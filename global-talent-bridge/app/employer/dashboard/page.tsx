@@ -99,28 +99,41 @@ export default async function EmployerDashboard() {
 
       if (matchData && matchData.length > 0) {
         const matches: MatchRow[] = matchData
-        const adminSupabase = createAdminClient()
-        const candidateIds = [...new Set(matches.map((m) => m.candidate_id))]
 
-        const { data: candidatesData } = await adminSupabase
-          .from('candidates')
-          .select('id, user_id, sector')
-          .in('id', candidateIds)
+        // Kandidaten- und Profilinformationen via Admin-Client laden
+        // (Kandidatenprofile sind für Arbeitgeber per RLS nicht direkt zugänglich)
+        let candidatesData: CandidateInfo[] = []
+        let profileData: ProfileInfo[] = []
 
-        const candidateMap = new Map<string, CandidateInfo>(
-          (candidatesData ?? []).map((c: CandidateInfo) => [c.id, c])
-        )
+        try {
+          const adminSupabase = createAdminClient()
+          const candidateIds = [...new Set(matches.map((m) => m.candidate_id))]
 
-        const userIds = (candidatesData ?? []).map((c: CandidateInfo) => c.user_id)
-        const { data: profileData } = userIds.length > 0
-          ? await adminSupabase
+          const candidatesRes = await adminSupabase
+            .from('candidates')
+            .select('id, user_id, sector')
+            .in('id', candidateIds)
+
+          candidatesData = candidatesRes.data ?? []
+
+          const userIds = candidatesData.map((c) => c.user_id)
+          if (userIds.length > 0) {
+            const profilesRes = await adminSupabase
               .from('profiles')
               .select('id, full_name')
               .in('id', userIds)
-          : { data: [] as ProfileInfo[] }
+            profileData = profilesRes.data ?? []
+          }
+        } catch {
+          // Admin-Client-Fehler — Kandidatennamen werden ohne Namen angezeigt (graceful degradation)
+        }
+
+        const candidateMap = new Map<string, CandidateInfo>(
+          candidatesData.map((c: CandidateInfo) => [c.id, c])
+        )
 
         const profileMap = new Map<string, ProfileInfo>(
-          (profileData ?? []).map((p: ProfileInfo) => [p.id, p])
+          profileData.map((p: ProfileInfo) => [p.id, p])
         )
 
         const jobTitleMap = new Map<string, string>(jobs.map((j) => [j.id, j.title]))
@@ -167,19 +180,31 @@ export default async function EmployerDashboard() {
         {!employer && (
           <div className="bg-yellow-900/20 border border-yellow-700 rounded-2xl p-6 flex items-start gap-4">
             <div className="text-3xl">⚠️</div>
-            <div>
+            <div className="flex-1">
               <h2 className="text-lg font-semibold text-yellow-300 mb-1">
-                Profil unvollständig
+                Kein Arbeitgeberprofil vorhanden
               </h2>
-              <p className="text-yellow-200/70 text-sm mb-4">
-                Erstelle dein Unternehmensprofil und füge Jobs hinzu.
+              <p className="text-yellow-200/70 text-sm mb-2">
+                Für dieses Konto wurde noch kein Arbeitgeberprofil erstellt.
               </p>
-              <Link
-                href="/employer/onboarding"
-                className="inline-block px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-white text-sm font-medium rounded-lg transition-colors"
-              >
-                Profil ausfüllen →
-              </Link>
+              <p className="text-yellow-200/50 text-xs mb-4">
+                Erstelle dein Unternehmensprofil, um Stellenanzeigen zu veröffentlichen
+                und internationale Fachkräfte über das automatische Matching zu finden.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/employer/onboarding"
+                  className="inline-block px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-white text-sm font-medium rounded-lg transition-colors"
+                >
+                  Arbeitgeberprofil erstellen →
+                </Link>
+                <Link
+                  href="/for-employers"
+                  className="inline-block px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-medium rounded-lg transition-colors"
+                >
+                  Wie funktioniert es?
+                </Link>
+              </div>
             </div>
           </div>
         )}

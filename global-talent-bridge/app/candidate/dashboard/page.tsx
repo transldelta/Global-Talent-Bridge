@@ -126,13 +126,22 @@ export default async function CandidateDashboard({
         ])
       )
 
-      matches = matchData.map((m) => ({
+      const rawMatches = matchData.map((m) => ({
         id: m.id,
         score: m.score,
         status: m.status,
         job_id: m.job_id,
         jobs: jobMap.get(m.job_id) ?? null,
       }))
+
+      // Deduplizierung nach job_id (DB-seitig bereits verhindert durch UNIQUE-Constraint,
+      // aber als JS-Fallback: höchster Score zuerst — bereits nach score desc sortiert)
+      const seenJobIds = new Set<string>()
+      matches = rawMatches.filter((m) => {
+        if (seenJobIds.has(m.job_id)) return false
+        seenJobIds.add(m.job_id)
+        return true
+      })
     }
   }
 
@@ -171,19 +180,31 @@ export default async function CandidateDashboard({
         {!candidate && (
           <div className="bg-yellow-900/20 border border-yellow-700 rounded-2xl p-6 flex items-start gap-4">
             <div className="text-3xl">⚠️</div>
-            <div>
+            <div className="flex-1">
               <h2 className="text-lg font-semibold text-yellow-300 mb-1">
-                Profil unvollständig
+                Kein Kandidatenprofil vorhanden
               </h2>
-              <p className="text-yellow-200/70 text-sm mb-4">
-                Erstelle dein Kandidatenprofil, damit wir passende Jobs finden können.
+              <p className="text-yellow-200/70 text-sm mb-2">
+                Für dieses Konto wurde noch kein Kandidatenprofil erstellt.
               </p>
-              <Link
-                href="/candidate/onboarding"
-                className="inline-block px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-white text-sm font-medium rounded-lg transition-colors"
-              >
-                Profil ausfüllen →
-              </Link>
+              <p className="text-yellow-200/50 text-xs mb-4">
+                Fülle dein Profil aus, damit unser Matching-System passende
+                Stellenangebote für dich berechnen kann.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/candidate/onboarding"
+                  className="inline-block px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-white text-sm font-medium rounded-lg transition-colors"
+                >
+                  Kandidatenprofil erstellen →
+                </Link>
+                <Link
+                  href="/for-candidates"
+                  className="inline-block px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-medium rounded-lg transition-colors"
+                >
+                  Wie funktioniert es?
+                </Link>
+              </div>
             </div>
           </div>
         )}
