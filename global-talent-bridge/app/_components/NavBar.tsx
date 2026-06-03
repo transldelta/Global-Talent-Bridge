@@ -92,6 +92,12 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
           {userIsAdmin && (
             <>
               <Link
+                href="/admin/outreach"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                Outreach
+              </Link>
+              <Link
                 href="/admin/leads"
                 className="text-sm text-gray-400 hover:text-white transition-colors"
               >

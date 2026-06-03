@@ -97,6 +97,15 @@ type LeadKpi = {
   candidate_leads: number
 }
 
+type OutreachKpi = {
+  total: number
+  planned: number
+  contacted: number
+  interested: number
+  followup_due: number
+  converted: number
+}
+
 type PricingPlanRow = {
   plan_key: string
   name: string | null
@@ -173,6 +182,12 @@ export default async function CeoDashboardPage() {
     pilotEmployerContactsRes,
     qualifiedContactsRes,
     followupDueRes,
+    outreachTotalRes,
+    outreachPlannedRes,
+    outreachContactedRes,
+    outreachInterestedRes,
+    outreachConvertedRes,
+    outreachFollowupRes,
   ] = await Promise.all([
     supabase
       .from('agent_departments')
@@ -232,6 +247,17 @@ export default async function CeoDashboardPage() {
     supabase.from('contact_requests').select('*', { count: 'exact', head: true }).eq('status', 'qualified'),
     supabase
       .from('contact_requests')
+      .select('*', { count: 'exact', head: true })
+      .not('next_follow_up_at', 'is', null)
+      .lte('next_follow_up_at', new Date().toISOString()),
+    // Phase 2I: Outreach KPIs
+    supabase.from('outreach_targets').select('*', { count: 'exact', head: true }),
+    supabase.from('outreach_targets').select('*', { count: 'exact', head: true }).eq('status', 'planned'),
+    supabase.from('outreach_targets').select('*', { count: 'exact', head: true }).eq('status', 'contacted'),
+    supabase.from('outreach_targets').select('*', { count: 'exact', head: true }).eq('status', 'interested'),
+    supabase.from('outreach_targets').select('*', { count: 'exact', head: true }).eq('status', 'converted'),
+    supabase
+      .from('outreach_targets')
       .select('*', { count: 'exact', head: true })
       .not('next_follow_up_at', 'is', null)
       .lte('next_follow_up_at', new Date().toISOString()),
@@ -303,6 +329,15 @@ export default async function CeoDashboardPage() {
     qualified_leads: qualifiedLeadsRes.count ?? 0,
     employer_leads: employerLeadsRes.count ?? 0,
     candidate_leads: candidateLeadsRes.count ?? 0,
+  }
+
+  const outreachKpi: OutreachKpi = {
+    total: outreachTotalRes.count ?? 0,
+    planned: outreachPlannedRes.count ?? 0,
+    contacted: outreachContactedRes.count ?? 0,
+    interested: outreachInterestedRes.count ?? 0,
+    converted: outreachConvertedRes.count ?? 0,
+    followup_due: outreachFollowupRes.count ?? 0,
   }
 
   const pricingPlans: PricingPlanRow[] = (pricingPlansRes.data ?? []).map((p) => ({
@@ -520,6 +555,48 @@ export default async function CeoDashboardPage() {
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
               <div className="text-xl font-bold text-yellow-400">{leadKpi.new_leads}</div>
               <div className="text-xs text-gray-400 mt-0.5">Neue Sales-Leads</div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Outreach Command Center ── */}
+        <div>
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+            <h2 className="text-xl font-bold text-white">📡 Outreach Command Center</h2>
+            <Link
+              href="/admin/outreach"
+              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+            >
+              Outreach verwalten →
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-white">{outreachKpi.total}</div>
+              <div className="text-xs text-gray-400 mt-0.5">Ziele gesamt</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-700/40 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-gray-400">{outreachKpi.planned}</div>
+              <div className="text-xs text-gray-400 mt-0.5">📋 Geplant</div>
+            </div>
+            <div className="bg-gray-900 border border-yellow-800/40 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-yellow-400">{outreachKpi.contacted}</div>
+              <div className="text-xs text-gray-400 mt-0.5">✉️ Kontaktiert</div>
+            </div>
+            <div className="bg-gray-900 border border-blue-800/40 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-blue-400">{outreachKpi.interested}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🤝 Interessiert</div>
+            </div>
+            <div className={`rounded-xl p-4 text-center ${outreachKpi.followup_due > 0 ? 'bg-orange-900/20 border border-orange-700/50' : 'bg-gray-900 border border-gray-800'}`}>
+              <div className={`text-2xl font-bold ${outreachKpi.followup_due > 0 ? 'text-orange-400' : 'text-gray-500'}`}>
+                {outreachKpi.followup_due}
+              </div>
+              <div className="text-xs text-gray-400 mt-0.5">📅 Follow-ups fällig</div>
+            </div>
+            <div className="bg-gray-900 border border-green-800/40 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-green-400">{outreachKpi.converted}</div>
+              <div className="text-xs text-gray-400 mt-0.5">⭐ Konvertiert</div>
             </div>
           </div>
         </div>

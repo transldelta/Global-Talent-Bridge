@@ -28,6 +28,13 @@ const METRIC_KEYS = [
   'employer_leads',
   'candidate_leads',
   'qualified_leads',
+  // Phase 2I: Outreach
+  'total_outreach_targets',
+  'planned_outreach_targets',
+  'contacted_outreach_targets',
+  'interested_outreach_targets',
+  'converted_outreach_targets',
+  'due_followups_outreach',
 ] as const
 
 type MetricKey = (typeof METRIC_KEYS)[number]
@@ -65,6 +72,12 @@ export async function POST() {
     employerLeadsRes,
     candidateLeadsRes,
     qualifiedLeadsRes,
+    outreachTotalRes,
+    outreachPlannedRes,
+    outreachContactedRes,
+    outreachInterestedRes,
+    outreachConvertedRes,
+    outreachFollowupRes,
   ] = await Promise.all([
     supabase.from('profiles').select('*', { count: 'exact', head: true }),
     supabase.from('candidates').select('*', { count: 'exact', head: true }),
@@ -88,6 +101,17 @@ export async function POST() {
     supabase.from('sales_leads').select('*', { count: 'exact', head: true }).eq('role', 'employer'),
     supabase.from('sales_leads').select('*', { count: 'exact', head: true }).eq('role', 'candidate'),
     supabase.from('sales_leads').select('*', { count: 'exact', head: true }).eq('status', 'qualified'),
+    // Phase 2I: Outreach Metrics
+    supabase.from('outreach_targets').select('*', { count: 'exact', head: true }),
+    supabase.from('outreach_targets').select('*', { count: 'exact', head: true }).eq('status', 'planned'),
+    supabase.from('outreach_targets').select('*', { count: 'exact', head: true }).eq('status', 'contacted'),
+    supabase.from('outreach_targets').select('*', { count: 'exact', head: true }).eq('status', 'interested'),
+    supabase.from('outreach_targets').select('*', { count: 'exact', head: true }).eq('status', 'converted'),
+    supabase
+      .from('outreach_targets')
+      .select('*', { count: 'exact', head: true })
+      .not('next_follow_up_at', 'is', null)
+      .lte('next_follow_up_at', new Date().toISOString()),
   ])
 
   // Durchschnittlichen Match-Score berechnen
@@ -234,6 +258,49 @@ export async function POST() {
       metric_key: 'qualified_leads',
       metric_name: 'Qualifizierte Leads',
       metric_value: qualifiedLeadsRes.count ?? 0,
+      period,
+      source: 'recalculate-metrics-api',
+    },
+    // Phase 2I: Outreach
+    {
+      metric_key: 'total_outreach_targets',
+      metric_name: 'Outreach-Ziele gesamt',
+      metric_value: outreachTotalRes.count ?? 0,
+      period,
+      source: 'recalculate-metrics-api',
+    },
+    {
+      metric_key: 'planned_outreach_targets',
+      metric_name: 'Geplante Outreach-Ziele',
+      metric_value: outreachPlannedRes.count ?? 0,
+      period,
+      source: 'recalculate-metrics-api',
+    },
+    {
+      metric_key: 'contacted_outreach_targets',
+      metric_name: 'Kontaktierte Firmen',
+      metric_value: outreachContactedRes.count ?? 0,
+      period,
+      source: 'recalculate-metrics-api',
+    },
+    {
+      metric_key: 'interested_outreach_targets',
+      metric_name: 'Interessierte Firmen',
+      metric_value: outreachInterestedRes.count ?? 0,
+      period,
+      source: 'recalculate-metrics-api',
+    },
+    {
+      metric_key: 'converted_outreach_targets',
+      metric_name: 'Konvertierte Pilot-Arbeitgeber',
+      metric_value: outreachConvertedRes.count ?? 0,
+      period,
+      source: 'recalculate-metrics-api',
+    },
+    {
+      metric_key: 'due_followups_outreach',
+      metric_name: 'Fällige Follow-ups (Outreach)',
+      metric_value: outreachFollowupRes.count ?? 0,
       period,
       source: 'recalculate-metrics-api',
     },
