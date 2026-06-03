@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NavBar } from '@/app/_components/NavBar'
 import { MatchingButton } from '@/app/candidate/_components/MatchingButton'
 
@@ -81,13 +82,16 @@ export default async function CandidateDashboard({
         .select('id, employer_id, title, sector, city, country, salary_range')
         .in('id', jobIds)
 
-      // Schritt 3: Arbeitgeber-Namen laden (employer_id aus jobs → companies-Namen)
+      // Schritt 3: Arbeitgeber-Namen laden via Admin-Client (RLS der employers-Tabelle
+      // erlaubt Kandidaten keinen Lesezugriff auf fremde Arbeitgeber — Admin-Client
+      // umgeht dies serverseitig; SUPABASE_SERVICE_ROLE_KEY verlässt nie den Server)
       const employerIds = [
         ...new Set((jobData ?? []).map((j) => j.employer_id).filter(Boolean) as string[]),
       ]
 
+      const adminSupabase = createAdminClient()
       const { data: employerData } = employerIds.length > 0
-        ? await supabase
+        ? await adminSupabase
             .from('employers')
             .select('id, company_name')
             .in('id', employerIds)
@@ -272,11 +276,9 @@ export default async function CandidateDashboard({
                     <p className="text-white font-medium truncate">
                       {match.jobs?.title ?? 'Stelle wird geladen…'}
                     </p>
-                    {match.jobs?.company_name && (
-                      <p className="text-blue-400 text-sm mt-0.5 truncate">
-                        🏢 {match.jobs.company_name}
-                      </p>
-                    )}
+                    <p className="text-blue-400 text-sm mt-0.5 truncate">
+                      🏢 {match.jobs?.company_name ?? 'Arbeitgeber nicht angegeben'}
+                    </p>
                     <p className="text-gray-400 text-sm mt-0.5">
                       {[
                         match.jobs?.sector,
