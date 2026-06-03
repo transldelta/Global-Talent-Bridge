@@ -148,6 +148,97 @@ export default function ForEmployersPage() {
         </div>
       </section>
 
+      {/* Pilot-Arbeitgeber-Abschnitt */}
+      <section className="px-4 py-16 border-t border-gray-800 bg-gradient-to-r from-green-900/10 to-blue-900/10">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-900/40 border border-green-700/50 text-green-300 text-xs font-medium mb-4">
+              🏢 Jetzt gesucht
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-3">Pilot-Arbeitgeber gesucht</h2>
+            <p className="text-gray-400 text-base leading-relaxed max-w-2xl mx-auto">
+              Global Talent Bridge ist live und voll funktionsfähig — jetzt suchen wir Unternehmen,
+              die die Plattform als erste testen und mitgestalten.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            {[
+              {
+                icon: '✅',
+                title: 'MVP ist live',
+                text: 'Die Plattform funktioniert bereits: Arbeitgeber-Profile, Job-Erstellung, Matching-Score, Kandidaten-Übersicht.',
+              },
+              {
+                icon: '🆓',
+                title: 'Komplett kostenlos',
+                text: 'In der Pilot-Phase entstehen keine Kosten. Kein Vertrag, keine Zahlungspflicht, keine versteckten Bedingungen.',
+              },
+              {
+                icon: '👤',
+                title: 'Persönliche Betreuung',
+                text: 'Ich bin direkt erreichbar und beantworte Fragen persönlich. Kein Support-Ticket, kein automatisches System.',
+              },
+              {
+                icon: '💬',
+                title: 'Dein Feedback zählt',
+                text: 'Pilot-Arbeitgeber prägen direkt die Weiterentwicklung. Was fehlt, was stört, was hilft — ich setze es schnell um.',
+              },
+            ].map((item) => (
+              <div key={item.title} className="flex items-start gap-4 bg-gray-900 border border-gray-800 rounded-xl p-4">
+                <div className="text-2xl shrink-0">{item.icon}</div>
+                <div>
+                  <p className="text-white font-medium mb-1 text-sm">{item.title}</p>
+                  <p className="text-gray-400 text-sm leading-relaxed">{item.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Was Pilot-Arbeitgeber machen */}
+          <div className="bg-gray-900 border border-green-800/30 rounded-2xl p-6 mb-6">
+            <h3 className="text-white font-semibold mb-4">So läuft die Pilot-Phase ab</h3>
+            <div className="space-y-3">
+              {[
+                { n: '1', text: 'Konto erstellen oder Pilot-Anfrage senden' },
+                { n: '2', text: 'Unternehmensprofil anlegen (5 Minuten)' },
+                { n: '3', text: 'Einen oder mehrere Jobs erstellen' },
+                { n: '4', text: 'Matching-Score und passende Kandidaten ansehen' },
+                { n: '5', text: 'Direktes Feedback an mich — was hilft, was fehlt' },
+              ].map((step) => (
+                <div key={step.n} className="flex items-center gap-3">
+                  <div className="w-6 h-6 rounded-full bg-green-700 text-white text-xs font-bold flex items-center justify-center shrink-0">
+                    {step.n}
+                  </div>
+                  <p className="text-gray-300 text-sm">{step.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="text-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/contact?role=employer&interest=pilot_employer"
+                className="px-8 py-4 bg-green-700 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors"
+              >
+                📋 Als Pilot-Arbeitgeber anfragen
+              </Link>
+              <Link
+                href="/auth/register?role=employer"
+                className="px-8 py-4 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 font-semibold rounded-xl transition-colors"
+              >
+                🏢 Direkt registrieren
+              </Link>
+            </div>
+            <p className="mt-3 text-xs text-gray-600">
+              Pilot-Anfrage = persönliches Gespräch, keine automatischen E-Mails, kein Spam.
+              Direkte Registrierung = sofort loslegen, kein Gespräch nötig.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Spätere Premium-Funktionen */}
       <section className="px-4 py-16 border-t border-gray-800 bg-gray-900/30">
         <div className="max-w-3xl mx-auto text-center">

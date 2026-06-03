@@ -114,4 +114,47 @@ export async function updateFollowUpAction(formData: FormData) {
     .eq('id', id)
 
   revalidatePath(`/admin/leads/${id}`)
+  revalidatePath('/admin/leads')
+}
+
+/**
+ * Markiert eine Kontaktanfrage als qualifiziert.
+ * Nur DB-Status — keine E-Mail, keine automatische Aktion.
+ */
+export async function markQualifiedAction(formData: FormData) {
+  const admin = await getCurrentAdminUser()
+  if (!admin) return
+
+  const id = formData.get('id') as string
+  if (!id) return
+
+  const supabase = createAdminClient()
+  await supabase
+    .from('contact_requests')
+    .update({ status: 'qualified' })
+    .eq('id', id)
+
+  revalidatePath(`/admin/leads/${id}`)
+  revalidatePath('/admin/leads')
+}
+
+/**
+ * Markiert eine Kontaktanfrage als abgelehnt.
+ * Nur DB-Status — keine E-Mail, keine automatische Aktion.
+ */
+export async function markRejectedAction(formData: FormData) {
+  const admin = await getCurrentAdminUser()
+  if (!admin) return
+
+  const id = formData.get('id') as string
+  if (!id) return
+
+  const supabase = createAdminClient()
+  await supabase
+    .from('contact_requests')
+    .update({ status: 'rejected' })
+    .eq('id', id)
+
+  revalidatePath(`/admin/leads/${id}`)
+  revalidatePath('/admin/leads')
 }

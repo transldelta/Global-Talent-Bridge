@@ -279,6 +279,7 @@ export default async function LeadDetailPage({
                 currentNotes={detail.admin_notes}
                 currentFollowUp={detail.next_follow_up_at}
                 contactedAt={detail.contacted_at}
+                currentStatus={detail.status}
               />
             </div>
 
