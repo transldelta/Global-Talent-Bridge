@@ -264,6 +264,77 @@ export default async function EmployerDashboard() {
           </div>
         )}
 
+        {/* ── Job-Hinweise für Arbeitgeber (nur wenn Profil vorhanden) ── */}
+        {employer && (() => {
+          const hints: { icon: string; text: string; color: string }[] = []
+
+          // Keine Jobs
+          if (jobs.length === 0) {
+            hints.push({
+              icon: '💼',
+              text: 'Du hast noch keine Stellen erstellt. Erstelle deinen ersten Job, damit Kandidaten gematcht werden können.',
+              color: 'text-yellow-300',
+            })
+          }
+
+          // Keine aktiven Jobs
+          if (jobs.length > 0 && activeJobs === 0) {
+            hints.push({
+              icon: '⚠️',
+              text: 'Alle deine Jobs sind inaktiv. Aktiviere mindestens eine Stelle, damit Kandidaten gematcht werden können.',
+              color: 'text-orange-300',
+            })
+          }
+
+          // Matches vorhanden
+          if (totalMatches > 0 && bestScore >= 70) {
+            hints.push({
+              icon: '🎯',
+              text: `Starke Übereinstimmung: ${enrichedMatches.filter((m) => m.score >= 70).length} Kandidat${enrichedMatches.filter((m) => m.score >= 70).length !== 1 ? 'en' : ''} mit Score ≥ 70%. Diese Kandidaten passen besonders gut.`,
+              color: 'text-green-300',
+            })
+          }
+
+          // Job ohne Matches
+          const jobsWithMatches = new Set(enrichedMatches.map((m) => m.job_id))
+          const jobsWithoutMatches = jobs.filter((j) => j.is_active && !jobsWithMatches.has(j.id))
+          if (jobsWithoutMatches.length > 0) {
+            hints.push({
+              icon: '🔍',
+              text: `${jobsWithoutMatches.length} aktive${jobsWithoutMatches.length > 1 ? 'r' : ''} Job${jobsWithoutMatches.length > 1 ? 's' : ''} hat noch keine Matches. Starte das Matching oder prüfe die Job-Anforderungen.`,
+              color: 'text-blue-300',
+            })
+          }
+
+          // Hohe Deutschanforderung
+          const highGermanJobs = jobs.filter(
+            (j) => j.is_active && (j.required_german === 'C1' || j.required_german === 'C2')
+          )
+          if (highGermanJobs.length > 0 && totalMatches < 3) {
+            hints.push({
+              icon: '💡',
+              text: `Tipp: ${highGermanJobs.length} Job${highGermanJobs.length > 1 ? 's' : ''} erfordert C1/C2 Deutsch. Mehr Kandidaten möglich, wenn Mindest-Deutschlevel auf B1/B2 gesenkt wird.`,
+              color: 'text-purple-300',
+            })
+          }
+
+          if (hints.length === 0) return null
+
+          return (
+            <div className="bg-green-900/10 border border-green-800/30 rounded-2xl p-5">
+              <h3 className="text-sm font-semibold text-green-300 mb-3">💡 Plattform-Hinweise für dich</h3>
+              <div className="space-y-2">
+                {hints.map((h, i) => (
+                  <div key={i} className="flex items-start gap-2">
+                    <span className="text-base shrink-0">{h.icon}</span>
+                    <p className={`text-xs leading-relaxed ${h.color}`}>{h.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
+        })()}
+
         {/* Aktionen */}
         {employer && (
           <div className="flex flex-wrap gap-3">

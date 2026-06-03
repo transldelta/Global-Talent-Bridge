@@ -3,6 +3,9 @@ import { getCurrentAdminUser } from '@/lib/admin'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NavBar } from '@/app/_components/NavBar'
 import { RefreshMetricsButton } from '@/app/admin/_components/RefreshMetricsButton'
+import { RunAgentsButton } from './RunAgentsButton'
+import { SuggestionActions } from './SuggestionActions'
+import { MarkAllReadButton } from './MarkAllReadButton'
 
 type Department = {
   department_key: string
@@ -106,6 +109,34 @@ type OutreachKpi = {
   converted: number
 }
 
+type AgentSuggestion = {
+  id: string
+  department_slug: string
+  title: string
+  description: string
+  category: string
+  priority: string
+  status: string
+  impact_score: number
+  effort_score: number
+  risk_score: number
+  expected_benefit: string | null
+  risk_note: string | null
+  action_type: string | null
+  requires_approval: boolean
+  created_at: string
+}
+
+type AgentNotificationRow = {
+  id: string
+  title: string
+  message: string
+  severity: string
+  department_slug: string | null
+  is_read: boolean
+  created_at: string
+}
+
 type PricingPlanRow = {
   plan_key: string
   name: string | null
@@ -188,6 +219,9 @@ export default async function CeoDashboardPage() {
     outreachInterestedRes,
     outreachConvertedRes,
     outreachFollowupRes,
+    agentSuggestionsRes,
+    agentNotificationsRes,
+    agentRunLogsRes,
   ] = await Promise.all([
     supabase
       .from('agent_departments')
@@ -261,6 +295,24 @@ export default async function CeoDashboardPage() {
       .select('*', { count: 'exact', head: true })
       .not('next_follow_up_at', 'is', null)
       .lte('next_follow_up_at', new Date().toISOString()),
+    // Phase 2J: Agent System
+    supabase
+      .from('agent_suggestions')
+      .select('id, department_slug, title, description, category, priority, status, impact_score, effort_score, risk_score, expected_benefit, risk_note, action_type, requires_approval, created_at')
+      .in('status', ['suggested', 'approved'])
+      .order('created_at', { ascending: false })
+      .limit(30),
+    supabase
+      .from('agent_notifications')
+      .select('id, title, message, severity, department_slug, is_read, created_at')
+      .eq('is_read', false)
+      .order('created_at', { ascending: false })
+      .limit(15),
+    supabase
+      .from('agent_run_logs')
+      .select('id, run_type, status, summary, suggestions_created, notifications_created, created_at')
+      .order('created_at', { ascending: false })
+      .limit(1),
   ])
 
   const departments: Department[] = deptRes.data ?? []
@@ -340,6 +392,23 @@ export default async function CeoDashboardPage() {
     followup_due: outreachFollowupRes.count ?? 0,
   }
 
+  // Phase 2J: Agent System
+  const agentSuggestions: AgentSuggestion[] = (agentSuggestionsRes.data ?? []) as AgentSuggestion[]
+  const agentNotifications: AgentNotificationRow[] = (agentNotificationsRes.data ?? []) as AgentNotificationRow[]
+  const lastRunLog = (agentRunLogsRes.data ?? [])[0] as {
+    id: string; run_type: string; status: string; summary: string | null;
+    suggestions_created: number; notifications_created: number; created_at: string
+  } | undefined
+
+  // Prioritäts-Sortierung: critical > high > medium > low
+  const PRIORITY_ORDER: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 }
+  const sortedSuggestions = [...agentSuggestions].sort(
+    (a, b) => (PRIORITY_ORDER[a.priority] ?? 99) - (PRIORITY_ORDER[b.priority] ?? 99)
+  )
+  const visionarySuggestions = sortedSuggestions.filter((s) => s.department_slug === 'visionary_strategy')
+  const marketingSuggestions = sortedSuggestions.filter((s) => s.department_slug === 'marketing_strategy')
+  const ceoCritical = sortedSuggestions.filter((s) => s.department_slug === 'ceo_control')
+
   const pricingPlans: PricingPlanRow[] = (pricingPlansRes.data ?? []).map((p) => ({
     ...p,
     features: Array.isArray(p.features) ? (p.features as string[]) : [],
@@ -395,6 +464,228 @@ export default async function CeoDashboardPage() {
             </p>
           </div>
         </div>
+
+        {/* ── CEO Command Center ── */}
+        <div className="bg-gray-900 border border-purple-800/40 rounded-2xl p-6 space-y-5">
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <div>
+              <h2 className="text-xl font-bold text-white">🤖 CEO Command Center</h2>
+              <p className="text-gray-400 text-sm mt-1">
+                Agenten analysieren intern und erstellen Vorschläge.{' '}
+                <span className="text-green-400 font-medium">Keine externen Aktionen ohne Freigabe.</span>
+              </p>
+            </div>
+            {lastRunLog && (
+              <div className="text-right shrink-0">
+                <p className="text-xs text-gray-500">Letzter Lauf:</p>
+                <p className="text-xs text-gray-400">
+                  {new Date(lastRunLog.created_at).toLocaleString('de-DE')}
+                </p>
+                <p className="text-xs text-green-400">
+                  +{lastRunLog.suggestions_created} Vorschläge
+                </p>
+              </div>
+            )}
+          </div>
+
+          <RunAgentsButton />
+
+          {/* Schnell-KPIs */}
+          <div className="grid grid-cols-3 gap-3 pt-2">
+            <div className="bg-gray-800/60 rounded-xl p-3 text-center">
+              <div className="text-xl font-bold text-purple-400">{agentSuggestions.length}</div>
+              <div className="text-xs text-gray-400 mt-0.5">Offene Vorschläge</div>
+            </div>
+            <div className={`rounded-xl p-3 text-center ${agentNotifications.length > 0 ? 'bg-orange-900/20' : 'bg-gray-800/60'}`}>
+              <div className={`text-xl font-bold ${agentNotifications.length > 0 ? 'text-orange-400' : 'text-gray-500'}`}>
+                {agentNotifications.length}
+              </div>
+              <div className="text-xs text-gray-400 mt-0.5">Ungelesene Alerts</div>
+            </div>
+            <div className="bg-gray-800/60 rounded-xl p-3 text-center">
+              <div className="text-xl font-bold text-blue-400">
+                {sortedSuggestions.filter((s) => s.priority === 'critical' || s.priority === 'high').length}
+              </div>
+              <div className="text-xs text-gray-400 mt-0.5">Hoch-Priorität</div>
+            </div>
+          </div>
+
+          <div className="p-3 bg-blue-900/10 border border-blue-800/30 rounded-xl">
+            <p className="text-blue-300/70 text-xs leading-relaxed">
+              💡 <strong className="text-blue-300">Was Agenten dürfen:</strong> Intern analysieren, Vorschläge erstellen, Outreach-Entwürfe vorbereiten, Notifications erzeugen. —{' '}
+              <strong className="text-red-300">Was Agenten NICHT dürfen:</strong> E-Mails senden, Zahlungen aktivieren, externe APIs kostenpflichtig nutzen, RLS ändern, User-Daten löschen.
+            </p>
+          </div>
+        </div>
+
+        {/* ── Ungelesene Benachrichtigungen ── */}
+        {agentNotifications.length > 0 && (
+          <div>
+            <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+              <h2 className="text-xl font-bold text-white">
+                🔔 Neue Benachrichtigungen
+                <span className="ml-2 text-sm font-normal text-orange-400">({agentNotifications.length})</span>
+              </h2>
+              <MarkAllReadButton />
+            </div>
+            <div className="space-y-2">
+              {agentNotifications.map((n) => {
+                const severityStyles: Record<string, string> = {
+                  critical: 'border-red-700/50 bg-red-900/10',
+                  warning: 'border-orange-700/50 bg-orange-900/10',
+                  success: 'border-green-700/50 bg-green-900/10',
+                  info: 'border-blue-700/50 bg-blue-900/10',
+                }
+                const severityText: Record<string, string> = {
+                  critical: 'text-red-300',
+                  warning: 'text-orange-300',
+                  success: 'text-green-300',
+                  info: 'text-blue-300',
+                }
+                const severityIcon: Record<string, string> = {
+                  critical: '🚨', warning: '⚠️', success: '✅', info: 'ℹ️',
+                }
+                return (
+                  <div
+                    key={n.id}
+                    className={`p-4 rounded-xl border flex items-start gap-3 ${severityStyles[n.severity] ?? 'border-gray-800 bg-gray-900'}`}
+                  >
+                    <span className="text-lg shrink-0">{severityIcon[n.severity] ?? 'ℹ️'}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-sm font-semibold ${severityText[n.severity] ?? 'text-gray-300'}`}>
+                        {n.title}
+                      </p>
+                      <p className="text-gray-400 text-xs mt-0.5 leading-relaxed">{n.message}</p>
+                    </div>
+                    <span className="text-xs text-gray-600 shrink-0">
+                      {new Date(n.created_at).toLocaleDateString('de-DE')}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* ── Agenten-Vorschläge (CEO Control) ── */}
+        {ceoCritical.length > 0 && (
+          <div>
+            <h2 className="text-xl font-bold text-white mb-4">
+              🎯 CEO-Vorschläge
+              <span className="ml-2 text-sm font-normal text-gray-400">({ceoCritical.length})</span>
+            </h2>
+            <div className="space-y-3">
+              {ceoCritical.map((s) => {
+                const priorityStyles: Record<string, string> = {
+                  critical: 'border-red-700/50 bg-red-900/5',
+                  high: 'border-orange-700/40 bg-orange-900/5',
+                  medium: 'border-gray-700 bg-gray-900',
+                  low: 'border-gray-800 bg-gray-900/50',
+                }
+                const priorityBadge: Record<string, string> = {
+                  critical: 'bg-red-900/40 text-red-300',
+                  high: 'bg-orange-900/40 text-orange-300',
+                  medium: 'bg-yellow-900/40 text-yellow-300',
+                  low: 'bg-gray-800 text-gray-400',
+                }
+                return (
+                  <div key={s.id} className={`rounded-2xl border p-5 ${priorityStyles[s.priority] ?? 'border-gray-800 bg-gray-900'}`}>
+                    <div className="flex items-start justify-between gap-3 flex-wrap">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${priorityBadge[s.priority] ?? 'bg-gray-800 text-gray-400'}`}>
+                            {s.priority.toUpperCase()}
+                          </span>
+                          <span className="text-xs text-gray-500">{s.category}</span>
+                        </div>
+                        <p className="text-white text-sm font-semibold leading-snug">{s.title}</p>
+                        <p className="text-gray-400 text-xs mt-1 leading-relaxed">{s.description}</p>
+                        {s.expected_benefit && (
+                          <p className="text-green-400/70 text-xs mt-1">✅ {s.expected_benefit}</p>
+                        )}
+                        {s.risk_note && (
+                          <p className="text-yellow-400/70 text-xs mt-0.5">⚠️ {s.risk_note}</p>
+                        )}
+                      </div>
+                      <div className="flex flex-col items-end gap-1 shrink-0 text-xs text-gray-500">
+                        <span>Impact: <strong className="text-white">{s.impact_score}/10</strong></span>
+                        <span>Aufwand: <strong className="text-white">{s.effort_score}/10</strong></span>
+                        <span>Risiko: <strong className="text-white">{s.risk_score}/10</strong></span>
+                      </div>
+                    </div>
+                    <SuggestionActions id={s.id} status={s.status} actionType={s.action_type} />
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* ── Marketing-Strategie ── */}
+        {marketingSuggestions.length > 0 && (
+          <div>
+            <h2 className="text-xl font-bold text-white mb-4">
+              📣 Marketing-Strategie
+              <span className="ml-2 text-sm font-normal text-gray-400">({marketingSuggestions.length} Vorschläge)</span>
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {marketingSuggestions.slice(0, 6).map((s) => (
+                <div key={s.id} className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <p className="text-white text-sm font-semibold leading-snug flex-1">{s.title}</p>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium shrink-0 ${s.priority === 'high' || s.priority === 'critical' ? 'bg-orange-900/40 text-orange-300' : 'bg-gray-800 text-gray-400'}`}>
+                      {s.priority}
+                    </span>
+                  </div>
+                  <p className="text-gray-400 text-xs leading-relaxed">{s.description}</p>
+                  {s.expected_benefit && (
+                    <p className="text-green-400/60 text-xs mt-2">✅ {s.expected_benefit}</p>
+                  )}
+                  {s.action_type === 'create_outreach_draft' && (
+                    <SuggestionActions id={s.id} status={s.status} actionType={s.action_type} />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ── Visionär-Agent ── */}
+        {visionarySuggestions.length > 0 && (
+          <div>
+            <h2 className="text-xl font-bold text-white mb-4">🔮 Visionäre Chancen</h2>
+            <div className="space-y-4">
+              {visionarySuggestions.map((s) => (
+                <div key={s.id} className="bg-gradient-to-r from-purple-900/10 to-blue-900/10 border border-purple-800/30 rounded-2xl p-5">
+                  <div className="flex items-start justify-between gap-3 flex-wrap">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white text-base font-semibold mb-1">{s.title}</p>
+                      <p className="text-gray-300 text-xs leading-relaxed">{s.description}</p>
+                      {s.expected_benefit && (
+                        <p className="text-purple-300/70 text-xs mt-2">
+                          💰 {s.expected_benefit}
+                        </p>
+                      )}
+                      {s.risk_note && (
+                        <p className="text-yellow-400/60 text-xs mt-1">⚠️ {s.risk_note}</p>
+                      )}
+                    </div>
+                    <div className="flex flex-col items-end gap-1 shrink-0 text-xs">
+                      <span className="text-gray-500">Impact <strong className="text-purple-300">{s.impact_score}/10</strong></span>
+                      <span className="text-gray-500">Aufwand <strong className="text-white">{s.effort_score}/10</strong></span>
+                      <span className="text-gray-500">Risiko <strong className="text-yellow-300">{s.risk_score}/10</strong></span>
+                    </div>
+                  </div>
+                  <div className="mt-3 p-2 bg-gray-900/50 rounded-lg">
+                    <p className="text-gray-500 text-xs">
+                      📌 <em>Potenzial, kein echter Umsatz. Manueller nächster Schritt: Machbarkeit prüfen, ersten Kontakt herstellen.</em>
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Live-KPI-Leiste */}
         <div>

@@ -265,6 +265,78 @@ export default async function CandidateDashboard({
           </div>
         )}
 
+        {/* ── Profil-Hinweise (nur wenn Kandidatenprofil vorhanden) ── */}
+        {candidate && (() => {
+          const hints: { icon: string; text: string; color: string }[] = []
+
+          // Sektor-Passung
+          if (candidate.sector) {
+            hints.push({
+              icon: '🎯',
+              text: `Dein Profil passt besonders zu Stellen im Bereich "${candidate.sector}". Nutze das Matching, um passende Angebote zu finden.`,
+              color: 'text-blue-300',
+            })
+          }
+
+          // Deutschkenntnisse
+          if (candidate.german_level && ['C1', 'C2', 'Muttersprachler'].includes(candidate.german_level)) {
+            hints.push({
+              icon: '🇩🇪',
+              text: `Sehr gute Deutschkenntnisse (${candidate.german_level}) erhöhen deine Chancen in deutschsprachigen Unternehmen deutlich.`,
+              color: 'text-green-300',
+            })
+          } else if (!candidate.german_level || candidate.german_level === 'Keine') {
+            hints.push({
+              icon: '💡',
+              text: 'Hinweis: Viele Arbeitgeber bevorzugen Kandidaten mit Grundkenntnissen Deutsch (A2+). Aktualisiere deinen Deutsch-Level, sobald du Kenntnisse erworben hast.',
+              color: 'text-yellow-300',
+            })
+          }
+
+          // Fähigkeiten fehlen
+          if (!Array.isArray(candidate.skills) || (candidate.skills as string[]).length === 0) {
+            hints.push({
+              icon: '📝',
+              text: 'Tipp: Trage deine Fähigkeiten und Qualifikationen in deinem Profil ein. Das verbessert die Matching-Qualität erheblich.',
+              color: 'text-orange-300',
+            })
+          }
+
+          // Viele Matches
+          if (matches.length >= 5) {
+            hints.push({
+              icon: '✅',
+              text: `Du hast ${matches.length} Matches! Kontaktiere Arbeitgeber direkt über die Plattform oder bewerbe dich über die angegebenen Wege.`,
+              color: 'text-green-300',
+            })
+          }
+
+          // Keine Matches
+          if (matches.length === 0 && candidate.sector) {
+            hints.push({
+              icon: '🔍',
+              text: 'Noch keine Matches gefunden. Starte das Matching oder prüfe, ob deine Profilangaben vollständig sind.',
+              color: 'text-gray-300',
+            })
+          }
+
+          if (hints.length === 0) return null
+
+          return (
+            <div className="bg-blue-900/10 border border-blue-800/30 rounded-2xl p-5">
+              <h3 className="text-sm font-semibold text-blue-300 mb-3">💡 Persönliche Hinweise</h3>
+              <div className="space-y-2">
+                {hints.map((h, i) => (
+                  <div key={i} className="flex items-start gap-2">
+                    <span className="text-base shrink-0">{h.icon}</span>
+                    <p className={`text-xs leading-relaxed ${h.color}`}>{h.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
+        })()}
+
         {/* Aktionen */}
         <div className="flex flex-wrap items-center gap-3">
           <Link
