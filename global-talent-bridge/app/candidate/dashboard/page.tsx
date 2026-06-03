@@ -76,39 +76,40 @@ export default async function CandidateDashboard({
       .limit(20)
 
     if (matchData && matchData.length > 0) {
-      // Schritt 2: Job-Details separat laden — inkl. employer_id für Firmenname
+      // Schritt 2+3: Job-Details + Arbeitgeber-Namen über Admin-Client laden.
+      // Admin-Client umgeht RLS beider Tabellen serverseitig:
+      //   jobs: is_active=false Jobs werden trotzdem angezeigt (Matches können auf
+      //         inaktive Jobs zeigen wenn der Job nach dem Matching deaktiviert wurde)
+      //   employers: SELECT-Policy erlaubt nur eigenen Eintrag → Admin-Client nötig
+      // SUPABASE_SERVICE_ROLE_KEY verlässt nie den Browser.
       const jobIds = matchData.map((m) => m.job_id)
 
-      const { data: jobData } = await supabase
+      const adminSupabase = createAdminClient()
+
+      const { data: jobData } = await adminSupabase
         .from('jobs')
         .select('id, employer_id, title, sector, city, country, salary_range')
         .in('id', jobIds)
 
-      // Schritt 3: Arbeitgeber-Namen laden via Admin-Client (RLS der employers-Tabelle
-      // erlaubt Kandidaten keinen Lesezugriff auf fremde Arbeitgeber — Admin-Client
-      // umgeht dies serverseitig; SUPABASE_SERVICE_ROLE_KEY verlässt nie den Server)
+      const employerIds = [
+        ...new Set((jobData ?? []).map((j) => j.employer_id).filter(Boolean) as string[]),
+      ]
+
       let employerMap = new Map<string, string>()
-      try {
-        const employerIds = [
-          ...new Set((jobData ?? []).map((j) => j.employer_id).filter(Boolean) as string[]),
-        ]
+      if (employerIds.length > 0) {
+        const { data: employerData } = await adminSupabase
+          .from('employers')
+          .select('id, company_name')
+          .in('id', employerIds)
 
-        if (employerIds.length > 0) {
-          const adminSupabase = createAdminClient()
-          const { data: employerData } = await adminSupabase
-            .from('employers')
-            .select('id, company_name')
-            .in('id', employerIds)
-
-          employerMap = new Map<string, string>(
-            (employerData ?? []).map((e: { id: string; company_name: string | null }) => [
+        employerMap = new Map<string, string>(
+          (employerData ?? [])
+            .filter((e: { id: string; company_name: string | null }) => e.company_name?.trim())
+            .map((e: { id: string; company_name: string | null }) => [
               e.id,
-              e.company_name ?? '',
+              e.company_name!.trim(),
             ])
-          )
-        }
-      } catch {
-        // Admin-Client-Fehler ignorieren — Firmenname wird als Fallback angezeigt
+        )
       }
 
       // Schritt 4: Im Code zusammenführen
@@ -396,7 +397,7 @@ export default async function CandidateDashboard({
                         {match.jobs?.title ?? 'Stelle wird geladen…'}
                       </p>
                       <p className="text-blue-400 text-sm mt-0.5 truncate">
-                        🏢 {match.jobs?.company_name ?? 'Arbeitgeber nicht angegeben'}
+                        🏢 {match.jobs?.company_name || 'Unternehmen vertraulich'}
                       </p>
                       <p className="text-gray-400 text-sm mt-0.5">
                         {[
