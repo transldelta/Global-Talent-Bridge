@@ -38,6 +38,7 @@ export function StatusSelect({
       <option value="new">new</option>
       <option value="contacted">contacted</option>
       <option value="qualified">qualified</option>
+      <option value="rejected">rejected</option>
       <option value="closed">closed</option>
     </select>
   )

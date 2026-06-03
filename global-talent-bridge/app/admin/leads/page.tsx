@@ -35,6 +35,7 @@ const STATUS_STYLES: Record<string, string> = {
   new: 'bg-blue-900/40 text-blue-300',
   contacted: 'bg-yellow-900/40 text-yellow-300',
   qualified: 'bg-green-900/40 text-green-300',
+  rejected: 'bg-red-900/40 text-red-400',
   closed: 'bg-gray-800 text-gray-500',
 }
 
@@ -159,16 +160,18 @@ export default async function AdminLeadsPage() {
                 <div className="col-span-1">Rolle</div>
                 <div className="col-span-1">Interesse</div>
                 <div className="col-span-2">Firma</div>
-                <div className="col-span-2">Nachricht (Auszug)</div>
                 <div className="col-span-1">Datum</div>
-                <div className="col-span-1">Status</div>
+                <div className="col-span-2">Status</div>
+                <div className="col-span-1">Details</div>
               </div>
 
               <div className="divide-y divide-gray-800">
                 {contacts.map((contact) => (
                   <div
                     key={contact.id}
-                    className="px-5 py-4 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-2 items-start"
+                    className={`px-5 py-4 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-2 items-center ${
+                      contact.interest === 'pilot_employer' ? 'bg-blue-900/5' : ''
+                    }`}
                   >
                     <div className="sm:col-span-2">
                       <p className="text-white text-sm font-medium truncate">{contact.name}</p>
@@ -183,7 +186,11 @@ export default async function AdminLeadsPage() {
                     </div>
                     <div className="sm:col-span-1">
                       {contact.interest ? (
-                        <span className="text-xs px-1.5 py-0.5 rounded-full bg-blue-900/30 text-blue-300 whitespace-nowrap">
+                        <span className={`text-xs px-1.5 py-0.5 rounded-full whitespace-nowrap ${
+                          contact.interest === 'pilot_employer'
+                            ? 'bg-green-900/40 text-green-300'
+                            : 'bg-blue-900/30 text-blue-300'
+                        }`}>
                           {INTEREST_LABELS[contact.interest] ?? contact.interest}
                         </span>
                       ) : (
@@ -193,17 +200,12 @@ export default async function AdminLeadsPage() {
                     <div className="sm:col-span-2">
                       <p className="text-gray-400 text-xs truncate">{contact.company_name ?? '—'}</p>
                     </div>
-                    <div className="sm:col-span-2">
-                      <p className="text-gray-400 text-xs leading-relaxed line-clamp-2">
-                        {contact.message.slice(0, 80)}{contact.message.length > 80 ? '…' : ''}
-                      </p>
-                    </div>
                     <div className="sm:col-span-1">
                       <p className="text-gray-500 text-xs">
                         {new Date(contact.created_at).toLocaleDateString('de-DE')}
                       </p>
                     </div>
-                    <div className="sm:col-span-1">
+                    <div className="sm:col-span-2">
                       <span className={`text-xs px-2 py-0.5 rounded-full ${STATUS_STYLES[contact.status] ?? STATUS_STYLES.new}`}>
                         {contact.status}
                       </span>
@@ -214,6 +216,14 @@ export default async function AdminLeadsPage() {
                           action={updateContactStatusAction}
                         />
                       </div>
+                    </div>
+                    <div className="sm:col-span-1">
+                      <Link
+                        href={`/admin/leads/${contact.id}`}
+                        className="text-xs text-blue-400 hover:text-blue-300 transition-colors whitespace-nowrap"
+                      >
+                        Details →
+                      </Link>
                     </div>
                   </div>
                 ))}

@@ -86,6 +86,8 @@ function TaskBadge({ status }: { status: string }) {
 type LeadKpi = {
   total_contacts: number
   new_contacts: number
+  contacted_contacts: number
+  pilot_employer_contacts: number
   total_leads: number
   new_leads: number
   qualified_leads: number
@@ -165,6 +167,8 @@ export default async function CeoDashboardPage() {
     qualifiedLeadsRes,
     employerLeadsRes,
     candidateLeadsRes,
+    contactedContactsRes,
+    pilotEmployerContactsRes,
   ] = await Promise.all([
     supabase
       .from('agent_departments')
@@ -217,6 +221,9 @@ export default async function CeoDashboardPage() {
     supabase.from('sales_leads').select('*', { count: 'exact', head: true }).eq('status', 'qualified'),
     supabase.from('sales_leads').select('*', { count: 'exact', head: true }).eq('role', 'employer'),
     supabase.from('sales_leads').select('*', { count: 'exact', head: true }).eq('role', 'candidate'),
+    // Erweiterte Lead-KPIs (Phase 2G)
+    supabase.from('contact_requests').select('*', { count: 'exact', head: true }).eq('status', 'contacted'),
+    supabase.from('contact_requests').select('*', { count: 'exact', head: true }).eq('interest', 'pilot_employer'),
   ])
 
   const departments: Department[] = deptRes.data ?? []
@@ -276,6 +283,8 @@ export default async function CeoDashboardPage() {
   const leadKpi: LeadKpi = {
     total_contacts: totalContactsRes.count ?? 0,
     new_contacts: newContactsRes.count ?? 0,
+    contacted_contacts: contactedContactsRes.count ?? 0,
+    pilot_employer_contacts: pilotEmployerContactsRes.count ?? 0,
     total_leads: totalLeadsRes.count ?? 0,
     new_leads: newLeadsRes.count ?? 0,
     qualified_leads: qualifiedLeadsRes.count ?? 0,
@@ -447,7 +456,7 @@ export default async function CeoDashboardPage() {
             </a>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
               <div className="text-2xl font-bold text-white">{leadKpi.total_contacts}</div>
               <div className="text-xs text-gray-400 mt-0.5">Kontaktanfragen</div>
@@ -457,8 +466,8 @@ export default async function CeoDashboardPage() {
               <div className="text-xs text-gray-400 mt-0.5">Neue Anfragen</div>
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold text-purple-400">{leadKpi.total_leads}</div>
-              <div className="text-xs text-gray-400 mt-0.5">Sales Leads</div>
+              <div className="text-2xl font-bold text-yellow-400">{leadKpi.contacted_contacts}</div>
+              <div className="text-xs text-gray-400 mt-0.5">Kontaktiert</div>
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
               <div className="text-2xl font-bold text-green-400">{leadKpi.qualified_leads}</div>
@@ -466,7 +475,11 @@ export default async function CeoDashboardPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="bg-gray-900 border border-green-800/40 rounded-xl p-4 text-center">
+              <div className="text-xl font-bold text-green-400">{leadKpi.pilot_employer_contacts}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🏢 Pilot-Anfragen</div>
+            </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
               <div className="text-xl font-bold text-green-400">{leadKpi.employer_leads}</div>
               <div className="text-xs text-gray-400 mt-0.5">🏢 Arbeitgeber-Leads</div>
@@ -477,7 +490,7 @@ export default async function CeoDashboardPage() {
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
               <div className="text-xl font-bold text-yellow-400">{leadKpi.new_leads}</div>
-              <div className="text-xs text-gray-400 mt-0.5">Neue Leads</div>
+              <div className="text-xs text-gray-400 mt-0.5">Neue Sales-Leads</div>
             </div>
           </div>
         </div>
