@@ -72,11 +72,9 @@ function buildPersonalizedMessage(target: OutreachTarget): string {
     ? `Guten Tag ${target.contact_person},`
     : 'Guten Tag,'
 
-  const companyRef = target.company_name ? ` bei ${target.company_name}` : ''
-
   return `${greeting}
 
-wenn Sie regelmäßig internationale Bewerber prüfen${companyRef}, kennen Sie das Problem:
+wenn Sie regelmäßig internationale Bewerber für Ihr Unternehmen prüfen, kennen Sie das Problem:
 viele Unterlagen, wenig Vorauswahl, viel manueller Aufwand.
 
 Global Talent Bridge löst genau das: Kandidaten legen ihr Profil an —
