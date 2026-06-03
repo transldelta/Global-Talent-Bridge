@@ -184,17 +184,23 @@ export default function ForEmployersPage() {
           <p className="text-gray-400 mb-6">
             Unternehmensprofil anlegen, ersten Job erstellen, Kandidaten finden.
           </p>
-          <Link
-            href="/auth/register?role=employer"
-            className="inline-block px-8 py-4 bg-green-700 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors"
-          >
-            🏢 Als Arbeitgeber registrieren →
-          </Link>
-          <div className="mt-4">
-            <Link href="/contact" className="text-sm text-gray-500 hover:text-gray-300 transition-colors">
-              Fragen? Kontakt aufnehmen →
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/auth/register?role=employer"
+              className="px-8 py-4 bg-green-700 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors"
+            >
+              🏢 Als Arbeitgeber registrieren →
+            </Link>
+            <Link
+              href="/contact?role=employer&interest=pilot_employer"
+              className="px-8 py-4 bg-blue-900/40 hover:bg-blue-800/60 border border-blue-700/60 text-blue-300 font-semibold rounded-xl transition-colors"
+            >
+              📋 Als Pilot-Arbeitgeber anfragen
             </Link>
           </div>
+          <p className="mt-4 text-xs text-gray-600">
+            Pilot-Anfrage: Direktes Gespräch, keine automatischen E-Mails, kein Spam.
+          </p>
         </div>
       </section>
 

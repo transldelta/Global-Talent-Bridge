@@ -222,6 +222,34 @@ export default async function PricingPage() {
             Jetzt kostenlos starten und erste Kandidaten finden.
           </p>
         </div>
+
+        {/* Pilot-CTA */}
+        <div className="bg-gradient-to-r from-blue-900/20 to-green-900/20 border border-blue-800/40 rounded-2xl p-8 text-center">
+          <div className="text-3xl mb-3">🤝</div>
+          <h3 className="text-xl font-bold text-white mb-2">Pilot-Arbeitgeber gesucht</h3>
+          <p className="text-gray-400 text-sm max-w-xl mx-auto mb-6">
+            Du möchtest als einer der ersten Arbeitgeber die Plattform testen und Feedback
+            geben? Meld dich direkt — wir sprechen gerne mit dir. Kein Verkaufsdruck,
+            keine automatischen E-Mails.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/contact?role=employer&interest=pilot_employer"
+              className="px-7 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors"
+            >
+              📋 Als Pilot-Arbeitgeber anfragen
+            </Link>
+            <Link
+              href="/auth/register?role=employer"
+              className="px-7 py-3.5 bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold rounded-xl border border-gray-700 transition-colors"
+            >
+              Direkt registrieren
+            </Link>
+          </div>
+          <p className="mt-4 text-xs text-gray-600">
+            Keine Zahlung erforderlich · Kein automatischer E-Mail-Kontakt · MVP-Phase
+          </p>
+        </div>
       </div>
     </div>
   )

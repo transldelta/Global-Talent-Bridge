@@ -12,6 +12,7 @@ type ContactRequest = {
   email: string
   role: string | null
   company_name: string | null
+  interest: string | null
   message: string
   status: string
   created_at: string
@@ -44,6 +45,14 @@ const ROLE_LABELS: Record<string, string> = {
   other: '❓ Sonstiges',
 }
 
+const INTEREST_LABELS: Record<string, string> = {
+  pilot_employer: '🏢 Pilot-Arbeitgeber',
+  candidate: '👤 Kandidat',
+  partnership: '🤝 Partnerschaft',
+  feedback: '💬 Feedback',
+  other: '❓ Sonstiges',
+}
+
 export default async function AdminLeadsPage() {
   const admin = await getCurrentAdminUser()
 
@@ -56,7 +65,7 @@ export default async function AdminLeadsPage() {
   const [contactsRes, leadsRes] = await Promise.all([
     supabase
       .from('contact_requests')
-      .select('id, name, email, role, company_name, message, status, created_at')
+      .select('id, name, email, role, company_name, interest, message, status, created_at')
       .order('created_at', { ascending: false })
       .limit(100),
     supabase
@@ -148,8 +157,9 @@ export default async function AdminLeadsPage() {
                 <div className="col-span-2">Name</div>
                 <div className="col-span-2">E-Mail</div>
                 <div className="col-span-1">Rolle</div>
+                <div className="col-span-1">Interesse</div>
                 <div className="col-span-2">Firma</div>
-                <div className="col-span-3">Nachricht (Auszug)</div>
+                <div className="col-span-2">Nachricht (Auszug)</div>
                 <div className="col-span-1">Datum</div>
                 <div className="col-span-1">Status</div>
               </div>
@@ -171,12 +181,21 @@ export default async function AdminLeadsPage() {
                         {ROLE_LABELS[contact.role ?? ''] ?? contact.role ?? '—'}
                       </p>
                     </div>
+                    <div className="sm:col-span-1">
+                      {contact.interest ? (
+                        <span className="text-xs px-1.5 py-0.5 rounded-full bg-blue-900/30 text-blue-300 whitespace-nowrap">
+                          {INTEREST_LABELS[contact.interest] ?? contact.interest}
+                        </span>
+                      ) : (
+                        <p className="text-gray-600 text-xs">—</p>
+                      )}
+                    </div>
                     <div className="sm:col-span-2">
                       <p className="text-gray-400 text-xs truncate">{contact.company_name ?? '—'}</p>
                     </div>
-                    <div className="sm:col-span-3">
+                    <div className="sm:col-span-2">
                       <p className="text-gray-400 text-xs leading-relaxed line-clamp-2">
-                        {contact.message.slice(0, 120)}{contact.message.length > 120 ? '…' : ''}
+                        {contact.message.slice(0, 80)}{contact.message.length > 80 ? '…' : ''}
                       </p>
                     </div>
                     <div className="sm:col-span-1">

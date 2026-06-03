@@ -20,6 +20,7 @@ export async function submitContactAction(
   const email = (formData.get('email') as string | null)?.trim() ?? ''
   const role = (formData.get('role') as string | null)?.trim() || 'other'
   const company_name = (formData.get('company_name') as string | null)?.trim() || null
+  const interest = (formData.get('interest') as string | null)?.trim() || null
   const message = (formData.get('message') as string | null)?.trim() ?? ''
   const consent = formData.get('consent') === 'true' || formData.get('consent') === 'on'
 
@@ -44,6 +45,9 @@ export async function submitContactAction(
   const validRoles = ['candidate', 'employer', 'partner', 'other']
   const safeRole = validRoles.includes(role) ? role : 'other'
 
+  const validInterests = ['pilot_employer', 'candidate', 'partnership', 'feedback', 'other']
+  const safeInterest = interest && validInterests.includes(interest) ? interest : null
+
   // Admin-Client — Service Role umgeht RLS (nur serverseitig)
   const supabase = createAdminClient()
 
@@ -53,6 +57,7 @@ export async function submitContactAction(
     email,
     role: safeRole,
     company_name,
+    interest: safeInterest,
     message,
     consent: true,
     status: 'new',
@@ -67,6 +72,11 @@ export async function submitContactAction(
   }
 
   // 2. Parallel als Sales Lead speichern (optional, ignoriert Fehler)
+  const notesParts = [
+    safeInterest ? `Interesse: ${safeInterest}` : null,
+    `Kontaktformular: ${message.slice(0, 200)}`,
+  ].filter(Boolean)
+
   await supabase.from('sales_leads').insert({
     source: 'contact_form',
     role: safeRole,
@@ -74,8 +84,8 @@ export async function submitContactAction(
     email,
     company_name,
     status: 'new',
-    priority: 'normal',
-    notes: `Kontaktformular: ${message.slice(0, 200)}`,
+    priority: safeInterest === 'pilot_employer' ? 'high' : 'normal',
+    notes: notesParts.join(' · '),
   })
 
   return { success: true }

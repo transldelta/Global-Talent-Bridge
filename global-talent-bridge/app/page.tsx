@@ -294,6 +294,49 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── MVP-STATUS ───────────────────────────────── */}
+      <section className="px-4 py-16 border-t border-gray-800">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-900/40 border border-green-700/50 text-green-300 text-xs font-medium mb-4">
+              🚦 Aktueller MVP-Status
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-2">Was bereits funktioniert</h2>
+            <p className="text-gray-400 text-sm">
+              Ehrlicher Überblick über den aktuellen Stand der Plattform.
+            </p>
+          </div>
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-3">
+            {[
+              { ok: true,  text: 'Kandidaten können sich registrieren und ein Profil erstellen' },
+              { ok: true,  text: 'Arbeitgeber können ein Unternehmensprofil und Jobs erstellen' },
+              { ok: true,  text: 'Matching-Algorithmus berechnet Score (0–100 %) regelbasiert' },
+              { ok: true,  text: 'Kandidaten sehen ihre Top-Jobs mit Score, Firma, Ort, Gehalt' },
+              { ok: true,  text: 'Arbeitgeber sehen rankierte Kandidaten in ihrem Dashboard' },
+              { ok: true,  text: 'Kontaktanfragen werden in der Datenbank gespeichert' },
+              { ok: false, text: 'Zahlungen / Premium-Pläne — in Vorbereitung, noch nicht aktiv' },
+              { ok: false, text: 'Direkter Kandidatenkontakt durch Arbeitgeber — kommt später' },
+              { ok: false, text: 'KI-gestütztes Matching — in Planung, heute regelbasiert' },
+              { ok: false, text: 'Automatische E-Mails — bewusst nicht aktiviert (DSGVO-freundlich)' },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <span className={`mt-0.5 shrink-0 text-sm ${item.ok ? 'text-green-400' : 'text-gray-600'}`}>
+                  {item.ok ? '✅' : '⏳'}
+                </span>
+                <p className={`text-sm ${item.ok ? 'text-gray-300' : 'text-gray-500'}`}>
+                  {item.text}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 text-center">
+            <p className="text-gray-600 text-xs">
+              Letzte Aktualisierung: Juni 2026 · Kein Fake-Status, keine erfundenen Zahlen
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* ── CTA UNTEN ────────────────────────────────── */}
       <section className="px-4 py-16 border-t border-gray-800 bg-gradient-to-r from-blue-900/20 to-purple-900/20">
         <div className="max-w-2xl mx-auto text-center">

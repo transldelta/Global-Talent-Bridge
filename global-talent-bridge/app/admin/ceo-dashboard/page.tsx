@@ -585,6 +585,65 @@ export default async function CeoDashboardPage() {
           </div>
         </div>
 
+        {/* Nächste manuelle Schritte */}
+        <div className="bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-blue-800/40 rounded-2xl p-6">
+          <h2 className="text-xl font-bold text-white mb-2">🗺️ Nächste manuelle Schritte</h2>
+          <p className="text-gray-400 text-sm mb-5">
+            Reine Anzeige — keine autonomen Aufgaben, keine automatischen E-Mails.
+            Alle Schritte werden manuell ausgeführt.
+          </p>
+          <div className="space-y-3">
+            {[
+              {
+                icon: '🏢',
+                step: '5 Pilot-Arbeitgeber kontaktieren',
+                detail: 'Über Kontaktformular eingegangene Anfragen (Interesse: Pilot-Arbeitgeber) manuell beantworten.',
+                done: false,
+              },
+              {
+                icon: '👤',
+                step: '10 Kandidatenprofile sammeln',
+                detail: 'Kandidaten über Netzwerke und soziale Medien auf die Plattform einladen. Profil-Qualität prüfen.',
+                done: false,
+              },
+              {
+                icon: '💬',
+                step: 'Feedback prüfen und auswerten',
+                detail: 'Kontaktanfragen lesen, Feedback-Einträge im Admin-Lead-Dashboard auswerten.',
+                done: false,
+              },
+              {
+                icon: '🎯',
+                step: 'Matchingqualität verbessern',
+                detail: 'Scoring-Algorithmus anpassen basierend auf realem Feedback von Arbeitgebern und Kandidaten.',
+                done: false,
+              },
+              {
+                icon: '💰',
+                step: 'Zahlungsfunktion aktivieren — erst danach',
+                detail: 'Stripe-Integration erst nach stabilen Pilot-Daten und klarem Mehrwert für Arbeitgeber aktivieren.',
+                done: false,
+              },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="flex items-start gap-4 p-4 bg-gray-900/60 border border-gray-700/50 rounded-xl"
+              >
+                <div className="text-2xl shrink-0">{item.icon}</div>
+                <div className="flex-1">
+                  <p className="text-white text-sm font-medium mb-0.5">{item.step}</p>
+                  <p className="text-gray-400 text-xs leading-relaxed">{item.detail}</p>
+                </div>
+                <div className="shrink-0">
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-500">
+                    ausstehend
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Sicherheitsstatus */}
         <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6">
           <h2 className="text-xl font-bold text-white mb-4">🔒 Sicherheitsstatus</h2>
