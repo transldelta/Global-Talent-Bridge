@@ -109,6 +109,9 @@ CREATE POLICY "interview_requests_employer_insert" ON public.interview_requests
   FOR INSERT TO authenticated
   WITH CHECK (employer_id IN (SELECT id FROM public.employers WHERE user_id = auth.uid()));
 
+CREATE UNIQUE INDEX IF NOT EXISTS idx_interview_requests_unique
+  ON public.interview_requests (employer_id, candidate_id, job_id);
+
 CREATE INDEX IF NOT EXISTS idx_interview_requests_employer ON public.interview_requests (employer_id);
 CREATE INDEX IF NOT EXISTS idx_interview_requests_candidate ON public.interview_requests (candidate_id);
 CREATE INDEX IF NOT EXISTS idx_interview_requests_status ON public.interview_requests (status);

@@ -46,7 +46,12 @@ export async function POST(request: Request) {
     .select()
     .single()
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 400 })
+  if (error) {
+    if (error.code === '23505') {
+      return NextResponse.json({ success: true, note: 'Interview-Anfrage bereits gestellt.' })
+    }
+    return NextResponse.json({ error: error.message }, { status: 400 })
+  }
 
   return NextResponse.json({
     success: true,
