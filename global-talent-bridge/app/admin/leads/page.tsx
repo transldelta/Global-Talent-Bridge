@@ -4,6 +4,7 @@ import { getCurrentAdminUser } from '@/lib/admin'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NavBar } from '@/app/_components/NavBar'
 import { updateContactStatusAction, updateLeadStatusAction } from './actions'
+import { StatusSelect } from './StatusSelect'
 
 type ContactRequest = {
   id: string
@@ -41,37 +42,6 @@ const ROLE_LABELS: Record<string, string> = {
   employer: '🏢 Arbeitgeber',
   partner: '🤝 Partner',
   other: '❓ Sonstiges',
-}
-
-function StatusSelect({
-  id,
-  currentStatus,
-  action,
-}: {
-  id: string
-  currentStatus: string
-  action: (formData: FormData) => Promise<void>
-}) {
-  return (
-    <form action={action} className="inline-flex">
-      <input type="hidden" name="id" value={id} />
-      <select
-        name="status"
-        defaultValue={currentStatus}
-        onChange={(e) => {
-          const form = e.target.closest('form') as HTMLFormElement
-          if (form) form.requestSubmit()
-        }}
-        className="text-xs bg-gray-800 border border-gray-700 text-white rounded-lg px-2 py-1 focus:outline-none focus:border-blue-500 cursor-pointer"
-      >
-        <option value="new">new</option>
-        <option value="contacted">contacted</option>
-        <option value="qualified">qualified</option>
-        <option value="closed">closed</option>
-      </select>
-      <button type="submit" className="sr-only">Speichern</button>
-    </form>
-  )
 }
 
 export default async function AdminLeadsPage() {

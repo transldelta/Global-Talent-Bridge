@@ -85,21 +85,29 @@ export default async function CandidateDashboard({
       // Schritt 3: Arbeitgeber-Namen laden via Admin-Client (RLS der employers-Tabelle
       // erlaubt Kandidaten keinen Lesezugriff auf fremde Arbeitgeber — Admin-Client
       // umgeht dies serverseitig; SUPABASE_SERVICE_ROLE_KEY verlässt nie den Server)
-      const employerIds = [
-        ...new Set((jobData ?? []).map((j) => j.employer_id).filter(Boolean) as string[]),
-      ]
+      let employerMap = new Map<string, string>()
+      try {
+        const employerIds = [
+          ...new Set((jobData ?? []).map((j) => j.employer_id).filter(Boolean) as string[]),
+        ]
 
-      const adminSupabase = createAdminClient()
-      const { data: employerData } = employerIds.length > 0
-        ? await adminSupabase
+        if (employerIds.length > 0) {
+          const adminSupabase = createAdminClient()
+          const { data: employerData } = await adminSupabase
             .from('employers')
             .select('id, company_name')
             .in('id', employerIds)
-        : { data: [] }
 
-      const employerMap = new Map<string, string>(
-        (employerData ?? []).map((e) => [e.id, e.company_name ?? ''])
-      )
+          employerMap = new Map<string, string>(
+            (employerData ?? []).map((e: { id: string; company_name: string | null }) => [
+              e.id,
+              e.company_name ?? '',
+            ])
+          )
+        }
+      } catch {
+        // Admin-Client-Fehler ignorieren — Firmenname wird als Fallback angezeigt
+      }
 
       // Schritt 4: Im Code zusammenführen
       const jobMap = new Map<string, JobData>(
