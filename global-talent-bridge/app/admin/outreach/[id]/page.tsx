@@ -94,8 +94,7 @@ Hätten Sie 15 Minuten für ein kurzes Gespräch?
 ${CTA_URL}
 
 Mit freundlichen Grüßen
-Brahim Ben Abla
-Global Talent Bridge
+Global Talent Bridge Team
 transl.delta@gmail.com`
 }
 

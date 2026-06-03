@@ -36,8 +36,7 @@ Oder testen Sie die Plattform direkt:
 ${CTA_URL}
 
 Mit freundlichen Grüßen
-Brahim Ben Abla
-Global Talent Bridge
+Global Talent Bridge Team
 transl.delta@gmail.com`
 
 const EMAIL_SHORT = `Betreff: Kostenloser Test — Kandidaten nach Matching-Score finden
@@ -54,8 +53,8 @@ Kein Vertrag, keine Kosten, kein Aufwand.
 Interesse? Hier können Sie direkt eine Pilot-Anfrage stellen:
 ${CTA_URL}
 
-Viele Grüße
-Brahim Ben Abla
+Mit freundlichen Grüßen
+Global Talent Bridge Team
 transl.delta@gmail.com`
 
 // ── Follow-up ──
@@ -81,7 +80,8 @@ Oder nutzen Sie das Kontaktformular:
 ${CTA_URL}
 
 Mit freundlichen Grüßen
-Brahim Ben Abla`
+Global Talent Bridge Team
+transl.delta@gmail.com`
 
 const FOLLOWUP_AFTER_INTEREST = `Betreff: Nächste Schritte — Global Talent Bridge Pilot
 
@@ -106,16 +106,15 @@ Ich bin persönlich erreichbar und antworte schnell.
 transl.delta@gmail.com
 
 Mit freundlichen Grüßen
-Brahim Ben Abla
-Global Talent Bridge`
+Global Talent Bridge Team
+transl.delta@gmail.com`
 
 // ── Telefon ──
 
 const PHONE_GUIDE = `── GESPRÄCHSEINSTIEG ──────────────────────────────────────────────────────────
 
-"Guten Tag, mein Name ist Brahim Ben Abla.
-Ich bin Gründer von Global Talent Bridge, einer Plattform für strukturiertes
-Matching internationaler Fachkräfte.
+"Guten Tag, mein Name ist [Ihr Name], ich rufe an wegen Global Talent Bridge —
+einer Plattform für strukturiertes Matching internationaler Fachkräfte.
 Haben Sie kurz 2–3 Minuten?"
 
 ── WENN JA ────────────────────────────────────────────────────────────────────
@@ -175,7 +174,8 @@ Kein Vertrag, keine Kosten, kein Spam.
 
 Wäre das etwas für Sie? Ich erkläre es gerne in 10–15 Minuten.
 
-Viele Grüße, Brahim Ben Abla`
+Viele Grüße,
+Global Talent Bridge Team`
 
 const WHATSAPP_MSG = `Hallo [Name]! 👋
 
@@ -185,7 +185,7 @@ Suche 5–10 Pilot-Unternehmen zum kostenlosen Testen. Kein Vertrag, keine Koste
 
 Hast du kurz Zeit für 10 Min Gespräch?
 
-LG Brahim 🙂`
+LG, Global Talent Bridge Team 🙂`
 
 // ── Demo-Erklärung ──
 
