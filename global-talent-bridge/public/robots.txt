@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Allow: /for-candidates
+Allow: /for-employers
+Allow: /pricing
+Allow: /about
+Allow: /contact
+Allow: /legal/
+
+# Kein Zugriff auf Admin- und Auth-Bereich
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /candidate/
+Disallow: /employer/
+Disallow: /api/
+
+Sitemap: https://global-talent-bridge.vercel.app/sitemap.xml

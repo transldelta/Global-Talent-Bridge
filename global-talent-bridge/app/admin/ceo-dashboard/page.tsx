@@ -83,6 +83,16 @@ function TaskBadge({ status }: { status: string }) {
   )
 }
 
+type LeadKpi = {
+  total_contacts: number
+  new_contacts: number
+  total_leads: number
+  new_leads: number
+  qualified_leads: number
+  employer_leads: number
+  candidate_leads: number
+}
+
 type PricingPlanRow = {
   plan_key: string
   name: string | null
@@ -107,6 +117,12 @@ const METRIC_ORDER: Record<string, { emoji: string; label?: string }> = {
   active_pricing_plans: { emoji: '🔓', label: 'Aktive Pläne' },
   total_employer_jobs: { emoji: '📋', label: 'Arbeitgeber-Jobs' },
   total_employer_matches: { emoji: '🤝', label: 'Arbeitgeber-Matches' },
+  total_contact_requests: { emoji: '📬', label: 'Kontaktanfragen' },
+  new_contact_requests: { emoji: '🆕', label: 'Neue Anfragen' },
+  total_sales_leads: { emoji: '🎯', label: 'Sales Leads' },
+  employer_leads: { emoji: '🏢', label: 'Arbeitgeber-Leads' },
+  candidate_leads: { emoji: '👤', label: 'Kandidaten-Leads' },
+  qualified_leads: { emoji: '⭐', label: 'Qualifizierte Leads' },
 }
 
 export default async function CeoDashboardPage() {
@@ -142,6 +158,13 @@ export default async function CeoDashboardPage() {
     onboardingsCountRes,
     matchScoresRes,
     pricingPlansRes,
+    totalContactsRes,
+    newContactsRes,
+    totalLeadsRes,
+    newLeadsRes,
+    qualifiedLeadsRes,
+    employerLeadsRes,
+    candidateLeadsRes,
   ] = await Promise.all([
     supabase
       .from('agent_departments')
@@ -186,6 +209,14 @@ export default async function CeoDashboardPage() {
       .from('pricing_plans')
       .select('plan_key, name, monthly_price_eur, yearly_price_eur, active, features')
       .order('monthly_price_eur', { ascending: true }),
+    // Lead KPIs
+    supabase.from('contact_requests').select('*', { count: 'exact', head: true }),
+    supabase.from('contact_requests').select('*', { count: 'exact', head: true }).eq('status', 'new'),
+    supabase.from('sales_leads').select('*', { count: 'exact', head: true }),
+    supabase.from('sales_leads').select('*', { count: 'exact', head: true }).eq('status', 'new'),
+    supabase.from('sales_leads').select('*', { count: 'exact', head: true }).eq('status', 'qualified'),
+    supabase.from('sales_leads').select('*', { count: 'exact', head: true }).eq('role', 'employer'),
+    supabase.from('sales_leads').select('*', { count: 'exact', head: true }).eq('role', 'candidate'),
   ])
 
   const departments: Department[] = deptRes.data ?? []
@@ -241,6 +272,16 @@ export default async function CeoDashboardPage() {
       emoji: '🚀',
     },
   ]
+
+  const leadKpi: LeadKpi = {
+    total_contacts: totalContactsRes.count ?? 0,
+    new_contacts: newContactsRes.count ?? 0,
+    total_leads: totalLeadsRes.count ?? 0,
+    new_leads: newLeadsRes.count ?? 0,
+    qualified_leads: qualifiedLeadsRes.count ?? 0,
+    employer_leads: employerLeadsRes.count ?? 0,
+    candidate_leads: candidateLeadsRes.count ?? 0,
+  }
 
   const pricingPlans: PricingPlanRow[] = (pricingPlansRes.data ?? []).map((p) => ({
     ...p,
@@ -391,6 +432,53 @@ export default async function CeoDashboardPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Go-to-Market & Leads */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-white">🎯 Go-to-Market & Leads</h2>
+            <a
+              href="/admin/leads"
+              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+            >
+              Leads verwalten →
+            </a>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-white">{leadKpi.total_contacts}</div>
+              <div className="text-xs text-gray-400 mt-0.5">Kontaktanfragen</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-blue-400">{leadKpi.new_contacts}</div>
+              <div className="text-xs text-gray-400 mt-0.5">Neue Anfragen</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-purple-400">{leadKpi.total_leads}</div>
+              <div className="text-xs text-gray-400 mt-0.5">Sales Leads</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-green-400">{leadKpi.qualified_leads}</div>
+              <div className="text-xs text-gray-400 mt-0.5">Qualifiziert</div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="text-xl font-bold text-green-400">{leadKpi.employer_leads}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🏢 Arbeitgeber-Leads</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="text-xl font-bold text-blue-400">{leadKpi.candidate_leads}</div>
+              <div className="text-xs text-gray-400 mt-0.5">👤 Kandidaten-Leads</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="text-xl font-bold text-yellow-400">{leadKpi.new_leads}</div>
+              <div className="text-xs text-gray-400 mt-0.5">Neue Leads</div>
+            </div>
           </div>
         </div>
 

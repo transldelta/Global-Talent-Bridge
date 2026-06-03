@@ -22,6 +22,12 @@ const METRIC_KEYS = [
   'active_pricing_plans',
   'total_employer_jobs',
   'total_employer_matches',
+  'total_contact_requests',
+  'new_contact_requests',
+  'total_sales_leads',
+  'employer_leads',
+  'candidate_leads',
+  'qualified_leads',
 ] as const
 
 type MetricKey = (typeof METRIC_KEYS)[number]
@@ -53,6 +59,12 @@ export async function POST() {
     activePricingPlansRes,
     totalEmployerJobsRes,
     totalEmployerMatchesRes,
+    totalContactRequestsRes,
+    newContactRequestsRes,
+    totalSalesLeadsRes,
+    employerLeadsRes,
+    candidateLeadsRes,
+    qualifiedLeadsRes,
   ] = await Promise.all([
     supabase.from('profiles').select('*', { count: 'exact', head: true }),
     supabase.from('candidates').select('*', { count: 'exact', head: true }),
@@ -70,6 +82,12 @@ export async function POST() {
     supabase.from('pricing_plans').select('*', { count: 'exact', head: true }).eq('active', true),
     supabase.from('jobs').select('*', { count: 'exact', head: true }),
     supabase.from('matches').select('*', { count: 'exact', head: true }),
+    supabase.from('contact_requests').select('*', { count: 'exact', head: true }),
+    supabase.from('contact_requests').select('*', { count: 'exact', head: true }).eq('status', 'new'),
+    supabase.from('sales_leads').select('*', { count: 'exact', head: true }),
+    supabase.from('sales_leads').select('*', { count: 'exact', head: true }).eq('role', 'employer'),
+    supabase.from('sales_leads').select('*', { count: 'exact', head: true }).eq('role', 'candidate'),
+    supabase.from('sales_leads').select('*', { count: 'exact', head: true }).eq('status', 'qualified'),
   ])
 
   // Durchschnittlichen Match-Score berechnen
@@ -174,6 +192,48 @@ export async function POST() {
       metric_key: 'total_employer_matches',
       metric_name: 'Arbeitgeber-Matches gesamt',
       metric_value: totalEmployerMatchesRes.count ?? 0,
+      period,
+      source: 'recalculate-metrics-api',
+    },
+    {
+      metric_key: 'total_contact_requests',
+      metric_name: 'Kontaktanfragen gesamt',
+      metric_value: totalContactRequestsRes.count ?? 0,
+      period,
+      source: 'recalculate-metrics-api',
+    },
+    {
+      metric_key: 'new_contact_requests',
+      metric_name: 'Neue Kontaktanfragen',
+      metric_value: newContactRequestsRes.count ?? 0,
+      period,
+      source: 'recalculate-metrics-api',
+    },
+    {
+      metric_key: 'total_sales_leads',
+      metric_name: 'Sales Leads gesamt',
+      metric_value: totalSalesLeadsRes.count ?? 0,
+      period,
+      source: 'recalculate-metrics-api',
+    },
+    {
+      metric_key: 'employer_leads',
+      metric_name: 'Arbeitgeber-Leads',
+      metric_value: employerLeadsRes.count ?? 0,
+      period,
+      source: 'recalculate-metrics-api',
+    },
+    {
+      metric_key: 'candidate_leads',
+      metric_name: 'Kandidaten-Leads',
+      metric_value: candidateLeadsRes.count ?? 0,
+      period,
+      source: 'recalculate-metrics-api',
+    },
+    {
+      metric_key: 'qualified_leads',
+      metric_name: 'Qualifizierte Leads',
+      metric_value: qualifiedLeadsRes.count ?? 0,
       period,
       source: 'recalculate-metrics-api',
     },
