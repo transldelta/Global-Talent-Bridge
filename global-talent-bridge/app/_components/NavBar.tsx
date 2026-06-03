@@ -88,9 +88,25 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
             </Link>
           )}
 
+          {/* Nur für Kandidaten */}
+          {!isEmployer && !userIsAdmin && user && (
+            <Link
+              href="/candidate/applications"
+              className="text-sm text-gray-400 hover:text-white transition-colors"
+            >
+              Meine Bewerbungen
+            </Link>
+          )}
+
           {/* Admin-only links */}
           {userIsAdmin && (
             <>
+              <Link
+                href="/admin/applications"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                Bewerbungen
+              </Link>
               <Link
                 href="/admin/outreach"
                 className="text-sm text-gray-400 hover:text-white transition-colors"

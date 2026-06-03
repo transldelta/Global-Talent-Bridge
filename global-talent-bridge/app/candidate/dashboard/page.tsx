@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NavBar } from '@/app/_components/NavBar'
 import { MatchingButton } from '@/app/candidate/_components/MatchingButton'
+import { ApplyButton } from '@/app/candidate/_components/ApplyButton'
 
 // -------------------------------------------------------
 // Typen
@@ -143,6 +144,17 @@ export default async function CandidateDashboard({
         return true
       })
     }
+  }
+
+  // Bestehende Bewerbungen laden (für alreadyApplied-Prüfung)
+  let appliedJobIds = new Set<string>()
+  if (candidate) {
+    const { data: applications } = await supabase
+      .from('application_requests')
+      .select('job_id')
+      .eq('candidate_id', candidate.id)
+      .neq('status', 'withdrawn')
+    appliedJobIds = new Set((applications ?? []).map((a: { job_id: string }) => a.job_id))
   }
 
   const showMatchingSuccess = searchParams?.matched === 'true'
@@ -371,45 +383,62 @@ export default async function CandidateDashboard({
               {matches.map((match) => (
                 <div
                   key={match.id}
-                  className="bg-gray-900 rounded-xl border border-gray-800 p-4 flex items-center justify-between gap-4"
+                  className="bg-gray-900 rounded-xl border border-gray-800 p-4"
                 >
-                  <div className="flex-1 min-w-0">
-                    <p className="text-white font-medium truncate">
-                      {match.jobs?.title ?? 'Stelle wird geladen…'}
-                    </p>
-                    <p className="text-blue-400 text-sm mt-0.5 truncate">
-                      🏢 {match.jobs?.company_name ?? 'Arbeitgeber nicht angegeben'}
-                    </p>
-                    <p className="text-gray-400 text-sm mt-0.5">
-                      {[
-                        match.jobs?.sector,
-                        match.jobs?.city,
-                        match.jobs?.country,
-                      ]
-                        .filter(Boolean)
-                        .join(' · ')}
-                    </p>
-                    {match.jobs?.salary_range && (
-                      <p className="text-gray-500 text-xs mt-1">
-                        💰 {match.jobs.salary_range}
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white font-medium truncate">
+                        {match.jobs?.title ?? 'Stelle wird geladen…'}
                       </p>
-                    )}
+                      <p className="text-blue-400 text-sm mt-0.5 truncate">
+                        🏢 {match.jobs?.company_name ?? 'Arbeitgeber nicht angegeben'}
+                      </p>
+                      <p className="text-gray-400 text-sm mt-0.5">
+                        {[
+                          match.jobs?.sector,
+                          match.jobs?.city,
+                          match.jobs?.country,
+                        ]
+                          .filter(Boolean)
+                          .join(' · ')}
+                      </p>
+                      {match.jobs?.salary_range && (
+                        <p className="text-gray-500 text-xs mt-1">
+                          💰 {match.jobs.salary_range}
+                        </p>
+                      )}
+                    </div>
+                    <div className="text-right shrink-0">
+                      <div
+                        className={`text-lg font-bold ${
+                          match.score >= 80
+                            ? 'text-green-400'
+                            : match.score >= 60
+                            ? 'text-yellow-400'
+                            : 'text-gray-400'
+                        }`}
+                      >
+                        {match.score}%
+                      </div>
+                      <div className="text-xs text-gray-500 capitalize mt-0.5">
+                        {match.status}
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-right shrink-0">
-                    <div
-                      className={`text-lg font-bold ${
-                        match.score >= 80
-                          ? 'text-green-400'
-                          : match.score >= 60
-                          ? 'text-yellow-400'
-                          : 'text-gray-400'
-                      }`}
+                  {/* Apply Button */}
+                  <div className="mt-3 pt-3 border-t border-gray-800 flex items-center justify-between gap-2">
+                    <ApplyButton
+                      jobId={match.job_id}
+                      matchId={match.id}
+                      jobTitle={match.jobs?.title ?? 'Diese Stelle'}
+                      alreadyApplied={appliedJobIds.has(match.job_id)}
+                    />
+                    <Link
+                      href="/candidate/applications"
+                      className="text-xs text-gray-600 hover:text-gray-400 transition-colors"
                     >
-                      {match.score}%
-                    </div>
-                    <div className="text-xs text-gray-500 capitalize mt-0.5">
-                      {match.status}
-                    </div>
+                      Alle Bewerbungen →
+                    </Link>
                   </div>
                 </div>
               ))}

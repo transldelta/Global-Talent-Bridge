@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NavBar } from '@/app/_components/NavBar'
+import { CandidateActionButtons } from '@/app/employer/_components/CandidateActionButtons'
 
 type Job = {
   id: string
@@ -156,6 +157,42 @@ export default async function EmployerDashboard() {
     }
   }
 
+  // Bewerbungen für eigene Jobs + gespeicherte Kandidaten laden
+  let applicationMap = new Map<string, { id: string; status: string }>() // key: candidate_id+job_id
+  let savedCandidateSet = new Set<string>() // key: candidate_id+job_id
+  let incomingApplications: { id: string; candidate_id: string; job_id: string; status: string; cover_note: string | null; created_at: string }[] = []
+
+  if (employer && jobs.length > 0) {
+    try {
+      const adminSupabase = createAdminClient()
+      const jobIds = jobs.map((j) => j.id)
+
+      const [appRes, savedRes] = await Promise.all([
+        adminSupabase
+          .from('application_requests')
+          .select('id, candidate_id, job_id, status, cover_note, created_at')
+          .in('job_id', jobIds)
+          .neq('status', 'withdrawn')
+          .order('created_at', { ascending: false })
+          .limit(50),
+        adminSupabase
+          .from('saved_candidates')
+          .select('candidate_id, job_id')
+          .eq('employer_id', employer.id),
+      ])
+
+      incomingApplications = appRes.data ?? []
+      for (const app of incomingApplications) {
+        applicationMap.set(`${app.candidate_id}:${app.job_id}`, { id: app.id, status: app.status })
+      }
+      for (const sc of savedRes.data ?? []) {
+        savedCandidateSet.add(`${sc.candidate_id}:${sc.job_id}`)
+      }
+    } catch {
+      // Admin-Client-Fehler — graceful degradation
+    }
+  }
+
   // KPIs berechnen
   const activeJobs = jobs.filter((j) => j.is_active).length
   const totalMatches = enrichedMatches.length
@@ -229,6 +266,26 @@ export default async function EmployerDashboard() {
                 {bestScore > 0 ? `${bestScore}%` : '—'}
               </div>
               <div className="text-xs text-gray-400 mt-0.5">Bester Score</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-blue-400">{incomingApplications.length}</div>
+              <div className="text-xs text-gray-400 mt-0.5">Bewerbungen</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-orange-400">
+                {incomingApplications.filter((a) => a.status === 'pending').length}
+              </div>
+              <div className="text-xs text-gray-400 mt-0.5">Neue Bewerbungen</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-yellow-400">{savedCandidateSet.size}</div>
+              <div className="text-xs text-gray-400 mt-0.5">Gespeicherte Kand.</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-green-400">
+                {incomingApplications.filter((a) => a.status === 'accepted').length}
+              </div>
+              <div className="text-xs text-gray-400 mt-0.5">Angenommen</div>
             </div>
           </div>
         )}
@@ -386,39 +443,67 @@ export default async function EmployerDashboard() {
               </div>
             ) : (
               <div className="grid gap-3">
-                {enrichedMatches.slice(0, 10).map((match) => (
-                  <div
-                    key={match.id}
-                    className="bg-gray-900 rounded-xl border border-gray-800 p-4 flex items-center justify-between gap-4"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <p className="text-white font-medium truncate">
-                        {match.candidate_name ?? 'Kandidat (anonym)'}
-                      </p>
-                      <p className="text-gray-400 text-sm mt-0.5">
-                        {[match.candidate_sector, match.job_title]
-                          .filter(Boolean)
-                          .join(' → ')}
-                      </p>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <div
-                        className={`text-lg font-bold ${
-                          match.score >= 80
-                            ? 'text-green-400'
-                            : match.score >= 60
-                            ? 'text-yellow-400'
-                            : 'text-gray-400'
-                        }`}
-                      >
-                        {match.score}%
+                {enrichedMatches.slice(0, 10).map((match) => {
+                  const appKey = `${match.candidate_id}:${match.job_id}`
+                  const appInfo = applicationMap.get(appKey)
+                  const isSaved = savedCandidateSet.has(appKey)
+                  return (
+                    <div
+                      key={match.id}
+                      className="bg-gray-900 rounded-xl border border-gray-800 p-4"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-white font-medium truncate">
+                            {match.candidate_name ?? 'Kandidat (anonym)'}
+                          </p>
+                          <p className="text-gray-400 text-sm mt-0.5">
+                            {[match.candidate_sector, match.job_title]
+                              .filter(Boolean)
+                              .join(' → ')}
+                          </p>
+                          {appInfo && (
+                            <span className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full ${
+                              appInfo.status === 'pending' ? 'bg-yellow-900/30 text-yellow-300 border border-yellow-800/40'
+                              : appInfo.status === 'accepted' ? 'bg-green-900/30 text-green-300 border border-green-800/40'
+                              : appInfo.status === 'rejected' ? 'bg-red-900/20 text-red-400 border border-red-800/30'
+                              : 'bg-blue-900/30 text-blue-300 border border-blue-800/40'
+                            }`}>
+                              📩 Beworben ({appInfo.status === 'pending' ? 'in Prüfung'
+                                : appInfo.status === 'employer_notified' ? 'für dich freigegeben'
+                                : appInfo.status})
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-right shrink-0">
+                          <div
+                            className={`text-lg font-bold ${
+                              match.score >= 80
+                                ? 'text-green-400'
+                                : match.score >= 60
+                                ? 'text-yellow-400'
+                                : 'text-gray-400'
+                            }`}
+                          >
+                            {match.score}%
+                          </div>
+                          <div className="text-xs text-gray-500 capitalize mt-0.5">
+                            {match.status}
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-xs text-gray-500 capitalize mt-0.5">
-                        {match.status}
+                      {/* Arbeitgeber-Aktionen */}
+                      <div className="mt-2 pt-2 border-t border-gray-800">
+                        <CandidateActionButtons
+                          candidateId={match.candidate_id}
+                          jobId={match.job_id}
+                          applicationId={appInfo?.id}
+                          isSaved={isSaved}
+                        />
                       </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
                 {enrichedMatches.length > 10 && (
                   <p className="text-center text-gray-500 text-sm py-2">
                     + {enrichedMatches.length - 10} weitere Matches in{' '}

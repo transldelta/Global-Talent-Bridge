@@ -222,6 +222,12 @@ export default async function CeoDashboardPage() {
     agentSuggestionsRes,
     agentNotificationsRes,
     agentRunLogsRes,
+    // Application-Workflow KPIs
+    appTotalRes,
+    appOpenRes,
+    interviewTotalRes,
+    contactReleaseTotalRes,
+    savedCandidatesTotalRes,
   ] = await Promise.all([
     supabase
       .from('agent_departments')
@@ -313,6 +319,12 @@ export default async function CeoDashboardPage() {
       .select('id, run_type, status, summary, suggestions_created, notifications_created, created_at')
       .order('created_at', { ascending: false })
       .limit(1),
+    // Application-Workflow KPIs
+    supabase.from('application_requests').select('*', { count: 'exact', head: true }),
+    supabase.from('application_requests').select('*', { count: 'exact', head: true }).in('status', ['pending', 'reviewed']),
+    supabase.from('interview_requests').select('*', { count: 'exact', head: true }),
+    supabase.from('contact_release_requests').select('*', { count: 'exact', head: true }),
+    supabase.from('saved_candidates').select('*', { count: 'exact', head: true }),
   ])
 
   const departments: Department[] = deptRes.data ?? []
@@ -391,6 +403,15 @@ export default async function CeoDashboardPage() {
     converted: outreachConvertedRes.count ?? 0,
     followup_due: outreachFollowupRes.count ?? 0,
   }
+
+  // Application-Workflow KPIs
+  const appWorkflowKpis = [
+    { label: 'Bewerbungen gesamt',  value: appTotalRes.count ?? 0,            emoji: '📩' },
+    { label: 'Offene Bewerbungen',  value: appOpenRes.count ?? 0,             emoji: '⏳', highlight: (appOpenRes.count ?? 0) > 0 },
+    { label: 'Interview-Anfragen',  value: interviewTotalRes.count ?? 0,      emoji: '📅' },
+    { label: 'Kontaktfreigaben',    value: contactReleaseTotalRes.count ?? 0, emoji: '📋' },
+    { label: 'Gespeicherte Kand.',  value: savedCandidatesTotalRes.count ?? 0, emoji: '⭐' },
+  ]
 
   // Phase 2J: Agent System
   const agentSuggestions: AgentSuggestion[] = (agentSuggestionsRes.data ?? []) as AgentSuggestion[]
@@ -705,6 +726,37 @@ export default async function CeoDashboardPage() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Bewerbungs-Workflow KPIs */}
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-xl font-bold text-white">📩 Bewerbungs-Workflow</h2>
+            <Link href="/admin/applications" className="text-xs text-blue-400 hover:text-blue-300 transition-colors">
+              Alle Bewerbungen →
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            {appWorkflowKpis.map((kpi) => (
+              <div
+                key={kpi.label}
+                className={`border rounded-xl p-4 text-center ${
+                  'highlight' in kpi && kpi.highlight
+                    ? 'bg-yellow-900/20 border-yellow-800/50'
+                    : 'bg-gray-900 border-gray-800'
+                }`}
+              >
+                <div className="text-2xl mb-1">{kpi.emoji}</div>
+                <div className={`text-2xl font-bold ${'highlight' in kpi && kpi.highlight ? 'text-yellow-300' : 'text-white'}`}>
+                  {kpi.value}
+                </div>
+                <div className="text-xs text-gray-400 mt-0.5 leading-tight">{kpi.label}</div>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-gray-600 mt-2">
+            🔒 Kein Kontakt ohne Admin-Freigabe. Alle Bewerbungen laufen über Admin-Kontrolle.
+          </p>
         </div>
 
         {/* Business Metrics (gespeicherte Werte) */}
