@@ -1,18 +1,45 @@
 import 'server-only'
+import { createClient } from '@/lib/supabase/server'
 
 /**
- * Prüft ob die gegebene E-Mail-Adresse Administrator-Rechte hat.
- * Admin-Liste kommt aus der ADMIN_EMAILS Umgebungsvariable (serverseitig).
- * Diese Funktion darf NIEMALS im Client verwendet werden.
+ * Liest Admin-E-Mails aus ADMIN_EMAILS Umgebungsvariable.
+ * Nur serverseitig — niemals im Client verwenden.
  */
-export function isAdmin(email: string | null | undefined): boolean {
-  if (!email) return false
-
-  const adminEmailsRaw = process.env.ADMIN_EMAILS ?? ''
-  const adminEmails = adminEmailsRaw
+export function getAdminEmails(): string[] {
+  const raw = process.env.ADMIN_EMAILS ?? ''
+  return raw
     .split(',')
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean)
+}
 
-  return adminEmails.includes(email.toLowerCase())
+/**
+ * Prüft ob eine E-Mail-Adresse Admin-Rechte hat.
+ * Case-insensitive. Mehrere E-Mails per Komma erlaubt.
+ */
+export function isAdminEmail(email: string | null | undefined): boolean {
+  if (!email) return false
+  return getAdminEmails().includes(email.toLowerCase())
+}
+
+/**
+ * Gibt den aktuell eingeloggten Admin-User zurück.
+ * Nutzt den Supabase Server Client (Anon Key + Session aus Cookies).
+ * Gibt null zurück wenn nicht eingeloggt oder kein Admin.
+ */
+export async function getCurrentAdminUser(): Promise<{
+  id: string
+  email: string
+} | null> {
+  try {
+    const supabase = createClient()
+    const { data: { user }, error } = await supabase.auth.getUser()
+
+    if (error || !user || !user.email) return null
+    if (!isAdminEmail(user.email)) return null
+
+    return { id: user.id, email: user.email }
+  } catch {
+    return null
+  }
 }
