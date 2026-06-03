@@ -1,13 +1,15 @@
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getCurrentAdminUser } from '@/lib/admin'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { NavBar } from '@/app/_components/NavBar'
 
 const TABLES = [
   'profiles', 'candidates', 'employers', 'jobs', 'matches',
   'onboarding_progress', 'system_logs', 'agent_departments',
   'agent_registry', 'agent_tasks', 'agent_reports', 'business_metrics',
 ] as const
+
+type TableName = (typeof TABLES)[number]
 
 export default async function SystemCheckPage() {
   const admin = await getCurrentAdminUser()
@@ -28,17 +30,21 @@ export default async function SystemCheckPage() {
   }
 
   const supabase = createAdminClient()
-  const tableStatus: Record<string, { count: number | null; error: string | null }> = {}
+  const tableStatus: Record<TableName, { count: number | null; error: string | null }> =
+    {} as Record<TableName, { count: number | null; error: string | null }>
 
-  for (const table of TABLES) {
-    const { count, error } = await supabase
-      .from(table)
-      .select('*', { count: 'exact', head: true })
-    tableStatus[table] = {
-      count: error ? null : (count ?? 0),
-      error: error ? error.message : null,
-    }
-  }
+  // Alle Tabellen-Counts parallel laden
+  await Promise.all(
+    TABLES.map(async (table) => {
+      const { count, error } = await supabase
+        .from(table)
+        .select('*', { count: 'exact', head: true })
+      tableStatus[table] = {
+        count: error ? null : (count ?? 0),
+        error: error ? error.message : null,
+      }
+    })
+  )
 
   const { data: rlsData } = await supabase.rpc('get_rls_status')
   const rlsMap = new Map<string, boolean>()
@@ -56,19 +62,21 @@ export default async function SystemCheckPage() {
 
   const allTablesOk = Object.values(tableStatus).every((t) => t.error === null)
 
+  // KPI-Zusammenfassung aus den geladenen Counts
+  const kpiItems = [
+    { label: 'User-Profile', key: 'profiles' as TableName, emoji: '👤' },
+    { label: 'Kandidaten', key: 'candidates' as TableName, emoji: '🎓' },
+    { label: 'Arbeitgeber', key: 'employers' as TableName, emoji: '🏢' },
+    { label: 'Jobs', key: 'jobs' as TableName, emoji: '💼' },
+    { label: 'Matches', key: 'matches' as TableName, emoji: '🎯' },
+    { label: 'System-Logs', key: 'system_logs' as TableName, emoji: '📋' },
+    { label: 'Abteilungen', key: 'agent_departments' as TableName, emoji: '🏛️' },
+    { label: 'Business Metrics', key: 'business_metrics' as TableName, emoji: '📊' },
+  ]
+
   return (
     <div className="min-h-screen bg-gray-950">
-      <nav className="border-b border-gray-800 bg-gray-900">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/admin/ceo-dashboard" className="text-gray-400 hover:text-white text-sm">
-              ← CEO Dashboard
-            </Link>
-            <span className="text-white font-semibold">System Check</span>
-          </div>
-          <span className="text-xs text-gray-500">{admin.email}</span>
-        </div>
-      </nav>
+      <NavBar badge="Admin" badgeColor="purple" />
 
       <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
         {/* Status-Header */}
@@ -78,7 +86,8 @@ export default async function SystemCheckPage() {
           />
           <div>
             <h1 className="text-2xl font-bold text-white">
-              System Status: {allTablesOk ? '✅ Alle Systeme operativ' : '⚠️ Fehler erkannt'}
+              System Status:{' '}
+              {allTablesOk ? '✅ Alle Systeme operativ' : '⚠️ Fehler erkannt'}
             </h1>
             <p className="text-gray-400 text-sm mt-0.5">
               {new Date().toLocaleString('de-DE')} · Admin: {admin.email}
@@ -86,7 +95,53 @@ export default async function SystemCheckPage() {
           </div>
         </div>
 
-        {/* Tabellen-Status */}
+        {/* KPI-Zusammenfassung */}
+        <div>
+          <h2 className="text-lg font-semibold text-white mb-3">KPI-Überblick</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {kpiItems.map(({ label, key, emoji }) => {
+              const status = tableStatus[key]
+              return (
+                <div
+                  key={key}
+                  className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center"
+                >
+                  <div className="text-2xl mb-1">{emoji}</div>
+                  <div className="text-2xl font-bold text-white">
+                    {status.error ? '—' : (status.count ?? 0)}
+                  </div>
+                  <div className="text-xs text-gray-400 mt-0.5">{label}</div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* RLS-Status aller Tabellen */}
+        <div>
+          <h2 className="text-lg font-semibold text-white mb-1">RLS-Status</h2>
+          <div className="flex flex-wrap gap-2">
+            {TABLES.map((table) => {
+              const rlsEnabled = rlsMap.get(table)
+              return (
+                <span
+                  key={table}
+                  className={`text-xs px-3 py-1 rounded-full font-medium ${
+                    rlsEnabled === true
+                      ? 'bg-green-900/40 text-green-300'
+                      : rlsEnabled === false
+                      ? 'bg-red-900/40 text-red-300'
+                      : 'bg-gray-800 text-gray-500'
+                  }`}
+                >
+                  {table} {rlsEnabled === true ? '🔒' : rlsEnabled === false ? '⚠️' : '?'}
+                </span>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Tabellen-Detail */}
         <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-800">
             <h2 className="text-lg font-semibold text-white">Datenbank-Tabellen</h2>

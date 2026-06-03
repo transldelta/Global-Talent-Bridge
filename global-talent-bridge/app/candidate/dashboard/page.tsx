@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { logoutAction } from '@/app/actions'
+import { NavBar } from '@/app/_components/NavBar'
 import { MatchingButton } from '@/app/candidate/_components/MatchingButton'
 
 // -------------------------------------------------------
@@ -108,28 +108,7 @@ export default async function CandidateDashboard({
 
   return (
     <div className="min-h-screen bg-gray-950">
-      {/* Navbar */}
-      <nav className="border-b border-gray-800 bg-gray-900">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <span className="text-white font-semibold">Global Talent Bridge</span>
-            <span className="ml-2 text-xs bg-blue-900 text-blue-300 px-2 py-0.5 rounded-full">
-              Kandidat
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="text-gray-400 text-sm hidden sm:block">{user.email}</span>
-            <form action={logoutAction}>
-              <button
-                type="submit"
-                className="text-sm text-gray-400 hover:text-white transition-colors"
-              >
-                Logout
-              </button>
-            </form>
-          </div>
-        </div>
-      </nav>
+      <NavBar badge="Kandidat" badgeColor="blue" />
 
       <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
 

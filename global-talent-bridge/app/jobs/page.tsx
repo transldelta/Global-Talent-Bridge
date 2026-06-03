@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import { NavBar } from '@/app/_components/NavBar'
 
 export default async function JobsPage() {
   const supabase = createClient()
@@ -47,20 +47,14 @@ export default async function JobsPage() {
 
   return (
     <div className="min-h-screen bg-gray-950">
-      {/* Navbar */}
-      <nav className="border-b border-gray-800 bg-gray-900">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/candidate/dashboard" className="text-gray-400 hover:text-white text-sm transition-colors">
-              ← Dashboard
-            </Link>
-            <span className="text-white font-semibold">Alle Jobs</span>
-          </div>
-          <span className="text-gray-500 text-sm">{jobList.length} aktive Stellen</span>
-        </div>
-      </nav>
+      <NavBar />
 
       <div className="max-w-5xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold text-white">Alle Jobs</h1>
+          <span className="text-gray-500 text-sm">{jobList.length} aktive Stellen</span>
+        </div>
+
         {jobList.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-5xl mb-4">💼</div>

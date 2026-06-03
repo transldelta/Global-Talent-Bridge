@@ -1,7 +1,8 @@
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getCurrentAdminUser } from '@/lib/admin'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { NavBar } from '@/app/_components/NavBar'
+import { RefreshMetricsButton } from '@/app/admin/_components/RefreshMetricsButton'
 
 type Department = {
   department_key: string
@@ -82,6 +83,19 @@ function TaskBadge({ status }: { status: string }) {
   )
 }
 
+// Bekannte Metriken in der richtigen Anzeigereihenfolge + Emoji-Mapping
+const METRIC_ORDER: Record<string, { emoji: string; label?: string }> = {
+  total_profiles: { emoji: '👤', label: 'Profile gesamt' },
+  total_candidates: { emoji: '🎓', label: 'Kandidaten' },
+  total_employers: { emoji: '🏢', label: 'Arbeitgeber' },
+  total_jobs: { emoji: '💼', label: 'Jobs gesamt' },
+  active_jobs: { emoji: '✅', label: 'Aktive Jobs' },
+  total_matches: { emoji: '🎯', label: 'Matches gesamt' },
+  average_match_score: { emoji: '📈', label: 'Ø Match-Score' },
+  completed_onboardings: { emoji: '🚀', label: 'Onboardings abgeschl.' },
+  total_system_logs: { emoji: '📋', label: 'System-Logs' },
+}
+
 export default async function CeoDashboardPage() {
   const admin = await getCurrentAdminUser()
 
@@ -102,39 +116,113 @@ export default async function CeoDashboardPage() {
 
   const supabase = createAdminClient()
 
-  const [deptRes, taskRes, reportRes, metricsRes, logsRes] = await Promise.all([
+  const [
+    deptRes,
+    taskRes,
+    reportRes,
+    metricsRes,
+    logsRes,
+    candidatesCountRes,
+    employersCountRes,
+    activeJobsCountRes,
+    totalMatchesCountRes,
+    onboardingsCountRes,
+    matchScoresRes,
+  ] = await Promise.all([
     supabase
       .from('agent_departments')
       .select('department_key, name, description, mission, active')
       .order('department_key'),
     supabase
       .from('agent_tasks')
-      .select('id, department_key, agent_name, title, status, priority, requires_human_approval, created_at')
+      .select(
+        'id, department_key, agent_name, title, status, priority, requires_human_approval, created_at'
+      )
       .neq('status', 'completed')
       .order('priority', { ascending: false })
       .limit(10),
     supabase
       .from('agent_reports')
-      .select('id, department_key, agent_name, report_type, title, summary, created_at')
+      .select(
+        'id, department_key, agent_name, report_type, title, summary, created_at'
+      )
       .order('created_at', { ascending: false })
       .limit(5),
     supabase
       .from('business_metrics')
       .select('metric_key, metric_name, metric_value, period, source, created_at')
       .order('created_at', { ascending: false })
-      .limit(10),
+      .limit(20),
     supabase
       .from('system_logs')
       .select('id, agent_name, status, message, created_at')
       .order('created_at', { ascending: false })
       .limit(10),
+    // Live-KPIs direkt aus den Tabellen
+    supabase.from('candidates').select('*', { count: 'exact', head: true }),
+    supabase.from('employers').select('*', { count: 'exact', head: true }),
+    supabase.from('jobs').select('*', { count: 'exact', head: true }).eq('is_active', true),
+    supabase.from('matches').select('*', { count: 'exact', head: true }),
+    supabase
+      .from('onboarding_progress')
+      .select('*', { count: 'exact', head: true })
+      .eq('step5_complete', true),
+    supabase.from('matches').select('score'),
   ])
 
   const departments: Department[] = deptRes.data ?? []
   const tasks: AgentTask[] = taskRes.data ?? []
   const reports: AgentReport[] = reportRes.data ?? []
-  const metrics: BusinessMetric[] = metricsRes.data ?? []
   const logs: SystemLog[] = logsRes.data ?? []
+
+  // Business Metrics: deduplizieren — nur aktuellsten Eintrag je metric_key
+  const rawMetrics: BusinessMetric[] = metricsRes.data ?? []
+  const metricMap = new Map<string, BusinessMetric>()
+  for (const m of rawMetrics) {
+    const key = m.metric_key ?? '__unknown'
+    if (!metricMap.has(key)) metricMap.set(key, m) // schon nach created_at desc sortiert
+  }
+  const metrics = [...metricMap.values()]
+
+  // Direkte Live-KPIs
+  const scores = (matchScoresRes.data ?? []).map((m: { score: number }) => m.score)
+  const avgScore =
+    scores.length > 0
+      ? Math.round(scores.reduce((s: number, v: number) => s + v, 0) / scores.length)
+      : 0
+
+  const liveKpis = [
+    {
+      label: 'Kandida­ten',
+      value: candidatesCountRes.count ?? 0,
+      emoji: '🎓',
+    },
+    {
+      label: 'Arbeit­geber',
+      value: employersCountRes.count ?? 0,
+      emoji: '🏢',
+    },
+    {
+      label: 'Aktive Jobs',
+      value: activeJobsCountRes.count ?? 0,
+      emoji: '💼',
+    },
+    {
+      label: 'Matches gesamt',
+      value: totalMatchesCountRes.count ?? 0,
+      emoji: '🎯',
+    },
+    {
+      label: 'Ø Match-Score',
+      value: `${avgScore}%`,
+      emoji: '📈',
+    },
+    {
+      label: 'Onboarding abgeschl.',
+      value: onboardingsCountRes.count ?? 0,
+      emoji: '🚀',
+    },
+  ]
 
   const ceo = departments.find((d) => d.department_key === 'ceo_command')
   const subDepts = departments.filter((d) => d.department_key !== 'ceo_command')
@@ -142,29 +230,7 @@ export default async function CeoDashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-950">
-      {/* Navbar */}
-      <nav className="border-b border-gray-800 bg-gray-900 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="text-white font-bold">Global Talent Bridge</span>
-            <span className="text-xs px-2 py-0.5 bg-purple-900/50 text-purple-300 rounded-full">
-              CEO / Erzdirigent
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link
-              href="/admin/system-check"
-              className="text-sm text-gray-400 hover:text-white transition-colors"
-            >
-              System Check
-            </Link>
-            <Link href="/" className="text-sm text-gray-400 hover:text-white transition-colors">
-              Startseite
-            </Link>
-            <span className="text-xs text-gray-500">{admin.email}</span>
-          </div>
-        </div>
-      </nav>
+      <NavBar badge="CEO Dashboard" badgeColor="purple" />
 
       <div className="max-w-6xl mx-auto px-4 py-8 space-y-10">
 
@@ -175,17 +241,21 @@ export default async function CeoDashboardPage() {
             <div className="flex-1">
               <h1 className="text-3xl font-bold text-white mb-1">CEO / Erzdirigent</h1>
               {ceo?.mission && (
-                <p className="text-gray-300 text-sm leading-relaxed max-w-2xl">{ceo.mission}</p>
+                <p className="text-gray-300 text-sm leading-relaxed max-w-2xl">
+                  {ceo.mission}
+                </p>
               )}
               <div className="mt-4 flex flex-wrap gap-3">
                 <div className="text-sm text-gray-400">
-                  <span className="text-white font-semibold">{subDepts.length}</span> Abteilungen vorbereitet
+                  <span className="text-white font-semibold">{subDepts.length}</span>{' '}
+                  Abteilungen vorbereitet
                 </div>
                 <div className="text-sm text-gray-400">
                   <span className="text-white font-semibold">{activeDepts}</span> aktiv
                 </div>
                 <div className="text-sm text-gray-400">
-                  <span className="text-white font-semibold">{tasks.length}</span> offene Aufgaben
+                  <span className="text-white font-semibold">{tasks.length}</span> offene
+                  Aufgaben
                 </div>
               </div>
             </div>
@@ -198,9 +268,75 @@ export default async function CeoDashboardPage() {
           </div>
         </div>
 
+        {/* Live-KPI-Leiste */}
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-xl font-bold text-white">📊 Live Business KPIs</h2>
+            <RefreshMetricsButton />
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            {liveKpis.map((kpi) => (
+              <div
+                key={kpi.label}
+                className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center"
+              >
+                <div className="text-2xl mb-1">{kpi.emoji}</div>
+                <div className="text-2xl font-bold text-white">{kpi.value}</div>
+                <div className="text-xs text-gray-400 mt-0.5 leading-tight">{kpi.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Business Metrics (gespeicherte Werte) */}
+        <div>
+          <h2 className="text-xl font-bold text-white mb-4">📈 Gespeicherte Kennzahlen</h2>
+          {metrics.length === 0 ? (
+            <div className="bg-gray-900 rounded-xl border border-gray-800 p-6 text-center text-gray-500">
+              Noch keine Kennzahlen gespeichert. Klicke &quot;Kennzahlen aktualisieren&quot; um
+              Daten zu berechnen.
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {metrics
+                .sort((a, b) => {
+                  const keyA = a.metric_key ?? ''
+                  const keyB = b.metric_key ?? ''
+                  const orderKeys = Object.keys(METRIC_ORDER)
+                  const idxA = orderKeys.indexOf(keyA)
+                  const idxB = orderKeys.indexOf(keyB)
+                  return (idxA === -1 ? 999 : idxA) - (idxB === -1 ? 999 : idxB)
+                })
+                .map((m) => {
+                  const key = m.metric_key ?? ''
+                  const meta = METRIC_ORDER[key]
+                  return (
+                    <div
+                      key={key}
+                      className="bg-gray-900 rounded-xl border border-gray-800 p-4"
+                    >
+                      {meta && (
+                        <div className="text-lg mb-1">{meta.emoji}</div>
+                      )}
+                      <p className="text-xs text-gray-500 mb-1">
+                        {m.metric_name ?? meta?.label ?? m.metric_key ?? '—'}
+                      </p>
+                      <p className="text-2xl font-bold text-white">
+                        {key === 'average_match_score' ? `${m.metric_value}%` : m.metric_value}
+                      </p>
+                      {m.period && (
+                        <p className="text-xs text-gray-600 mt-1">{m.period}</p>
+                      )}
+                    </div>
+                  )
+                })}
+            </div>
+          )}
+        </div>
+
         {/* 12 Abteilungen */}
         <div>
-          <h2 className="text-xl font-bold text-white mb-4">12 Abteilungen</h2>
+          <h2 className="text-xl font-bold text-white mb-4">🏛️ 12 Abteilungen</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {subDepts.map((dept) => (
               <div
@@ -208,7 +344,9 @@ export default async function CeoDashboardPage() {
                 className="bg-gray-900 rounded-xl border border-gray-800 p-5 hover:border-gray-700 transition-colors"
               >
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-white font-semibold text-sm leading-tight">{dept.name}</h3>
+                  <h3 className="text-white font-semibold text-sm leading-tight">
+                    {dept.name}
+                  </h3>
                   <StatusBadge active={dept.active} />
                 </div>
                 {dept.mission && (
@@ -217,7 +355,9 @@ export default async function CeoDashboardPage() {
                   </p>
                 )}
                 <div className="mt-3 pt-3 border-t border-gray-800">
-                  <span className="text-xs text-gray-600 font-mono">{dept.department_key}</span>
+                  <span className="text-xs text-gray-600 font-mono">
+                    {dept.department_key}
+                  </span>
                 </div>
               </div>
             ))}
@@ -253,7 +393,9 @@ export default async function CeoDashboardPage() {
               <span className="text-green-400 text-lg">✅</span>
               <div>
                 <p className="text-green-300 text-sm font-medium">Admin über ADMIN_EMAILS</p>
-                <p className="text-green-200/60 text-xs">Serverseitig geprüft, kein Client-Zugriff</p>
+                <p className="text-green-200/60 text-xs">
+                  Serverseitig geprüft, kein Client-Zugriff
+                </p>
               </div>
             </div>
           </div>
@@ -274,9 +416,14 @@ export default async function CeoDashboardPage() {
           ) : (
             <div className="grid gap-3">
               {tasks.map((task) => (
-                <div key={task.id} className="bg-gray-900 rounded-xl border border-gray-800 p-4 flex items-center gap-4">
+                <div
+                  key={task.id}
+                  className="bg-gray-900 rounded-xl border border-gray-800 p-4 flex items-center gap-4"
+                >
                   <div className="flex-1">
-                    <p className="text-white text-sm font-medium">{task.title || 'Unbenannte Aufgabe'}</p>
+                    <p className="text-white text-sm font-medium">
+                      {task.title || 'Unbenannte Aufgabe'}
+                    </p>
                     <p className="text-gray-500 text-xs mt-0.5">
                       {task.department_key ?? '—'}
                       {task.requires_human_approval && (
@@ -301,10 +448,15 @@ export default async function CeoDashboardPage() {
           ) : (
             <div className="grid gap-3">
               {reports.map((report) => (
-                <div key={report.id} className="bg-gray-900 rounded-xl border border-gray-800 p-4">
+                <div
+                  key={report.id}
+                  className="bg-gray-900 rounded-xl border border-gray-800 p-4"
+                >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-white text-sm font-medium">{report.title || 'Unbenannter Bericht'}</p>
+                      <p className="text-white text-sm font-medium">
+                        {report.title || 'Unbenannter Bericht'}
+                      </p>
                       <p className="text-gray-500 text-xs mt-0.5">
                         {report.department_key ?? '—'} · {report.report_type ?? '—'}
                       </p>
@@ -314,28 +466,10 @@ export default async function CeoDashboardPage() {
                     </span>
                   </div>
                   {report.summary && (
-                    <p className="text-gray-400 text-xs mt-2 leading-relaxed">{report.summary}</p>
+                    <p className="text-gray-400 text-xs mt-2 leading-relaxed">
+                      {report.summary}
+                    </p>
                   )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Business Metrics */}
-        <div>
-          <h2 className="text-xl font-bold text-white mb-4">📈 Business Metrics</h2>
-          {metrics.length === 0 ? (
-            <div className="bg-gray-900 rounded-xl border border-gray-800 p-6 text-center text-gray-500">
-              Noch keine Metriken vorhanden.
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {metrics.map((m, i) => (
-                <div key={i} className="bg-gray-900 rounded-xl border border-gray-800 p-4">
-                  <p className="text-xs text-gray-500 mb-1">{m.metric_name ?? m.metric_key ?? '—'}</p>
-                  <p className="text-2xl font-bold text-white">{m.metric_value}</p>
-                  {m.period && <p className="text-xs text-gray-600 mt-1">{m.period}</p>}
                 </div>
               ))}
             </div>
@@ -370,7 +504,9 @@ export default async function CeoDashboardPage() {
                     <div className="flex-1 min-w-0">
                       <p className="text-gray-300 text-sm">{log.message}</p>
                       <p className="text-gray-600 text-xs mt-0.5">
-                        {log.agent_name && <span className="mr-2">[{log.agent_name}]</span>}
+                        {log.agent_name && (
+                          <span className="mr-2">[{log.agent_name}]</span>
+                        )}
                         {new Date(log.created_at).toLocaleString('de-DE')}
                       </p>
                     </div>
@@ -380,7 +516,6 @@ export default async function CeoDashboardPage() {
             </div>
           )}
         </div>
-
       </div>
     </div>
   )
