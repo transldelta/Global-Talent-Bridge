@@ -16,6 +16,14 @@ export function createAdminClient() {
     )
   }
 
+  // Platzhalter-Wert erkennen — gibt Warnung aus, bricht aber nicht den Build ab
+  if (serviceRoleKey === 'HIER_SERVICE_ROLE_KEY_EINTRAGEN' || !serviceRoleKey.startsWith('eyJ')) {
+    console.warn(
+      '[createAdminClient] SUPABASE_SERVICE_ROLE_KEY ist der Platzhalter oder ungültig. ' +
+      'DB-Abfragen schlagen fehl. Trage den echten Key aus dem Supabase Dashboard in .env.local ein.'
+    )
+  }
+
   return createClient(supabaseUrl, serviceRoleKey, {
     auth: {
       autoRefreshToken: false,

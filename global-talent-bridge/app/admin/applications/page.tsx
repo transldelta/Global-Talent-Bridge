@@ -69,10 +69,29 @@ export default async function AdminApplicationsPage() {
   const adminSupabase = createAdminClient()
 
   // Load all applications
-  const { data: applications } = await adminSupabase
+  const { data: applications, error: appsError } = await adminSupabase
     .from('application_requests')
     .select('*')
     .order('created_at', { ascending: false })
+
+  // Sichtbarer Fehler wenn Service Role Key fehlt / ungültig
+  if (appsError) {
+    return (
+      <div className="min-h-screen bg-gray-950 text-white">
+        <NavBar badge="Admin" badgeColor="purple" />
+        <main className="max-w-6xl mx-auto px-4 py-8">
+          <div className="bg-red-900/20 border border-red-700/50 rounded-xl p-6 space-y-2">
+            <p className="text-red-400 font-semibold">⚠️ Datenbankfehler — Bewerbungen konnten nicht geladen werden</p>
+            <p className="text-red-300/80 text-sm font-mono">{appsError.message}</p>
+            <p className="text-gray-400 text-sm mt-3">
+              Häufige Ursache: <code className="text-yellow-400">SUPABASE_SERVICE_ROLE_KEY</code> ist nicht gesetzt oder ungültig.
+              Prüfe <code className="text-gray-300">.env.local</code> und starte den Dev-Server neu.
+            </p>
+          </div>
+        </main>
+      </div>
+    )
+  }
 
   const apps: Application[] = applications ?? []
 
