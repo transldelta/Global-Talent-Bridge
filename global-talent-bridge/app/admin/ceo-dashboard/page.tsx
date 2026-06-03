@@ -222,6 +222,15 @@ export default async function CeoDashboardPage() {
     agentSuggestionsRes,
     agentNotificationsRes,
     agentRunLogsRes,
+    growthLeadsTotalRes,
+    growthLeadsInterestedRes,
+    growthLeadsWonRes,
+    growthActiveSourcesRes,
+    growthActivePartnersRes,
+    growthDraftMessagesRes,
+    growthSentMessagesRes,
+    growthOpenTasksRes,
+    growthLastRunRes,
   ] = await Promise.all([
     supabase
       .from('agent_departments')
@@ -313,6 +322,16 @@ export default async function CeoDashboardPage() {
       .select('id, run_type, status, summary, suggestions_created, notifications_created, created_at')
       .order('created_at', { ascending: false })
       .limit(1),
+    // Growth Engine KPIs
+    supabase.from('employer_leads').select('*', { count: 'exact', head: true }),
+    supabase.from('employer_leads').select('*', { count: 'exact', head: true }).in('status', ['interested', 'qualified']),
+    supabase.from('employer_leads').select('*', { count: 'exact', head: true }).eq('status', 'closed_won'),
+    supabase.from('candidate_growth_sources').select('*', { count: 'exact', head: true }).eq('status', 'active'),
+    supabase.from('partner_leads').select('*', { count: 'exact', head: true }).eq('status', 'active'),
+    supabase.from('outreach_messages').select('*', { count: 'exact', head: true }).eq('status', 'draft'),
+    supabase.from('outreach_messages').select('*', { count: 'exact', head: true }).eq('status', 'sent'),
+    supabase.from('growth_tasks').select('*', { count: 'exact', head: true }).eq('status', 'open'),
+    supabase.from('growth_agent_runs').select('created_at, summary, leads_scored, tasks_created').order('created_at', { ascending: false }).limit(1),
   ])
 
   const departments: Department[] = deptRes.data ?? []
@@ -408,6 +427,19 @@ export default async function CeoDashboardPage() {
   const visionarySuggestions = sortedSuggestions.filter((s) => s.department_slug === 'visionary_strategy')
   const marketingSuggestions = sortedSuggestions.filter((s) => s.department_slug === 'marketing_strategy')
   const ceoCritical = sortedSuggestions.filter((s) => s.department_slug === 'ceo_control')
+
+  // Growth Engine KPIs
+  const growthKpi = {
+    totalLeads: growthLeadsTotalRes.count ?? 0,
+    interestedLeads: growthLeadsInterestedRes.count ?? 0,
+    closedWon: growthLeadsWonRes.count ?? 0,
+    activeSources: growthActiveSourcesRes.count ?? 0,
+    activePartners: growthActivePartnersRes.count ?? 0,
+    draftMessages: growthDraftMessagesRes.count ?? 0,
+    sentMessages: growthSentMessagesRes.count ?? 0,
+    openTasks: growthOpenTasksRes.count ?? 0,
+    lastRun: (growthLastRunRes.data ?? [])[0] as { created_at: string; summary: string | null; leads_scored: number; tasks_created: number } | undefined,
+  }
 
   const pricingPlans: PricingPlanRow[] = (pricingPlansRes.data ?? []).map((p) => ({
     ...p,
@@ -1164,6 +1196,50 @@ export default async function CeoDashboardPage() {
               ))}
             </div>
           )}
+        </div>
+
+        {/* ── Growth Engine KPIs ── */}
+        <div className="bg-gray-900 border border-emerald-800/30 rounded-2xl p-6 space-y-4">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div>
+              <h2 className="text-xl font-bold text-white">🚀 Growth Engine</h2>
+              <p className="text-gray-400 text-sm mt-1">Kontrolliertes Wachstum · kein Auto-Send · alle Aktionen unter CEO-Kontrolle</p>
+            </div>
+            <Link
+              href="/admin/growth"
+              className="px-3 py-1.5 bg-emerald-900/40 hover:bg-emerald-900/60 border border-emerald-800/50 text-emerald-300 text-sm rounded-lg transition-colors"
+            >
+              Growth Dashboard →
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              { label: 'Arbeitgeber-Leads', value: growthKpi.totalLeads, sub: `${growthKpi.interestedLeads} interessiert · ${growthKpi.closedWon} gewonnen`, color: 'text-blue-400', href: '/admin/growth/employers' },
+              { label: 'Kandidatenquellen aktiv', value: growthKpi.activeSources, sub: 'Aktive Kanäle', color: 'text-cyan-400', href: '/admin/growth/candidates' },
+              { label: 'Partner aktiv', value: growthKpi.activePartners, sub: 'Strategische Partner', color: 'text-purple-400', href: '/admin/growth/partners' },
+              { label: 'Offene Aufgaben', value: growthKpi.openTasks, sub: `${growthKpi.draftMessages} Entwürfe · ${growthKpi.sentMessages} versendet`, color: growthKpi.openTasks > 0 ? 'text-yellow-400' : 'text-green-400', href: '/admin/growth/tasks' },
+            ].map((kpi) => (
+              <Link key={kpi.label} href={kpi.href} className="bg-gray-800/60 rounded-xl p-3 hover:bg-gray-800 transition-colors">
+                <div className={`text-2xl font-bold ${kpi.color}`}>{kpi.value}</div>
+                <div className="text-gray-400 text-xs mt-0.5 font-medium">{kpi.label}</div>
+                <div className="text-gray-600 text-xs mt-1">{kpi.sub}</div>
+              </Link>
+            ))}
+          </div>
+
+          {growthKpi.lastRun && (
+            <p className="text-xs text-gray-600">
+              Letzter Growth-Agent: {new Date(growthKpi.lastRun.created_at).toLocaleString('de-DE')} ·{' '}
+              {growthKpi.lastRun.summary ?? `${growthKpi.lastRun.leads_scored} Leads · ${growthKpi.lastRun.tasks_created} Aufgaben`}
+            </p>
+          )}
+
+          <div className="flex flex-wrap gap-2">
+            <Link href="/admin/growth/launch-readiness" className="text-xs px-3 py-1.5 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 rounded-lg transition-colors">🎯 Launch-Bereitschaft</Link>
+            <Link href="/admin/growth/approval-queue" className="text-xs px-3 py-1.5 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 rounded-lg transition-colors">✅ Freigabe-Warteschlange</Link>
+            <Link href="/admin/growth/activity-log" className="text-xs px-3 py-1.5 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 rounded-lg transition-colors">📜 Aktivitätslog</Link>
+          </div>
         </div>
 
         {/* System Logs */}

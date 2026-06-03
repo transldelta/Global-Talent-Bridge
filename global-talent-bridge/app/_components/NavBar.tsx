@@ -5,7 +5,7 @@ import { logoutAction } from '@/app/actions'
 
 interface NavBarProps {
   badge?: string
-  badgeColor?: 'blue' | 'green' | 'purple' | 'yellow'
+  badgeColor?: 'blue' | 'green' | 'purple' | 'yellow' | 'red'
 }
 
 const badgeColorMap: Record<string, string> = {
@@ -13,6 +13,7 @@ const badgeColorMap: Record<string, string> = {
   green: 'bg-green-900 text-green-300',
   purple: 'bg-purple-900 text-purple-300',
   yellow: 'bg-yellow-900 text-yellow-300',
+  red: 'bg-red-900 text-red-300',
 }
 
 /**
@@ -120,6 +121,12 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
                 className="text-sm text-gray-400 hover:text-white transition-colors"
               >
                 CEO Dashboard
+              </Link>
+              <Link
+                href="/admin/growth"
+                className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors font-medium"
+              >
+                🚀 Growth
               </Link>
             </>
           )}
