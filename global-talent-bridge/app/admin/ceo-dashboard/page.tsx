@@ -83,6 +83,15 @@ function TaskBadge({ status }: { status: string }) {
   )
 }
 
+type PricingPlanRow = {
+  plan_key: string
+  name: string | null
+  monthly_price_eur: number
+  yearly_price_eur: number
+  active: boolean
+  features: string[]
+}
+
 // Bekannte Metriken in der richtigen Anzeigereihenfolge + Emoji-Mapping
 const METRIC_ORDER: Record<string, { emoji: string; label?: string }> = {
   total_profiles: { emoji: '👤', label: 'Profile gesamt' },
@@ -94,6 +103,10 @@ const METRIC_ORDER: Record<string, { emoji: string; label?: string }> = {
   average_match_score: { emoji: '📈', label: 'Ø Match-Score' },
   completed_onboardings: { emoji: '🚀', label: 'Onboardings abgeschl.' },
   total_system_logs: { emoji: '📋', label: 'System-Logs' },
+  total_pricing_plans: { emoji: '💰', label: 'Pricing-Pläne gesamt' },
+  active_pricing_plans: { emoji: '🔓', label: 'Aktive Pläne' },
+  total_employer_jobs: { emoji: '📋', label: 'Arbeitgeber-Jobs' },
+  total_employer_matches: { emoji: '🤝', label: 'Arbeitgeber-Matches' },
 }
 
 export default async function CeoDashboardPage() {
@@ -128,6 +141,7 @@ export default async function CeoDashboardPage() {
     totalMatchesCountRes,
     onboardingsCountRes,
     matchScoresRes,
+    pricingPlansRes,
   ] = await Promise.all([
     supabase
       .from('agent_departments')
@@ -168,6 +182,10 @@ export default async function CeoDashboardPage() {
       .select('*', { count: 'exact', head: true })
       .eq('step5_complete', true),
     supabase.from('matches').select('score'),
+    supabase
+      .from('pricing_plans')
+      .select('plan_key, name, monthly_price_eur, yearly_price_eur, active, features')
+      .order('monthly_price_eur', { ascending: true }),
   ])
 
   const departments: Department[] = deptRes.data ?? []
@@ -223,6 +241,18 @@ export default async function CeoDashboardPage() {
       emoji: '🚀',
     },
   ]
+
+  const pricingPlans: PricingPlanRow[] = (pricingPlansRes.data ?? []).map((p) => ({
+    ...p,
+    features: Array.isArray(p.features) ? (p.features as string[]) : [],
+  }))
+  const activePricingCount = pricingPlans.filter((p) => p.active).length
+
+  // Potenzieller Jahresumsatz (wenn alle Pläne gleich verteilt aktiv wären — rein informativ)
+  const potentialMonthlyRevenue = pricingPlans.reduce(
+    (sum, p) => sum + p.monthly_price_eur,
+    0
+  )
 
   const ceo = departments.find((d) => d.department_key === 'ceo_command')
   const subDepts = departments.filter((d) => d.department_key !== 'ceo_command')
@@ -361,6 +391,109 @@ export default async function CeoDashboardPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Pricing-Pläne */}
+        <div>
+          <div className="flex items-center gap-3 mb-4">
+            <h2 className="text-xl font-bold text-white">💰 Pricing-Pläne</h2>
+            <span className="text-xs px-2.5 py-1 bg-yellow-900/30 text-yellow-300 rounded-full font-medium">
+              Zahlungen noch nicht aktiviert
+            </span>
+          </div>
+
+          {/* Pricing-KPIs */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-white">{pricingPlans.length}</div>
+              <div className="text-xs text-gray-400 mt-0.5">Pläne vorbereitet</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-gray-500">{activePricingCount}</div>
+              <div className="text-xs text-gray-400 mt-0.5">Aktive Pläne</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-purple-400">
+                {potentialMonthlyRevenue > 0 ? `${potentialMonthlyRevenue} €` : '—'}
+              </div>
+              <div className="text-xs text-gray-400 mt-0.5">Pot. Umsatz/Monat</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-purple-300">
+                {potentialMonthlyRevenue > 0 ? `${potentialMonthlyRevenue * 12} €` : '—'}
+              </div>
+              <div className="text-xs text-gray-400 mt-0.5">Pot. Umsatz/Jahr</div>
+            </div>
+          </div>
+
+          {/* Plan-Tabelle */}
+          {pricingPlans.length === 0 ? (
+            <div className="bg-gray-900 rounded-xl border border-gray-800 p-6 text-center text-gray-500">
+              Noch keine Pricing-Pläne in der Datenbank.
+            </div>
+          ) : (
+            <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
+              <div className="px-5 py-3 border-b border-gray-800 grid grid-cols-12 gap-2 text-xs text-gray-500 font-medium">
+                <div className="col-span-3">Plan</div>
+                <div className="col-span-2 text-right">Monatlich</div>
+                <div className="col-span-2 text-right">Jährlich</div>
+                <div className="col-span-3">Features</div>
+                <div className="col-span-2 text-center">Status</div>
+              </div>
+              <div className="divide-y divide-gray-800">
+                {pricingPlans.map((plan) => (
+                  <div
+                    key={plan.plan_key}
+                    className="px-5 py-3 grid grid-cols-12 gap-2 items-center"
+                  >
+                    <div className="col-span-3">
+                      <p className="text-white text-sm font-medium">{plan.name ?? plan.plan_key}</p>
+                      <p className="text-gray-600 text-xs font-mono">{plan.plan_key}</p>
+                    </div>
+                    <div className="col-span-2 text-right">
+                      <p className="text-white text-sm">
+                        {plan.monthly_price_eur === 0 ? 'Kostenlos' : `${plan.monthly_price_eur} €`}
+                      </p>
+                    </div>
+                    <div className="col-span-2 text-right">
+                      <p className="text-gray-400 text-sm">
+                        {plan.yearly_price_eur > 0 ? `${plan.yearly_price_eur} €` : '—'}
+                      </p>
+                    </div>
+                    <div className="col-span-3">
+                      <p className="text-gray-400 text-xs">
+                        {plan.features.length} Feature{plan.features.length !== 1 ? 's' : ''}
+                      </p>
+                    </div>
+                    <div className="col-span-2 text-center">
+                      {plan.active ? (
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-green-900/40 text-green-300">
+                          aktiv
+                        </span>
+                      ) : (
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-500">
+                          inaktiv
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Zahlungs-Hinweis */}
+          <div className="mt-4 p-4 bg-yellow-900/10 border border-yellow-800/40 rounded-xl flex items-start gap-3">
+            <span className="text-yellow-400 text-lg shrink-0">⚠️</span>
+            <div>
+              <p className="text-yellow-300 text-sm font-medium">Zahlungen noch nicht aktiviert</p>
+              <p className="text-yellow-200/60 text-xs mt-0.5">
+                Alle Pricing-Pläne sind vorbereitet (active=false). Stripe-Integration und echte
+                Zahlungsabwicklung kommen in einer späteren Phase. Kein Umsatz wird aktuell
+                generiert.
+              </p>
+            </div>
           </div>
         </div>
 

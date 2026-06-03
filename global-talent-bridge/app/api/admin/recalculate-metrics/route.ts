@@ -18,6 +18,10 @@ const METRIC_KEYS = [
   'average_match_score',
   'completed_onboardings',
   'total_system_logs',
+  'total_pricing_plans',
+  'active_pricing_plans',
+  'total_employer_jobs',
+  'total_employer_matches',
 ] as const
 
 type MetricKey = (typeof METRIC_KEYS)[number]
@@ -45,6 +49,10 @@ export async function POST() {
     onboardingsRes,
     logsRes,
     matchScoresRes,
+    totalPricingPlansRes,
+    activePricingPlansRes,
+    totalEmployerJobsRes,
+    totalEmployerMatchesRes,
   ] = await Promise.all([
     supabase.from('profiles').select('*', { count: 'exact', head: true }),
     supabase.from('candidates').select('*', { count: 'exact', head: true }),
@@ -58,6 +66,10 @@ export async function POST() {
       .eq('step5_complete', true),
     supabase.from('system_logs').select('*', { count: 'exact', head: true }),
     supabase.from('matches').select('score'),
+    supabase.from('pricing_plans').select('*', { count: 'exact', head: true }),
+    supabase.from('pricing_plans').select('*', { count: 'exact', head: true }).eq('active', true),
+    supabase.from('jobs').select('*', { count: 'exact', head: true }),
+    supabase.from('matches').select('*', { count: 'exact', head: true }),
   ])
 
   // Durchschnittlichen Match-Score berechnen
@@ -134,6 +146,34 @@ export async function POST() {
       metric_key: 'total_system_logs',
       metric_name: 'System-Logs gesamt',
       metric_value: logsRes.count ?? 0,
+      period,
+      source: 'recalculate-metrics-api',
+    },
+    {
+      metric_key: 'total_pricing_plans',
+      metric_name: 'Pricing-Pläne gesamt',
+      metric_value: totalPricingPlansRes.count ?? 0,
+      period,
+      source: 'recalculate-metrics-api',
+    },
+    {
+      metric_key: 'active_pricing_plans',
+      metric_name: 'Aktive Pricing-Pläne',
+      metric_value: activePricingPlansRes.count ?? 0,
+      period,
+      source: 'recalculate-metrics-api',
+    },
+    {
+      metric_key: 'total_employer_jobs',
+      metric_name: 'Arbeitgeber-Jobs gesamt',
+      metric_value: totalEmployerJobsRes.count ?? 0,
+      period,
+      source: 'recalculate-metrics-api',
+    },
+    {
+      metric_key: 'total_employer_matches',
+      metric_name: 'Arbeitgeber-Matches gesamt',
+      metric_value: totalEmployerMatchesRes.count ?? 0,
       period,
       source: 'recalculate-metrics-api',
     },

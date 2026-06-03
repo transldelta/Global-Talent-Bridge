@@ -17,7 +17,8 @@ const badgeColorMap: Record<string, string> = {
 
 /**
  * Universelle Navigation für alle geschützten Seiten.
- * Server Component — liest Session aus Cookies, zeigt Admin-Links nur für Admins.
+ * Server Component — liest Session aus Cookies, zeigt rollenbasierte Links.
+ * Admin-Links nur sichtbar wenn isAdminEmail() = true (serverseitig).
  */
 export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
   const supabase = createClient()
@@ -31,8 +32,8 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
     ? await supabase.from('profiles').select('role').eq('id', user.id).single()
     : { data: null }
 
-  const dashboardHref =
-    profile?.role === 'employer' ? '/employer/dashboard' : '/candidate/dashboard'
+  const isEmployer = profile?.role === 'employer'
+  const dashboardHref = isEmployer ? '/employer/dashboard' : '/candidate/dashboard'
 
   const badgeCss = badgeColorMap[badgeColor] ?? badgeColorMap.blue
 
@@ -40,7 +41,7 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
     <nav className="border-b border-gray-800 bg-gray-900">
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
         {/* Left: Brand + badge */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 shrink-0">
           <Link
             href={dashboardHref}
             className="text-white font-semibold hover:text-gray-200 transition-colors"
@@ -55,19 +56,37 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
         </div>
 
         {/* Right: Navigation links + user info + logout */}
-        <div className="flex items-center gap-4 flex-wrap">
+        <div className="flex items-center gap-3 flex-wrap">
           <Link
             href={dashboardHref}
             className="text-sm text-gray-400 hover:text-white transition-colors"
           >
             Dashboard
           </Link>
+
           <Link
             href="/jobs"
             className="text-sm text-gray-400 hover:text-white transition-colors"
           >
             Jobs
           </Link>
+
+          <Link
+            href="/pricing"
+            className="text-sm text-gray-400 hover:text-white transition-colors"
+          >
+            Pricing
+          </Link>
+
+          {/* Nur für Arbeitgeber */}
+          {isEmployer && (
+            <Link
+              href="/employer/jobs"
+              className="text-sm text-gray-400 hover:text-white transition-colors"
+            >
+              Meine Jobs
+            </Link>
+          )}
 
           {/* Admin-only links */}
           {userIsAdmin && (
@@ -88,7 +107,7 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
           )}
 
           {user && (
-            <span className="text-gray-600 text-sm hidden sm:block">{user.email}</span>
+            <span className="text-gray-600 text-sm hidden md:block">{user.email}</span>
           )}
 
           <form action={logoutAction}>
