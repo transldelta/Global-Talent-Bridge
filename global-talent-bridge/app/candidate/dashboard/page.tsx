@@ -9,11 +9,13 @@ import { MatchingButton } from '@/app/candidate/_components/MatchingButton'
 // -------------------------------------------------------
 type JobData = {
   id: string
+  employer_id: string | null
   title: string
   sector: string | null
   city: string | null
   country: string | null
   salary_range: string | null
+  company_name: string | null   // aus employers-Tabelle zusammengeführt
 }
 
 type MatchRow = {
@@ -71,25 +73,43 @@ export default async function CandidateDashboard({
       .limit(20)
 
     if (matchData && matchData.length > 0) {
-      // Schritt 2: Job-Details separat laden (RLS: is_active=true)
+      // Schritt 2: Job-Details separat laden — inkl. employer_id für Firmenname
       const jobIds = matchData.map((m) => m.job_id)
 
       const { data: jobData } = await supabase
         .from('jobs')
-        .select('id, title, sector, city, country, salary_range')
+        .select('id, employer_id, title, sector, city, country, salary_range')
         .in('id', jobIds)
 
-      // Schritt 3: Im Code zusammenführen
+      // Schritt 3: Arbeitgeber-Namen laden (employer_id aus jobs → companies-Namen)
+      const employerIds = [
+        ...new Set((jobData ?? []).map((j) => j.employer_id).filter(Boolean) as string[]),
+      ]
+
+      const { data: employerData } = employerIds.length > 0
+        ? await supabase
+            .from('employers')
+            .select('id, company_name')
+            .in('id', employerIds)
+        : { data: [] }
+
+      const employerMap = new Map<string, string>(
+        (employerData ?? []).map((e) => [e.id, e.company_name ?? ''])
+      )
+
+      // Schritt 4: Im Code zusammenführen
       const jobMap = new Map<string, JobData>(
         (jobData ?? []).map((j) => [
           j.id,
           {
             id: j.id,
+            employer_id: j.employer_id ?? null,
             title: j.title,
             sector: j.sector ?? null,
             city: j.city ?? null,
             country: j.country ?? null,
             salary_range: j.salary_range ?? null,
+            company_name: j.employer_id ? (employerMap.get(j.employer_id) ?? null) : null,
           },
         ])
       )
@@ -252,6 +272,11 @@ export default async function CandidateDashboard({
                     <p className="text-white font-medium truncate">
                       {match.jobs?.title ?? 'Stelle wird geladen…'}
                     </p>
+                    {match.jobs?.company_name && (
+                      <p className="text-blue-400 text-sm mt-0.5 truncate">
+                        🏢 {match.jobs.company_name}
+                      </p>
+                    )}
                     <p className="text-gray-400 text-sm mt-0.5">
                       {[
                         match.jobs?.sector,

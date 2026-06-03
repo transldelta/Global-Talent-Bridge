@@ -7,6 +7,9 @@ import { useRouter } from 'next/navigation'
  * Client-seitiger Matching-Button.
  * Ruft POST /api/matches/run-basic auf, zeigt Ladezustand
  * und leitet nach Erfolg zurück zum Dashboard (mit Erfolgsmeldung).
+ *
+ * Fix: finally-Block stellt sicher, dass loading IMMER auf false gesetzt wird —
+ * auch im Erfolgsfall nach router.push(). Kein dauerhafter Spinner mehr.
  */
 export function MatchingButton() {
   const [loading, setLoading] = useState(false)
@@ -14,6 +17,9 @@ export function MatchingButton() {
   const router = useRouter()
 
   async function handleClick() {
+    // Doppelklick verhindern
+    if (loading) return
+
     setLoading(true)
     setError(null)
 
@@ -29,7 +35,6 @@ export function MatchingButton() {
           (data as { error?: string }).error ||
             'Fehler beim Matching. Bitte erneut versuchen.'
         )
-        setLoading(false)
         return
       }
 
@@ -38,6 +43,8 @@ export function MatchingButton() {
       router.refresh()
     } catch {
       setError('Netzwerkfehler. Bitte Verbindung prüfen.')
+    } finally {
+      // Immer zurücksetzen — egal ob Erfolg, Fehler oder Exception
       setLoading(false)
     }
   }
@@ -58,9 +65,7 @@ export function MatchingButton() {
           '⚡ Matching starten'
         )}
       </button>
-      {error && (
-        <p className="text-red-400 text-xs">{error}</p>
-      )}
+      {error && <p className="text-red-400 text-xs">{error}</p>}
     </div>
   )
 }
