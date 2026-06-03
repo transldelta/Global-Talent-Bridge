@@ -16,6 +16,8 @@ type Application = {
   reviewed_at: string | null
   employer_notified_at: string | null
   created_at: string
+  auto_generated_message: boolean
+  message_generation_mode: 'manual' | 'test_auto'
 }
 
 type CandidateProfile = {
@@ -251,10 +253,36 @@ function ApplicationCard({
             <span className="text-blue-400">{companyName}</span>
             {job?.location && <span className="text-gray-500">📍 {job.location}</span>}
           </div>
-          {app.cover_note && (
-            <p className="text-xs text-gray-400 mt-1 bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700/50 line-clamp-2">
-              &ldquo;{app.cover_note}&rdquo;
-            </p>
+          {/* Nachricht + Modus-Badge */}
+          {app.cover_note ? (
+            <div className="mt-1 space-y-1">
+              <div className="flex items-center gap-2">
+                {app.message_generation_mode === 'test_auto' ? (
+                  <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-yellow-900/30 text-yellow-300 border border-yellow-700/40">
+                    🧪 Test-Auto
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-400 border border-gray-700">
+                    ✍️ Manuell
+                  </span>
+                )}
+                {app.auto_generated_message && (
+                  <span className="text-xs text-yellow-500/70">
+                    (serverseitig generiert)
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-gray-400 bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700/50 line-clamp-3 whitespace-pre-line">
+                &ldquo;{app.cover_note}&rdquo;
+              </p>
+            </div>
+          ) : (
+            <div className="mt-1 flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-500 border border-gray-700">
+                ✍️ Manuell
+              </span>
+              <span className="text-xs text-gray-600">Keine Nachricht hinterlassen</span>
+            </div>
           )}
           {app.admin_note && (
             <p className="text-xs text-blue-400 mt-1">

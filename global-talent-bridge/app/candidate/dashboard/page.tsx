@@ -5,6 +5,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { NavBar } from '@/app/_components/NavBar'
 import { MatchingButton } from '@/app/candidate/_components/MatchingButton'
 import { ApplyButton } from '@/app/candidate/_components/ApplyButton'
+import { generateTestApplicationMessage, isTestAutoMessageEnabled } from '@/lib/application-message'
 
 // -------------------------------------------------------
 // Typen
@@ -158,6 +159,10 @@ export default async function CandidateDashboard({
   }
 
   const showMatchingSuccess = searchParams?.matched === 'true'
+
+  // ── Test-Modus: automatische Bewerbungsnachricht ─────────────────────────
+  // Nur serverseitig auswerten — env var verlässt nie den Client
+  const testMode = isTestAutoMessageEnabled()
 
   return (
     <div className="min-h-screen bg-gray-950">
@@ -432,6 +437,16 @@ export default async function CandidateDashboard({
                       matchId={match.id}
                       jobTitle={match.jobs?.title ?? 'Diese Stelle'}
                       alreadyApplied={appliedJobIds.has(match.job_id)}
+                      testMode={testMode}
+                      autoMessage={
+                        testMode
+                          ? generateTestApplicationMessage({
+                              candidateSector: candidate?.sector ?? null,
+                              jobTitle: match.jobs?.title ?? 'der ausgeschriebenen Stelle',
+                              candidateFirstName: profile?.full_name ?? null,
+                            })
+                          : null
+                      }
                     />
                     <Link
                       href="/candidate/applications"
