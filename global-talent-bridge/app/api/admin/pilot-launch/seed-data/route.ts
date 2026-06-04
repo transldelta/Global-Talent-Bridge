@@ -288,20 +288,9 @@ export async function POST() {
 
   // System-Log
   await supabase.from('system_logs').insert({
-    type: 'pilot_seed',
-    message: `Pilotdaten angelegt: ${empData?.length ?? 0} Arbeitgeber, ${candData?.length ?? 0} Kandidaten`,
-    metadata: {
-      seed_source: SEED_SOURCE,
-      employers_created: empData?.length ?? 0,
-      candidates_created: candData?.length ?? 0,
-      corridors: [
-        'India → Canada (IT)',
-        'India → UK (Nursing)',
-        'Morocco → Germany (Care)',
-        'Turkey → Germany (IT)',
-        'Philippines → Australia (Care)',
-      ],
-    },
+    agent_name: 'pilot-seed',
+    status: 'success',
+    message: `Pilotdaten angelegt (${SEED_SOURCE}): ${empData?.length ?? 0} Arbeitgeber, ${candData?.length ?? 0} Kandidaten — 5 Korridore`,
   }).then(() => {})
 
   return NextResponse.json({

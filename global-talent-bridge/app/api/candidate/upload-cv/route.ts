@@ -90,14 +90,9 @@ export async function POST(request: NextRequest) {
 
   // system_logs Eintrag
   await adminClient.from('system_logs').insert({
-    type: 'cv_upload',
-    message: `CV hochgeladen: ${originalName}`,
-    metadata: {
-      user_id: user.id,
-      path: storagePath,
-      size_bytes: file.size,
-      mime_type: file.type,
-    },
+    agent_name: 'cv-upload',
+    status: 'success',
+    message: `CV hochgeladen: ${originalName} (${(file.size / 1024).toFixed(0)} KB) — user_id: ${user.id}`,
   }).then(() => {})
 
   return NextResponse.json({
