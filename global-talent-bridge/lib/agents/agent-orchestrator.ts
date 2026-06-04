@@ -9,6 +9,7 @@ import { runCorridorIntelligenceAgent } from './corridor-intelligence-agent'
 import { runGlobalCandidateAcquisitionAgent } from './global-candidate-acquisition-agent'
 import { runLandingpageFactoryAgent } from './landingpage-factory-agent'
 import { runMigrationIntelligenceAgent } from './migration-intelligence-agent'
+import { runRevenueIntelligenceAgent } from './revenue-intelligence-agent'
 
 export type AgentRunResult = {
   success: boolean
@@ -27,6 +28,7 @@ export type AgentRunResult = {
     candidateAcquisition: { sourcesAnalyzed: number; scoresUpdated: number; landingpagesReviewed: number; suggestionsCreated: number; notificationsCreated: number } | null
     landingpageFactory: { corridorsProcessed: number; landingpagesCreated: number; landingpagesUpdated: number; suggestionsCreated: number; notificationsCreated: number } | null
     migrationIntelligence: { entriesAnalyzed: number; scoresUpdated: number; markedOutdated: number; suggestionsCreated: number; notificationsCreated: number } | null
+    revenueIntelligence: { plansAnalyzed: number; scenariosComputed: number; suggestionsCreated: number } | null
   }
   error?: string
 }
@@ -51,6 +53,7 @@ export async function runAllAgents(): Promise<AgentRunResult> {
     candidateAcquisition: null,
     landingpageFactory: null,
     migrationIntelligence: null,
+    revenueIntelligence: null,
   }
 
   let totalSuggestions = 0
@@ -111,6 +114,11 @@ export async function runAllAgents(): Promise<AgentRunResult> {
     totalSuggestions += miResult.suggestionsCreated
     totalNotifications += miResult.notificationsCreated
 
+    // ── Revenue Intelligence Agent ────────────────────────────────────────────
+    const riResult = await runRevenueIntelligenceAgent()
+    details.revenueIntelligence = riResult
+    totalSuggestions += riResult.suggestionsCreated
+
   } catch (err) {
     errorMessage = err instanceof Error ? err.message : 'Unbekannter Fehler'
   }
@@ -134,9 +142,12 @@ export async function runAllAgents(): Promise<AgentRunResult> {
   const miSummary = details.migrationIntelligence
     ? ` MI: ${details.migrationIntelligence.entriesAnalyzed} Einträge, ${details.migrationIntelligence.scoresUpdated} Score-Updates.`
     : ''
+  const riSummary = details.revenueIntelligence
+    ? ` RI: ${details.revenueIntelligence.plansAnalyzed} Pläne, ${details.revenueIntelligence.scenariosComputed} Szenarien.`
+    : ''
 
   const summary = success
-    ? `Agenten-Lauf abgeschlossen: ${totalSuggestions} neue Vorschläge, ${totalNotifications} Benachrichtigungen, ${totalSignals} Markt-Signale.${growthSummary}${gmiSummary}${ciSummary}${gcaSummary}${lpfSummary}${miSummary}`
+    ? `Agenten-Lauf abgeschlossen: ${totalSuggestions} neue Vorschläge, ${totalNotifications} Benachrichtigungen, ${totalSignals} Markt-Signale.${growthSummary}${gmiSummary}${ciSummary}${gcaSummary}${lpfSummary}${miSummary}${riSummary}`
     : `Agenten-Lauf mit Fehler abgebrochen: ${errorMessage}`
 
   // ── Run-Log schreiben ─────────────────────────────────────────────────────

@@ -6,6 +6,7 @@ import { RefreshMetricsButton } from '@/app/admin/_components/RefreshMetricsButt
 import { RunAgentsButton } from './RunAgentsButton'
 import { SuggestionActions } from './SuggestionActions'
 import { MarkAllReadButton } from './MarkAllReadButton'
+import { computeScenarios } from '@/lib/revenue/forecast'
 
 type Department = {
   department_key: string
@@ -268,6 +269,10 @@ export default async function CeoDashboardPage() {
     miHighRiskRes,
     miReviewedRes,
     miTopRowsRes,
+    // Revenue Intelligence KPIs
+    revPlansTotalRes,
+    revActivePlansRes,
+    revEventsRes,
   ] = await Promise.all([
     supabase
       .from('agent_departments')
@@ -405,6 +410,10 @@ export default async function CeoDashboardPage() {
     supabase.from('migration_intelligence').select('*', { count: 'exact', head: true }).in('risk_level', ['high', 'critical']).neq('status', 'outdated'),
     supabase.from('migration_intelligence').select('*', { count: 'exact', head: true }).in('status', ['reviewed', 'approved']),
     supabase.from('migration_intelligence').select('source_country, target_country, sector, estimated_success_score, risk_level, status').neq('status', 'outdated').order('estimated_success_score', { ascending: false }).limit(10),
+    // Revenue Intelligence queries
+    supabase.from('revenue_plans').select('*', { count: 'exact', head: true }),
+    supabase.from('revenue_plans').select('*', { count: 'exact', head: true }).eq('active', true),
+    supabase.from('revenue_events').select('amount, source').eq('event_type', 'forecast').order('created_at', { ascending: false }).limit(3),
   ])
 
   const departments: Department[] = deptRes.data ?? []
@@ -557,6 +566,19 @@ export default async function CeoDashboardPage() {
     reviewed:  miReviewedRes.count ?? 0,
   }
   const miTopRows = (miTopRowsRes.data ?? []) as MITopRow[]
+
+  // Revenue Intelligence
+  const revenueScenarios = computeScenarios()
+  const revKpis = {
+    totalPlans:  revPlansTotalRes.count  ?? 0,
+    activePlans: revActivePlansRes.count ?? 0,
+  }
+  type RevEventRow = { amount: number; source: string | null }
+  const latestForecastEvents = (revEventsRes.data ?? []) as RevEventRow[]
+  // MRR from latest forecast events: scenario C is highest
+  const forecastMRR = latestForecastEvents.length > 0
+    ? Math.max(...latestForecastEvents.map(e => e.amount))
+    : revenueScenarios[2].mrr
 
   // Phase 2J: Agent System
   const agentSuggestions: AgentSuggestion[] = (agentSuggestionsRes.data ?? []) as AgentSuggestion[]
@@ -1438,6 +1460,88 @@ export default async function CeoDashboardPage() {
 
           <p className="text-xs text-gray-600 mt-3">
             ⚠️ Alle MI-Daten sind algorithmisch. Kein Rechtsbeistand. Keine Garantien. Nur interne Orientierung.
+          </p>
+        </div>
+
+        {/* ── 💰 Revenue Intelligence ── */}
+        <div>
+          <div className="flex items-start justify-between mb-4 flex-wrap gap-2">
+            <div>
+              <h2 className="text-xl font-bold text-white">💰 Revenue Intelligence</h2>
+              <p className="text-gray-400 text-sm mt-0.5">
+                Forecast-Simulationen · MRR/ARR · Break-even · Keine echten Zahlungen · Kein Stripe
+              </p>
+            </div>
+            <Link href="/admin/revenue" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors text-xs">
+              💰 Revenue verwalten →
+            </Link>
+          </div>
+
+          {/* Revenue KPI Row */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+            <div className="bg-gray-900 border border-emerald-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-emerald-300">{revKpis.activePlans}</div>
+              <div className="text-xs text-gray-400 mt-0.5">📦 Aktive Pläne</div>
+            </div>
+            <div className="bg-gray-900 border border-blue-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-blue-300">
+                {revenueScenarios[0].mrr.toLocaleString('de-DE')} €
+              </div>
+              <div className="text-xs text-gray-400 mt-0.5">🔮 MRR Szenario A</div>
+            </div>
+            <div className="bg-gray-900 border border-violet-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-violet-300">
+                {revenueScenarios[2].arr.toLocaleString('de-DE')} €
+              </div>
+              <div className="text-xs text-gray-400 mt-0.5">📈 ARR Szenario C (Forecast)</div>
+            </div>
+            <div className="bg-gray-900 border border-green-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-green-300">
+                ~{revenueScenarios[0].breakEvenMonths} Mo.
+              </div>
+              <div className="text-xs text-gray-400 mt-0.5">⏱️ Break-even Szenario A</div>
+            </div>
+          </div>
+
+          {/* Scenario comparison */}
+          <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+            <div className="px-4 py-3 border-b border-gray-800 text-sm font-semibold text-gray-300">
+              🔮 Forecast-Szenarien — Simulation
+            </div>
+            <div className="divide-y divide-gray-800">
+              {revenueScenarios.map((s, i) => (
+                <div key={s.label} className="px-4 py-3 flex items-center justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className={`text-sm font-medium ${i === 0 ? 'text-gray-300' : i === 1 ? 'text-blue-300' : 'text-emerald-300'}`}>
+                      {s.label}
+                    </div>
+                    <div className="text-xs text-gray-500 mt-0.5">
+                      {s.employers} Arbeitgeber · {s.candidates} Kandidaten
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4 shrink-0 text-right">
+                    <div>
+                      <div className="text-xs text-gray-500">MRR</div>
+                      <div className="text-sm font-bold text-white">{s.mrr.toLocaleString('de-DE')} €</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-gray-500">ARR</div>
+                      <div className="text-sm font-semibold text-gray-200">{s.arr.toLocaleString('de-DE')} €</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-gray-500">Break-even</div>
+                      <div className={`text-sm font-semibold ${s.breakEvenMonths <= 3 ? 'text-green-400' : s.breakEvenMonths <= 6 ? 'text-yellow-400' : 'text-orange-400'}`}>
+                        ~{s.breakEvenMonths} Mo.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <p className="text-xs text-gray-600 mt-3">
+            🔮 Alle Revenue-Zahlen sind Forecast-Simulationen. Keine echten Zahlungen. Kein Stripe. Keine Abbuchungen.
           </p>
         </div>
 
