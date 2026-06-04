@@ -164,6 +164,18 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
                 🌐 Landingpages
               </Link>
               <Link
+                href="/admin/global/employer-acquisition"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                🏢 Employer
+              </Link>
+              <Link
+                href="/admin/global/employer-outreach"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                📋 Outreach
+              </Link>
+              <Link
                 href="/admin/leads"
                 className="text-sm text-gray-400 hover:text-white transition-colors"
               >

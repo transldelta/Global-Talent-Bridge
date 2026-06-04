@@ -257,6 +257,12 @@ export default async function CeoDashboardPage() {
     gcaLandingpagesTotalRes,
     gcaLandingpagesCriticalRes,
     gcaTopLandingpagesRes,
+    // Employer Acquisition KPIs
+    geaSourcesTotalRes,
+    geaSourcesCriticalRes,
+    geaSourcesHighRes,
+    geaTopSourcesRes,
+    geaOutreachTotalRes,
   ] = await Promise.all([
     supabase
       .from('agent_departments')
@@ -383,6 +389,12 @@ export default async function CeoDashboardPage() {
     supabase.from('landingpage_recommendations').select('*', { count: 'exact', head: true }),
     supabase.from('landingpage_recommendations').select('*', { count: 'exact', head: true }).eq('priority', 'critical'),
     supabase.from('landingpage_recommendations').select('title, slug, language, priority, status, migration_corridors(source_country, target_country)').order('priority', { ascending: false }).limit(10),
+    // Employer Acquisition queries
+    supabase.from('employer_acquisition_sources').select('*', { count: 'exact', head: true }).eq('status', 'active'),
+    supabase.from('employer_acquisition_sources').select('*', { count: 'exact', head: true }).eq('priority_level', 'critical'),
+    supabase.from('employer_acquisition_sources').select('*', { count: 'exact', head: true }).eq('priority_level', 'high'),
+    supabase.from('employer_acquisition_sources').select('source_name, country, sector, source_type, opportunity_score, priority_level, estimated_employers').eq('status', 'active').order('opportunity_score', { ascending: false }).limit(8),
+    supabase.from('employer_outreach_recommendations').select('*', { count: 'exact', head: true }),
   ])
 
   const departments: Department[] = deptRes.data ?? []
@@ -516,6 +528,16 @@ export default async function CeoDashboardPage() {
   }
   const gcaTopSources = (gcaTopSourcesRes.data ?? []) as GCASourceRow[]
   const gcaTopLandingpages = (gcaTopLandingpagesRes.data ?? []) as unknown as GCALandingRow[]
+
+  // Employer Acquisition
+  type GEASourceRow = { source_name: string; country: string | null; sector: string | null; source_type: string | null; opportunity_score: number; priority_level: string | null; estimated_employers: number }
+  const geaKpis = {
+    total: geaSourcesTotalRes.count ?? 0,
+    critical: geaSourcesCriticalRes.count ?? 0,
+    high: geaSourcesHighRes.count ?? 0,
+    outreachRecs: geaOutreachTotalRes.count ?? 0,
+  }
+  const geaTopSources = (geaTopSourcesRes.data ?? []) as GEASourceRow[]
 
   // Phase 2J: Agent System
   const agentSuggestions: AgentSuggestion[] = (agentSuggestionsRes.data ?? []) as AgentSuggestion[]
@@ -1239,6 +1261,88 @@ export default async function CeoDashboardPage() {
           <p className="text-xs text-gray-600 mt-3">
             🔒 Alle Akquisitionsdaten sind intern. Kein automatisches Scraping. Kein automatisches Kontaktieren.
             Alle Aktionen manuell durch Admin. DSGVO-konform.
+          </p>
+        </div>
+
+        {/* ── 🏢 Employer Acquisition ── */}
+        <div>
+          <div className="flex items-start justify-between mb-4 flex-wrap gap-2">
+            <div>
+              <h2 className="text-xl font-bold text-white">🏢 Employer Acquisition</h2>
+              <p className="text-gray-400 text-sm mt-0.5">
+                Globale Arbeitgeberquellen · Outreach-Empfehlungen · Prioritäten
+              </p>
+            </div>
+            <div className="flex gap-2 text-xs">
+              <Link href="/admin/global/employer-acquisition" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors">
+                🏢 Quellen →
+              </Link>
+              <Link href="/admin/global/employer-outreach" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors">
+                📋 Outreach →
+              </Link>
+            </div>
+          </div>
+
+          {/* GEA KPI Row */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+            <div className="bg-gray-900 border border-emerald-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-emerald-300">{geaKpis.total}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🏢 Aktive Quellen</div>
+            </div>
+            <div className={`border rounded-xl p-3 text-center ${geaKpis.critical > 0 ? 'bg-red-900/20 border-red-800/40' : 'bg-gray-900 border-gray-800'}`}>
+              <div className={`text-2xl font-bold ${geaKpis.critical > 0 ? 'text-red-300' : 'text-gray-600'}`}>{geaKpis.critical}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🔥 Kritische Quellen</div>
+            </div>
+            <div className="bg-gray-900 border border-orange-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-orange-300">{geaKpis.high}</div>
+              <div className="text-xs text-gray-400 mt-0.5">📈 Hohe Priorität</div>
+            </div>
+            <div className="bg-gray-900 border border-blue-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-blue-300">{geaKpis.outreachRecs}</div>
+              <div className="text-xs text-gray-400 mt-0.5">📋 Outreach-Empfehlungen</div>
+            </div>
+          </div>
+
+          {/* Top Employer Sources */}
+          {geaTopSources.length > 0 && (
+            <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-gray-800 text-sm font-semibold text-gray-300">
+                🏢 Top Arbeitgeberquellen — Opportunity Scores
+              </div>
+              <div className="divide-y divide-gray-800">
+                {geaTopSources.map((src, i) => {
+                  const employers = src.estimated_employers >= 1_000
+                    ? `${Math.round(src.estimated_employers / 1_000)}K`
+                    : String(src.estimated_employers)
+                  return (
+                    <div key={i} className="px-4 py-3 flex items-center justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm text-white font-medium truncate">{src.source_name}</div>
+                        <div className="text-xs text-gray-500 truncate">
+                          {src.country ?? '—'} · {src.sector ?? '—'} · {src.source_type ?? '—'}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0">
+                        <span className="text-xs text-emerald-300 font-bold">{src.opportunity_score}</span>
+                        <span className="text-xs text-gray-500">{employers} AG</span>
+                        <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                          src.priority_level === 'critical' ? 'bg-red-900/30 text-red-400' :
+                          src.priority_level === 'high' ? 'bg-orange-900/30 text-orange-400' :
+                          'bg-gray-800 text-gray-400'
+                        }`}>
+                          {src.priority_level === 'critical' ? '🔥' : src.priority_level === 'high' ? '📈' : '🟡'}
+                        </span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          <p className="text-xs text-gray-600 mt-3">
+            🔒 Alle Employer-Akquisitionsdaten sind intern. Kein automatisches Anschreiben von Arbeitgebern.
+            Outreach-Empfehlungen werden manuell durch den Admin initiiert und freigegeben.
           </p>
         </div>
 
