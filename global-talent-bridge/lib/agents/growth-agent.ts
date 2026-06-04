@@ -16,7 +16,7 @@ function calcPriorityScore({
   let score = 30
 
   // Sektoren mit starkem Fachkräftemangel priorisieren
-  const highDemandSectors = ['pflege', 'pflege', 'health', 'gesundheit', 'it', 'technik', 'logistik', 'bau']
+  const highDemandSectors = ['pflege', 'health', 'gesundheit', 'it', 'technik', 'logistik', 'bau', 'klinik']
   if (sector && highDemandSectors.some((s) => sector.toLowerCase().includes(s))) {
     score += 25
   }
@@ -44,10 +44,7 @@ function buildEmailDraft(target: {
     ? `Sehr geehrte/r ${target.contact_person},`
     : `Sehr geehrte Damen und Herren,`
 
-  const sectorText = target.sector
-    ? ` im Bereich ${target.sector}`
-    : ''
-
+  const sectorText = target.sector ? ` im Bereich ${target.sector}` : ''
   const locationText = target.city
     ? ` aus ${target.city}${target.country ? ', ' + target.country : ''}`
     : ''
@@ -71,10 +68,9 @@ Hätten Sie Interesse an einem kurzen 15-minütigen Gespräch, um zu sehen, ob w
 Mit freundlichen Grüßen
 [Ihr Name]
 Global Talent Bridge
-https://globaltalentbridge.de
 
 ---
-ℹ️ Diese Nachricht wurde als Entwurf vom Growth Agent erstellt und wartet auf manuelle Freigabe.`
+ℹ️ Entwurf vom Growth Agent · wartet auf Admin-Freigabe · kein automatischer Versand`
 
   return { subject, body }
 }
@@ -91,7 +87,7 @@ function buildWhatsAppDraft(target: {
 
 Ich schreibe Ihnen von Global Talent Bridge${sector} – wir helfen Unternehmen wie ${target.company_name}, internationale Fachkräfte gezielt zu finden.
 
-Aktuell haben wir vorqualifizierte Kandidaten mit Deutsch-Kenntnissen, die kurzfristig verfügbar sind.
+Wir haben vorqualifizierte Kandidaten mit Deutsch-Kenntnissen, die kurzfristig verfügbar sind.
 
 Hätten Sie 5 Minuten für ein kurzes Gespräch? 🙏
 
@@ -126,6 +122,22 @@ Mit freundlichen Grüßen
   }
 }
 
+type DraftInsert = {
+  created_by_agent: string
+  target_type: string
+  target_name: string
+  target_email: string | null
+  target_phone: string | null
+  channel: string
+  message_subject: string | null
+  message_body: string
+  status: string
+  risk_level: string
+  priority_score: number
+  requires_double_confirmation: boolean
+  source_context: Record<string, unknown>
+}
+
 /**
  * Growth Agent
  * Analysiert Leads, erstellt Outreach-Entwürfe + Follow-up-Pläne.
@@ -149,26 +161,37 @@ export async function runGrowthAgent(runType: 'manual' | 'scheduled' | 'triggere
 
   try {
     // ── 1. Outreach-Ziele lesen ───────────────────────────────────────────────
-    const { data: targets } = await supabase
+    // Felder: id, company_name, contact_person, email, phone, sector, city, country, status, priority, next_follow_up_at
+    const { data: targets, error: targetsError } = await supabase
       .from('outreach_targets')
       .select('id, company_name, contact_person, email, phone, sector, city, country, status, priority, next_follow_up_at')
       .in('status', ['planned', 'follow_up', 'interested'])
       .order('priority', { ascending: false })
       .limit(50)
 
+    if (targetsError) {
+      console.error('[growth-agent] outreach_targets error:', targetsError.message)
+    }
+
     const allTargets = targets ?? []
     leadsAnalyzed += allTargets.length
 
     // ── 2. Sales Leads lesen ──────────────────────────────────────────────────
-    const { data: salesLeads } = await supabase
+    // Felder: id, source, role, name, email, company_name, status, priority, notes
+    // ACHTUNG: sales_leads hat KEIN phone, KEIN sector, KEIN contact_person
+    const { data: salesLeads, error: leadsError } = await supabase
       .from('sales_leads')
-      .select('id, company_name, contact_name, email, phone, sector, status, source')
+      .select('id, name, email, company_name, status, role, source, notes')
       .eq('status', 'new')
       .limit(20)
 
+    if (leadsError) {
+      console.error('[growth-agent] sales_leads error:', leadsError.message)
+    }
+
     leadsAnalyzed += (salesLeads ?? []).length
 
-    // ── 3. Bestehende Entwürfe laden (Deduplication by target_name) ───────────
+    // ── 3. Bestehende Entwürfe laden (Deduplication) ──────────────────────────
     const { data: existingDrafts } = await supabase
       .from('outreach_approval_queue')
       .select('target_name, channel, status')
@@ -178,42 +201,34 @@ export async function runGrowthAgent(runType: 'manual' | 'scheduled' | 'triggere
       (existingDrafts ?? []).map((d: { target_name: string; channel: string }) => `${d.target_name}::${d.channel}`)
     )
 
-    const draftsToInsert: Array<{
-      created_by_agent: string
-      target_type: string
-      target_name: string
-      target_email: string | null
-      target_phone: string | null
-      channel: string
-      message_subject: string | null
-      message_body: string
-      status: string
-      risk_level: string
-      priority_score: number
-      requires_double_confirmation: boolean
-      source_context: Record<string, unknown>
-    }> = []
+    const draftsToInsert: DraftInsert[] = []
 
-    // ── 4. Neue Outreach-Entwürfe für ungekontaktierte Ziele ──────────────────
+    // ── 4. Entwürfe für outreach_targets ─────────────────────────────────────
     for (const t of allTargets) {
       const followupDue = !!(t.next_follow_up_at && t.next_follow_up_at <= now)
       const isInterested = t.status === 'interested'
       const priority = calcPriorityScore({
         status: t.status,
-        sector: t.sector,
+        sector: t.sector ?? null,
         followupDue,
         isInterested,
       })
 
-      // E-Mail-Entwurf für ungekontaktierte Ziele
-      if (t.status === 'planned' && t.email) {
+      // E-Mail-Entwurf für ungekontaktierte/geplante Ziele
+      if ((t.status === 'planned' || t.status === 'interested') && t.email) {
         const key = `${t.company_name}::email`
         if (!existingKeys.has(key)) {
-          const { subject, body } = buildEmailDraft(t)
+          const { subject, body } = buildEmailDraft({
+            company_name: t.company_name ?? 'Unbekanntes Unternehmen',
+            contact_person: t.contact_person ?? null,
+            sector: t.sector ?? null,
+            city: t.city ?? null,
+            country: t.country ?? null,
+          })
           draftsToInsert.push({
             created_by_agent: 'growth_agent',
             target_type: 'employer_lead',
-            target_name: t.company_name,
+            target_name: t.company_name ?? 'Unbekannt',
             target_email: t.email,
             target_phone: t.phone ?? null,
             channel: 'email',
@@ -239,11 +254,14 @@ export async function runGrowthAgent(runType: 'manual' | 'scheduled' | 'triggere
       if (followupDue && t.email) {
         const key = `${t.company_name}::followup_email`
         if (!existingKeys.has(key)) {
-          const { subject, body } = buildFollowUpEmailDraft(t)
+          const { subject, body } = buildFollowUpEmailDraft({
+            company_name: t.company_name ?? 'Unbekannt',
+            contact_person: t.contact_person ?? null,
+          })
           draftsToInsert.push({
             created_by_agent: 'growth_agent',
             target_type: 'employer_lead',
-            target_name: t.company_name,
+            target_name: t.company_name ?? 'Unbekannt',
             target_email: t.email,
             target_phone: t.phone ?? null,
             channel: 'email',
@@ -265,15 +283,19 @@ export async function runGrowthAgent(runType: 'manual' | 'scheduled' | 'triggere
         }
       }
 
-      // WhatsApp-Entwurf für Targets mit Telefonnummer + high priority
+      // WhatsApp-Entwurf: nur wenn Telefon + hohe Priorität
       if (t.phone && priority >= 65) {
         const key = `${t.company_name}::whatsapp`
         if (!existingKeys.has(key)) {
-          const waBody = buildWhatsAppDraft(t)
+          const waBody = buildWhatsAppDraft({
+            company_name: t.company_name ?? 'Unbekannt',
+            contact_person: t.contact_person ?? null,
+            sector: t.sector ?? null,
+          })
           draftsToInsert.push({
             created_by_agent: 'growth_agent',
             target_type: 'employer_lead',
-            target_name: t.company_name,
+            target_name: t.company_name ?? 'Unbekannt',
             target_email: t.email ?? null,
             target_phone: t.phone,
             channel: 'whatsapp',
@@ -295,32 +317,35 @@ export async function runGrowthAgent(runType: 'manual' | 'scheduled' | 'triggere
     }
 
     // ── 5. Sales Leads → Email-Entwürfe ───────────────────────────────────────
+    // sales_leads Spalten: id, source, role, name, email, company_name, status, priority, notes
     for (const lead of salesLeads ?? []) {
-      const key = `${lead.company_name}::email`
+      const companyName = lead.company_name ?? lead.name ?? 'Unbekanntes Unternehmen'
+      const key = `${companyName}::email`
       if (!existingKeys.has(key) && lead.email) {
         const { subject, body } = buildEmailDraft({
-          company_name: lead.company_name ?? 'Unbekanntes Unternehmen',
-          contact_person: lead.contact_name ?? null,
-          sector: lead.sector ?? null,
+          company_name: companyName,
+          contact_person: lead.name ?? null,  // 'name' Feld als Kontaktperson
+          sector: null,                        // sales_leads hat kein sector-Feld
           city: null,
           country: null,
         })
         draftsToInsert.push({
           created_by_agent: 'growth_agent',
           target_type: 'employer_lead',
-          target_name: lead.company_name ?? 'Unbekannt',
+          target_name: companyName,
           target_email: lead.email,
-          target_phone: lead.phone ?? null,
+          target_phone: null,  // sales_leads hat kein phone-Feld
           channel: 'email',
           message_subject: subject,
           message_body: body,
           status: 'pending',
           risk_level: 'low',
-          priority_score: 50,
+          priority_score: 40,
           requires_double_confirmation: false,
           source_context: {
             sales_lead_id: lead.id,
             source: lead.source,
+            role: lead.role,
             original_status: lead.status,
           },
         })
@@ -338,10 +363,11 @@ export async function runGrowthAgent(runType: 'manual' | 'scheduled' | 'triggere
         draftsCreated = draftsToInsert.length
       } else {
         console.error('[growth-agent] Insert error:', insertError.message)
+        errorMessage = `Fehler beim Speichern der Entwürfe: ${insertError.message}`
       }
     }
 
-    // ── 7. CEO-Alerts erstellen ───────────────────────────────────────────────
+    // ── 7. CEO-Alerts ─────────────────────────────────────────────────────────
     const notificationsToInsert: Array<{
       title: string
       message: string
@@ -349,11 +375,21 @@ export async function runGrowthAgent(runType: 'manual' | 'scheduled' | 'triggere
       department_slug: string
     }> = []
 
+    if (draftsCreated > 0) {
+      notificationsToInsert.push({
+        title: `📬 Growth Agent: ${draftsCreated} neue Outreach-Entwürfe`,
+        message: `${draftsCreated} Entwurf${draftsCreated > 1 ? 'e' : ''} erstellt und warten auf Freigabe: /admin/outreach/approval-queue`,
+        severity: 'info',
+        department_slug: 'marketing_growth_department',
+      })
+      alertsSent++
+    }
+
     const highPriorityDrafts = draftsToInsert.filter((d) => d.priority_score >= 70)
     if (highPriorityDrafts.length > 0) {
       notificationsToInsert.push({
-        title: `🚀 ${highPriorityDrafts.length} hochprioritäre Outreach-Entwürfe bereit`,
-        message: `${highPriorityDrafts.length} Entwurf${highPriorityDrafts.length > 1 ? 'e' : ''} mit hoher Priorität warten auf Freigabe unter /admin/outreach/approval-queue.`,
+        title: `🚀 ${highPriorityDrafts.length} hochprioritäre Entwürfe bereit`,
+        message: `${highPriorityDrafts.length} Entwurf${highPriorityDrafts.length > 1 ? 'e' : ''} mit hoher Priorität (≥70) warten auf Freigabe.`,
         severity: 'warning',
         department_slug: 'marketing_growth_department',
       })
@@ -362,8 +398,8 @@ export async function runGrowthAgent(runType: 'manual' | 'scheduled' | 'triggere
 
     if (followupsPlanned > 0) {
       notificationsToInsert.push({
-        title: `📅 ${followupsPlanned} Follow-up-Entwurf${followupsPlanned > 1 ? 'e' : ''} erstellt`,
-        message: `${followupsPlanned} fällige Follow-ups als Entwurf in der Approval-Queue. Jetzt freigeben: /admin/outreach/approval-queue`,
+        title: `📅 ${followupsPlanned} fällige Follow-up${followupsPlanned > 1 ? 's' : ''} als Entwurf erstellt`,
+        message: `Follow-up-Entwürfe für überfällige Targets bereit: /admin/outreach/approval-queue?status=pending`,
         severity: 'info',
         department_slug: 'marketing_growth_department',
       })
@@ -373,8 +409,8 @@ export async function runGrowthAgent(runType: 'manual' | 'scheduled' | 'triggere
     const highRiskDrafts = draftsToInsert.filter((d) => d.risk_level === 'high')
     if (highRiskDrafts.length > 0) {
       notificationsToInsert.push({
-        title: `⚠️ ${highRiskDrafts.length} High-Risk-Outreach benötig${highRiskDrafts.length > 1 ? 'en' : 't'} doppelte Bestätigung`,
-        message: `${highRiskDrafts.length} WhatsApp-Entwurf${highRiskDrafts.length > 1 ? 'e' : ''} mit Risikostufe "hoch" warten auf doppelte Bestätigung.`,
+        title: `⚠️ ${highRiskDrafts.length} High-Risk-Entwurf${highRiskDrafts.length > 1 ? 'e' : ''} — doppelte Bestätigung nötig`,
+        message: `Diese Entwürfe erfordern manuelle doppelte Bestätigung vor Freigabe.`,
         severity: 'critical',
         department_slug: 'marketing_growth_department',
       })
@@ -387,16 +423,15 @@ export async function runGrowthAgent(runType: 'manual' | 'scheduled' | 'triggere
 
   } catch (err) {
     errorMessage = err instanceof Error ? err.message : 'Unbekannter Fehler'
-    console.error('[growth-agent] Error:', errorMessage)
+    console.error('[growth-agent] Uncaught error:', errorMessage)
   }
 
   // ── 8. Run-Log speichern ──────────────────────────────────────────────────
-  const supabase2 = createAdminClient()
   const runSummary = errorMessage
     ? `Growth-Agent Fehler: ${errorMessage}`
-    : `Growth-Agent: ${leadsAnalyzed} Leads analysiert, ${draftsCreated} Entwürfe erstellt, ${followupsPlanned} Follow-ups geplant, ${alertsSent} Alerts.`
+    : `Growth-Agent: ${leadsAnalyzed} Leads analysiert, ${draftsCreated} Entwürfe erstellt, ${followupsPlanned} Follow-ups, ${alertsSent} Alerts.`
 
-  await supabase2.from('internal_growth_agent_runs').insert({
+  await supabase.from('internal_growth_agent_runs').insert({
     run_type: runType,
     status: errorMessage ? 'error' : draftsCreated > 0 ? 'success' : 'partial',
     leads_analyzed: leadsAnalyzed,
@@ -407,7 +442,7 @@ export async function runGrowthAgent(runType: 'manual' | 'scheduled' | 'triggere
     error_message: errorMessage ?? null,
   })
 
-  await supabase2.from('system_logs').insert({
+  await supabase.from('system_logs').insert({
     agent_name: 'growth_agent',
     status: errorMessage ? 'error' : 'success',
     message: runSummary,

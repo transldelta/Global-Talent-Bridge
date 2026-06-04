@@ -4,6 +4,7 @@ import { getCurrentAdminUser } from '@/lib/admin'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NavBar } from '@/app/_components/NavBar'
 import { ApprovalQueueClient } from './_components/ApprovalQueueClient'
+import { RunGrowthAgentButton } from './_components/RunGrowthAgentButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -53,10 +54,7 @@ export default async function ApprovalQueuePage() {
 
   const supabase = createAdminClient()
 
-  const [
-    allEntriesRes,
-    lastRunRes,
-  ] = await Promise.all([
+  const [allEntriesRes, lastRunRes] = await Promise.all([
     supabase
       .from('outreach_approval_queue')
       .select('*')
@@ -88,12 +86,17 @@ export default async function ApprovalQueuePage() {
     <>
       <NavBar badge="Admin" badgeColor="purple" />
       <main className="max-w-6xl mx-auto px-4 py-8">
+
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-start justify-between mb-6 gap-4 flex-wrap">
           <div>
             <div className="flex items-center gap-3 mb-1">
               <Link href="/admin/outreach" className="text-gray-500 hover:text-gray-400 text-sm">
                 ← Outreach
+              </Link>
+              <span className="text-gray-700">·</span>
+              <Link href="/admin/ceo-dashboard" className="text-gray-500 hover:text-gray-400 text-sm">
+                CEO Dashboard
               </Link>
             </div>
             <h1 className="text-2xl font-bold text-white">📬 Outreach Approval Queue</h1>
@@ -101,9 +104,7 @@ export default async function ApprovalQueuePage() {
               Vom Growth Agent erstellte Entwürfe — kein Versand ohne Admin-Freigabe
             </p>
           </div>
-          <div className="flex gap-2">
-            <RunGrowthAgentButton />
-          </div>
+          <RunGrowthAgentButton />
         </div>
 
         {/* Security Banner */}
@@ -131,8 +132,8 @@ export default async function ApprovalQueuePage() {
             <h3 className="text-sm font-semibold text-gray-300 mb-3">🤖 Letzte Growth-Agent-Läufe</h3>
             <div className="space-y-2">
               {lastRuns.map((run) => (
-                <div key={run.id} className="flex items-center gap-3 text-xs text-gray-400">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                <div key={run.id} className="flex flex-wrap items-center gap-3 text-xs text-gray-400">
+                  <span className={`px-2 py-0.5 rounded-full font-medium ${
                     run.status === 'success' ? 'bg-green-900/30 text-green-400' :
                     run.status === 'partial' ? 'bg-yellow-900/30 text-yellow-400' :
                     'bg-red-900/30 text-red-400'
@@ -140,10 +141,24 @@ export default async function ApprovalQueuePage() {
                     {run.status}
                   </span>
                   <span className="text-gray-500">{new Date(run.run_at).toLocaleString('de-DE')}</span>
-                  <span>{run.leads_analyzed} Leads · {run.drafts_created} Entwürfe · {run.followups_planned} Follow-ups</span>
+                  <span>
+                    {run.leads_analyzed} Leads · {run.drafts_created} Entwürfe · {run.followups_planned} Follow-ups
+                  </span>
+                  {run.summary && (
+                    <span className="text-gray-600 italic truncate max-w-xs">{run.summary}</span>
+                  )}
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Hint wenn Queue leer */}
+        {allEntries.length === 0 && lastRuns.length === 0 && (
+          <div className="mb-6 p-4 bg-blue-900/20 border border-blue-800/30 rounded-xl text-sm text-blue-300">
+            <strong>ℹ️ Noch keine Entwürfe.</strong> Klicke &quot;Growth Agent starten&quot; um Entwürfe
+            aus bestehenden Outreach-Zielen zu generieren. Der Agent analysiert alle Leads und erstellt
+            personalisierte Nachrichten — ohne etwas zu senden.
           </div>
         )}
 
@@ -154,14 +169,14 @@ export default async function ApprovalQueuePage() {
           </div>
         )}
 
-        {/* Client component für interaktive Aktionen */}
+        {/* Interactive entries */}
         <ApprovalQueueClient initialEntries={allEntries} />
       </main>
     </>
   )
 }
 
-// ── Sub-components ────────────────────────────────────────────────────────────
+// ── Helper Components ─────────────────────────────────────────────────────────
 
 function KpiCard({ label, value, color }: { label: string; value: number; color: string }) {
   const colorMap: Record<string, string> = {
@@ -179,18 +194,5 @@ function KpiCard({ label, value, color }: { label: string; value: number; color:
       <div className="text-2xl font-bold">{value}</div>
       <div className="text-xs mt-1 text-gray-400">{label}</div>
     </div>
-  )
-}
-
-function RunGrowthAgentButton() {
-  return (
-    <form action="/api/admin/growth-agent/run" method="POST">
-      <button
-        type="submit"
-        className="px-4 py-2 bg-purple-700 hover:bg-purple-600 text-white text-sm rounded-lg transition-colors"
-      >
-        🤖 Growth Agent starten
-      </button>
-    </form>
   )
 }
