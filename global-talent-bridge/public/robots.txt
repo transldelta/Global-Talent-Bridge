@@ -6,6 +6,7 @@ Allow: /pricing
 Allow: /about
 Allow: /contact
 Allow: /legal/
+Allow: /corridors/
 
 # Kein Zugriff auf Admin- und Auth-Bereich
 Disallow: /admin/

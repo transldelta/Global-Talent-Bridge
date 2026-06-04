@@ -7,6 +7,7 @@ import { runGrowthAgent } from './growth-agent'
 import { runGlobalMarketIntelligenceAgent } from './global-market-intelligence-agent'
 import { runCorridorIntelligenceAgent } from './corridor-intelligence-agent'
 import { runGlobalCandidateAcquisitionAgent } from './global-candidate-acquisition-agent'
+import { runLandingpageFactoryAgent } from './landingpage-factory-agent'
 
 export type AgentRunResult = {
   success: boolean
@@ -23,6 +24,7 @@ export type AgentRunResult = {
     globalMarket: { corridorsAnalyzed: number; sourcesAnalyzed: number; scoresUpdated: number; suggestionsCreated: number; alertsCreated: number } | null
     corridorIntelligence: { corridorsAnalyzed: number; scoresUpdated: number; suggestionsCreated: number; notificationsCreated: number; campaignsReviewed: number } | null
     candidateAcquisition: { sourcesAnalyzed: number; scoresUpdated: number; landingpagesReviewed: number; suggestionsCreated: number; notificationsCreated: number } | null
+    landingpageFactory: { corridorsProcessed: number; landingpagesCreated: number; landingpagesUpdated: number; suggestionsCreated: number; notificationsCreated: number } | null
   }
   error?: string
 }
@@ -45,6 +47,7 @@ export async function runAllAgents(): Promise<AgentRunResult> {
     globalMarket: null,
     corridorIntelligence: null,
     candidateAcquisition: null,
+    landingpageFactory: null,
   }
 
   let totalSuggestions = 0
@@ -93,6 +96,12 @@ export async function runAllAgents(): Promise<AgentRunResult> {
     totalSuggestions += gcaResult.suggestionsCreated
     totalNotifications += gcaResult.notificationsCreated
 
+    // ── Landingpage Factory Agent ─────────────────────────────────────────────
+    const lpfResult = await runLandingpageFactoryAgent()
+    details.landingpageFactory = lpfResult
+    totalSuggestions += lpfResult.suggestionsCreated
+    totalNotifications += lpfResult.notificationsCreated
+
   } catch (err) {
     errorMessage = err instanceof Error ? err.message : 'Unbekannter Fehler'
   }
@@ -110,9 +119,12 @@ export async function runAllAgents(): Promise<AgentRunResult> {
   const gcaSummary = details.candidateAcquisition
     ? ` GCA: ${details.candidateAcquisition.sourcesAnalyzed} Quellen, ${details.candidateAcquisition.landingpagesReviewed} Landingpages.`
     : ''
+  const lpfSummary = details.landingpageFactory
+    ? ` LPF: ${details.landingpageFactory.landingpagesCreated} neue Landingpages, ${details.landingpageFactory.landingpagesUpdated} Updates.`
+    : ''
 
   const summary = success
-    ? `Agenten-Lauf abgeschlossen: ${totalSuggestions} neue Vorschläge, ${totalNotifications} Benachrichtigungen, ${totalSignals} Markt-Signale.${growthSummary}${gmiSummary}${ciSummary}${gcaSummary}`
+    ? `Agenten-Lauf abgeschlossen: ${totalSuggestions} neue Vorschläge, ${totalNotifications} Benachrichtigungen, ${totalSignals} Markt-Signale.${growthSummary}${gmiSummary}${ciSummary}${gcaSummary}${lpfSummary}`
     : `Agenten-Lauf mit Fehler abgebrochen: ${errorMessage}`
 
   // ── Run-Log schreiben ─────────────────────────────────────────────────────

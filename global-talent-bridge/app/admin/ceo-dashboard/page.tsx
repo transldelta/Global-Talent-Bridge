@@ -257,6 +257,12 @@ export default async function CeoDashboardPage() {
     gcaLandingpagesTotalRes,
     gcaLandingpagesCriticalRes,
     gcaTopLandingpagesRes,
+    // Landingpage Factory KPIs
+    lpfTotalRes,
+    lpfReadyForReviewRes,
+    lpfHighPriorityRes,
+    lpfPublishedRes,
+    lpfTopPagesRes,
   ] = await Promise.all([
     supabase
       .from('agent_departments')
@@ -383,6 +389,12 @@ export default async function CeoDashboardPage() {
     supabase.from('landingpage_recommendations').select('*', { count: 'exact', head: true }),
     supabase.from('landingpage_recommendations').select('*', { count: 'exact', head: true }).eq('priority', 'critical'),
     supabase.from('landingpage_recommendations').select('title, slug, language, priority, status, migration_corridors(source_country, target_country)').order('priority', { ascending: false }).limit(10),
+    // Landingpage Factory queries
+    supabase.from('landingpage_factory').select('*', { count: 'exact', head: true }),
+    supabase.from('landingpage_factory').select('*', { count: 'exact', head: true }).eq('status', 'ready_for_review'),
+    supabase.from('landingpage_factory').select('*', { count: 'exact', head: true }).in('priority_level', ['critical', 'high']),
+    supabase.from('landingpage_factory').select('*', { count: 'exact', head: true }).eq('status', 'published'),
+    supabase.from('landingpage_factory').select('slug, title, language, source_country, target_country, opportunity_score, priority_level, status').order('opportunity_score', { ascending: false }).limit(8),
   ])
 
   const departments: Department[] = deptRes.data ?? []
@@ -516,6 +528,16 @@ export default async function CeoDashboardPage() {
   }
   const gcaTopSources = (gcaTopSourcesRes.data ?? []) as GCASourceRow[]
   const gcaTopLandingpages = (gcaTopLandingpagesRes.data ?? []) as unknown as GCALandingRow[]
+
+  // Landingpage Factory
+  type LPFTopRow = { slug: string; title: string; language: string; source_country: string | null; target_country: string | null; opportunity_score: number; priority_level: string | null; status: string }
+  const lpfKpis = {
+    total:           lpfTotalRes.count ?? 0,
+    readyForReview:  lpfReadyForReviewRes.count ?? 0,
+    highPriority:    lpfHighPriorityRes.count ?? 0,
+    published:       lpfPublishedRes.count ?? 0,
+  }
+  const lpfTopPages = (lpfTopPagesRes.data ?? []) as LPFTopRow[]
 
   // Phase 2J: Agent System
   const agentSuggestions: AgentSuggestion[] = (agentSuggestionsRes.data ?? []) as AgentSuggestion[]
@@ -1239,6 +1261,87 @@ export default async function CeoDashboardPage() {
           <p className="text-xs text-gray-600 mt-3">
             🔒 Alle Akquisitionsdaten sind intern. Kein automatisches Scraping. Kein automatisches Kontaktieren.
             Alle Aktionen manuell durch Admin. DSGVO-konform.
+          </p>
+        </div>
+
+        {/* ── 🚀 Landingpage Factory ── */}
+        <div>
+          <div className="flex items-start justify-between mb-4 flex-wrap gap-2">
+            <div>
+              <h2 className="text-xl font-bold text-white">🚀 Landingpage Factory</h2>
+              <p className="text-gray-400 text-sm mt-0.5">
+                Internationale Karriere-Landingpages · SEO-Vorbereitung · Mehrsprachig
+              </p>
+            </div>
+            <Link href="/admin/global/landingpage-factory" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors text-xs">
+              🚀 LPF verwalten →
+            </Link>
+          </div>
+
+          {/* LPF KPI Row */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+            <div className="bg-gray-900 border border-violet-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-violet-300">{lpfKpis.total}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🚀 Landingpages gesamt</div>
+            </div>
+            <div className={`border rounded-xl p-3 text-center ${lpfKpis.readyForReview > 0 ? 'bg-blue-900/20 border-blue-800/40' : 'bg-gray-900 border-gray-800'}`}>
+              <div className={`text-2xl font-bold ${lpfKpis.readyForReview > 0 ? 'text-blue-300' : 'text-gray-600'}`}>{lpfKpis.readyForReview}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🔍 Zur Prüfung</div>
+            </div>
+            <div className="bg-gray-900 border border-orange-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-orange-300">{lpfKpis.highPriority}</div>
+              <div className="text-xs text-gray-400 mt-0.5">📈 Hohe Priorität</div>
+            </div>
+            <div className="bg-gray-900 border border-green-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-green-300">{lpfKpis.published}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🌐 Veröffentlicht</div>
+            </div>
+          </div>
+
+          {/* Top Landingpages table */}
+          {lpfTopPages.length > 0 && (
+            <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-gray-800 text-sm font-semibold text-gray-300">
+                🚀 Top Landingpages — nach Opportunity Score
+              </div>
+              <div className="divide-y divide-gray-800">
+                {lpfTopPages.map((lp, i) => (
+                  <div key={i} className="px-4 py-3 flex items-center justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm text-white font-medium truncate">{lp.title}</div>
+                      <div className="text-xs text-gray-500 flex items-center gap-1.5">
+                        <code className="text-violet-400 font-mono">/corridors/{lp.slug}</code>
+                        <span>·</span>
+                        <span>{lp.source_country ?? '—'} → {lp.target_country ?? '—'}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-xs font-bold text-violet-300">{lp.opportunity_score}</span>
+                      <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                        lp.status === 'published'        ? 'bg-green-900/30 text-green-400' :
+                        lp.status === 'ready_for_review' ? 'bg-blue-900/30 text-blue-400' :
+                        lp.status === 'approved'         ? 'bg-purple-900/30 text-purple-400' :
+                        'bg-gray-800 text-gray-400'
+                      }`}>
+                        {lp.status === 'published' ? '🌐' : lp.status === 'ready_for_review' ? '🔍' : lp.status === 'approved' ? '✅' : '📋'}
+                      </span>
+                      <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                        lp.priority_level === 'critical' ? 'bg-red-900/30 text-red-400' :
+                        lp.priority_level === 'high'     ? 'bg-orange-900/30 text-orange-400' :
+                        'bg-gray-800 text-gray-400'
+                      }`}>
+                        {lp.priority_level === 'critical' ? '🔥' : lp.priority_level === 'high' ? '📈' : '🟡'}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <p className="text-xs text-gray-600 mt-3">
+            🔒 Landingpages werden vom Agenten vorbereitet. Kein automatisches Deployment. Kein automatisches Senden.
+            Alle Seiten müssen manuell genehmigt und auf &quot;published&quot; gesetzt werden. SEO-Inhalte sind Vorschläge.
           </p>
         </div>
 

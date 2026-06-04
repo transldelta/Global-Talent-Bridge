@@ -164,6 +164,12 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
                 🌐 Landingpages
               </Link>
               <Link
+                href="/admin/global/landingpage-factory"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                🚀 LPF
+              </Link>
+              <Link
                 href="/admin/leads"
                 className="text-sm text-gray-400 hover:text-white transition-colors"
               >

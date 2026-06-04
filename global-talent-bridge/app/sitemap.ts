@@ -1,11 +1,13 @@
 import { MetadataRoute } from 'next'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 const BASE_URL = 'https://global-talent-bridge.vercel.app'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
 
-  return [
+  // Static pages
+  const staticPages: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
       lastModified: now,
@@ -73,4 +75,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     },
   ]
+
+  // Dynamic corridor landingpages (published + approved only)
+  let corridorPages: MetadataRoute.Sitemap = []
+  try {
+    const supabase = createAdminClient()
+    const { data } = await supabase
+      .from('landingpage_factory')
+      .select('slug, updated_at, opportunity_score')
+      .in('status', ['published', 'approved'])
+      .order('opportunity_score', { ascending: false })
+
+    if (data && data.length > 0) {
+      corridorPages = data.map((lp: { slug: string; updated_at: string; opportunity_score: number }) => ({
+        url: `${BASE_URL}/corridors/${lp.slug}`,
+        lastModified: new Date(lp.updated_at),
+        changeFrequency: 'weekly' as const,
+        priority: lp.opportunity_score >= 85 ? 0.9 : lp.opportunity_score >= 70 ? 0.8 : 0.7,
+      }))
+    }
+  } catch {
+    // Graceful fallback — static pages still served
+  }
+
+  return [...staticPages, ...corridorPages]
 }
