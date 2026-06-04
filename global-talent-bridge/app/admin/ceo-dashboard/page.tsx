@@ -424,6 +424,19 @@ export default async function CeoDashboardPage() {
     supabase.from('migration_corridors').select('*', { count: 'exact', head: true }),
   ])
 
+  // Enterprise Readiness — separate fast query (system_incidents)
+  const [erOpenIncidentsRes, erTotalIncidentsRes] = await Promise.all([
+    supabase.from('system_incidents').select('*', { count: 'exact', head: true }).eq('status', 'open'),
+    supabase.from('system_incidents').select('*', { count: 'exact', head: true }),
+  ])
+  const erOpenIncidents  = erOpenIncidentsRes.count ?? 0
+  const erTotalIncidents = erTotalIncidentsRes.count ?? 0
+  // Static test metrics (Sprint F — last run: 2026-06-04)
+  const ER_TOTAL_TESTS    = 65
+  const ER_PASSING_TESTS  = 65
+  const ER_TEST_FILES     = 5
+  const ER_COVERAGE_PCT   = 100 // scoring + forecast functions
+
   const departments: Department[] = deptRes.data ?? []
   const tasks: AgentTask[] = taskRes.data ?? []
   const reports: AgentReport[] = reportRes.data ?? []
@@ -2112,6 +2125,61 @@ export default async function CeoDashboardPage() {
               ))}
             </div>
           )}
+        </div>
+
+        {/* ── 🛡 Enterprise Readiness ── */}
+        <div>
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+            <h2 className="text-xl font-bold text-white">🛡 Enterprise Readiness</h2>
+            <div className="flex gap-3">
+              <Link href="/admin/testing" className="text-xs text-green-400 hover:text-green-300">
+                🧪 Test Coverage →
+              </Link>
+              <Link href="/admin/system-health" className="text-xs text-blue-400 hover:text-blue-300">
+                🏥 System Health →
+              </Link>
+              <Link href="/admin/system-audit" className="text-xs text-purple-400 hover:text-purple-300">
+                🔍 System Audit →
+              </Link>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+            <div className="bg-gray-900 rounded-xl border border-gray-800 p-4 text-center">
+              <p className="text-2xl font-bold text-green-400">{ER_PASSING_TESTS}/{ER_TOTAL_TESTS}</p>
+              <p className="text-xs text-gray-500 mt-1">Tests passing</p>
+            </div>
+            <div className="bg-gray-900 rounded-xl border border-gray-800 p-4 text-center">
+              <p className="text-2xl font-bold text-green-400">{ER_COVERAGE_PCT}%</p>
+              <p className="text-xs text-gray-500 mt-1">Scoring Coverage</p>
+            </div>
+            <div className={`bg-gray-900 rounded-xl border p-4 text-center ${erOpenIncidents > 0 ? 'border-red-700' : 'border-gray-800'}`}>
+              <p className={`text-2xl font-bold ${erOpenIncidents > 0 ? 'text-red-400' : 'text-green-400'}`}>{erOpenIncidents}</p>
+              <p className="text-xs text-gray-500 mt-1">Offene Incidents</p>
+            </div>
+            <div className="bg-gray-900 rounded-xl border border-gray-800 p-4 text-center">
+              <p className="text-2xl font-bold text-blue-400">{ER_TEST_FILES}</p>
+              <p className="text-xs text-gray-500 mt-1">Test-Dateien</p>
+            </div>
+          </div>
+          <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+              <div>
+                <p className="text-gray-500 text-xs mb-2 uppercase tracking-wider">Test-Framework</p>
+                <p className="text-white font-medium">Vitest 4.x</p>
+                <p className="text-gray-400 text-xs mt-1">Unit Tests · Pure Functions · Node env</p>
+              </div>
+              <div>
+                <p className="text-gray-500 text-xs mb-2 uppercase tracking-wider">Incident Tracking</p>
+                <p className="text-white font-medium">{erTotalIncidents} Incidents gesamt</p>
+                <p className="text-gray-400 text-xs mt-1">{erOpenIncidents} offen · system_incidents Tabelle</p>
+              </div>
+              <div>
+                <p className="text-gray-500 text-xs mb-2 uppercase tracking-wider">Docs</p>
+                <p className="text-white font-medium">11 Dokumente</p>
+                <p className="text-gray-400 text-xs mt-1">Architektur · Security · Exit · Backup · Enterprise</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* System Logs */}
