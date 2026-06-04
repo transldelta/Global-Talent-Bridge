@@ -447,6 +447,18 @@ export default async function CeoDashboardPage() {
     feedbackCrit:plFeedbackCritRes.count ?? 0,
   }
 
+  // ── Launch Readiness — static audit scores (2026-06-04, Sprint H audit) ──
+  const LAUNCH_READINESS = {
+    technicalScore:  62,
+    businessScore:   38,
+    launchScore:     35,
+    buyerScore:      68,
+    overallScore:    51,
+    criticalBlockers: 10,
+    auditDate:       '2026-06-04',
+    recommendation:  'Pilot starten',
+  }
+
   // Enterprise Readiness — separate fast query (system_incidents)
   const [erOpenIncidentsRes, erTotalIncidentsRes] = await Promise.all([
     supabase.from('system_incidents').select('*', { count: 'exact', head: true }).eq('status', 'open'),
@@ -2148,6 +2160,86 @@ export default async function CeoDashboardPage() {
               ))}
             </div>
           )}
+        </div>
+
+        {/* ── 🚦 Launch Readiness ── */}
+        <div>
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+            <h2 className="text-xl font-bold text-white">🚦 Launch Readiness</h2>
+            <div className="flex gap-3">
+              <span className="text-xs text-gray-500">Audit: {LAUNCH_READINESS.auditDate}</span>
+              <Link href="/admin/sale-readiness" className="text-xs text-yellow-400 hover:text-yellow-300">
+                📊 Sale Readiness →
+              </Link>
+            </div>
+          </div>
+
+          {/* Overall Score Banner */}
+          <div className={`rounded-xl border-2 p-5 mb-4 flex items-center gap-4 ${
+            LAUNCH_READINESS.overallScore >= 70 ? 'bg-green-900/20 border-green-700' :
+            LAUNCH_READINESS.overallScore >= 50 ? 'bg-yellow-900/20 border-yellow-700' :
+            'bg-red-900/20 border-red-700'
+          }`}>
+            <div className={`text-4xl font-bold ${
+              LAUNCH_READINESS.overallScore >= 70 ? 'text-green-400' :
+              LAUNCH_READINESS.overallScore >= 50 ? 'text-yellow-400' : 'text-red-400'
+            }`}>{LAUNCH_READINESS.overallScore}/100</div>
+            <div>
+              <p className="text-white font-semibold">Gesamt-Readiness-Score</p>
+              <p className="text-gray-400 text-xs mt-0.5">
+                Empfehlung: <span className={`font-medium ${
+                  LAUNCH_READINESS.recommendation === 'Öffentlich starten' ? 'text-green-400' :
+                  LAUNCH_READINESS.recommendation === 'Pilot starten' ? 'text-yellow-400' : 'text-red-400'
+                }`}>{LAUNCH_READINESS.recommendation}</span>
+                {' · '}{LAUNCH_READINESS.criticalBlockers} kritische Blocker offen
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[
+              { label: 'Technische Reife',  score: LAUNCH_READINESS.technicalScore, threshold: 70 },
+              { label: 'Business-Reife',    score: LAUNCH_READINESS.businessScore,  threshold: 60 },
+              { label: 'Launch-Reife',      score: LAUNCH_READINESS.launchScore,    threshold: 60 },
+              { label: 'Käufer-Reife (M&A)',score: LAUNCH_READINESS.buyerScore,     threshold: 70 },
+            ].map(item => (
+              <div key={item.label} className="bg-gray-900 rounded-xl border border-gray-800 p-4">
+                <p className={`text-2xl font-bold ${item.score >= item.threshold ? 'text-green-400' : item.score >= 50 ? 'text-yellow-400' : 'text-red-400'}`}>
+                  {item.score}/100
+                </p>
+                <p className="text-xs text-gray-500 mt-1">{item.label}</p>
+                <div className="mt-2 h-1 bg-gray-800 rounded-full">
+                  <div
+                    className={`h-1 rounded-full ${item.score >= item.threshold ? 'bg-green-500' : item.score >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                    style={{ width: `${item.score}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4 bg-gray-900 rounded-xl border border-gray-800 p-5">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-3">Top Blocker vor Launch</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              {[
+                'Kein Passwort-Reset',
+                'Kein CV/Lebenslauf-Upload',
+                'Kein transactional E-Mail für Nutzer',
+                'Test-Modus aktiv in .env',
+                'Rechtliche Texte als MVP-Entwurf',
+                'Impressum: Delta Translation',
+                'Keine Profilbearbeitung',
+                'Kein Konto löschen (DSGVO)',
+                'Kein Direktnachrichten-System',
+                'Stripe nicht integriert (€0 Revenue)',
+              ].map((blocker, i) => (
+                <div key={blocker} className="flex items-center gap-2 text-red-400">
+                  <span className="text-gray-600 font-mono w-4 text-right shrink-0">{i+1}.</span>
+                  <span>{blocker}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* ── 🚀 Pilot Launch ── */}
