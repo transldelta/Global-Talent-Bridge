@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { runCeoAgent } from './ceo-agent'
 import { runMarketingStrategyAgent } from './marketing-strategy-agent'
 import { runVisionaryAgent } from './visionary-agent'
+import { runGrowthAgent } from './growth-agent'
 
 export type AgentRunResult = {
   success: boolean
@@ -15,6 +16,7 @@ export type AgentRunResult = {
     ceo: { suggestions: number; notifications: number } | null
     marketing: { suggestions: number; signals: number } | null
     visionary: { suggestions: number } | null
+    growth: { leadsAnalyzed: number; draftsCreated: number; followupsPlanned: number; alertsSent: number } | null
   }
   error?: string
 }
@@ -33,6 +35,7 @@ export async function runAllAgents(): Promise<AgentRunResult> {
     ceo: null,
     marketing: null,
     visionary: null,
+    growth: null,
   }
 
   let totalSuggestions = 0
@@ -58,13 +61,22 @@ export async function runAllAgents(): Promise<AgentRunResult> {
     details.visionary = visionaryResult
     totalSuggestions += visionaryResult.suggestions
 
+    // ── Growth Agent ─────────────────────────────────────────────────────────
+    const growthResult = await runGrowthAgent('triggered')
+    details.growth = growthResult
+    totalNotifications += growthResult.alertsSent
+
   } catch (err) {
     errorMessage = err instanceof Error ? err.message : 'Unbekannter Fehler'
   }
 
   const success = !errorMessage
+  const growthSummary = details.growth
+    ? ` Growth: ${details.growth.draftsCreated} Entwürfe, ${details.growth.followupsPlanned} Follow-ups.`
+    : ''
+
   const summary = success
-    ? `Agenten-Lauf abgeschlossen: ${totalSuggestions} neue Vorschläge, ${totalNotifications} Benachrichtigungen, ${totalSignals} Markt-Signale erstellt.`
+    ? `Agenten-Lauf abgeschlossen: ${totalSuggestions} neue Vorschläge, ${totalNotifications} Benachrichtigungen, ${totalSignals} Markt-Signale erstellt.${growthSummary}`
     : `Agenten-Lauf mit Fehler abgebrochen: ${errorMessage}`
 
   // ── Run-Log schreiben ─────────────────────────────────────────────────────

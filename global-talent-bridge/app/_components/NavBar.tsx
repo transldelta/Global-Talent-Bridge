@@ -122,6 +122,12 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
                 Outreach
               </Link>
               <Link
+                href="/admin/outreach/approval-queue"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                Approval Queue
+              </Link>
+              <Link
                 href="/admin/leads"
                 className="text-sm text-gray-400 hover:text-white transition-colors"
               >

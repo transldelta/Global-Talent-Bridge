@@ -228,6 +228,15 @@ export default async function CeoDashboardPage() {
     interviewTotalRes,
     contactReleaseTotalRes,
     savedCandidatesTotalRes,
+    // Growth Engine / Approval Queue KPIs
+    approvalPendingRes,
+    approvalEmailDraftsRes,
+    approvalWhatsappDraftsRes,
+    approvalApprovedRes,
+    approvalSentRes,
+    approvalRejectedRes,
+    approvalHighRiskRes,
+    growthLastRunRes,
   ] = await Promise.all([
     supabase
       .from('agent_departments')
@@ -325,6 +334,15 @@ export default async function CeoDashboardPage() {
     supabase.from('interview_requests').select('*', { count: 'exact', head: true }),
     supabase.from('contact_release_requests').select('*', { count: 'exact', head: true }),
     supabase.from('saved_candidates').select('*', { count: 'exact', head: true }),
+    // Growth Engine / Approval Queue
+    supabase.from('outreach_approval_queue').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+    supabase.from('outreach_approval_queue').select('*', { count: 'exact', head: true }).eq('channel', 'email').eq('status', 'pending'),
+    supabase.from('outreach_approval_queue').select('*', { count: 'exact', head: true }).eq('channel', 'whatsapp').eq('status', 'pending'),
+    supabase.from('outreach_approval_queue').select('*', { count: 'exact', head: true }).eq('status', 'approved'),
+    supabase.from('outreach_approval_queue').select('*', { count: 'exact', head: true }).eq('status', 'sent'),
+    supabase.from('outreach_approval_queue').select('*', { count: 'exact', head: true }).eq('status', 'rejected'),
+    supabase.from('outreach_approval_queue').select('*', { count: 'exact', head: true }).eq('risk_level', 'high').eq('status', 'pending'),
+    supabase.from('internal_growth_agent_runs').select('run_at, status, drafts_created, leads_analyzed').order('run_at', { ascending: false }).limit(1),
   ])
 
   const departments: Department[] = deptRes.data ?? []
@@ -412,6 +430,18 @@ export default async function CeoDashboardPage() {
     { label: 'Kontaktfreigaben',    value: contactReleaseTotalRes.count ?? 0, emoji: '📋' },
     { label: 'Gespeicherte Kand.',  value: savedCandidatesTotalRes.count ?? 0, emoji: '⭐' },
   ]
+
+  // Growth Engine / Approval Queue KPIs
+  const approvalKpis = {
+    pending:       approvalPendingRes.count ?? 0,
+    emailDrafts:   approvalEmailDraftsRes.count ?? 0,
+    whatsappDrafts: approvalWhatsappDraftsRes.count ?? 0,
+    approved:      approvalApprovedRes.count ?? 0,
+    sent:          approvalSentRes.count ?? 0,
+    rejected:      approvalRejectedRes.count ?? 0,
+    highRisk:      approvalHighRiskRes.count ?? 0,
+  }
+  const lastGrowthRun = ((growthLastRunRes.data ?? []) as Array<{ run_at: string; status: string; drafts_created: number; leads_analyzed: number }>)[0]
 
   // Phase 2J: Agent System
   const agentSuggestions: AgentSuggestion[] = (agentSuggestionsRes.data ?? []) as AgentSuggestion[]
@@ -756,6 +786,66 @@ export default async function CeoDashboardPage() {
           </div>
           <p className="text-xs text-gray-600 mt-2">
             🔒 Kein Kontakt ohne Admin-Freigabe. Alle Bewerbungen laufen über Admin-Kontrolle.
+          </p>
+        </div>
+
+        {/* ── Growth Engine / Approval Queue KPIs ── */}
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h2 className="text-xl font-bold text-white">🚀 Growth Engine — Approval Queue</h2>
+              <p className="text-gray-400 text-sm mt-0.5">
+                Vom Growth Agent erstellte Entwürfe — warten auf Admin-Freigabe
+              </p>
+            </div>
+            <Link
+              href="/admin/outreach/approval-queue"
+              className="text-xs text-purple-400 hover:text-purple-300 transition-colors"
+            >
+              Zur Approval Queue →
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+            <div className={`border rounded-xl p-3 text-center ${approvalKpis.pending > 0 ? 'bg-yellow-900/20 border-yellow-800/50' : 'bg-gray-900 border-gray-800'}`}>
+              <div className="text-2xl font-bold text-yellow-300">{approvalKpis.pending}</div>
+              <div className="text-xs text-gray-400 mt-0.5">⏳ Ausstehend</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-blue-300">{approvalKpis.emailDrafts}</div>
+              <div className="text-xs text-gray-400 mt-0.5">✉️ E-Mail-Entwürfe</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-green-300">{approvalKpis.whatsappDrafts}</div>
+              <div className="text-xs text-gray-400 mt-0.5">💬 WhatsApp</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-purple-300">{approvalKpis.approved}</div>
+              <div className="text-xs text-gray-400 mt-0.5">✅ Freigegeben</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-teal-300">{approvalKpis.sent}</div>
+              <div className="text-xs text-gray-400 mt-0.5">📨 Gesendet</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-gray-400">{approvalKpis.rejected}</div>
+              <div className="text-xs text-gray-400 mt-0.5">❌ Abgelehnt</div>
+            </div>
+            <div className={`border rounded-xl p-3 text-center ${approvalKpis.highRisk > 0 ? 'bg-red-900/20 border-red-800/40' : 'bg-gray-900 border-gray-800'}`}>
+              <div className={`text-2xl font-bold ${approvalKpis.highRisk > 0 ? 'text-red-400' : 'text-gray-600'}`}>
+                {approvalKpis.highRisk}
+              </div>
+              <div className="text-xs text-gray-400 mt-0.5">⚠️ High-Risk</div>
+            </div>
+          </div>
+          {lastGrowthRun && (
+            <p className="text-xs text-gray-600 mt-2">
+              Letzter Growth-Agent-Lauf: {new Date(lastGrowthRun.run_at).toLocaleString('de-DE')} ·
+              {lastGrowthRun.leads_analyzed} Leads · {lastGrowthRun.drafts_created} Entwürfe ·
+              <span className={lastGrowthRun.status === 'success' ? 'text-green-600' : 'text-red-500'}> {lastGrowthRun.status}</span>
+            </p>
+          )}
+          <p className="text-xs text-gray-600 mt-1">
+            🔒 Kein Versand ohne Admin-Freigabe. High-Risk erfordert doppelte Bestätigung.
           </p>
         </div>
 
