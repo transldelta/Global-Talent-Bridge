@@ -263,6 +263,11 @@ export default async function CeoDashboardPage() {
     lpfHighPriorityRes,
     lpfPublishedRes,
     lpfTopPagesRes,
+    // Migration Intelligence KPIs
+    miTotalRes,
+    miHighRiskRes,
+    miReviewedRes,
+    miTopRowsRes,
   ] = await Promise.all([
     supabase
       .from('agent_departments')
@@ -395,6 +400,11 @@ export default async function CeoDashboardPage() {
     supabase.from('landingpage_factory').select('*', { count: 'exact', head: true }).in('priority_level', ['critical', 'high']),
     supabase.from('landingpage_factory').select('*', { count: 'exact', head: true }).eq('status', 'published'),
     supabase.from('landingpage_factory').select('slug, title, language, source_country, target_country, opportunity_score, priority_level, status').order('opportunity_score', { ascending: false }).limit(8),
+    // Migration Intelligence queries
+    supabase.from('migration_intelligence').select('*', { count: 'exact', head: true }).neq('status', 'outdated'),
+    supabase.from('migration_intelligence').select('*', { count: 'exact', head: true }).in('risk_level', ['high', 'critical']).neq('status', 'outdated'),
+    supabase.from('migration_intelligence').select('*', { count: 'exact', head: true }).in('status', ['reviewed', 'approved']),
+    supabase.from('migration_intelligence').select('source_country, target_country, sector, estimated_success_score, risk_level, status').neq('status', 'outdated').order('estimated_success_score', { ascending: false }).limit(10),
   ])
 
   const departments: Department[] = deptRes.data ?? []
@@ -538,6 +548,15 @@ export default async function CeoDashboardPage() {
     published:       lpfPublishedRes.count ?? 0,
   }
   const lpfTopPages = (lpfTopPagesRes.data ?? []) as LPFTopRow[]
+
+  // Migration Intelligence
+  type MITopRow = { source_country: string | null; target_country: string | null; sector: string | null; estimated_success_score: number; risk_level: string; status: string }
+  const miKpis = {
+    total:     miTotalRes.count ?? 0,
+    highRisk:  miHighRiskRes.count ?? 0,
+    reviewed:  miReviewedRes.count ?? 0,
+  }
+  const miTopRows = (miTopRowsRes.data ?? []) as MITopRow[]
 
   // Phase 2J: Agent System
   const agentSuggestions: AgentSuggestion[] = (agentSuggestionsRes.data ?? []) as AgentSuggestion[]
@@ -1342,6 +1361,83 @@ export default async function CeoDashboardPage() {
           <p className="text-xs text-gray-600 mt-3">
             🔒 Landingpages werden vom Agenten vorbereitet. Kein automatisches Deployment. Kein automatisches Senden.
             Alle Seiten müssen manuell genehmigt und auf &quot;published&quot; gesetzt werden. SEO-Inhalte sind Vorschläge.
+          </p>
+        </div>
+
+        {/* ── 🛂 Migration Intelligence ── */}
+        <div>
+          <div className="flex items-start justify-between mb-4 flex-wrap gap-2">
+            <div>
+              <h2 className="text-xl font-bold text-white">🛂 Migration Intelligence</h2>
+              <p className="text-gray-400 text-sm mt-0.5">
+                Komplexitätsanalyse pro Korridor · Erfolgswahrscheinlichkeit · Risikolevel · Kein Rechtsbeistand
+              </p>
+            </div>
+            <Link href="/admin/global/migration-intelligence" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors text-xs">
+              🛂 MI verwalten →
+            </Link>
+          </div>
+
+          {/* MI KPI Row */}
+          <div className="grid grid-cols-3 gap-3 mb-5">
+            <div className="bg-gray-900 border border-teal-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-teal-300">{miKpis.total}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🛂 Korridore analysiert</div>
+            </div>
+            <div className={`border rounded-xl p-3 text-center ${miKpis.highRisk > 0 ? 'bg-orange-900/20 border-orange-800/40' : 'bg-gray-900 border-gray-800'}`}>
+              <div className={`text-2xl font-bold ${miKpis.highRisk > 0 ? 'text-orange-300' : 'text-gray-600'}`}>{miKpis.highRisk}</div>
+              <div className="text-xs text-gray-400 mt-0.5">⚠️ Hochrisiko</div>
+            </div>
+            <div className="bg-gray-900 border border-blue-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-blue-300">{miKpis.reviewed}</div>
+              <div className="text-xs text-gray-400 mt-0.5">✅ Reviewed / Approved</div>
+            </div>
+          </div>
+
+          {/* Top MI rows */}
+          {miTopRows.length > 0 && (
+            <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-gray-800 text-sm font-semibold text-gray-300">
+                🛂 Top Korridore — nach Erfolgswahrscheinlichkeit
+              </div>
+              <div className="divide-y divide-gray-800">
+                {miTopRows.map((row, i) => (
+                  <div key={i} className="px-4 py-3 flex items-center justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm text-white font-medium">
+                        {row.source_country ?? '?'} → {row.target_country ?? '?'}
+                      </div>
+                      {row.sector && (
+                        <div className="text-xs text-gray-500 mt-0.5">{row.sector}</div>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className={`text-sm font-bold ${
+                        row.estimated_success_score >= 80 ? 'text-green-300' :
+                        row.estimated_success_score >= 60 ? 'text-yellow-300' :
+                        row.estimated_success_score >= 40 ? 'text-orange-300' :
+                        'text-red-300'
+                      }`}>{row.estimated_success_score}%</span>
+                      <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                        row.risk_level === 'low'      ? 'bg-green-900/30 text-green-400' :
+                        row.risk_level === 'medium'   ? 'bg-yellow-900/30 text-yellow-400' :
+                        row.risk_level === 'high'     ? 'bg-orange-900/30 text-orange-400' :
+                        'bg-red-900/30 text-red-400'
+                      }`}>{row.risk_level}</span>
+                      <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                        row.status === 'approved' ? 'bg-green-900/30 text-green-400' :
+                        row.status === 'reviewed' ? 'bg-blue-900/30 text-blue-400' :
+                        'bg-gray-800 text-gray-500'
+                      }`}>{row.status}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <p className="text-xs text-gray-600 mt-3">
+            ⚠️ Alle MI-Daten sind algorithmisch. Kein Rechtsbeistand. Keine Garantien. Nur interne Orientierung.
           </p>
         </div>
 

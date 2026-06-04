@@ -8,6 +8,7 @@ import { runGlobalMarketIntelligenceAgent } from './global-market-intelligence-a
 import { runCorridorIntelligenceAgent } from './corridor-intelligence-agent'
 import { runGlobalCandidateAcquisitionAgent } from './global-candidate-acquisition-agent'
 import { runLandingpageFactoryAgent } from './landingpage-factory-agent'
+import { runMigrationIntelligenceAgent } from './migration-intelligence-agent'
 
 export type AgentRunResult = {
   success: boolean
@@ -25,6 +26,7 @@ export type AgentRunResult = {
     corridorIntelligence: { corridorsAnalyzed: number; scoresUpdated: number; suggestionsCreated: number; notificationsCreated: number; campaignsReviewed: number } | null
     candidateAcquisition: { sourcesAnalyzed: number; scoresUpdated: number; landingpagesReviewed: number; suggestionsCreated: number; notificationsCreated: number } | null
     landingpageFactory: { corridorsProcessed: number; landingpagesCreated: number; landingpagesUpdated: number; suggestionsCreated: number; notificationsCreated: number } | null
+    migrationIntelligence: { entriesAnalyzed: number; scoresUpdated: number; markedOutdated: number; suggestionsCreated: number; notificationsCreated: number } | null
   }
   error?: string
 }
@@ -48,6 +50,7 @@ export async function runAllAgents(): Promise<AgentRunResult> {
     corridorIntelligence: null,
     candidateAcquisition: null,
     landingpageFactory: null,
+    migrationIntelligence: null,
   }
 
   let totalSuggestions = 0
@@ -102,6 +105,12 @@ export async function runAllAgents(): Promise<AgentRunResult> {
     totalSuggestions += lpfResult.suggestionsCreated
     totalNotifications += lpfResult.notificationsCreated
 
+    // ── Migration Intelligence Agent ──────────────────────────────────────────
+    const miResult = await runMigrationIntelligenceAgent()
+    details.migrationIntelligence = miResult
+    totalSuggestions += miResult.suggestionsCreated
+    totalNotifications += miResult.notificationsCreated
+
   } catch (err) {
     errorMessage = err instanceof Error ? err.message : 'Unbekannter Fehler'
   }
@@ -122,9 +131,12 @@ export async function runAllAgents(): Promise<AgentRunResult> {
   const lpfSummary = details.landingpageFactory
     ? ` LPF: ${details.landingpageFactory.landingpagesCreated} neue Landingpages, ${details.landingpageFactory.landingpagesUpdated} Updates.`
     : ''
+  const miSummary = details.migrationIntelligence
+    ? ` MI: ${details.migrationIntelligence.entriesAnalyzed} Einträge, ${details.migrationIntelligence.scoresUpdated} Score-Updates.`
+    : ''
 
   const summary = success
-    ? `Agenten-Lauf abgeschlossen: ${totalSuggestions} neue Vorschläge, ${totalNotifications} Benachrichtigungen, ${totalSignals} Markt-Signale.${growthSummary}${gmiSummary}${ciSummary}${gcaSummary}${lpfSummary}`
+    ? `Agenten-Lauf abgeschlossen: ${totalSuggestions} neue Vorschläge, ${totalNotifications} Benachrichtigungen, ${totalSignals} Markt-Signale.${growthSummary}${gmiSummary}${ciSummary}${gcaSummary}${lpfSummary}${miSummary}`
     : `Agenten-Lauf mit Fehler abgebrochen: ${errorMessage}`
 
   // ── Run-Log schreiben ─────────────────────────────────────────────────────

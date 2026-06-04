@@ -170,6 +170,12 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
                 🚀 LPF
               </Link>
               <Link
+                href="/admin/global/migration-intelligence"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                🛂 MI
+              </Link>
+              <Link
                 href="/admin/leads"
                 className="text-sm text-gray-400 hover:text-white transition-colors"
               >

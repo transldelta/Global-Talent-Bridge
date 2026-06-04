@@ -42,6 +42,22 @@ type LandingpageFull = {
   migration_corridors: CorridorDetail | null
 }
 
+type MigrationIntelligenceDetail = {
+  visa_complexity: number
+  recognition_complexity: number
+  language_complexity: number
+  document_complexity: number
+  estimated_success_score: number
+  risk_level: string
+  required_documents: Record<string, unknown> | null
+  language_requirements: Record<string, string> | null
+  recognition_steps: string[] | null
+  visa_pathways: string[] | null
+  recommended_next_steps: string[] | null
+  disclaimer: string | null
+  status: string
+}
+
 // ─── generateMetadata ─────────────────────────────────────────────────────────
 
 export async function generateMetadata(
@@ -140,6 +156,8 @@ export default async function CorridorLandingPage(
 
   // Load corridor intelligence if available
   let ci: CorridorIntelligenceDetail | null = null
+  let mi: MigrationIntelligenceDetail | null = null
+
   if (corridor) {
     const { data: corridorRows } = await supabase
       .from('migration_corridors')
@@ -149,13 +167,22 @@ export default async function CorridorLandingPage(
       .single()
 
     if (corridorRows?.id) {
-      const { data: ciData } = await supabase
-        .from('corridor_intelligence')
-        .select('top_professions, language_requirements, visa_pathways, demand_level, migration_difficulty, notes')
-        .eq('corridor_id', corridorRows.id)
-        .single()
+      const [ciResult, miResult] = await Promise.all([
+        supabase
+          .from('corridor_intelligence')
+          .select('top_professions, language_requirements, visa_pathways, demand_level, migration_difficulty, notes')
+          .eq('corridor_id', corridorRows.id)
+          .single(),
+        supabase
+          .from('migration_intelligence')
+          .select('visa_complexity, recognition_complexity, language_complexity, document_complexity, estimated_success_score, risk_level, required_documents, language_requirements, recognition_steps, visa_pathways, recommended_next_steps, disclaimer, status')
+          .eq('corridor_id', corridorRows.id)
+          .in('status', ['reviewed', 'approved'])
+          .single(),
+      ])
 
-      if (ciData) ci = ciData as CorridorIntelligenceDetail
+      if (ciResult.data) ci = ciResult.data as CorridorIntelligenceDetail
+      if (miResult.data) mi = miResult.data as MigrationIntelligenceDetail
     }
   }
 
@@ -293,6 +320,152 @@ export default async function CorridorLandingPage(
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Migration Intelligence Section ─────────────────────────────────── */}
+      {mi && (
+        <section className="px-4 py-8 max-w-4xl mx-auto w-full space-y-5">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-lg font-bold text-white">🛂 Migrations-Orientierung</h2>
+            <span
+              className={`text-xs px-2 py-0.5 rounded-full border font-medium ${
+                mi.risk_level === 'low'      ? 'bg-green-900/30 text-green-300 border-green-800/30' :
+                mi.risk_level === 'medium'   ? 'bg-yellow-900/30 text-yellow-300 border-yellow-800/30' :
+                mi.risk_level === 'high'     ? 'bg-orange-900/30 text-orange-300 border-orange-800/30' :
+                'bg-red-900/30 text-red-300 border-red-800/30'
+              }`}
+            >
+              Risiko: {mi.risk_level}
+            </span>
+          </div>
+
+          {/* Success probability */}
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm text-gray-300 font-medium">Erfolgswahrscheinlichkeit (Orientierung)</span>
+              <span className={`text-xl font-bold ${
+                mi.estimated_success_score >= 80 ? 'text-green-300' :
+                mi.estimated_success_score >= 60 ? 'text-yellow-300' :
+                mi.estimated_success_score >= 40 ? 'text-orange-300' :
+                'text-red-300'
+              }`}>
+                {mi.estimated_success_score}%
+              </span>
+            </div>
+            <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full ${
+                  mi.estimated_success_score >= 80 ? 'bg-green-500' :
+                  mi.estimated_success_score >= 60 ? 'bg-yellow-500' :
+                  mi.estimated_success_score >= 40 ? 'bg-orange-500' :
+                  'bg-red-500'
+                }`}
+                style={{ width: `${mi.estimated_success_score}%` }}
+              />
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
+              {[
+                { label: 'Visa-Komplexität', value: mi.visa_complexity },
+                { label: 'Anerkennungs-Aufwand', value: mi.recognition_complexity },
+                { label: 'Sprachanforderung', value: mi.language_complexity },
+                { label: 'Dokumentenaufwand', value: mi.document_complexity },
+              ].map(({ label, value }) => (
+                <div key={label} className="text-center">
+                  <div className={`text-lg font-bold ${value >= 70 ? 'text-red-300' : value >= 50 ? 'text-orange-300' : 'text-green-300'}`}>
+                    {value}
+                  </div>
+                  <div className="text-xs text-gray-500 mt-0.5">{label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Required Documents */}
+          {mi.required_documents && typeof mi.required_documents === 'object' && (
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+              <h3 className="text-sm font-semibold text-gray-300 mb-3">📄 Typische Dokumente</h3>
+              <div className="space-y-2">
+                {Object.entries(mi.required_documents as Record<string, string>).map(([key, value]) => (
+                  <div key={key} className="flex items-start gap-2 text-sm text-gray-300">
+                    <span className="text-teal-400 shrink-0 mt-0.5">→</span>
+                    <span><span className="text-gray-400 font-medium">{key}:</span> {value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Recognition Steps */}
+          {Array.isArray(mi.recognition_steps) && mi.recognition_steps.length > 0 && (
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+              <h3 className="text-sm font-semibold text-gray-300 mb-3">🎓 Anerkennungsschritte</h3>
+              <ol className="space-y-2">
+                {mi.recognition_steps.map((step, i) => (
+                  <li key={i} className="flex items-start gap-3 text-sm text-gray-300">
+                    <span className="shrink-0 w-5 h-5 rounded-full bg-teal-900/50 border border-teal-700/50 text-teal-300 text-xs flex items-center justify-center font-bold mt-0.5">
+                      {i + 1}
+                    </span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
+          {/* Visa Pathways from MI */}
+          {Array.isArray(mi.visa_pathways) && mi.visa_pathways.length > 0 && !ci?.visa_pathways && (
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+              <h3 className="text-sm font-semibold text-gray-300 mb-3">🛂 Typische Visa-Wege</h3>
+              <ul className="space-y-2">
+                {mi.visa_pathways.map((path, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
+                    <span className="text-teal-400 shrink-0 mt-0.5">→</span>
+                    {path}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Language Requirements from MI */}
+          {mi.language_requirements && Object.keys(mi.language_requirements).length > 0 && !ci?.language_requirements && (
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+              <h3 className="text-sm font-semibold text-gray-300 mb-3">🗣️ Sprachanforderungen (Orientierung)</h3>
+              <div className="flex flex-wrap gap-3">
+                {Object.entries(mi.language_requirements).map(([lang, level]) => (
+                  <div key={lang} className="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg">
+                    <span className="text-xs text-gray-400">{lang}</span>
+                    <div className="text-sm font-semibold text-white">{String(level)}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Recommended Next Steps */}
+          {Array.isArray(mi.recommended_next_steps) && mi.recommended_next_steps.length > 0 && (
+            <div className="bg-gray-900 border border-teal-800/30 rounded-xl p-5">
+              <h3 className="text-sm font-semibold text-teal-300 mb-3">💡 Empfohlene nächste Schritte</h3>
+              <ul className="space-y-2">
+                {mi.recommended_next_steps.map((step, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
+                    <span className="text-teal-400 shrink-0 mt-0.5">✓</span>
+                    {step}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Disclaimer */}
+          <div className="bg-yellow-900/10 border border-yellow-800/30 rounded-xl p-4 flex items-start gap-3">
+            <span className="text-yellow-400 shrink-0">⚠️</span>
+            <p className="text-yellow-200/70 text-xs leading-relaxed">
+              {mi.disclaimer ??
+                'Diese Informationen sind algorithmisch berechnet und dienen ausschließlich zur allgemeinen Orientierung. Keine Rechtsberatung. Keine Garantien. Alle Angaben ohne Gewähr. Für individuelle Beratung bitte lokale Migrations- und Anerkennungsexperten hinzuziehen.'}
+            </p>
           </div>
         </section>
       )}
