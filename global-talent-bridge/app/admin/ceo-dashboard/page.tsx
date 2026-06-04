@@ -237,6 +237,13 @@ export default async function CeoDashboardPage() {
     approvalRejectedRes,
     approvalHighRiskRes,
     growthLastRunRes,
+    // Global Market Intelligence KPIs
+    gmiActiveCorridorsRes,
+    gmiCriticalRes,
+    gmiHighRes,
+    gmiSourcesRes,
+    gmiTopCorridorsRes,
+    gmiTopSourcesRes,
   ] = await Promise.all([
     supabase
       .from('agent_departments')
@@ -343,6 +350,13 @@ export default async function CeoDashboardPage() {
     supabase.from('outreach_approval_queue').select('*', { count: 'exact', head: true }).eq('status', 'rejected'),
     supabase.from('outreach_approval_queue').select('*', { count: 'exact', head: true }).eq('risk_level', 'high').eq('status', 'pending'),
     supabase.from('internal_growth_agent_runs').select('run_at, status, drafts_created, leads_analyzed').order('run_at', { ascending: false }).limit(1),
+    // Global Market Intelligence
+    supabase.from('migration_corridors').select('*', { count: 'exact', head: true }).eq('status', 'active'),
+    supabase.from('migration_corridors').select('*', { count: 'exact', head: true }).eq('priority_level', 'critical'),
+    supabase.from('migration_corridors').select('*', { count: 'exact', head: true }).eq('priority_level', 'high'),
+    supabase.from('candidate_sources').select('*', { count: 'exact', head: true }).eq('status', 'active'),
+    supabase.from('migration_corridors').select('source_country, target_country, sector, opportunity_score, priority_level').eq('status', 'active').order('opportunity_score', { ascending: false }).limit(5),
+    supabase.from('candidate_sources').select('source_name, source_country, source_type, priority_score, estimated_audience').eq('status', 'active').order('priority_score', { ascending: false }).limit(5),
   ])
 
   const departments: Department[] = deptRes.data ?? []
@@ -442,6 +456,18 @@ export default async function CeoDashboardPage() {
     highRisk:      approvalHighRiskRes.count ?? 0,
   }
   const lastGrowthRun = ((growthLastRunRes.data ?? []) as Array<{ run_at: string; status: string; drafts_created: number; leads_analyzed: number }>)[0]
+
+  // Global Market Intelligence
+  const gmiKpis = {
+    activeCorridors: gmiActiveCorridorsRes.count ?? 0,
+    critical:        gmiCriticalRes.count ?? 0,
+    high:            gmiHighRes.count ?? 0,
+    sources:         gmiSourcesRes.count ?? 0,
+  }
+  type TopCorridor = { source_country: string; target_country: string; sector: string; opportunity_score: number; priority_level: string }
+  type TopSource   = { source_name: string; source_country: string | null; source_type: string | null; priority_score: number; estimated_audience: number }
+  const gmiTopCorridors = (gmiTopCorridorsRes.data ?? []) as TopCorridor[]
+  const gmiTopSources   = (gmiTopSourcesRes.data ?? []) as TopSource[]
 
   // Phase 2J: Agent System
   const agentSuggestions: AgentSuggestion[] = (agentSuggestionsRes.data ?? []) as AgentSuggestion[]
@@ -846,6 +872,124 @@ export default async function CeoDashboardPage() {
           )}
           <p className="text-xs text-gray-600 mt-1">
             🔒 Kein Versand ohne Admin-Freigabe. High-Risk erfordert doppelte Bestätigung.
+          </p>
+        </div>
+
+        {/* ── 🌍 Global Market Intelligence ── */}
+        <div>
+          <div className="flex items-start justify-between mb-4 flex-wrap gap-2">
+            <div>
+              <h2 className="text-xl font-bold text-white">🌍 Global Market Intelligence</h2>
+              <p className="text-gray-400 text-sm mt-0.5">
+                Migrations-Korridore · Kandidatenquellen · Globale Chancen
+              </p>
+            </div>
+            <div className="flex gap-2 text-xs">
+              <Link href="/admin/global/corridors" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors">
+                🌍 Korridore →
+              </Link>
+              <Link href="/admin/global/sources" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors">
+                🎯 Quellen →
+              </Link>
+            </div>
+          </div>
+
+          {/* GMI KPI Row */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+            <div className="bg-gray-900 border border-blue-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-blue-300">{gmiKpis.activeCorridors}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🌍 Aktive Korridore</div>
+            </div>
+            <div className={`border rounded-xl p-3 text-center ${gmiKpis.critical > 0 ? 'bg-red-900/20 border-red-800/40' : 'bg-gray-900 border-gray-800'}`}>
+              <div className={`text-2xl font-bold ${gmiKpis.critical > 0 ? 'text-red-300' : 'text-gray-600'}`}>{gmiKpis.critical}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🔥 Kritische Chancen</div>
+            </div>
+            <div className="bg-gray-900 border border-orange-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-orange-300">{gmiKpis.high}</div>
+              <div className="text-xs text-gray-400 mt-0.5">📈 Hohe Priorität</div>
+            </div>
+            <div className="bg-gray-900 border border-green-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-green-300">{gmiKpis.sources}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🎯 Kandidatenquellen</div>
+            </div>
+          </div>
+
+          {/* Top Corridors + Top Sources side by side */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+            {/* Top Corridors */}
+            <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-gray-800 text-sm font-semibold text-gray-300">
+                🌍 Top Migrations-Korridore
+              </div>
+              {gmiTopCorridors.length === 0 ? (
+                <div className="p-4 text-sm text-gray-500 text-center">Noch keine Daten — Agent starten</div>
+              ) : (
+                <div className="divide-y divide-gray-800">
+                  {gmiTopCorridors.map((c, i) => (
+                    <div key={i} className="px-4 py-3 flex items-center justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm text-white font-medium truncate">
+                          {c.source_country} → {c.target_country}
+                        </div>
+                        <div className="text-xs text-gray-500 truncate">{c.sector}</div>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <div className="text-right">
+                          <div className="text-sm font-bold text-purple-300">{c.opportunity_score}</div>
+                          <div className="text-xs text-gray-600">score</div>
+                        </div>
+                        <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                          c.priority_level === 'critical' ? 'bg-red-900/30 text-red-400' :
+                          c.priority_level === 'high'     ? 'bg-orange-900/30 text-orange-400' :
+                          'bg-gray-800 text-gray-400'
+                        }`}>
+                          {c.priority_level === 'critical' ? '🔥' : c.priority_level === 'high' ? '📈' : '🟡'}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Top Candidate Sources */}
+            <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-gray-800 text-sm font-semibold text-gray-300">
+                🎯 Top Kandidatenquellen
+              </div>
+              {gmiTopSources.length === 0 ? (
+                <div className="p-4 text-sm text-gray-500 text-center">Noch keine Daten — Agent starten</div>
+              ) : (
+                <div className="divide-y divide-gray-800">
+                  {gmiTopSources.map((s, i) => (
+                    <div key={i} className="px-4 py-3 flex items-center justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm text-white font-medium truncate">{s.source_name}</div>
+                        <div className="text-xs text-gray-500 truncate">
+                          {s.source_country ?? '—'} · {s.source_type ?? '—'}
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <div className="text-sm font-bold text-green-300">
+                          {s.estimated_audience >= 1_000_000
+                            ? `${(s.estimated_audience / 1_000_000).toFixed(1)}M`
+                            : s.estimated_audience >= 1_000
+                              ? `${Math.round(s.estimated_audience / 1_000)}K`
+                              : s.estimated_audience}
+                        </div>
+                        <div className="text-xs text-gray-600">Reichweite</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <p className="text-xs text-gray-600 mt-3">
+            🔒 Keine automatischen Aktionen. Alle Korridore und Quellen dienen ausschließlich interner Analyse.
+            DSGVO-konform. Kein Scraping. Kein automatisches Senden.
           </p>
         </div>
 

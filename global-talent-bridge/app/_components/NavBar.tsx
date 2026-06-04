@@ -128,6 +128,18 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
                 Approval Queue
               </Link>
               <Link
+                href="/admin/global/corridors"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                🌍 Korridore
+              </Link>
+              <Link
+                href="/admin/global/sources"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                Quellen
+              </Link>
+              <Link
                 href="/admin/leads"
                 className="text-sm text-gray-400 hover:text-white transition-colors"
               >

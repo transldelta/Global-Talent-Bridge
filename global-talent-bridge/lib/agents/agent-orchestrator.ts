@@ -4,6 +4,7 @@ import { runCeoAgent } from './ceo-agent'
 import { runMarketingStrategyAgent } from './marketing-strategy-agent'
 import { runVisionaryAgent } from './visionary-agent'
 import { runGrowthAgent } from './growth-agent'
+import { runGlobalMarketIntelligenceAgent } from './global-market-intelligence-agent'
 
 export type AgentRunResult = {
   success: boolean
@@ -17,6 +18,7 @@ export type AgentRunResult = {
     marketing: { suggestions: number; signals: number } | null
     visionary: { suggestions: number } | null
     growth: { leadsAnalyzed: number; draftsCreated: number; followupsPlanned: number; alertsSent: number } | null
+    globalMarket: { corridorsAnalyzed: number; sourcesAnalyzed: number; scoresUpdated: number; suggestionsCreated: number; alertsCreated: number } | null
   }
   error?: string
 }
@@ -36,6 +38,7 @@ export async function runAllAgents(): Promise<AgentRunResult> {
     marketing: null,
     visionary: null,
     growth: null,
+    globalMarket: null,
   }
 
   let totalSuggestions = 0
@@ -66,6 +69,12 @@ export async function runAllAgents(): Promise<AgentRunResult> {
     details.growth = growthResult
     totalNotifications += growthResult.alertsSent
 
+    // ── Global Market Intelligence Agent ──────────────────────────────────────
+    const gmiResult = await runGlobalMarketIntelligenceAgent()
+    details.globalMarket = gmiResult
+    totalSuggestions += gmiResult.suggestionsCreated
+    totalNotifications += gmiResult.alertsCreated
+
   } catch (err) {
     errorMessage = err instanceof Error ? err.message : 'Unbekannter Fehler'
   }
@@ -74,9 +83,12 @@ export async function runAllAgents(): Promise<AgentRunResult> {
   const growthSummary = details.growth
     ? ` Growth: ${details.growth.draftsCreated} Entwürfe, ${details.growth.followupsPlanned} Follow-ups.`
     : ''
+  const gmiSummary = details.globalMarket
+    ? ` GMI: ${details.globalMarket.corridorsAnalyzed} Korridore, ${details.globalMarket.scoresUpdated} Score-Updates.`
+    : ''
 
   const summary = success
-    ? `Agenten-Lauf abgeschlossen: ${totalSuggestions} neue Vorschläge, ${totalNotifications} Benachrichtigungen, ${totalSignals} Markt-Signale erstellt.${growthSummary}`
+    ? `Agenten-Lauf abgeschlossen: ${totalSuggestions} neue Vorschläge, ${totalNotifications} Benachrichtigungen, ${totalSignals} Markt-Signale.${growthSummary}${gmiSummary}`
     : `Agenten-Lauf mit Fehler abgebrochen: ${errorMessage}`
 
   // ── Run-Log schreiben ─────────────────────────────────────────────────────
