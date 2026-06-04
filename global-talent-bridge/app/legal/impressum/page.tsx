@@ -27,14 +27,8 @@ export default function ImpressumPage() {
             <p className="text-gray-500 text-sm">Angaben gemäß § 5 TMG</p>
           </div>
 
-          {/* MVP-Hinweis */}
-          <div className="p-4 bg-yellow-900/20 border border-yellow-800/40 rounded-xl">
-            <p className="text-yellow-300 text-sm">
-              <strong>Hinweis:</strong> Global Talent Bridge wird aktuell unter dem Namen
-              Delta Translation betrieben. Wenn das Projekt als eigene Firma weitergeführt wird,
-              werden diese Angaben entsprechend aktualisiert.
-            </p>
-          </div>
+          {/* Admin-Hinweis (nur intern sichtbar wenn env gesetzt) */}
+          {/* VOR LAUNCH PRÜFEN: Firmenname + Adresse + USt-ID aktuell? Rechtsform korrekt? */}
 
           {/* Anbieter */}
           <div>
@@ -80,8 +74,7 @@ export default function ImpressumPage() {
                 Online-Plattform zur Verbindung internationaler Fachkräfte mit Arbeitgebern.
               </p>
               <p>
-                Die Plattform befindet sich in der MVP-Phase. Alle Angaben wurden nach
-                bestem Wissen und Gewissen erstellt.
+                Alle Angaben wurden nach bestem Wissen und Gewissen erstellt.
               </p>
             </div>
           </div>

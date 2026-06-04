@@ -24,16 +24,7 @@ export default function DatenschutzPage() {
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 space-y-8 text-sm leading-relaxed">
           <div>
             <h1 className="text-3xl font-bold text-white mb-2">Datenschutzerklärung</h1>
-            <p className="text-gray-500 text-sm">Stand: Juni 2026 · MVP-Entwurf</p>
-          </div>
-
-          {/* MVP-Hinweis */}
-          <div className="p-4 bg-yellow-900/20 border border-yellow-800/40 rounded-xl">
-            <p className="text-yellow-300 text-sm">
-              <strong>Hinweis:</strong> Dies ist ein MVP-Entwurf der Datenschutzerklärung.
-              Er stellt keine abschließende Rechtsberatung dar. Bei rechtlichen Fragen wende
-              dich an einen qualifizierten Datenschutzbeauftragten.
-            </p>
+            <p className="text-gray-500 text-sm">Stand: Juni 2026</p>
           </div>
 
           {/* 1. Verantwortlicher */}

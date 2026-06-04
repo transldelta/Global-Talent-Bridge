@@ -89,6 +89,60 @@ export async function logoutAction() {
   redirect('/')
 }
 
+/**
+ * Passwort-Reset-E-Mail senden.
+ * Nutzt Supabase resetPasswordForEmail ohne externen Versand-Provider.
+ */
+export async function forgotPasswordAction(formData: FormData) {
+  const email = formData.get('email') as string
+
+  if (!email) {
+    redirect('/auth/forgot-password?error=E-Mail+ist+erforderlich.')
+  }
+
+  const supabase = createClient()
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${baseUrl}/auth/callback?next=/auth/update-password`,
+  })
+
+  if (error) {
+    redirect(`/auth/forgot-password?error=${encodeURIComponent(error.message)}`)
+  }
+
+  // Immer Erfolg anzeigen (kein E-Mail-Enumeration)
+  redirect('/auth/forgot-password?message=Falls+ein+Konto+mit+dieser+E-Mail+existiert%2C+wurde+eine+Reset-E-Mail+gesendet.')
+}
+
+/**
+ * Neues Passwort setzen nach Reset-Link-Klick.
+ * Nur gültig wenn aktive Session (von Supabase-Callback gesetzt).
+ */
+export async function updatePasswordAction(formData: FormData) {
+  const password = formData.get('password') as string
+  const confirmPassword = formData.get('confirmPassword') as string
+
+  if (!password || password.length < 8) {
+    redirect('/auth/update-password?error=Passwort+muss+mindestens+8+Zeichen+lang+sein.')
+  }
+
+  if (password !== confirmPassword) {
+    redirect('/auth/update-password?error=Passwörter+stimmen+nicht+überein.')
+  }
+
+  const supabase = createClient()
+
+  const { error } = await supabase.auth.updateUser({ password })
+
+  if (error) {
+    redirect(`/auth/update-password?error=${encodeURIComponent(error.message)}`)
+  }
+
+  redirect('/auth/login?message=Passwort+erfolgreich+geändert.+Bitte+einloggen.')
+}
+
 // ============================================================
 // ONBOARDING ACTIONS
 // ============================================================

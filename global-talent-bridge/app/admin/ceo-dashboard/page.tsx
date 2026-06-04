@@ -447,17 +447,20 @@ export default async function CeoDashboardPage() {
     feedbackCrit:plFeedbackCritRes.count ?? 0,
   }
 
-  // ── Launch Readiness — static audit scores (2026-06-04, Sprint H audit) ──
+  // ── Launch Readiness — static audit scores (2026-06-04, Sprint I fixes applied) ──
   const LAUNCH_READINESS = {
-    technicalScore:  62,
+    technicalScore:  67,  // +5: Passwort-Reset, CV-Upload, E-Mail-Layer
     businessScore:   38,
-    launchScore:     35,
+    launchScore:     38,  // +3: Rechtstexte finalisiert, Test-Modus dokumentiert
     buyerScore:      68,
-    overallScore:    51,
-    criticalBlockers: 10,
+    overallScore:    53,  // neu: (67*0.30 + 38*0.25 + 38*0.25 + 68*0.20) = 53
+    criticalBlockers: 6,  // -4: Blocker #1-#6 teilweise behoben
     auditDate:       '2026-06-04',
     recommendation:  'Pilot starten',
   }
+
+  // ── Test-Modus-Warnung ──
+  const testModeActive = process.env.ENABLE_TEST_AUTO_APPLICATION_MESSAGE === 'true'
 
   // Enterprise Readiness — separate fast query (system_incidents)
   const [erOpenIncidentsRes, erTotalIncidentsRes] = await Promise.all([
@@ -688,6 +691,20 @@ export default async function CeoDashboardPage() {
       <NavBar badge="CEO Dashboard" badgeColor="purple" />
 
       <div className="max-w-6xl mx-auto px-4 py-8 space-y-10">
+
+        {/* ⚠️ Test-Modus-Warnung */}
+        {testModeActive && (
+          <div className="flex items-start gap-3 p-4 bg-orange-900/30 border border-orange-700 rounded-xl">
+            <span className="text-orange-400 text-xl shrink-0">⚠️</span>
+            <div>
+              <p className="text-orange-300 font-semibold text-sm">Test-Modus aktiv (ENABLE_TEST_AUTO_APPLICATION_MESSAGE=true)</p>
+              <p className="text-orange-400/80 text-xs mt-1">
+                Automatische Test-Bewerbungsnachrichten sind aktiviert. Dies darf in der Produktion nicht aktiv sein.
+                Setze <code className="bg-orange-900/50 px-1 rounded">ENABLE_TEST_AUTO_APPLICATION_MESSAGE=false</code> in den Produktions-Umgebungsvariablen.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* CEO-Header */}
         <div className="bg-gradient-to-r from-purple-900/30 to-blue-900/30 border border-purple-800/50 rounded-2xl p-8">
