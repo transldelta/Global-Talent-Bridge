@@ -58,8 +58,6 @@ export function StatusUpdater({
     }
   }
 
-  const meta = PILOT_STATUS_LABELS[status] ?? { label: status, color: 'text-gray-400' }
-
   return (
     <div className="flex items-center gap-2">
       <select

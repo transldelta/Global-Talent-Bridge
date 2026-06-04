@@ -354,3 +354,157 @@ describe('Edge Cases', () => {
     expect(t.corridor).toBe('Philippinen → Deutschland (Pflege)')
   })
 })
+
+// ── Sonstige-Template-Korrektheit (Regression: kein Pflegeheim-Fallback) ─────
+
+describe('Sonstige — generisches Template (kein Pflegeheim-Fallback)', () => {
+  const sonstigeCtx = (industry: string | null): EmployerContext => ({
+    companyName: 'Hospitality Group Wien',
+    contactName: 'K. Fischer',
+    country: 'Österreich',
+    industry,
+    corridor: 'Österreich → Deutschland',
+  })
+
+  it('Gastronomie → Sonstige', () => {
+    expect(generateTemplates(sonstigeCtx('Gastronomie')).type).toBe('Sonstige')
+  })
+
+  it('Bau → Sonstige', () => {
+    expect(generateTemplates(sonstigeCtx('Bau')).type).toBe('Sonstige')
+  })
+
+  it('Sonstige E-Mail enthält NICHT "Pflegekräfte"', () => {
+    const t = generateTemplates(sonstigeCtx('Gastronomie'))
+    expect(t.email.body).not.toContain('Pflegekräfte')
+  })
+
+  it('Sonstige E-Mail enthält NICHT "Pflegeeinrichtungen"', () => {
+    const t = generateTemplates(sonstigeCtx('Bau'))
+    expect(t.email.body).not.toContain('Pflegeeinrichtungen')
+  })
+
+  it('Sonstige E-Mail enthält Firmennamen', () => {
+    const t = generateTemplates(sonstigeCtx('Gastronomie'))
+    expect(t.email.body).toContain('Hospitality Group Wien')
+  })
+
+  it('Sonstige E-Mail hat Betreff', () => {
+    const t = generateTemplates(sonstigeCtx('Gastronomie'))
+    expect(t.email.subject).toBeDefined()
+    expect(t.email.subject!.length).toBeGreaterThan(10)
+  })
+
+  it('Sonstige E-Mail enthält generische Formulierung "Fachkräfte"', () => {
+    const t = generateTemplates(sonstigeCtx('Gastronomie'))
+    expect(t.email.body.toLowerCase()).toContain('fachkräfte')
+  })
+
+  it('Sonstige E-Mail enthält Platzhalter [Ihr Name]', () => {
+    const t = generateTemplates(sonstigeCtx('Gastronomie'))
+    expect(t.email.body).toContain('[Ihr Name]')
+  })
+
+  it('Sonstige WhatsApp ist generisch (ohne Pflegebezug)', () => {
+    const t = generateTemplates(sonstigeCtx('Gastronomie'))
+    expect(t.whatsapp.body).not.toContain('Pflegekräfte')
+    expect(t.whatsapp.body).not.toContain('Pflegeeinrichtungen')
+  })
+
+  it('alle 3 Kanäle haben Body für Sonstige', () => {
+    const t = generateTemplates(sonstigeCtx('Bau'))
+    expect(t.email.body.length).toBeGreaterThan(50)
+    expect(t.whatsapp.body.length).toBeGreaterThan(20)
+    expect(t.linkedin.body.length).toBeGreaterThan(20)
+  })
+})
+
+// ── Realdata-Simulation — die 10 DB-Arbeitgeber ─────────────────────────────
+
+describe('Realdata-Simulation — Seed-Arbeitgeber aus DB', () => {
+  const dbEmployers = [
+    { company: 'Sydney CareFirst Services', country: 'Australia', industry: 'Care' },
+    { company: 'NorthStar Tech Canada Inc.', country: 'Canada', industry: 'IT' },
+    { company: 'NHS London Royal Trust', country: 'United Kingdom', industry: 'Nursing' },
+    { company: 'Pflege Plus GmbH Karlsruhe', country: 'Germany', industry: 'Care' },
+    { company: 'Berlin Digital Solutions GmbH', country: 'Germany', industry: 'IT' },
+    { company: 'Pflege Plus GmbH', country: 'Deutschland', industry: 'Pflege' },
+    { company: 'MedCare Bayern', country: 'Deutschland', industry: 'Pflege' },
+    { company: 'TechRecruit Berlin', country: 'Deutschland', industry: 'IT' },
+    { company: 'Hospitality Group Wien', country: 'Österreich', industry: 'Gastronomie' },
+    { company: 'Bau AG Hamburg', country: 'Deutschland', industry: 'Bau' },
+  ]
+
+  it('alle 10 Arbeitgeber erzeugen valide Templates ohne Fehler', () => {
+    for (const emp of dbEmployers) {
+      const corridor = inferCorridor(emp.country, emp.industry)
+      const ctx: EmployerContext = {
+        companyName: emp.company,
+        contactName: null,
+        country: emp.country,
+        industry: emp.industry,
+        corridor,
+      }
+      const t = generateTemplates(ctx)
+      expect(t.email.body.length).toBeGreaterThan(50)
+      expect(t.whatsapp.body.length).toBeGreaterThan(10)
+      expect(t.linkedin.body.length).toBeGreaterThan(10)
+      expect(t.email.body).not.toContain('undefined')
+      expect(t.whatsapp.body).not.toContain('undefined')
+      expect(t.linkedin.body).not.toContain('undefined')
+    }
+  })
+
+  it('Gastronomie und Bau erzeugen KEIN Pflegeheim-Template', () => {
+    for (const emp of dbEmployers.filter((e) => ['Gastronomie', 'Bau'].includes(e.industry))) {
+      const corridor = inferCorridor(emp.country, emp.industry)
+      const ctx: EmployerContext = {
+        companyName: emp.company,
+        contactName: null,
+        country: emp.country,
+        industry: emp.industry,
+        corridor,
+      }
+      const t = generateTemplates(ctx)
+      expect(t.type).toBe('Sonstige')
+      expect(t.email.body).not.toContain('Pflegekräfte')
+      expect(t.email.body).not.toContain('Pflegeeinrichtungen')
+    }
+  })
+
+  it('Pflege-Arbeitgeber erzeugen Pflegeheim-Template', () => {
+    const pflegeEmps = dbEmployers.filter((e) =>
+      ['Care', 'Nursing', 'Pflege'].includes(e.industry)
+    )
+    expect(pflegeEmps).toHaveLength(5)
+    for (const emp of pflegeEmps) {
+      const corridor = inferCorridor(emp.country, emp.industry)
+      const ctx: EmployerContext = {
+        companyName: emp.company,
+        contactName: null,
+        country: emp.country,
+        industry: emp.industry,
+        corridor,
+      }
+      const t = generateTemplates(ctx)
+      expect(t.type).toBe('Pflegeheim')
+    }
+  })
+
+  it('IT-Arbeitgeber erzeugen IT-Template', () => {
+    const itEmps = dbEmployers.filter((e) => e.industry === 'IT')
+    expect(itEmps).toHaveLength(3)
+    for (const emp of itEmps) {
+      const corridor = inferCorridor(emp.country, emp.industry)
+      const ctx: EmployerContext = {
+        companyName: emp.company,
+        contactName: null,
+        country: emp.country,
+        industry: emp.industry,
+        corridor,
+      }
+      const t = generateTemplates(ctx)
+      expect(t.type).toBe('IT-Unternehmen')
+    }
+  })
+})

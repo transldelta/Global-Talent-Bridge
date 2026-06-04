@@ -226,6 +226,33 @@ Global Talent Bridge
   }
 }
 
+function emailSonstige(ctx: EmployerContext): OutreachTemplate {
+  const g = greeting(ctx.contactName)
+  return {
+    employerType: 'Sonstige',
+    channel: 'email',
+    subject: `Internationale Fachkräfte für Ihr Unternehmen – ${ctx.companyName}`,
+    body: `${g},
+
+mein Name ist [Ihr Name] und ich bin Gründer von Global Talent Bridge — einer Plattform, die internationale Fachkräfte mit Arbeitgebern in Deutschland und Europa zusammenbringt.
+
+Ich melde mich, weil wir Unternehmen wie ${ctx.companyName} dabei unterstützen, qualifizierte Mitarbeitende aus dem Ausland zu finden — strukturiert, transparent und ohne bürokratischen Aufwand.
+
+Was wir bieten:
+• Vorgeprüfte internationale Kandidaten passend zu Ihren Anforderungen
+• Klare Matchingkriterien: Qualifikation, Sprachstand, Verfügbarkeit
+• Pilotzugang ohne Kosten — wir suchen Feedback-Partner für die erste Phase
+• Begleitung von der ersten Kontaktaufnahme bis zur Einstellung
+
+Hätten Sie 20 Minuten für ein kurzes Kennenlerngespräch?
+
+Mit freundlichen Grüßen
+[Ihr Name]
+Global Talent Bridge
+[Telefon / WhatsApp]`,
+  }
+}
+
 function emailSprachschule(ctx: EmployerContext): OutreachTemplate {
   const g = greeting(ctx.contactName)
   return {
@@ -311,7 +338,7 @@ export function generateTemplates(ctx: EmployerContext): {
     'IT-Unternehmen':      emailIT,
     'Personalvermittler':  emailPersonalvermittler,
     'Sprachschule':        emailSprachschule,
-    'Sonstige':            emailPflegeheim, // fallback
+    'Sonstige':            emailSonstige,
   }
 
   return {
