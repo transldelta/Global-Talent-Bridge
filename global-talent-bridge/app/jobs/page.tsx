@@ -1,6 +1,8 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { NavBar } from '@/app/_components/NavBar'
+import { ApplyButton } from '@/app/candidate/_components/ApplyButton'
+import { isTestAutoMessageEnabled } from '@/lib/application-message'
 
 export default async function JobsPage() {
   const supabase = createClient()
@@ -8,6 +10,40 @@ export default async function JobsPage() {
 
   if (!user) {
     redirect('/auth/login')
+  }
+
+  // Profil + Rolle laden
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+
+  const isCandidate = profile?.role === 'candidate'
+
+  // Kandidatenprofil für Apply-Button
+  let candidateId: string | null = null
+  let existingApplicationJobIds: Set<string> = new Set()
+
+  if (isCandidate) {
+    const { data: candidate } = await supabase
+      .from('candidates')
+      .select('id')
+      .eq('user_id', user.id)
+      .single()
+
+    candidateId = candidate?.id ?? null
+
+    if (candidateId) {
+      // Vorhandene Bewerbungen laden (verhindert doppelten Apply-Button)
+      const { data: apps } = await supabase
+        .from('application_requests')
+        .select('job_id')
+        .eq('candidate_id', candidateId)
+        .neq('status', 'withdrawn')
+
+      existingApplicationJobIds = new Set((apps ?? []).map((a) => a.job_id))
+    }
   }
 
   const { data: jobs } = await supabase
@@ -45,6 +81,8 @@ export default async function JobsPage() {
     employers: Array.isArray(j.employers) && j.employers.length > 0 ? j.employers[0] : null,
   }))
 
+  const testMode = isTestAutoMessageEnabled()
+
   return (
     <div className="min-h-screen bg-gray-950">
       <NavBar />
@@ -55,6 +93,17 @@ export default async function JobsPage() {
           <span className="text-gray-500 text-sm">{jobList.length} aktive Stellen</span>
         </div>
 
+        {/* Testmodus-Banner */}
+        {testMode && (
+          <div className="mb-4 bg-yellow-900/20 border border-yellow-700/40 rounded-xl px-4 py-3 flex items-center gap-2">
+            <span className="text-yellow-400">🧪</span>
+            <p className="text-yellow-300/90 text-sm">
+              <strong>Testmodus aktiv:</strong> Nachrichten werden automatisch generiert.{' '}
+              <code className="text-xs bg-yellow-900/30 px-1 rounded">ENABLE_TEST_AUTO_APPLICATION_MESSAGE=true</code>
+            </p>
+          </div>
+        )}
+
         {jobList.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-5xl mb-4">💼</div>
@@ -63,50 +112,79 @@ export default async function JobsPage() {
           </div>
         ) : (
           <div className="grid gap-4">
-            {jobList.map((job) => (
-              <div
-                key={job.id}
-                className="bg-gray-900 rounded-2xl border border-gray-800 p-6"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <h2 className="text-lg font-semibold text-white">{job.title}</h2>
-                    {job.employers?.company_name && (
-                      <p className="text-blue-400 text-sm mt-0.5">{job.employers.company_name}</p>
-                    )}
-                    <p className="text-gray-400 text-sm mt-1">
-                      {[job.sector, job.city, job.country].filter(Boolean).join(' · ')}
-                    </p>
-                  </div>
-                  <span className="shrink-0 text-xs px-2.5 py-1 rounded-full bg-green-900/40 text-green-300 font-medium">
-                    Aktiv
-                  </span>
-                </div>
+            {jobList.map((job) => {
+              const alreadyApplied = existingApplicationJobIds.has(job.id)
+              return (
+                <div
+                  key={job.id}
+                  className="bg-gray-900 rounded-2xl border border-gray-800 p-6"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <h2 className="text-lg font-semibold text-white">{job.title}</h2>
+                      {job.employers?.company_name && (
+                        <p className="text-blue-400 text-sm mt-0.5">{job.employers.company_name}</p>
+                      )}
+                      <p className="text-gray-400 text-sm mt-1">
+                        {[job.sector, job.city, job.country].filter(Boolean).join(' · ')}
+                      </p>
+                    </div>
 
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {job.required_experience > 0 && (
-                    <span className="text-xs px-3 py-1 bg-gray-800 text-gray-300 rounded-full">
-                      🕐 {job.required_experience}+ Jahre Erfahrung
-                    </span>
-                  )}
-                  {job.required_german && (
-                    <span className="text-xs px-3 py-1 bg-gray-800 text-gray-300 rounded-full">
-                      🇩🇪 Deutsch: {job.required_german}
-                    </span>
-                  )}
-                  {job.required_english && (
-                    <span className="text-xs px-3 py-1 bg-gray-800 text-gray-300 rounded-full">
-                      🇬🇧 Englisch: {job.required_english}
-                    </span>
-                  )}
-                  {job.salary_range && (
-                    <span className="text-xs px-3 py-1 bg-gray-800 text-gray-300 rounded-full">
-                      💰 {job.salary_range}
-                    </span>
-                  )}
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-xs px-2.5 py-1 rounded-full bg-green-900/40 text-green-300 font-medium">
+                        Aktiv
+                      </span>
+                      {/* Bewerbungsbutton nur für Kandidaten */}
+                      {isCandidate && candidateId && (
+                        <ApplyButton
+                          jobId={job.id}
+                          matchId={null}
+                          jobTitle={job.title}
+                          alreadyApplied={alreadyApplied}
+                          testMode={testMode}
+                          autoMessage={null}
+                        />
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {job.required_experience > 0 && (
+                      <span className="text-xs px-3 py-1 bg-gray-800 text-gray-300 rounded-full">
+                        🕐 {job.required_experience}+ Jahre Erfahrung
+                      </span>
+                    )}
+                    {job.required_german && (
+                      <span className="text-xs px-3 py-1 bg-gray-800 text-gray-300 rounded-full">
+                        🇩🇪 Deutsch: {job.required_german}
+                      </span>
+                    )}
+                    {job.required_english && (
+                      <span className="text-xs px-3 py-1 bg-gray-800 text-gray-300 rounded-full">
+                        🇬🇧 Englisch: {job.required_english}
+                      </span>
+                    )}
+                    {job.salary_range && (
+                      <span className="text-xs px-3 py-1 bg-gray-800 text-gray-300 rounded-full">
+                        💰 {job.salary_range}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
+          </div>
+        )}
+
+        {/* Info: Nicht-Kandidaten sehen keinen Button */}
+        {!isCandidate && (
+          <div className="mt-6 bg-gray-900/50 border border-gray-800 rounded-xl p-4 text-center">
+            <p className="text-gray-500 text-sm">
+              Um dich auf Stellen zu bewerben, benötigst du ein{' '}
+              <a href="/candidate/onboarding" className="text-blue-400 hover:text-blue-300 underline">
+                Kandidatenprofil
+              </a>.
+            </p>
           </div>
         )}
       </div>
