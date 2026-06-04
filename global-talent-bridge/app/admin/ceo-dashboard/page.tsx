@@ -249,6 +249,14 @@ export default async function CeoDashboardPage() {
     ciCampaignTotalRes,
     ciCampaignCriticalRes,
     ciCampaignApprovedRes,
+    // Candidate Acquisition KPIs
+    gcaSourcesTotalRes,
+    gcaSourcesCriticalRes,
+    gcaSourcesHighRes,
+    gcaTopSourcesRes,
+    gcaLandingpagesTotalRes,
+    gcaLandingpagesCriticalRes,
+    gcaTopLandingpagesRes,
   ] = await Promise.all([
     supabase
       .from('agent_departments')
@@ -367,6 +375,14 @@ export default async function CeoDashboardPage() {
     supabase.from('campaign_recommendations').select('*', { count: 'exact', head: true }),
     supabase.from('campaign_recommendations').select('*', { count: 'exact', head: true }).eq('campaign_priority', 'critical'),
     supabase.from('campaign_recommendations').select('*', { count: 'exact', head: true }).eq('status', 'approved'),
+    // Candidate Acquisition queries
+    supabase.from('candidate_acquisition_sources').select('*', { count: 'exact', head: true }).eq('status', 'active'),
+    supabase.from('candidate_acquisition_sources').select('*', { count: 'exact', head: true }).eq('priority_level', 'critical'),
+    supabase.from('candidate_acquisition_sources').select('*', { count: 'exact', head: true }).eq('priority_level', 'high'),
+    supabase.from('candidate_acquisition_sources').select('source_name, country, source_type, opportunity_score, priority_level, estimated_audience').eq('status', 'active').order('opportunity_score', { ascending: false }).limit(10),
+    supabase.from('landingpage_recommendations').select('*', { count: 'exact', head: true }),
+    supabase.from('landingpage_recommendations').select('*', { count: 'exact', head: true }).eq('priority', 'critical'),
+    supabase.from('landingpage_recommendations').select('title, slug, language, priority, status, migration_corridors(source_country, target_country)').order('priority', { ascending: false }).limit(10),
   ])
 
   const departments: Department[] = deptRes.data ?? []
@@ -487,6 +503,19 @@ export default async function CeoDashboardPage() {
     critical: ciCampaignCriticalRes.count ?? 0,
     approved: ciCampaignApprovedRes.count ?? 0,
   }
+
+  // Candidate Acquisition
+  type GCASourceRow = { source_name: string; country: string | null; source_type: string | null; opportunity_score: number; priority_level: string | null; estimated_audience: number }
+  type GCALandingRow = { title: string; slug: string; language: string; priority: string; status: string; migration_corridors: { source_country: string; target_country: string } | null }
+  const gcaKpis = {
+    total: gcaSourcesTotalRes.count ?? 0,
+    critical: gcaSourcesCriticalRes.count ?? 0,
+    high: gcaSourcesHighRes.count ?? 0,
+    landingpages: gcaLandingpagesTotalRes.count ?? 0,
+    criticalLPs: gcaLandingpagesCriticalRes.count ?? 0,
+  }
+  const gcaTopSources = (gcaTopSourcesRes.data ?? []) as GCASourceRow[]
+  const gcaTopLandingpages = (gcaTopLandingpagesRes.data ?? []) as unknown as GCALandingRow[]
 
   // Phase 2J: Agent System
   const agentSuggestions: AgentSuggestion[] = (agentSuggestionsRes.data ?? []) as AgentSuggestion[]
@@ -1087,6 +1116,129 @@ export default async function CeoDashboardPage() {
           <p className="text-xs text-gray-600 mt-3">
             🔒 Alle Corridor Intelligence Daten sind intern. Kein Scraping. Keine automatischen Kampagnen.
             Kampagnen-Empfehlungen werden manuell durch den Admin genehmigt und durchgeführt.
+          </p>
+        </div>
+
+        {/* ── 🎯 Candidate Acquisition ── */}
+        <div>
+          <div className="flex items-start justify-between mb-4 flex-wrap gap-2">
+            <div>
+              <h2 className="text-xl font-bold text-white">🎯 Candidate Acquisition</h2>
+              <p className="text-gray-400 text-sm mt-0.5">
+                Globale Kandidatenquellen · Landing Page Strategie · Prioritäten
+              </p>
+            </div>
+            <div className="flex gap-2 text-xs">
+              <Link href="/admin/global/candidate-acquisition" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors">
+                🎯 Quellen →
+              </Link>
+              <Link href="/admin/global/landingpages" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors">
+                🌐 Landingpages →
+              </Link>
+            </div>
+          </div>
+
+          {/* GCA KPI Row */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+            <div className="bg-gray-900 border border-blue-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-blue-300">{gcaKpis.total}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🎯 Aktive Quellen</div>
+            </div>
+            <div className={`border rounded-xl p-3 text-center ${gcaKpis.critical > 0 ? 'bg-red-900/20 border-red-800/40' : 'bg-gray-900 border-gray-800'}`}>
+              <div className={`text-2xl font-bold ${gcaKpis.critical > 0 ? 'text-red-300' : 'text-gray-600'}`}>{gcaKpis.critical}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🔥 Kritische Quellen</div>
+            </div>
+            <div className="bg-gray-900 border border-orange-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-orange-300">{gcaKpis.high}</div>
+              <div className="text-xs text-gray-400 mt-0.5">📈 Hohe Priorität</div>
+            </div>
+            <div className="bg-gray-900 border border-green-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-green-300">{gcaKpis.landingpages}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🌐 Landingpages</div>
+            </div>
+          </div>
+
+          {/* Top Sources + Top Landingpages side by side */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+            {/* Top Sources */}
+            <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-gray-800 text-sm font-semibold text-gray-300">
+                🎯 Top Kandidatenquellen
+              </div>
+              {gcaTopSources.length === 0 ? (
+                <div className="p-4 text-sm text-gray-500 text-center">Noch keine Daten — Agent starten</div>
+              ) : (
+                <div className="divide-y divide-gray-800">
+                  {gcaTopSources.slice(0, 8).map((src, i) => {
+                    const audience = src.estimated_audience >= 1_000_000
+                      ? `${(src.estimated_audience / 1_000_000).toFixed(1)}M`
+                      : src.estimated_audience >= 1_000
+                        ? `${Math.round(src.estimated_audience / 1_000)}K`
+                        : String(src.estimated_audience)
+                    return (
+                      <div key={i} className="px-4 py-2.5 flex items-center justify-between gap-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm text-white font-medium truncate">{src.source_name}</div>
+                          <div className="text-xs text-gray-500 truncate">{src.country ?? '—'} · {src.source_type ?? '—'}</div>
+                        </div>
+                        <div className="flex items-center gap-3 shrink-0">
+                          <span className="text-xs text-green-300 font-bold">{src.opportunity_score}</span>
+                          <span className="text-xs text-gray-500">{audience}</span>
+                          <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                            src.priority_level === 'critical' ? 'bg-red-900/30 text-red-400' :
+                            src.priority_level === 'high' ? 'bg-orange-900/30 text-orange-400' :
+                            'bg-gray-800 text-gray-400'
+                          }`}>
+                            {src.priority_level === 'critical' ? '🔥' : src.priority_level === 'high' ? '📈' : '🟡'}
+                          </span>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Top Landingpages */}
+            <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-gray-800 text-sm font-semibold text-gray-300">
+                🌐 Top Landingpage-Empfehlungen
+              </div>
+              {gcaTopLandingpages.length === 0 ? (
+                <div className="p-4 text-sm text-gray-500 text-center">Noch keine Daten</div>
+              ) : (
+                <div className="divide-y divide-gray-800">
+                  {gcaTopLandingpages.slice(0, 8).map((lp, i) => (
+                    <div key={i} className="px-4 py-2.5 flex items-center justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <code className="text-xs text-blue-400 font-mono">/{lp.slug}</code>
+                        <div className="text-xs text-gray-500 truncate">{lp.title}</div>
+                      </div>
+                      <div className="flex gap-2 shrink-0">
+                        <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                          lp.priority === 'critical' ? 'bg-red-900/30 text-red-400' :
+                          lp.priority === 'high' ? 'bg-orange-900/30 text-orange-400' :
+                          'bg-gray-800 text-gray-400'
+                        }`}>
+                          {lp.priority === 'critical' ? '🔥' : lp.priority === 'high' ? '📈' : '🟡'} {lp.priority}
+                        </span>
+                        <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                          lp.status === 'live' ? 'bg-green-900/30 text-green-400' : 'bg-gray-800 text-gray-400'
+                        }`}>
+                          {lp.status === 'live' ? '✅ live' : lp.status}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <p className="text-xs text-gray-600 mt-3">
+            🔒 Alle Akquisitionsdaten sind intern. Kein automatisches Scraping. Kein automatisches Kontaktieren.
+            Alle Aktionen manuell durch Admin. DSGVO-konform.
           </p>
         </div>
 
