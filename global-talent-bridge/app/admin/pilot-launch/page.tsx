@@ -125,6 +125,28 @@ export default async function PilotLaunchPage() {
   const criticalTasks  = tasks.filter(t => t.priority === 'critical').length
   const critFeedback   = feedback.filter(f => f.priority === 'critical' || f.priority === 'high').length
 
+  // ── Pilot-Readiness-Checks (server-seitig, env vars) ──────────────────────
+  const missingBaseUrl  = !process.env.NEXT_PUBLIC_BASE_URL
+  const testModeOn      = process.env.ENABLE_TEST_AUTO_APPLICATION_MESSAGE === 'true'
+  const emailProviderNone = (process.env.EMAIL_PROVIDER ?? 'none') === 'none'
+  const pilotWarnings: { icon: string; msg: string; detail: string }[] = []
+
+  if (missingBaseUrl) pilotWarnings.push({
+    icon: '🔗',
+    msg: 'NEXT_PUBLIC_BASE_URL nicht gesetzt',
+    detail: 'Passwort-Reset-Links in E-Mails zeigen auf localhost:3000 — in Production kaputt. In Vercel setzen: NEXT_PUBLIC_BASE_URL=https://deine-domain.vercel.app',
+  })
+  if (testModeOn) pilotWarnings.push({
+    icon: '🧪',
+    msg: 'Test-Modus aktiv (ENABLE_TEST_AUTO_APPLICATION_MESSAGE=true)',
+    detail: 'Bewerbungsnachrichten werden automatisch generiert. Für echte Nutzer auf false setzen.',
+  })
+  if (emailProviderNone) pilotWarnings.push({
+    icon: '📧',
+    msg: 'EMAIL_PROVIDER=none — keine E-Mails werden gesendet',
+    detail: 'Nutzer erhalten keine Benachrichtigungen. Für Pilot ausreichend, aber dokumentieren. Für echten Versand: EMAIL_PROVIDER=resend + RESEND_API_KEY.',
+  })
+
   return (
     <main className="p-8 max-w-6xl mx-auto space-y-10">
       {/* Header */}
@@ -135,6 +157,25 @@ export default async function PilotLaunchPage() {
         </div>
         <RunPilotAgentButton />
       </div>
+
+      {/* ── Pilot-Readiness-Warnungen ── */}
+      {pilotWarnings.length > 0 && (
+        <div className="space-y-2">
+          {pilotWarnings.map((w, i) => (
+            <div key={i} className="flex items-start gap-3 p-4 bg-red-50 border border-red-300 rounded-xl">
+              <span className="text-xl shrink-0">{w.icon}</span>
+              <div>
+                <p className="text-red-800 font-semibold text-sm">{w.msg}</p>
+                <p className="text-red-700/80 text-xs mt-0.5">{w.detail}</p>
+              </div>
+            </div>
+          ))}
+          <p className="text-xs text-gray-400 pl-1">
+            ⚠️ {pilotWarnings.length} Konfigurationsproblem{pilotWarnings.length > 1 ? 'e' : ''} vor Pilot-Start beheben.
+            Siehe <code className="bg-gray-100 px-1 rounded">docs/PILOT_START_CHECKLIST.md</code>
+          </p>
+        </div>
+      )}
 
       {/* KPI Row */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
