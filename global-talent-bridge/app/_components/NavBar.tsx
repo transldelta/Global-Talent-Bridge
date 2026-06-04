@@ -80,12 +80,20 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
 
           {/* Nur für Arbeitgeber */}
           {isEmployer && (
-            <Link
-              href="/employer/jobs"
-              className="text-sm text-gray-400 hover:text-white transition-colors"
-            >
-              Meine Jobs
-            </Link>
+            <>
+              <Link
+                href="/employer/jobs"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                Meine Jobs
+              </Link>
+              <Link
+                href="/employer/applications"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                Bewerbungen
+              </Link>
+            </>
           )}
 
           {/* Nur für Kandidaten */}

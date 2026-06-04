@@ -172,7 +172,7 @@ export default async function EmployerDashboard() {
           .from('application_requests')
           .select('id, candidate_id, job_id, status, cover_note, created_at')
           .in('job_id', jobIds)
-          .neq('status', 'withdrawn')
+          .in('status', ['employer_notified', 'accepted', 'rejected'])  // Nur freigegebene sichtbar
           .order('created_at', { ascending: false })
           .limit(50),
         adminSupabase
@@ -269,13 +269,13 @@ export default async function EmployerDashboard() {
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
               <div className="text-2xl font-bold text-blue-400">{incomingApplications.length}</div>
-              <div className="text-xs text-gray-400 mt-0.5">Bewerbungen</div>
+              <div className="text-xs text-gray-400 mt-0.5">Freigegebene Bew.</div>
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold text-orange-400">
-                {incomingApplications.filter((a) => a.status === 'pending').length}
+              <div className="text-2xl font-bold text-green-400">
+                {incomingApplications.filter((a) => a.status === 'employer_notified').length}
               </div>
-              <div className="text-xs text-gray-400 mt-0.5">Neue Bewerbungen</div>
+              <div className="text-xs text-gray-400 mt-0.5">Zu bearbeiten</div>
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
               <div className="text-2xl font-bold text-yellow-400">{savedCandidateSet.size}</div>
@@ -396,6 +396,12 @@ export default async function EmployerDashboard() {
         {employer && (
           <div className="flex flex-wrap gap-3">
             <Link
+              href="/employer/applications"
+              className="px-4 py-2.5 bg-green-700 hover:bg-green-600 text-white text-sm font-medium rounded-lg transition-colors"
+            >
+              📩 Freigegebene Bewerbungen
+            </Link>
+            <Link
               href="/employer/jobs"
               className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors"
             >
@@ -403,15 +409,9 @@ export default async function EmployerDashboard() {
             </Link>
             <Link
               href="/employer/jobs/new"
-              className="px-4 py-2.5 bg-green-700 hover:bg-green-600 text-white text-sm font-medium rounded-lg transition-colors"
-            >
-              + Neuen Job erstellen
-            </Link>
-            <Link
-              href="/jobs"
               className="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-medium rounded-lg transition-colors"
             >
-              Alle Jobs ansehen
+              + Neuen Job erstellen
             </Link>
           </div>
         )}

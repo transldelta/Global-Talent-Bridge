@@ -7,13 +7,22 @@ type Props = {
   jobId: string
   applicationId?: string
   isSaved?: boolean
+  /** true wenn bereits eine Interview-Anfrage für diesen Kandidaten+Job existiert */
+  hasInterviewRequest?: boolean
 }
 
-export function CandidateActionButtons({ candidateId, jobId, applicationId, isSaved = false }: Props) {
+export function CandidateActionButtons({
+  candidateId,
+  jobId,
+  applicationId,
+  isSaved = false,
+  hasInterviewRequest = false,
+}: Props) {
   const [isPendingSave, startSave] = useTransition()
   const [isPendingInterview, startInterview] = useTransition()
   const [isPendingContact, startContact] = useTransition()
   const [saved, setSaved] = useState(isSaved)
+  const [interviewDone, setInterviewDone] = useState(hasInterviewRequest)
   const [feedbacks, setFeedbacks] = useState<Record<string, { ok: boolean; msg: string }>>({})
 
   async function callApi(url: string, method: string, body: object) {
@@ -49,6 +58,7 @@ export function CandidateActionButtons({ candidateId, jobId, applicationId, isSa
         format: 'video',
         message: 'Interview-Anfrage über das Arbeitgeber-Dashboard erstellt.',
       })
+      if (r.ok) setInterviewDone(true)
       setFeedbacks((prev) => ({ ...prev, interview: r }))
     })
   }
@@ -83,7 +93,7 @@ export function CandidateActionButtons({ candidateId, jobId, applicationId, isSa
       </button>
 
       {/* Interview anfragen */}
-      {feedbacks.interview?.ok ? (
+      {interviewDone ? (
         <span className="text-xs px-3 py-1.5 rounded-lg bg-purple-900/20 text-purple-400 border border-purple-800/30">
           📅 Interview beantragt
         </span>
