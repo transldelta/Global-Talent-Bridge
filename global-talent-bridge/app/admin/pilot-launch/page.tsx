@@ -2,6 +2,8 @@ import { getCurrentAdminUser } from '@/lib/admin'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
 import { RunPilotAgentButton } from './_components/RunPilotAgentButton'
+import { PreparePilotDataButton } from './_components/PreparePilotDataButton'
+import { PilotChecklist } from './_components/PilotChecklist'
 
 type PilotEmployer = {
   id: string
@@ -125,26 +127,25 @@ export default async function PilotLaunchPage() {
   const criticalTasks  = tasks.filter(t => t.priority === 'critical').length
   const critFeedback   = feedback.filter(f => f.priority === 'critical' || f.priority === 'high').length
 
-  // ── Pilot-Readiness-Checks (server-seitig, env vars) ──────────────────────
-  const missingBaseUrl  = !process.env.NEXT_PUBLIC_BASE_URL
-  const testModeOn      = process.env.ENABLE_TEST_AUTO_APPLICATION_MESSAGE === 'true'
-  const emailProviderNone = (process.env.EMAIL_PROVIDER ?? 'none') === 'none'
-  const pilotWarnings: { icon: string; msg: string; detail: string }[] = []
+  // ── Pilot-Readiness-Checks (server-seitig, env vars + DB) ────────────────
+  const baseUrlSet       = !!process.env.NEXT_PUBLIC_BASE_URL
+  const testModeOff      = process.env.ENABLE_TEST_AUTO_APPLICATION_MESSAGE !== 'true'
+  const emailProviderSet = (process.env.EMAIL_PROVIDER ?? 'none') !== 'none'
 
-  if (missingBaseUrl) pilotWarnings.push({
+  // Kandidaten mit Score ≥ 70
+  const qualityCandidateCount = candidates.filter(c => c.quality_score >= 70).length
+
+  // Kritische ENV-Blocker für Banner (rot = nicht ignorierbar)
+  const criticalEnvErrors: { icon: string; msg: string; detail: string }[] = []
+  if (!baseUrlSet) criticalEnvErrors.push({
     icon: '🔗',
-    msg: 'NEXT_PUBLIC_BASE_URL nicht gesetzt',
-    detail: 'Passwort-Reset-Links in E-Mails zeigen auf localhost:3000 — in Production kaputt. In Vercel setzen: NEXT_PUBLIC_BASE_URL=https://deine-domain.vercel.app',
+    msg: 'NEXT_PUBLIC_BASE_URL fehlt',
+    detail: 'Passwort-Reset-Links zeigen auf localhost:3000. In Vercel setzen: NEXT_PUBLIC_BASE_URL=https://deine-domain.vercel.app',
   })
-  if (testModeOn) pilotWarnings.push({
+  if (!testModeOff) criticalEnvErrors.push({
     icon: '🧪',
-    msg: 'Test-Modus aktiv (ENABLE_TEST_AUTO_APPLICATION_MESSAGE=true)',
-    detail: 'Bewerbungsnachrichten werden automatisch generiert. Für echte Nutzer auf false setzen.',
-  })
-  if (emailProviderNone) pilotWarnings.push({
-    icon: '📧',
-    msg: 'EMAIL_PROVIDER=none — keine E-Mails werden gesendet',
-    detail: 'Nutzer erhalten keine Benachrichtigungen. Für Pilot ausreichend, aber dokumentieren. Für echten Versand: EMAIL_PROVIDER=resend + RESEND_API_KEY.',
+    msg: 'ENABLE_TEST_AUTO_APPLICATION_MESSAGE=true',
+    detail: 'Test-Modus aktiv — automatische Bewerbungsnachrichten. Für echte Nutzer: false setzen.',
   })
 
   return (
@@ -158,24 +159,63 @@ export default async function PilotLaunchPage() {
         <RunPilotAgentButton />
       </div>
 
-      {/* ── Pilot-Readiness-Warnungen ── */}
-      {pilotWarnings.length > 0 && (
+      {/* ── Kritische ENV-Blocker (rot) ── */}
+      {criticalEnvErrors.length > 0 && (
         <div className="space-y-2">
-          {pilotWarnings.map((w, i) => (
-            <div key={i} className="flex items-start gap-3 p-4 bg-red-50 border border-red-300 rounded-xl">
+          {criticalEnvErrors.map((w, i) => (
+            <div key={i} className="flex items-start gap-3 p-4 bg-red-50 border border-red-400 rounded-xl">
               <span className="text-xl shrink-0">{w.icon}</span>
               <div>
-                <p className="text-red-800 font-semibold text-sm">{w.msg}</p>
+                <p className="text-red-800 font-semibold text-sm">🚫 {w.msg}</p>
                 <p className="text-red-700/80 text-xs mt-0.5">{w.detail}</p>
               </div>
             </div>
           ))}
-          <p className="text-xs text-gray-400 pl-1">
-            ⚠️ {pilotWarnings.length} Konfigurationsproblem{pilotWarnings.length > 1 ? 'e' : ''} vor Pilot-Start beheben.
-            Siehe <code className="bg-gray-100 px-1 rounded">docs/PILOT_START_CHECKLIST.md</code>
-          </p>
         </div>
       )}
+
+      {/* ── E-Mail-Warnung (gelb, nicht blockierend) ── */}
+      {!emailProviderSet && (
+        <div className="flex items-start gap-3 p-4 bg-yellow-50 border border-yellow-300 rounded-xl">
+          <span className="text-xl shrink-0">📧</span>
+          <div>
+            <p className="text-yellow-800 font-semibold text-sm">EMAIL_PROVIDER=none — keine E-Mails werden gesendet</p>
+            <p className="text-yellow-700/80 text-xs mt-0.5">
+              Für Pilot akzeptabel (Admin informiert manuell). Für echten Versand: EMAIL_PROVIDER=resend + RESEND_API_KEY in Vercel.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── Pilotdaten + Checkliste ── */}
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 space-y-5">
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">🌱 Pilotdaten vorbereiten</h2>
+            <p className="text-xs text-gray-500 mt-0.5">
+              5 Arbeitgeber + 20 Kandidaten über 5 Korridore · Idempotent · Klar als Pilotdaten markiert
+            </p>
+          </div>
+          <PreparePilotDataButton />
+        </div>
+
+        <div className="text-xs text-gray-400 space-y-0.5 border-t pt-3">
+          <p>Korridore: India→Canada (IT) · India→UK (Nursing) · Morocco→Germany (Care) · Turkey→Germany (IT) · Philippines→Australia (Care)</p>
+          <p>Alle Datensätze mit <code className="bg-gray-100 px-1 rounded">source = &apos;pilot_seed_v1&apos;</code> — sicher identifizierbar und löschbar.</p>
+        </div>
+      </div>
+
+      {/* ── Pilot-Start-Checkliste ── */}
+      <div className="bg-white border border-gray-200 rounded-2xl p-6">
+        <PilotChecklist
+          baseUrlSet={baseUrlSet}
+          testModeOff={testModeOff}
+          emailProviderSet={emailProviderSet}
+          employerCount={employers.length}
+          candidateCount={candidates.length}
+          qualityCandidateCount={qualityCandidateCount}
+        />
+      </div>
 
       {/* KPI Row */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">

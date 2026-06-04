@@ -1,6 +1,6 @@
 # Real Launch Readiness Audit — Global Talent Bridge
 
-> **Stand:** 2026-06-04 · Sprint I Fixes verifiziert  
+> **Stand:** 2026-06-04 · Sprint I Fixes verifiziert + Pilot-Start-Setup implementiert  
 > **Methode:** Direkte Code-Inspektion aller relevanten Dateien. Keine Annahmen. Keine Schönrechnerei.  
 > **Ziel:** Ehrliche Bewertung vor öffentlichem Launch.
 
@@ -10,19 +10,21 @@
 
 Global Talent Bridge hat eine **technisch solide Basis** mit funktionierendem Auth (inkl. Passwort-Reset), Matching, Bewerbungsworkflow, CV-Upload, umfangreichem Admin-System und 11 KI-Agenten.
 
-**Sprint I hat 6 kritische Blocker behoben.** 6 Blocker bleiben offen.
+**Sprint I hat 6 kritische Blocker behoben. Pilot-Start-Setup implementiert.** 6 Blocker bleiben offen.
 
-| Kategorie | Sprint H | Sprint I | Änderung |
-|-----------|----------|----------|----------|
-| Technical Score | 62 | 70 | +8 |
-| Business Score | 38 | 38 | 0 |
-| Launch Score | 35 | 38 | +3 |
-| Buyer Score | 68 | 68 | 0 |
-| **Overall Score** | **51** | **54** | **+3** |
-| Critical Blockers | 10 | 6 | -4 |
+| Kategorie | Sprint H | Sprint I | Pilot-Setup | Änderung gesamt |
+|-----------|----------|----------|-------------|-----------------|
+| Technical Score | 62 | 70 | 72 | +10 |
+| Business Score | 38 | 38 | 40 | +2 |
+| Launch Score | 35 | 38 | 42 | +7 |
+| Buyer Score | 68 | 68 | 68 | 0 |
+| **Overall Score** | **51** | **54** | **56** | **+5** |
+| Critical Blockers | 10 | 6 | 4 | -6 |
 
-**Empfehlung: Pilot starten ✅** — kontrolliert mit 2–5 Arbeitgebern und 10–20 Kandidaten.  
-**Öffentlicher Launch: Noch nicht.** 6 Blocker offen.
+*Pilot-Setup-Score-Anpassung:* +2 Technical (Seed-API, Checkliste-Infrastruktur), +2 Business (strukturierte Pilotdaten, Korridor-Planung), +4 Launch (interaktive Checkliste, ENV-Validierung im UI, Seed-Daten bereit)
+
+**Empfehlung: Pilot starten ✅** — Tool und Daten sind bereit. 2 ENV-Variablen in Vercel setzen (NEXT_PUBLIC_BASE_URL + Test-Modus=false), dann Pilotstart möglich.  
+**Öffentlicher Launch: Noch nicht.** 4 strukturelle Blocker offen (Profil-Edit, Konto-löschen, Messaging, Stripe).
 
 ---
 
@@ -101,16 +103,28 @@ Global Talent Bridge hat eine **technisch solide Basis** mit funktionierendem Au
 
 ---
 
-## Was noch offen ist (6 Blocker)
+## Was noch offen ist (4 strukturelle Blocker + 2 Konfiguration)
+
+### Konfiguration (vor Pilot, 5 Minuten Aufwand)
+
+| # | Blocker | Aufwand | Priorität |
+|---|---------|---------|-----------|
+| K1 | `NEXT_PUBLIC_BASE_URL` in Vercel setzen | 5 Min | 🔴 SOFORT |
+| K2 | `ENABLE_TEST_AUTO_APPLICATION_MESSAGE=false` in Vercel | 5 Min | 🔴 SOFORT |
+
+### Strukturell (vor öffentlichem Launch)
 
 | # | Blocker | Betrifft | Priorität |
 |---|---------|----------|-----------|
-| 1 | `NEXT_PUBLIC_BASE_URL` in Production (Vercel) setzen | Passwort-Reset | 🔴 Vor Pilot |
-| 2 | `sendEmail()` nicht in Bewerbungsflow (nur Interview-Request) | E-Mail-Vollständigkeit | 🟡 Wichtig |
-| 3 | Keine Profilbearbeitung (Edit-Seite) für Kandidaten/Arbeitgeber | Core UX | 🔴 Vor öffentlichem Launch |
-| 4 | Kein "Konto löschen" (DSGVO-Pflicht) | Datenschutz | 🔴 Vor öffentlichem Launch |
-| 5 | Kein Messaging/Chat zwischen Arbeitgeber und Kandidat | Core UX | 🟡 Vor öffentlichem Launch |
-| 6 | Stripe nicht integriert — keine echten Zahlungen | Revenue | 🟡 Vor Revenue-Launch |
+| S1 | Keine Profilbearbeitung (Edit-Seite) | Core UX | 🔴 Vor öffentlichem Launch |
+| S2 | Kein "Konto löschen" (DSGVO Art. 17) | Datenschutz | 🔴 Vor öffentlichem Launch |
+| S3 | Kein Messaging/Chat | Core UX | 🟡 Vor öffentlichem Launch |
+| S4 | Stripe fehlt — keine echten Zahlungen | Revenue | 🟡 Vor Revenue-Launch |
+
+### Informell (nicht blockierend für Pilot)
+
+- `sendEmail()` nicht in Bewerbungsflow verdrahtet (nur Interview-Request) — Admin informiert manuell
+- `Supabase Auth → Site URL` in Production-Supabase-Dashboard setzen
 
 ---
 

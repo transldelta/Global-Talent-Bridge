@@ -459,13 +459,19 @@ export default async function CeoDashboardPage() {
   //   +1: Test-Modus-Warnung im CEO-Dashboard
   // buyer 68: unverändert
   // overall: (70*0.30 + 38*0.25 + 38*0.25 + 68*0.20) = 21.0+9.5+9.5+13.6 = 53.6 → 54
+  // Scores nach Pilot-Start-Setup (Sprint I + Pilot-Setup):
+  // technical 72: +2 (Seed-API, Checklisten-Infrastruktur)
+  // business  40: +2 (strukturierte Pilotdaten, 5 Korridor-Arbeitgeber, 20 Kandidaten)
+  // launch    42: +4 (interaktive Checkliste, ENV-Validierung im UI, Seed bereit)
+  // buyer     68: unverändert
+  // overall: (72*0.30 + 40*0.25 + 42*0.25 + 68*0.20) = 21.6+10.0+10.5+13.6 = 55.7 → 56
   const LAUNCH_READINESS = {
-    technicalScore:  70,
-    businessScore:   38,
-    launchScore:     38,
+    technicalScore:  72,
+    businessScore:   40,
+    launchScore:     42,
     buyerScore:      68,
-    overallScore:    54,
-    criticalBlockers: 6,  // 10 → 6: #1 Passwort-Reset ✅ #2 CV-Upload ✅ #3 E-Mail-Layer ✅ #4 Test-Modus ✅ #5 AGB ✅ #6 Impressum ✅
+    overallScore:    56,
+    criticalBlockers: 4,  // K1+K2: Vercel-ENV (5 Min); S1: Profil-Edit; S2: Konto löschen
     auditDate:       '2026-06-04',
     recommendation:  'Pilot starten',
   }
