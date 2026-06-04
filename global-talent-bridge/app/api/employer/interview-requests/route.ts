@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { sendEmail } from '@/lib/email/index'
 
 async function getEmployerId() {
   const supabase = createClient()
@@ -51,6 +53,35 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, note: 'Interview-Anfrage bereits gestellt.' })
     }
     return NextResponse.json({ error: error.message }, { status: 400 })
+  }
+
+  // ── E-Mail-Log (kein automatischer Versand — Admin-kontrolliert) ─────────
+  // Bei EMAIL_PROVIDER=none: nur Console-Log, kein Versand.
+  // Bei EMAIL_PROVIDER=resend: Versand erst nach Admin-Freigabe (nicht hier).
+  // Zweck: Audit-Trail sicherstellen.
+  try {
+    const adminClient = createAdminClient()
+    const [employerRes, jobRes] = await Promise.all([
+      adminClient.from('employers').select('company_name').eq('id', employerId).single(),
+      body.job_id
+        ? adminClient.from('jobs').select('title').eq('id', body.job_id).single()
+        : Promise.resolve({ data: null }),
+    ])
+
+    await sendEmail({
+      to: 'admin@globaltalentbridge.com', // Platzhalter — echter Versand erst nach Admin-Freigabe
+      template: 'interview_requested',
+      data: {
+        candidateName: 'Kandidat', // Auth-E-Mail nicht direkt abrufbar — Admin kennt Namen
+        companyName: employerRes.data?.company_name ?? 'Arbeitgeber',
+        jobTitle: jobRes.data?.title ?? 'Stelle',
+        proposedDate: body.proposed_date ?? '',
+        message: body.message ?? '',
+        dashboardUrl: `${process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000'}/candidate/dashboard`,
+      },
+    })
+  } catch (emailErr) {
+    console.error('[interview-requests] E-Mail-Log-Fehler:', emailErr)
   }
 
   return NextResponse.json({

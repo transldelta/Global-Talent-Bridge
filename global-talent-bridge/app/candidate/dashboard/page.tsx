@@ -5,6 +5,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { NavBar } from '@/app/_components/NavBar'
 import { MatchingButton } from '@/app/candidate/_components/MatchingButton'
 import { ApplyButton } from '@/app/candidate/_components/ApplyButton'
+import { CvUploadWidget } from '@/app/candidate/_components/CvUploadWidget'
 import { generateTestApplicationMessage, isTestAutoMessageEnabled } from '@/lib/application-message'
 
 // -------------------------------------------------------
@@ -53,10 +54,10 @@ export default async function CandidateDashboard({
     .eq('id', user.id)
     .single()
 
-  // Kandidatenprofil laden
+  // Kandidatenprofil laden (inkl. CV-Felder)
   const { data: candidate } = await supabase
     .from('candidates')
-    .select('id, sector, years_experience, german_level, english_level, skills')
+    .select('id, sector, years_experience, german_level, english_level, skills, cv_url, cv_filename, cv_uploaded_at')
     .eq('user_id', user.id)
     .single()
 
@@ -281,6 +282,14 @@ export default async function CandidateDashboard({
               )}
             </div>
           </div>
+        )}
+
+        {/* ── CV Upload (nur wenn Kandidatenprofil vorhanden) ── */}
+        {candidate && (
+          <CvUploadWidget
+            currentCvFilename={candidate.cv_filename ?? null}
+            currentCvUploadedAt={candidate.cv_uploaded_at ?? null}
+          />
         )}
 
         {/* ── Profil-Hinweise (nur wenn Kandidatenprofil vorhanden) ── */}

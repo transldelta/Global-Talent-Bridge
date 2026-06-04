@@ -26,6 +26,8 @@ type CandidateProfile = {
   last_name: string | null
   profession: string | null
   country_of_origin: string | null
+  cv_url: string | null
+  cv_filename: string | null
 }
 
 type JobPosting = {
@@ -101,7 +103,7 @@ export default async function AdminApplicationsPage() {
 
   const [candidatesRes, jobsRes] = await Promise.all([
     candidateIds.length
-      ? adminSupabase.from('candidates').select('id, first_name, last_name, profession, country_of_origin').in('id', candidateIds)
+      ? adminSupabase.from('candidates').select('id, first_name, last_name, profession, country_of_origin, cv_url, cv_filename').in('id', candidateIds)
       : { data: [] },
     jobIds.length
       ? adminSupabase.from('job_postings').select('id, title, location, employer_id').in('id', jobIds)
@@ -307,6 +309,19 @@ function ApplicationCard({
             <p className="text-xs text-blue-400 mt-1">
               📝 Admin-Notiz: {app.admin_note}
             </p>
+          )}
+          {/* CV-Download (nur für Admin) */}
+          {candidate?.cv_url && (
+            <div className="mt-1">
+              <a
+                href={`/api/admin/download-cv?path=${encodeURIComponent(candidate.cv_url)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-lg bg-blue-900/30 text-blue-300 border border-blue-800/40 hover:bg-blue-900/50 transition-colors"
+              >
+                📄 CV herunterladen {candidate.cv_filename ? `(${candidate.cv_filename})` : ''}
+              </a>
+            </div>
           )}
           <div className="flex items-center gap-3 text-xs text-gray-600 mt-1">
             <span>Eingegangen: {appliedDate}</span>

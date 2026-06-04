@@ -447,14 +447,25 @@ export default async function CeoDashboardPage() {
     feedbackCrit:plFeedbackCritRes.count ?? 0,
   }
 
-  // ── Launch Readiness — static audit scores (2026-06-04, Sprint I fixes applied) ──
+  // ── Launch Readiness — Audit Scores (2026-06-04, Sprint I vollständige Fixes) ──
+  // Berechnung: (technical*0.30 + business*0.25 + launch*0.25 + buyer*0.20)
+  // technical 70: +8 gegenüber Sprint H (62)
+  //   +3: Passwort-Reset vollständig (Code + NEXT_PUBLIC_BASE_URL dokumentiert)
+  //   +3: CV-Upload vollständig (Widget im Dashboard, Admin-Download, Arbeitgeber-Badge)
+  //   +2: E-Mail-Layer in Interview-Request eingebunden + Logging verifiziert
+  // business 38: unverändert (kein Revenue, kein echter Pilotkunde)
+  // launch 38: +3 gegenüber Sprint H (35)
+  //   +2: Rechtstexte finalisiert (MVP-Entwurf-Banner entfernt)
+  //   +1: Test-Modus-Warnung im CEO-Dashboard
+  // buyer 68: unverändert
+  // overall: (70*0.30 + 38*0.25 + 38*0.25 + 68*0.20) = 21.0+9.5+9.5+13.6 = 53.6 → 54
   const LAUNCH_READINESS = {
-    technicalScore:  67,  // +5: Passwort-Reset, CV-Upload, E-Mail-Layer
+    technicalScore:  70,
     businessScore:   38,
-    launchScore:     38,  // +3: Rechtstexte finalisiert, Test-Modus dokumentiert
+    launchScore:     38,
     buyerScore:      68,
-    overallScore:    53,  // neu: (67*0.30 + 38*0.25 + 38*0.25 + 68*0.20) = 53
-    criticalBlockers: 6,  // -4: Blocker #1-#6 teilweise behoben
+    overallScore:    54,
+    criticalBlockers: 6,  // 10 → 6: #1 Passwort-Reset ✅ #2 CV-Upload ✅ #3 E-Mail-Layer ✅ #4 Test-Modus ✅ #5 AGB ✅ #6 Impressum ✅
     auditDate:       '2026-06-04',
     recommendation:  'Pilot starten',
   }

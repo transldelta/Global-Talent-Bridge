@@ -26,6 +26,7 @@ type ReleasedApp = {
   match_score: number | null
   is_saved: boolean
   has_interview_request: boolean
+  cv_filename: string | null
 }
 
 // ── Hilfskomponenten ───────────────────────────────────────────────────────────
@@ -132,6 +133,16 @@ function ApplicationCard({
               +{app.candidate_skills.length - 8} weitere
             </span>
           )}
+        </div>
+      )}
+
+      {/* CV-Indikator (kein Direktdownload — CV über Admin anfordern) */}
+      {app.cv_filename && (
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-blue-900/20 text-blue-300 border border-blue-800/40">
+            📄 Lebenslauf vorhanden ({app.cv_filename})
+          </span>
+          <span className="text-xs text-gray-600">· Über Admin anfordern</span>
         </div>
       )}
 
@@ -260,7 +271,7 @@ export default async function EmployerApplicationsPage() {
   const [candidatesRes, matchesRes, savedRes] = await Promise.all([
     adminSupabase
       .from('candidates')
-      .select('id, user_id, sector, years_experience, german_level, english_level, skills')
+      .select('id, user_id, sector, years_experience, german_level, english_level, skills, cv_filename')
       .in('id', candidateIds),
     adminSupabase
       .from('matches')
@@ -307,6 +318,7 @@ export default async function EmployerApplicationsPage() {
       match_score: matchScoreMap.get(`${app.candidate_id}:${app.job_id}`) ?? null,
       is_saved: savedSet.has(`${app.candidate_id}:${app.job_id}`),
       has_interview_request: interviewSet.has(`${app.candidate_id}:${app.job_id}`),
+      cv_filename: (cand?.cv_filename as string | null) ?? null,
     }
   })
 
