@@ -424,6 +424,29 @@ export default async function CeoDashboardPage() {
     supabase.from('migration_corridors').select('*', { count: 'exact', head: true }),
   ])
 
+  // ── Pilot Launch KPIs — separate query block ────────────────────────────
+  const [
+    plEmpTotalRes, plEmpActiveRes, plEmpInterestedRes, plEmpDemoRes,
+    plCandTotalRes, plTasksOpenRes, plFeedbackCritRes,
+  ] = await Promise.all([
+    supabase.from('pilot_employers').select('*', { count: 'exact', head: true }),
+    supabase.from('pilot_employers').select('*', { count: 'exact', head: true }).eq('status', 'active_pilot'),
+    supabase.from('pilot_employers').select('*', { count: 'exact', head: true }).in('status', ['interested','demo_scheduled','onboarding','active_pilot']),
+    supabase.from('pilot_employers').select('*', { count: 'exact', head: true }).eq('status', 'demo_scheduled'),
+    supabase.from('pilot_candidates').select('*', { count: 'exact', head: true }),
+    supabase.from('pilot_tasks').select('*', { count: 'exact', head: true }).eq('status', 'open'),
+    supabase.from('pilot_feedback').select('*', { count: 'exact', head: true }).in('priority', ['high','critical']).eq('status', 'new'),
+  ])
+  const plKpis = {
+    empTotal:    plEmpTotalRes.count ?? 0,
+    empActive:   plEmpActiveRes.count ?? 0,
+    empInterest: plEmpInterestedRes.count ?? 0,
+    empDemo:     plEmpDemoRes.count ?? 0,
+    candTotal:   plCandTotalRes.count ?? 0,
+    tasksOpen:   plTasksOpenRes.count ?? 0,
+    feedbackCrit:plFeedbackCritRes.count ?? 0,
+  }
+
   // Enterprise Readiness — separate fast query (system_incidents)
   const [erOpenIncidentsRes, erTotalIncidentsRes] = await Promise.all([
     supabase.from('system_incidents').select('*', { count: 'exact', head: true }).eq('status', 'open'),
@@ -2125,6 +2148,50 @@ export default async function CeoDashboardPage() {
               ))}
             </div>
           )}
+        </div>
+
+        {/* ── 🚀 Pilot Launch ── */}
+        <div>
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+            <h2 className="text-xl font-bold text-white">🚀 Pilot Launch</h2>
+            <div className="flex gap-3">
+              <Link href="/admin/pilot-launch" className="text-xs text-blue-400 hover:text-blue-300">
+                📋 Pilot Dashboard →
+              </Link>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+            <div className={`bg-gray-900 rounded-xl border p-4 text-center ${plKpis.empActive > 0 ? 'border-green-700' : 'border-gray-800'}`}>
+              <p className={`text-2xl font-bold ${plKpis.empActive > 0 ? 'text-green-400' : 'text-gray-500'}`}>{plKpis.empActive}</p>
+              <p className="text-xs text-gray-500 mt-1">Aktive Pilotkunden</p>
+            </div>
+            <div className="bg-gray-900 rounded-xl border border-gray-800 p-4 text-center">
+              <p className="text-2xl font-bold text-yellow-400">{plKpis.empInterest}</p>
+              <p className="text-xs text-gray-500 mt-1">Interessiert/Pipeline</p>
+            </div>
+            <div className={`bg-gray-900 rounded-xl border p-4 text-center ${plKpis.empDemo > 0 ? 'border-purple-700' : 'border-gray-800'}`}>
+              <p className={`text-2xl font-bold ${plKpis.empDemo > 0 ? 'text-purple-400' : 'text-gray-500'}`}>{plKpis.empDemo}</p>
+              <p className="text-xs text-gray-500 mt-1">Demo-Termine</p>
+            </div>
+            <div className="bg-gray-900 rounded-xl border border-gray-800 p-4 text-center">
+              <p className="text-2xl font-bold text-blue-400">{plKpis.candTotal}</p>
+              <p className="text-xs text-gray-500 mt-1">Pilot-Kandidaten</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="bg-gray-900 rounded-xl border border-gray-800 p-4 text-center">
+              <p className={`text-2xl font-bold ${plKpis.tasksOpen > 0 ? 'text-orange-400' : 'text-green-400'}`}>{plKpis.tasksOpen}</p>
+              <p className="text-xs text-gray-500 mt-1">Offene Aufgaben</p>
+            </div>
+            <div className="bg-gray-900 rounded-xl border border-gray-800 p-4 text-center">
+              <p className={`text-2xl font-bold ${plKpis.feedbackCrit > 0 ? 'text-red-400' : 'text-green-400'}`}>{plKpis.feedbackCrit}</p>
+              <p className="text-xs text-gray-500 mt-1">Krit. Feedback offen</p>
+            </div>
+            <div className="bg-gray-900 rounded-xl border border-gray-800 p-4 text-center">
+              <p className="text-2xl font-bold text-gray-400">{plKpis.empTotal}</p>
+              <p className="text-xs text-gray-500 mt-1">Arbeitgeber gesamt</p>
+            </div>
+          </div>
         </div>
 
         {/* ── 🛡 Enterprise Readiness ── */}

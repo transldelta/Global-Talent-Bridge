@@ -10,6 +10,7 @@ import { runGlobalCandidateAcquisitionAgent } from './global-candidate-acquisiti
 import { runLandingpageFactoryAgent } from './landingpage-factory-agent'
 import { runMigrationIntelligenceAgent } from './migration-intelligence-agent'
 import { runRevenueIntelligenceAgent } from './revenue-intelligence-agent'
+import { runPilotLaunchAgent } from './pilot-launch-agent'
 
 export type AgentRunResult = {
   success: boolean
@@ -29,6 +30,7 @@ export type AgentRunResult = {
     landingpageFactory: { corridorsProcessed: number; landingpagesCreated: number; landingpagesUpdated: number; suggestionsCreated: number; notificationsCreated: number } | null
     migrationIntelligence: { entriesAnalyzed: number; scoresUpdated: number; markedOutdated: number; suggestionsCreated: number; notificationsCreated: number } | null
     revenueIntelligence: { plansAnalyzed: number; scenariosComputed: number; suggestionsCreated: number } | null
+    pilotLaunch: { followUpsDue: number; tasksCreated: number; suggestionsCreated: number; employersActive: number; candidatesTotal: number; feedbackCritical: number } | null
   }
   error?: string
 }
@@ -54,6 +56,7 @@ export async function runAllAgents(): Promise<AgentRunResult> {
     landingpageFactory: null,
     migrationIntelligence: null,
     revenueIntelligence: null,
+    pilotLaunch: null,
   }
 
   let totalSuggestions = 0
@@ -119,6 +122,11 @@ export async function runAllAgents(): Promise<AgentRunResult> {
     details.revenueIntelligence = riResult
     totalSuggestions += riResult.suggestionsCreated
 
+    // ── Pilot Launch Agent ────────────────────────────────────────────────────
+    const plResult = await runPilotLaunchAgent()
+    details.pilotLaunch = plResult
+    totalSuggestions += plResult.suggestionsCreated
+
   } catch (err) {
     errorMessage = err instanceof Error ? err.message : 'Unbekannter Fehler'
   }
@@ -145,9 +153,12 @@ export async function runAllAgents(): Promise<AgentRunResult> {
   const riSummary = details.revenueIntelligence
     ? ` RI: ${details.revenueIntelligence.plansAnalyzed} Pläne, ${details.revenueIntelligence.scenariosComputed} Szenarien.`
     : ''
+  const plSummary = details.pilotLaunch
+    ? ` PL: ${details.pilotLaunch.employersActive} aktive Pilotkunden, ${details.pilotLaunch.followUpsDue} Follow-ups fällig, ${details.pilotLaunch.tasksCreated} Tasks.`
+    : ''
 
   const summary = success
-    ? `Agenten-Lauf abgeschlossen: ${totalSuggestions} neue Vorschläge, ${totalNotifications} Benachrichtigungen, ${totalSignals} Markt-Signale.${growthSummary}${gmiSummary}${ciSummary}${gcaSummary}${lpfSummary}${miSummary}${riSummary}`
+    ? `Agenten-Lauf abgeschlossen: ${totalSuggestions} neue Vorschläge, ${totalNotifications} Benachrichtigungen, ${totalSignals} Markt-Signale.${growthSummary}${gmiSummary}${ciSummary}${gcaSummary}${lpfSummary}${miSummary}${riSummary}${plSummary}`
     : `Agenten-Lauf mit Fehler abgebrochen: ${errorMessage}`
 
   // ── Run-Log schreiben ─────────────────────────────────────────────────────
