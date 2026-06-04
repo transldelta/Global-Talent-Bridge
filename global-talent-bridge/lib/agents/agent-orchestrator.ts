@@ -5,6 +5,7 @@ import { runMarketingStrategyAgent } from './marketing-strategy-agent'
 import { runVisionaryAgent } from './visionary-agent'
 import { runGrowthAgent } from './growth-agent'
 import { runGlobalMarketIntelligenceAgent } from './global-market-intelligence-agent'
+import { runCorridorIntelligenceAgent } from './corridor-intelligence-agent'
 
 export type AgentRunResult = {
   success: boolean
@@ -19,6 +20,7 @@ export type AgentRunResult = {
     visionary: { suggestions: number } | null
     growth: { leadsAnalyzed: number; draftsCreated: number; followupsPlanned: number; alertsSent: number } | null
     globalMarket: { corridorsAnalyzed: number; sourcesAnalyzed: number; scoresUpdated: number; suggestionsCreated: number; alertsCreated: number } | null
+    corridorIntelligence: { corridorsAnalyzed: number; scoresUpdated: number; suggestionsCreated: number; notificationsCreated: number; campaignsReviewed: number } | null
   }
   error?: string
 }
@@ -39,6 +41,7 @@ export async function runAllAgents(): Promise<AgentRunResult> {
     visionary: null,
     growth: null,
     globalMarket: null,
+    corridorIntelligence: null,
   }
 
   let totalSuggestions = 0
@@ -75,6 +78,12 @@ export async function runAllAgents(): Promise<AgentRunResult> {
     totalSuggestions += gmiResult.suggestionsCreated
     totalNotifications += gmiResult.alertsCreated
 
+    // ── Corridor Intelligence Agent ────────────────────────────────────────────
+    const ciResult = await runCorridorIntelligenceAgent()
+    details.corridorIntelligence = ciResult
+    totalSuggestions += ciResult.suggestionsCreated
+    totalNotifications += ciResult.notificationsCreated
+
   } catch (err) {
     errorMessage = err instanceof Error ? err.message : 'Unbekannter Fehler'
   }
@@ -86,9 +95,12 @@ export async function runAllAgents(): Promise<AgentRunResult> {
   const gmiSummary = details.globalMarket
     ? ` GMI: ${details.globalMarket.corridorsAnalyzed} Korridore, ${details.globalMarket.scoresUpdated} Score-Updates.`
     : ''
+  const ciSummary = details.corridorIntelligence
+    ? ` CI: ${details.corridorIntelligence.corridorsAnalyzed} analysiert, ${details.corridorIntelligence.scoresUpdated} Score-Updates.`
+    : ''
 
   const summary = success
-    ? `Agenten-Lauf abgeschlossen: ${totalSuggestions} neue Vorschläge, ${totalNotifications} Benachrichtigungen, ${totalSignals} Markt-Signale.${growthSummary}${gmiSummary}`
+    ? `Agenten-Lauf abgeschlossen: ${totalSuggestions} neue Vorschläge, ${totalNotifications} Benachrichtigungen, ${totalSignals} Markt-Signale.${growthSummary}${gmiSummary}${ciSummary}`
     : `Agenten-Lauf mit Fehler abgebrochen: ${errorMessage}`
 
   // ── Run-Log schreiben ─────────────────────────────────────────────────────

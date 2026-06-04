@@ -140,6 +140,18 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
                 Quellen
               </Link>
               <Link
+                href="/admin/global/corridor-intelligence"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                🧠 CI
+              </Link>
+              <Link
+                href="/admin/global/campaigns"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                📣 Kampagnen
+              </Link>
+              <Link
                 href="/admin/leads"
                 className="text-sm text-gray-400 hover:text-white transition-colors"
               >

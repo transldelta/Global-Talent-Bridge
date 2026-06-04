@@ -244,6 +244,11 @@ export default async function CeoDashboardPage() {
     gmiSourcesRes,
     gmiTopCorridorsRes,
     gmiTopSourcesRes,
+    // Corridor Intelligence KPIs
+    ciTopCorridorsRes,
+    ciCampaignTotalRes,
+    ciCampaignCriticalRes,
+    ciCampaignApprovedRes,
   ] = await Promise.all([
     supabase
       .from('agent_departments')
@@ -357,6 +362,11 @@ export default async function CeoDashboardPage() {
     supabase.from('candidate_sources').select('*', { count: 'exact', head: true }).eq('status', 'active'),
     supabase.from('migration_corridors').select('source_country, target_country, sector, opportunity_score, priority_level').eq('status', 'active').order('opportunity_score', { ascending: false }).limit(5),
     supabase.from('candidate_sources').select('source_name, source_country, source_type, priority_score, estimated_audience').eq('status', 'active').order('priority_score', { ascending: false }).limit(5),
+    // Corridor Intelligence queries
+    supabase.from('corridor_intelligence').select('opportunity_score, demand_level, migration_difficulty, recommended_landingpage_slug, migration_corridors(source_country, target_country, sector)').order('opportunity_score', { ascending: false }).limit(5),
+    supabase.from('campaign_recommendations').select('*', { count: 'exact', head: true }),
+    supabase.from('campaign_recommendations').select('*', { count: 'exact', head: true }).eq('campaign_priority', 'critical'),
+    supabase.from('campaign_recommendations').select('*', { count: 'exact', head: true }).eq('status', 'approved'),
   ])
 
   const departments: Department[] = deptRes.data ?? []
@@ -468,6 +478,15 @@ export default async function CeoDashboardPage() {
   type TopSource   = { source_name: string; source_country: string | null; source_type: string | null; priority_score: number; estimated_audience: number }
   const gmiTopCorridors = (gmiTopCorridorsRes.data ?? []) as TopCorridor[]
   const gmiTopSources   = (gmiTopSourcesRes.data ?? []) as TopSource[]
+
+  // Corridor Intelligence
+  type CITopRow = { opportunity_score: number; demand_level: number; migration_difficulty: number; recommended_landingpage_slug: string | null; migration_corridors: { source_country: string; target_country: string; sector: string } }
+  const ciTopRows = (ciTopCorridorsRes.data ?? []) as unknown as CITopRow[]
+  const ciKpis = {
+    total: ciCampaignTotalRes.count ?? 0,
+    critical: ciCampaignCriticalRes.count ?? 0,
+    approved: ciCampaignApprovedRes.count ?? 0,
+  }
 
   // Phase 2J: Agent System
   const agentSuggestions: AgentSuggestion[] = (agentSuggestionsRes.data ?? []) as AgentSuggestion[]
@@ -990,6 +1009,84 @@ export default async function CeoDashboardPage() {
           <p className="text-xs text-gray-600 mt-3">
             🔒 Keine automatischen Aktionen. Alle Korridore und Quellen dienen ausschließlich interner Analyse.
             DSGVO-konform. Kein Scraping. Kein automatisches Senden.
+          </p>
+        </div>
+
+        {/* ── 🌐 Corridor Intelligence ── */}
+        <div>
+          <div className="flex items-start justify-between mb-4 flex-wrap gap-2">
+            <div>
+              <h2 className="text-xl font-bold text-white">🌐 Corridor Intelligence</h2>
+              <p className="text-gray-400 text-sm mt-0.5">
+                Tiefes Korridor-Wissen · Visa-Wege · Berufe · Kampagnen-Empfehlungen
+              </p>
+            </div>
+            <div className="flex gap-2 text-xs">
+              <Link href="/admin/global/corridor-intelligence" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors">
+                🧠 CI Details →
+              </Link>
+              <Link href="/admin/global/campaigns" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors">
+                📣 Kampagnen →
+              </Link>
+            </div>
+          </div>
+
+          {/* CI KPI Row */}
+          <div className="grid grid-cols-3 gap-3 mb-5">
+            <div className="bg-gray-900 border border-blue-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-blue-300">{ciTopRows.length > 0 ? ciTopRows.length : ciKpis.total}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🧠 Korridore analysiert</div>
+            </div>
+            <div className={`border rounded-xl p-3 text-center ${ciKpis.critical > 0 ? 'bg-red-900/20 border-red-800/40' : 'bg-gray-900 border-gray-800'}`}>
+              <div className={`text-2xl font-bold ${ciKpis.critical > 0 ? 'text-red-300' : 'text-gray-600'}`}>{ciKpis.critical}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🔥 Kritische Kampagnen</div>
+            </div>
+            <div className="bg-gray-900 border border-green-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-green-300">{ciKpis.total}</div>
+              <div className="text-xs text-gray-400 mt-0.5">📣 Kampagnen gesamt</div>
+            </div>
+          </div>
+
+          {/* Top CI Corridors */}
+          {ciTopRows.length > 0 && (
+            <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-gray-800 text-sm font-semibold text-gray-300">
+                🧠 Top Corridor Intelligence — Opportunity Scores
+              </div>
+              <div className="divide-y divide-gray-800">
+                {ciTopRows.map((ci, i) => {
+                  const c = ci.migration_corridors
+                  return (
+                    <div key={i} className="px-4 py-3 flex items-center justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm text-white font-medium truncate">
+                          {c.source_country} → {c.target_country}
+                        </div>
+                        <div className="text-xs text-gray-500 truncate">{c.sector}</div>
+                      </div>
+                      <div className="flex items-center gap-4 shrink-0 text-xs">
+                        <div className="text-right">
+                          <div className="text-xs text-gray-500">Nachfrage</div>
+                          <div className="font-bold text-blue-300">{ci.demand_level}</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-xs text-gray-500">Opportunity</div>
+                          <div className="font-bold text-green-300">{ci.opportunity_score}</div>
+                        </div>
+                        {ci.recommended_landingpage_slug && (
+                          <span className="text-blue-400/70">/{ci.recommended_landingpage_slug}</span>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          <p className="text-xs text-gray-600 mt-3">
+            🔒 Alle Corridor Intelligence Daten sind intern. Kein Scraping. Keine automatischen Kampagnen.
+            Kampagnen-Empfehlungen werden manuell durch den Admin genehmigt und durchgeführt.
           </p>
         </div>
 
