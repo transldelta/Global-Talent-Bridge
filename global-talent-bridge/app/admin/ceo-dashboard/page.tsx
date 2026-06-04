@@ -273,6 +273,10 @@ export default async function CeoDashboardPage() {
     revPlansTotalRes,
     revActivePlansRes,
     revEventsRes,
+    // Due Diligence KPIs
+    ddLpfTotalRes,
+    ddMiReviewedRes,
+    ddCorridorsTotalRes,
   ] = await Promise.all([
     supabase
       .from('agent_departments')
@@ -414,6 +418,10 @@ export default async function CeoDashboardPage() {
     supabase.from('revenue_plans').select('*', { count: 'exact', head: true }),
     supabase.from('revenue_plans').select('*', { count: 'exact', head: true }).eq('active', true),
     supabase.from('revenue_events').select('amount, source').eq('event_type', 'forecast').order('created_at', { ascending: false }).limit(3),
+    // Due Diligence queries
+    supabase.from('landingpage_factory').select('*', { count: 'exact', head: true }),
+    supabase.from('migration_intelligence').select('*', { count: 'exact', head: true }).in('status', ['reviewed','approved']),
+    supabase.from('migration_corridors').select('*', { count: 'exact', head: true }),
   ])
 
   const departments: Department[] = deptRes.data ?? []
@@ -579,6 +587,20 @@ export default async function CeoDashboardPage() {
   const forecastMRR = latestForecastEvents.length > 0
     ? Math.max(...latestForecastEvents.map(e => e.amount))
     : revenueScenarios[2].mrr
+
+  // Due Diligence
+  const DD_TOTAL_DOCS = 13   // vorhanden docs count
+  const DD_MISSING_DOCS = 3  // pen-test, unit-tests, stripe
+  const ddKpis = {
+    docsPresent:  DD_TOTAL_DOCS,
+    docsMissing:  DD_MISSING_DOCS,
+    agents:       10,
+    tables:       20,
+    apiRoutes:    24,
+    corridors:    ddCorridorsTotalRes.count ?? 0,
+    lpf:          ddLpfTotalRes.count ?? 0,
+    miReviewed:   ddMiReviewedRes.count ?? 0,
+  }
 
   // Phase 2J: Agent System
   const agentSuggestions: AgentSuggestion[] = (agentSuggestionsRes.data ?? []) as AgentSuggestion[]
@@ -1543,6 +1565,94 @@ export default async function CeoDashboardPage() {
           <p className="text-xs text-gray-600 mt-3">
             🔮 Alle Revenue-Zahlen sind Forecast-Simulationen. Keine echten Zahlungen. Kein Stripe. Keine Abbuchungen.
           </p>
+        </div>
+
+        {/* ── 📁 Due Diligence ── */}
+        <div>
+          <div className="flex items-start justify-between mb-4 flex-wrap gap-2">
+            <div>
+              <h2 className="text-xl font-bold text-white">📁 Due Diligence</h2>
+              <p className="text-gray-400 text-sm mt-0.5">
+                Sale Readiness · Übernahmefähigkeit · Dokumentation · Technische Transparenz
+              </p>
+            </div>
+            <Link href="/admin/sale-readiness" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors text-xs">
+              📁 Sale Readiness →
+            </Link>
+          </div>
+
+          {/* DD KPI Row */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-5">
+            <div className="bg-gray-900 border border-green-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-green-300">{ddKpis.docsPresent}</div>
+              <div className="text-xs text-gray-400 mt-0.5">📄 Dokumente vorhanden</div>
+            </div>
+            <div className={`border rounded-xl p-3 text-center ${ddKpis.docsMissing > 0 ? 'bg-yellow-900/20 border-yellow-800/40' : 'bg-gray-900 border-gray-800'}`}>
+              <div className={`text-2xl font-bold ${ddKpis.docsMissing > 0 ? 'text-yellow-300' : 'text-gray-600'}`}>{ddKpis.docsMissing}</div>
+              <div className="text-xs text-gray-400 mt-0.5">⚠️ Dokumente fehlen</div>
+            </div>
+            <div className="bg-gray-900 border border-violet-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-violet-300">{ddKpis.agents}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🤖 Agenten gesamt</div>
+            </div>
+            <div className="bg-gray-900 border border-teal-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-teal-300">{ddKpis.tables}+</div>
+              <div className="text-xs text-gray-400 mt-0.5">🗄️ DB-Tabellen</div>
+            </div>
+            <div className="bg-gray-900 border border-blue-800/30 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold text-blue-300">{ddKpis.apiRoutes}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🔌 API-Routen</div>
+            </div>
+          </div>
+
+          {/* DD Summary Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-3 text-center">
+              <div className="text-xl font-bold text-pink-300">{ddKpis.corridors}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🌍 Korridore</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-3 text-center">
+              <div className="text-xl font-bold text-orange-300">{ddKpis.lpf}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🚀 Landingpages</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-3 text-center">
+              <div className="text-xl font-bold text-teal-300">{ddKpis.miReviewed}</div>
+              <div className="text-xs text-gray-400 mt-0.5">🛂 MI reviewed</div>
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-3 text-center">
+              <div className={`text-xl font-bold ${ddKpis.docsMissing === 0 ? 'text-green-300' : ddKpis.docsMissing <= 3 ? 'text-yellow-300' : 'text-red-300'}`}>
+                {Math.round((ddKpis.docsPresent / (ddKpis.docsPresent + ddKpis.docsMissing)) * 100)}%
+              </div>
+              <div className="text-xs text-gray-400 mt-0.5">📊 Doc-Coverage</div>
+            </div>
+          </div>
+
+          {/* Quick links to DD docs */}
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
+            <p className="text-xs text-gray-400 mb-3 font-semibold">Schlüsseldokumente</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {[
+                { label: '📋 Due Diligence Tech', file: 'DUE_DILIGENCE_TECH.md' },
+                { label: '🏗️ Architektur', file: 'ARCHITECTURE.md' },
+                { label: '🔒 Security', file: 'SECURITY_COMPLIANCE.md' },
+                { label: '💼 Buyer One Pager', file: 'BUYER_ONE_PAGER.md' },
+              ].map(({ label, file }) => (
+                <div key={file} className="px-3 py-2 bg-gray-800 rounded-lg">
+                  <p className="text-xs text-gray-300 font-medium">{label}</p>
+                  <p className="text-xs text-gray-600 font-mono mt-0.5">docs/{file}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex gap-3 mt-3">
+            <Link href="/admin/sale-readiness" className="text-xs text-purple-400 hover:text-purple-300">
+              📁 Sale Readiness Center →
+            </Link>
+            <Link href="/admin/export-readiness" className="text-xs text-yellow-400 hover:text-yellow-300">
+              📊 Export Readiness →
+            </Link>
+          </div>
         </div>
 
         {/* Business Metrics (gespeicherte Werte) */}

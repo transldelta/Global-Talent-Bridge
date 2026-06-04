@@ -182,6 +182,12 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
                 💰 Revenue
               </Link>
               <Link
+                href="/admin/sale-readiness"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                📁 Sale Readiness
+              </Link>
+              <Link
                 href="/admin/leads"
                 className="text-sm text-gray-400 hover:text-white transition-colors"
               >
