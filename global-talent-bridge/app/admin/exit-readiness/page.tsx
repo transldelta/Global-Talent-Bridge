@@ -100,6 +100,7 @@ export default async function ExitReadinessPage() {
           </div>
           <div className="flex gap-3 flex-wrap items-center">
             <ExportButton />
+            <Link href="/admin/data-room" className="text-xs text-blue-400 hover:text-blue-300">🏛️ Data Room →</Link>
             <Link href="/admin/pilot-execution" className="text-xs text-green-400 hover:text-green-300">🚀 Pilot Execution →</Link>
             <Link href="/admin/ceo-dashboard" className="text-xs text-gray-400 hover:text-gray-300">🏠 CEO Dashboard →</Link>
           </div>

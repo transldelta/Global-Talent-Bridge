@@ -1672,9 +1672,14 @@ export default async function CeoDashboardPage() {
                 Sale Readiness · Übernahmefähigkeit · Dokumentation · Technische Transparenz
               </p>
             </div>
-            <Link href="/admin/sale-readiness" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors text-xs">
-              📁 Sale Readiness →
-            </Link>
+            <div className="flex gap-2 flex-wrap">
+              <Link href="/admin/sale-readiness" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors text-xs">
+                📁 Sale Readiness →
+              </Link>
+              <Link href="/admin/data-room" className="px-3 py-1.5 bg-blue-900/30 hover:bg-blue-900/50 text-blue-300 border border-blue-800/40 rounded-lg transition-colors text-xs">
+                🏛️ Buyer Data Room →
+              </Link>
+            </div>
           </div>
 
           {/* DD KPI Row */}
@@ -2304,7 +2309,10 @@ export default async function CeoDashboardPage() {
               <Link href="/admin/exit-readiness" className="text-xs text-yellow-400 hover:text-yellow-300">
                 📋 Exit Readiness →
               </Link>
-              <Link href="/admin/pilot-launch" className="text-xs text-blue-400 hover:text-blue-300">
+              <Link href="/admin/data-room" className="text-xs text-blue-400 hover:text-blue-300">
+                🏛️ Data Room →
+              </Link>
+              <Link href="/admin/pilot-launch" className="text-xs text-gray-400 hover:text-gray-300">
                 📋 Pilot Dashboard →
               </Link>
             </div>
