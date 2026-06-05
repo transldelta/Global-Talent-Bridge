@@ -2306,10 +2306,16 @@ export default async function CeoDashboardPage() {
               <Link href="/admin/pilot-outreach" className="text-xs text-green-400 hover:text-green-300">
                 📤 Outreach-Cockpit →
               </Link>
-              <Link href="/admin/exit-readiness" className="text-xs text-yellow-400 hover:text-yellow-300">
+              <Link href="/admin/pilot-offer" className="text-xs text-yellow-400 hover:text-yellow-300">
+                🎯 Pilot Offer →
+              </Link>
+              <Link href="/admin/employer-responses" className="text-xs text-blue-400 hover:text-blue-300">
+                📋 Responses →
+              </Link>
+              <Link href="/admin/exit-readiness" className="text-xs text-orange-400 hover:text-orange-300">
                 📋 Exit Readiness →
               </Link>
-              <Link href="/admin/data-room" className="text-xs text-blue-400 hover:text-blue-300">
+              <Link href="/admin/data-room" className="text-xs text-indigo-400 hover:text-indigo-300">
                 🏛️ Data Room →
               </Link>
               <Link href="/admin/pilot-launch" className="text-xs text-gray-400 hover:text-gray-300">

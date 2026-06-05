@@ -190,6 +190,20 @@ export function getBuiltModules(): BuiltModule[] {
       status: 'complete',
       description: 'Synthetic demo data pack, data room snapshot, export API. Demo: true tags on all items.',
     },
+    {
+      id: 'pilot-offer',
+      name: 'Pilot Offer Center',
+      route: '/admin/pilot-offer',
+      status: 'complete',
+      description: '3 offer variants, 6 industry pitches, objection handling (8), call script, next best action per employer.',
+    },
+    {
+      id: 'employer-responses',
+      name: 'Employer Response Pipeline',
+      route: '/admin/employer-responses',
+      status: 'complete',
+      description: 'Manual interaction logging, response classification, follow-up tracking. No auto-send.',
+    },
   ]
 }
 

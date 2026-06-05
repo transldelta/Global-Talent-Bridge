@@ -709,8 +709,8 @@ describe('getAssetOverview', () => {
 })
 
 describe('getBuiltModules', () => {
-  it('returns exactly 11 modules', () => {
-    expect(getBuiltModules()).toHaveLength(11)
+  it('returns exactly 13 modules', () => {
+    expect(getBuiltModules()).toHaveLength(13)
   })
 
   it('all modules have id, name, route, status, description', () => {

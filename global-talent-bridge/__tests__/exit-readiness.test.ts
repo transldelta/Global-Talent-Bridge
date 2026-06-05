@@ -105,9 +105,9 @@ describe('generateProductSummary', () => {
 // ── BuyerChecklist ────────────────────────────────────────────────────────────
 
 describe('generateBuyerChecklist', () => {
-  it('returns exactly 13 checklist items', () => {
+  it('returns exactly 15 checklist items', () => {
     const list = generateBuyerChecklist()
-    expect(list).toHaveLength(13)
+    expect(list).toHaveLength(15)
   })
 
   it('every item has id, label, status, detail', () => {
@@ -184,7 +184,7 @@ describe('generateBuyerChecklist', () => {
   it('works with empty liveData', () => {
     expect(() => generateBuyerChecklist({})).not.toThrow()
     const list = generateBuyerChecklist({})
-    expect(list).toHaveLength(13)
+    expect(list).toHaveLength(15)
   })
 
   it('works with all flags provided', () => {
@@ -200,7 +200,7 @@ describe('generateBuyerChecklist', () => {
       deploymentPresent: true,
       testsDocumented: true,
     })
-    expect(list).toHaveLength(13)
+    expect(list).toHaveLength(15)
   })
 })
 
@@ -530,9 +530,9 @@ describe('generateExitEvidence', () => {
     expect(ev.overallReadinessScore).toBe(expected)
   })
 
-  it('buyerChecklist has 13 items', () => {
+  it('buyerChecklist has 15 items', () => {
     const ev = generateExitEvidence()
-    expect(ev.buyerChecklist).toHaveLength(13)
+    expect(ev.buyerChecklist).toHaveLength(15)
   })
 
   it('valueDrivers has 9 items', () => {

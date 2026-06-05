@@ -360,7 +360,7 @@ export function generateLaunchBlockers(data: PilotLiveData): LaunchBlocker[] {
       priority: 'high',
       title: 'Manuelle Outreach unzureichend',
       description: `Nur ${data.pilotContacted} Arbeitgeber manuell kontaktiert. Ziel: ≥5 pro Woche.`,
-      resolution: 'Outreach-Kampagne starten: /admin/pilot-outreach — Templates vorbereitet.',
+      resolution: 'Outreach starten: /admin/pilot-outreach (Templates) + /admin/pilot-offer (Angebotsvarianten) + /admin/employer-responses (Antworten protokollieren).',
       blocksLaunch: false,
     })
   }

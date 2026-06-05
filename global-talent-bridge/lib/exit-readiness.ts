@@ -204,6 +204,18 @@ export function generateBuyerChecklist(liveData?: {
       status: 'confirmed',
       detail: '7-Day Pilot Execution Plan, Launch Blockers priorisiert, Nächste Aktionen je Modul.',
     },
+    {
+      id: 'pilot_offer_exists',
+      label: 'Pilot offer exists',
+      status: 'confirmed',
+      detail: '3 Angebotsvarianten (Validation/Starter/Success-Based), 6 Branchen-Pitches, Objection Handling, Call Script.',
+    },
+    {
+      id: 'response_pipeline_exists',
+      label: 'Employer response pipeline exists',
+      status: 'confirmed',
+      detail: 'Manuelle Interaktionsprotokolle, Response-Klassifizierung, Follow-up-Tracking. pilot_employer_interactions Tabelle vorhanden.',
+    },
   ]
 }
 
