@@ -53,9 +53,7 @@ function buildEmailDraft(target: {
 
   const body = `${greeting}
 
-mein Name ist [Ihr Name] vom Team Global Talent Bridge.
-
-Wir sind eine spezialisierte Plattform für internationales Talent-Matching${sectorText}. Unsere vorqualifizierten Kandidaten verfügen über nachgewiesene Sprachkenntnisse (Deutsch/Englisch) und passende Berufserfahrung.
+Global Talent Bridge ist eine spezialisierte Plattform für internationales Talent-Matching${sectorText}. Unsere Kandidaten verfügen über dokumentierte Sprachkenntnisse (Deutsch/Englisch) und passende Berufserfahrung.
 
 **Warum Global Talent Bridge${locationText}?**
 - Vorqualifizierte internationale Fachkräfte – kein Aufwand bei der Vorauswahl
@@ -66,8 +64,7 @@ Wir sind eine spezialisierte Plattform für internationales Talent-Matching${sec
 Hätten Sie Interesse an einem kurzen 15-minütigen Gespräch, um zu sehen, ob wir Ihnen helfen können, offene Stellen schneller zu besetzen?
 
 Mit freundlichen Grüßen
-[Ihr Name]
-Global Talent Bridge
+Global Talent Bridge Team
 
 ---
 ℹ️ Entwurf vom Growth Agent · wartet auf Admin-Freigabe · kein automatischer Versand`
@@ -115,7 +112,7 @@ Global Talent Bridge vermittelt vorqualifizierte internationale Fachkräfte – 
 Darf ich Ihnen mehr Details schicken?
 
 Mit freundlichen Grüßen
-[Ihr Name] · Global Talent Bridge
+Global Talent Bridge Team
 
 ---
 ℹ️ Follow-up-Entwurf vom Growth Agent – wartet auf Freigabe`,

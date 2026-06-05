@@ -457,7 +457,7 @@ export function getCallScript(): CallScript {
       id: 'opening',
       label: '30-Sekunden-Eröffnung',
       script:
-        'Guten Tag, mein Name ist [Name] von Global Talent Bridge. ' +
+        'Guten Tag, hier ist Global Talent Bridge. ' +
         'Wir helfen [Branche]-Unternehmen in [Land], qualifizierte internationale Fachkräfte ' +
         'strukturiert und transparent zu rekrutieren. ' +
         'Haben Sie kurz 5 Minuten? Ich möchte kurz klären ob unser Ansatz zu Ihnen passt.',

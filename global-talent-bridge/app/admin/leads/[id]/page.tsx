@@ -55,7 +55,7 @@ const INTEREST_LABELS: Record<string, string> = {
 
 function buildTemplate(name: string, interest: string | null): string {
   const greeting = `Hallo ${name},`
-  const signature = `\nMit freundlichen Grüßen\nBrahim Ben Abla\nGlobal Talent Bridge | transl.delta@gmail.com`
+  const signature = `\nMit freundlichen Grüßen\nGlobal Talent Bridge Team\n[KONTAKT-E-MAIL]\nhttps://globaltalentbridge.de`
 
   switch (interest) {
     case 'pilot_employer':

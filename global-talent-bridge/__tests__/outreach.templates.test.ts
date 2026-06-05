@@ -156,9 +156,10 @@ describe('generateTemplates — Template-Generierung', () => {
     expect(t.linkedin.body.length).toBeGreaterThan(20)
   })
 
-  it('E-Mail enthält Platzhalter [Ihr Name]', () => {
+  it('E-Mail enthält neutrale Signatur "Global Talent Bridge Team"', () => {
     const t = generateTemplates(ctx)
-    expect(t.email.body).toContain('[Ihr Name]')
+    expect(t.email.body).toContain('Global Talent Bridge Team')
+    expect(t.email.body).not.toContain('[Ihr Name]')
   })
 
   it('Kanäle sind korrekt gesetzt', () => {
@@ -400,9 +401,10 @@ describe('Sonstige — generisches Template (kein Pflegeheim-Fallback)', () => {
     expect(t.email.body.toLowerCase()).toContain('fachkräfte')
   })
 
-  it('Sonstige E-Mail enthält Platzhalter [Ihr Name]', () => {
+  it('Sonstige E-Mail enthält neutrale Signatur "Global Talent Bridge Team"', () => {
     const t = generateTemplates(sonstigeCtx('Gastronomie'))
-    expect(t.email.body).toContain('[Ihr Name]')
+    expect(t.email.body).toContain('Global Talent Bridge Team')
+    expect(t.email.body).not.toContain('[Ihr Name]')
   })
 
   it('Sonstige WhatsApp ist generisch (ohne Pflegebezug)', () => {

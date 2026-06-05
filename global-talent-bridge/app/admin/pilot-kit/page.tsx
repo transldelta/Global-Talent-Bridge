@@ -113,8 +113,8 @@ transl.delta@gmail.com`
 
 const PHONE_GUIDE = `── GESPRÄCHSEINSTIEG ──────────────────────────────────────────────────────────
 
-"Guten Tag, mein Name ist [Ihr Name], ich rufe an wegen Global Talent Bridge —
-einer Plattform für strukturiertes Matching internationaler Fachkräfte.
+"Guten Tag, Global Talent Bridge — ich rufe kurz wegen unserer Plattform für
+internationales Fachkräfte-Matching an.
 Haben Sie kurz 2–3 Minuten?"
 
 ── WENN JA ────────────────────────────────────────────────────────────────────

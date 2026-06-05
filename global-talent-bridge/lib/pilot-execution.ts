@@ -442,7 +442,7 @@ export function generate7DayPlan(): DayPlan[] {
       tasks: [
         'Passende Landingpage-Variante auswählen oder erstellen',
         'Outreach-Sequenz für Top-5-Arbeitgeber vorbereiten (/admin/pilot-outreach)',
-        'Platzhalter [Ihr Name] in allen Templates ersetzen',
+        'Neutrale Signatur "Global Talent Bridge Team" in allen Templates prüfen',
         'Risiko-Check durchführen: Rechtsgrundlage, DSGVO, Zielland-Compliance',
       ],
       module: 'Pilot Outreach',

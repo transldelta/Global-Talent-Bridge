@@ -120,14 +120,14 @@ function emailPflegeheim(ctx: EmployerContext): OutreachTemplate {
     subject: `Qualifiziertes Pflegepersonal aus dem Ausland – ${ctx.companyName}`,
     body: `${g},
 
-mein Name ist [Ihr Name] und ich bin Gründer von Global Talent Bridge — einer Plattform, die qualifizierte Pflegekräfte aus dem Ausland mit deutschen Pflegeeinrichtungen zusammenbringt.
+Global Talent Bridge ist eine Plattform, die qualifizierte Pflegekräfte aus dem Ausland mit deutschen Pflegeeinrichtungen zusammenbringt.
 
-Ich melde mich, weil ich weiß, wie angespannt die Personalsituation im deutschen Pflegebereich aktuell ist — und weil wir einen strukturierten Lösungsansatz für genau dieses Problem entwickelt haben.
+Wir melden uns, weil wir wissen, wie angespannt die Personalsituation im deutschen Pflegebereich aktuell ist — und weil wir einen strukturierten Ansatz für genau dieses Problem entwickeln.
 
 Was wir anbieten:
-• Vorgeprüfte Pflegekräfte aus ${ctx.country} (${ctx.corridor})
-• Vollständige Sprachdokumentation (B1/B2 Deutsch)
-• Begleitung durch Anerkennungsverfahren
+• Kandidatenprofile aus ${ctx.country} (${ctx.corridor})
+• Sprachdokumentation (B1/B2 Deutsch)
+• Begleitung durch das Anerkennungsverfahren
 • Transparente Matchingkriterien: Erfahrung, Fachbereich, Verfügbarkeit
 
 Für den Pilotstart arbeiten wir mit einer kleinen Zahl ausgewählter Einrichtungen zusammen — kostenlos und ohne Verpflichtung — um den Prozess gemeinsam zu verfeinern.
@@ -135,9 +135,10 @@ Für den Pilotstart arbeiten wir mit einer kleinen Zahl ausgewählter Einrichtun
 Hätten Sie 20 Minuten für ein kurzes Gespräch diese oder nächste Woche?
 
 Mit freundlichen Grüßen
-[Ihr Name]
-Global Talent Bridge
-[Telefon / WhatsApp]`,
+Global Talent Bridge Team
+[KONTAKT-E-MAIL]
+[TELEFON / WHATSAPP]
+https://globaltalentbridge.de`,
   }
 }
 
@@ -149,7 +150,7 @@ function emailKlinik(ctx: EmployerContext): OutreachTemplate {
     subject: `Internationale Fachkräfte für Ihren Klinikbetrieb – ${ctx.companyName}`,
     body: `${g},
 
-als Gründer von Global Talent Bridge möchte ich Ihnen kurz vorstellen, wie wir Kliniken und Krankenhäuser bei der strukturierten Gewinnung qualifizierter Fachkräfte aus dem Ausland unterstützen.
+Global Talent Bridge möchte kurz vorstellen, wie wir Kliniken und Krankenhäuser bei der strukturierten Gewinnung qualifizierter Fachkräfte aus dem Ausland unterstützen können.
 
 Unser aktueller Fokus-Korridor: ${ctx.corridor}
 
@@ -159,14 +160,15 @@ Was uns unterscheidet:
 • Transparente Kommunikation auf beiden Seiten (Klinik & Kandidat)
 • Pilotzugang ohne Kosten — nur Feedback im Gegenzug
 
-Gerne stelle ich Ihnen die Plattform in einem 20-minütigen Demo-Termin vor.
+Gerne stellen wir die Plattform in einem 20-minütigen Demo-Termin vor.
 
 Wann passt es Ihnen?
 
 Mit freundlichen Grüßen
-[Ihr Name]
-Global Talent Bridge
-[Telefon / WhatsApp]`,
+Global Talent Bridge Team
+[KONTAKT-E-MAIL]
+[TELEFON / WHATSAPP]
+https://globaltalentbridge.de`,
   }
 }
 
@@ -178,22 +180,23 @@ function emailIT(ctx: EmployerContext): OutreachTemplate {
     subject: `Internationale IT-Talente direkt zu Ihnen – ${ctx.companyName}`,
     body: `${g},
 
-ich schreibe Ihnen wegen eines Problems, das viele Tech-Unternehmen kennen: Qualifizierte Entwickler und IT-Fachkräfte sind in Deutschland rar — gleichzeitig gibt es international ein enormes ungenutztes Potenzial.
+Global Talent Bridge meldet sich wegen eines Problems, das viele Tech-Unternehmen kennen: Qualifizierte Entwickler und IT-Fachkräfte sind in Deutschland rar — gleichzeitig gibt es international ungenutztes Potenzial.
 
 Global Talent Bridge verbindet international ausgebildete IT-Talente aus ${ctx.country} mit deutschen Unternehmen. Korridor: ${ctx.corridor}.
 
-Was wir leisten:
-• Vorgeprüfte Kandidaten mit verifizierten Skills (Stack, Erfahrung, Sprachstand)
+Was wir anbieten:
+• Kandidatenprofile mit dokumentierten Skills (Stack, Erfahrung, Sprachstand)
 • Matchingprozess mit klaren Kriterien — keine Blindbewerbungen
 • Pilotzugang für ausgewählte Unternehmen (kostenlos, ohne Verpflichtung)
-• Sie erhalten Kandidatenprofile + können Bewerbungen direkt im System einsehen
+• Sie erhalten Kandidatenprofile und können Bewerbungen im System einsehen
 
 Hätten Sie Interesse an einer kurzen Vorstellung unserer Plattform?
 
 Freundliche Grüße
-[Ihr Name]
-Global Talent Bridge
-[Telefon / WhatsApp]`,
+Global Talent Bridge Team
+[KONTAKT-E-MAIL]
+[TELEFON / WHATSAPP]
+https://globaltalentbridge.de`,
   }
 }
 
@@ -207,22 +210,23 @@ function emailPersonalvermittler(ctx: EmployerContext): OutreachTemplate {
 
 als Personalvermittler kennen Sie das Problem: Ihre Kunden suchen spezialisierte Fachkräfte — und der lokale Markt gibt es kaum her.
 
-Ich bin Gründer von Global Talent Bridge und entwickle eine Plattform für strukturiertes internationales Recruiting. Wir bauen aktiv Kandidaten-Pipelines aus ${ctx.corridor}.
+Global Talent Bridge ist eine Plattform für strukturiertes internationales Recruiting. Wir bauen aktiv Kandidaten-Pipelines aus ${ctx.corridor}.
 
 Kooperationsansatz:
 • Sie senden uns Ihre offenen Positionen — wir matchen mit unserem internationalen Pool
-• Ihre Kunden erhalten qualifizierte, vorgeprüfte Kandidatenprofile
+• Ihre Kunden erhalten strukturierte Kandidatenprofile
 • Transparentes Provisionsmodell ab dem ersten erfolgreichen Placement
 • Kein Exklusivvertrag nötig
 
-Ich suche für den Pilotstart 2–3 Recruiting-Partner, die echte Vakanzen einbringen und Feedback geben.
+Wir suchen für den Pilotstart 2–3 Recruiting-Partner, die echte Vakanzen einbringen und Feedback geben.
 
 Hätten Sie Zeit für ein erstes Gespräch?
 
 Freundliche Grüße
-[Ihr Name]
-Global Talent Bridge
-[Telefon / WhatsApp]`,
+Global Talent Bridge Team
+[KONTAKT-E-MAIL]
+[TELEFON / WHATSAPP]
+https://globaltalentbridge.de`,
   }
 }
 
@@ -234,12 +238,12 @@ function emailSonstige(ctx: EmployerContext): OutreachTemplate {
     subject: `Internationale Fachkräfte für Ihr Unternehmen – ${ctx.companyName}`,
     body: `${g},
 
-mein Name ist [Ihr Name] und ich bin Gründer von Global Talent Bridge — einer Plattform, die internationale Fachkräfte mit Arbeitgebern in Deutschland und Europa zusammenbringt.
+Global Talent Bridge ist eine Plattform, die internationale Fachkräfte mit Arbeitgebern in Deutschland und Europa zusammenbringt.
 
-Ich melde mich, weil wir Unternehmen wie ${ctx.companyName} dabei unterstützen, qualifizierte Mitarbeitende aus dem Ausland zu finden — strukturiert, transparent und ohne bürokratischen Aufwand.
+Wir melden uns, weil wir Unternehmen wie ${ctx.companyName} dabei unterstützen möchten, Mitarbeitende aus dem Ausland zu finden — strukturiert, transparent und ohne bürokratischen Aufwand.
 
 Was wir bieten:
-• Vorgeprüfte internationale Kandidaten passend zu Ihren Anforderungen
+• Internationale Kandidatenprofile passend zu Ihren Anforderungen
 • Klare Matchingkriterien: Qualifikation, Sprachstand, Verfügbarkeit
 • Pilotzugang ohne Kosten — wir suchen Feedback-Partner für die erste Phase
 • Begleitung von der ersten Kontaktaufnahme bis zur Einstellung
@@ -247,9 +251,10 @@ Was wir bieten:
 Hätten Sie 20 Minuten für ein kurzes Kennenlerngespräch?
 
 Mit freundlichen Grüßen
-[Ihr Name]
-Global Talent Bridge
-[Telefon / WhatsApp]`,
+Global Talent Bridge Team
+[KONTAKT-E-MAIL]
+[TELEFON / WHATSAPP]
+https://globaltalentbridge.de`,
   }
 }
 
@@ -261,9 +266,9 @@ function emailSprachschule(ctx: EmployerContext): OutreachTemplate {
     subject: `Kooperation mit Global Talent Bridge – Sprachvorbereitung für internationale Fachkräfte`,
     body: `${g},
 
-mein Name ist [Ihr Name], ich bin Gründer von Global Talent Bridge — einer Matching-Plattform für internationale Fachkräfte und deutsche Arbeitgeber.
+Global Talent Bridge ist eine Matching-Plattform für internationale Fachkräfte und deutsche Arbeitgeber.
 
-Ich wende mich an Sie, weil Sprachqualifikation in unserem Matching-Prozess ein Kernkriterium ist: Kandidaten mit B1/B2-Nachweis haben deutlich höhere Vermittlungschancen.
+Wir melden uns, weil Sprachqualifikation in unserem Matching-Prozess ein Kernkriterium ist: Kandidaten mit B1/B2-Nachweis haben bessere Vermittlungschancen.
 
 Kooperationsvorschlag:
 • Ihre Sprachkurse werden als qualifizierendes Angebot auf unserer Plattform verwiesen
@@ -274,9 +279,10 @@ Kooperationsvorschlag:
 Hätten Sie 20 Minuten für ein Gespräch über eine mögliche Zusammenarbeit?
 
 Mit freundlichen Grüßen
-[Ihr Name]
-Global Talent Bridge
-[Telefon / WhatsApp]`,
+Global Talent Bridge Team
+[KONTAKT-E-MAIL]
+[TELEFON / WHATSAPP]
+https://globaltalentbridge.de`,
   }
 }
 
@@ -287,12 +293,12 @@ function whatsappTemplate(ctx: EmployerContext, type: EmployerType): OutreachTem
   const korridorHint = ctx.corridor
 
   const bodies: Record<EmployerType, string> = {
-    'Pflegeheim': `${g} 👋\n\nIch bin [Ihr Name] von Global Talent Bridge. Wir verbinden qualifizierte Pflegekräfte (${korridorHint}) mit deutschen Pflegeeinrichtungen.\n\nFür ${ctx.companyName}: Wäre ein kurzes Gespräch (15 Min.) möglich? Kein Verkaufsgespräch — nur Kennenlernen + ehrliches Feedback. 🙏`,
-    'Klinik': `${g} 👋\n\nHier ist [Ihr Name] von Global Talent Bridge. Wir matchen internationale Fachkräfte (${korridorHint}) mit Kliniken in Deutschland.\n\nFür ${ctx.companyName}: Darf ich kurz vorstellen, wie das funktioniert? 15 Minuten würden reichen.`,
-    'IT-Unternehmen': `${g} 👋\n\nIch bin [Ihr Name] von Global Talent Bridge. Wir verbinden IT-Talente aus dem Ausland (${korridorHint}) mit deutschen Tech-Unternehmen.\n\nHätten Sie kurz Zeit für ein Kennenlerngespräch? (15 Min., kein Sales-Call)`,
-    'Personalvermittler': `${g} 👋\n\nMein Name ist [Ihr Name] — Gründer von Global Talent Bridge. Ich suche Recruiting-Partner für internationales Matching (${korridorHint}).\n\nKooperation auf Augenhöhe — kein Exklusivvertrag. Hätten Sie Zeit für ein kurzes Gespräch?`,
-    'Sprachschule': `${g} 👋\n\nIch bin [Ihr Name] von Global Talent Bridge. Wir vermitteln internationale Fachkräfte nach Deutschland und suchen Sprachschulpartner für die B1/B2-Vorbereitung.\n\nWäre eine Kooperation interessant? Gerne kurzes Kennenlernen (15 Min.).`,
-    'Sonstige': `${g} 👋\n\nIch bin [Ihr Name] von Global Talent Bridge — einer Plattform für internationales Fachkräfte-Matching.\n\nFür ${ctx.companyName}: Hätten Sie kurz Zeit für ein erstes Gespräch?`,
+    'Pflegeheim': `${g} 👋\n\nGlobal Talent Bridge Team hier — wir verbinden Pflegekräfte aus dem Ausland (${korridorHint}) mit deutschen Pflegeeinrichtungen.\n\nFür ${ctx.companyName}: Wäre ein kurzes Gespräch (15 Min.) möglich? Kein Verkaufsgespräch — nur Kennenlernen + ehrliches Feedback. 🙏`,
+    'Klinik': `${g} 👋\n\nGlobal Talent Bridge Team hier — wir matchen internationale Fachkräfte (${korridorHint}) mit Kliniken in Deutschland.\n\nFür ${ctx.companyName}: Darf ich kurz vorstellen, wie das funktioniert? 15 Minuten würden reichen.`,
+    'IT-Unternehmen': `${g} 👋\n\nGlobal Talent Bridge Team — wir verbinden IT-Talente aus dem Ausland (${korridorHint}) mit deutschen Tech-Unternehmen.\n\nHätten Sie kurz Zeit für ein Kennenlerngespräch? (15 Min., kein Sales-Call)`,
+    'Personalvermittler': `${g} 👋\n\nGlobal Talent Bridge Team — wir suchen Recruiting-Partner für internationales Matching (${korridorHint}).\n\nKooperation auf Augenhöhe — kein Exklusivvertrag. Hätten Sie Zeit für ein kurzes Gespräch?`,
+    'Sprachschule': `${g} 👋\n\nGlobal Talent Bridge Team — wir vermitteln internationale Fachkräfte nach Deutschland und suchen Sprachschulpartner für die B1/B2-Vorbereitung.\n\nWäre eine Kooperation interessant? Gerne kurzes Kennenlernen (15 Min.).`,
+    'Sonstige': `${g} 👋\n\nGlobal Talent Bridge Team — eine Plattform für internationales Fachkräfte-Matching.\n\nFür ${ctx.companyName}: Hätten Sie kurz Zeit für ein erstes Gespräch?`,
   }
 
   return {
@@ -306,12 +312,12 @@ function linkedinTemplate(ctx: EmployerContext, type: EmployerType): OutreachTem
   const g = greetingInformal(ctx.contactName)
 
   const bodies: Record<EmployerType, string> = {
-    'Pflegeheim': `${g},\n\nich bin Gründer von Global Talent Bridge — einer Matching-Plattform, die qualifizierte Pflegekräfte aus ${ctx.country} mit deutschen Pflegeeinrichtungen verbindet (${ctx.corridor}).\n\nIch suche für den Pilotstart ausgewählte Einrichtungen wie ${ctx.companyName}. Wäre ein kurzes Kennenlerngespräch möglich?\n\nViele Grüße,\n[Ihr Name]`,
-    'Klinik': `${g},\n\nals Gründer von Global Talent Bridge verbinde ich international qualifizierte Fachkräfte (${ctx.corridor}) mit deutschen Kliniken.\n\nIch suche Pilotpartner — kein Vertrag, nur ehrliches Feedback. Hätten Sie 20 Minuten?\n\nViele Grüße,\n[Ihr Name]`,
-    'IT-Unternehmen': `${g},\n\nich entwickle Global Talent Bridge, eine Plattform für strukturiertes internationales Recruiting im IT-Bereich (${ctx.corridor}).\n\nFür ${ctx.companyName}: Pilot-Zugang ohne Kosten, echter Kandidatenpool. Darf ich kurz vorstellen?\n\nBeste Grüße,\n[Ihr Name]`,
-    'Personalvermittler': `${g},\n\nals Gründer von Global Talent Bridge suche ich Recruiting-Partner für den Pilotstart. Wir haben einen wachsenden internationalen Kandidatenpool (${ctx.corridor}) und suchen Partner, die offene Positionen einbringen.\n\nInteressiert?\n\nBeste Grüße,\n[Ihr Name]`,
-    'Sprachschule': `${g},\n\nich bin Gründer von Global Talent Bridge und suche Sprachschulpartner für die B1/B2-Vorbereitung unserer internationalen Kandidaten.\n\nKooperation auf Augenhöhe — gerne kurzes Kennenlerngespräch?\n\nMit freundlichen Grüßen,\n[Ihr Name]`,
-    'Sonstige': `${g},\n\nich bin Gründer von Global Talent Bridge, einer Plattform für internationales Fachkräfte-Matching. Darf ich kurz vorstellen, was wir machen?\n\nMit freundlichen Grüßen,\n[Ihr Name]`,
+    'Pflegeheim': `${g},\n\nGlobal Talent Bridge ist eine Matching-Plattform, die Pflegekräfte aus ${ctx.country} mit deutschen Pflegeeinrichtungen verbindet (${ctx.corridor}).\n\nWir suchen für den Pilotstart ausgewählte Einrichtungen wie ${ctx.companyName}. Wäre ein kurzes Kennenlerngespräch möglich?\n\nViele Grüße\nGlobal Talent Bridge Team`,
+    'Klinik': `${g},\n\nGlobal Talent Bridge verbindet international qualifizierte Fachkräfte (${ctx.corridor}) mit deutschen Kliniken.\n\nWir suchen Pilotpartner — kein Vertrag, nur ehrliches Feedback. Hätten Sie 20 Minuten?\n\nViele Grüße\nGlobal Talent Bridge Team`,
+    'IT-Unternehmen': `${g},\n\nGlobal Talent Bridge ist eine Plattform für strukturiertes internationales Recruiting im IT-Bereich (${ctx.corridor}).\n\nFür ${ctx.companyName}: Pilot-Zugang ohne Kosten, strukturierter Kandidatenpool. Darf ich kurz vorstellen?\n\nBeste Grüße\nGlobal Talent Bridge Team`,
+    'Personalvermittler': `${g},\n\nGlobal Talent Bridge sucht Recruiting-Partner für den Pilotstart. Wir bauen einen internationalen Kandidatenpool auf (${ctx.corridor}) und suchen Partner, die offene Positionen einbringen.\n\nInteressiert?\n\nBeste Grüße\nGlobal Talent Bridge Team`,
+    'Sprachschule': `${g},\n\nGlobal Talent Bridge sucht Sprachschulpartner für die B1/B2-Vorbereitung internationaler Kandidaten auf ihrem Weg nach Deutschland.\n\nKooperation auf Augenhöhe — gerne kurzes Kennenlerngespräch?\n\nMit freundlichen Grüßen\nGlobal Talent Bridge Team`,
+    'Sonstige': `${g},\n\nGlobal Talent Bridge ist eine Plattform für internationales Fachkräfte-Matching. Darf ich kurz vorstellen, was wir machen?\n\nMit freundlichen Grüßen\nGlobal Talent Bridge Team`,
   }
 
   return {
