@@ -120,7 +120,7 @@ export function getDetailedProviderStatus(env: EnvSnapshot): DetailedProviderSta
     'Kein automatischer Versand — nur nach expliziter JA-Freigabe.',
     'Kein Massenversand — immer nur ein Draft pro Anfrage.',
     'LinkedIn / WhatsApp / Phone werden nie automatisch gesendet.',
-    'Signatur immer: Global Talent Bridge Team.',
+    'Signatur immer: CorridorWork Team.',
     'Alle Sendeversuche werden in system_logs protokolliert.',
   ]
 
@@ -227,7 +227,7 @@ export function checkDraftEmailEligibility(
   if (!noPersonalNames) {
     return {
       canSend: false,
-      reason: 'Persönlicher Name oder verbotener Platzhalter im Text gefunden. Signatur muss "Global Talent Bridge Team" lauten.',
+      reason: 'Persönlicher Name oder verbotener Platzhalter im Text gefunden. Signatur muss "CorridorWork Team" lauten.',
       checks,
     }
   }

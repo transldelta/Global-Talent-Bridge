@@ -1,10 +1,10 @@
-# Buyer One Pager — Global Talent Bridge
+# Buyer One Pager — CorridorWork
 
 **Stand:** 2026-06-04 | **Vertraulich**
 
 ---
 
-## Was ist Global Talent Bridge?
+## Was ist CorridorWork?
 
 Eine B2B/B2C SaaS-Plattform für internationales Fachkräfte-Matching.
 

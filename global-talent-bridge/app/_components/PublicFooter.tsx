@@ -98,7 +98,7 @@ export function PublicFooter() {
         {/* Bottom bar */}
         <div className="border-t border-gray-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-gray-600 text-xs">
-            © {year} Global Talent Bridge · MVP-Phase · Betrieben von Delta Translation, Karlsruhe
+            © {year} CorridorWork · MVP-Phase · Betrieben von Delta Translation, Karlsruhe
           </p>
           <div className="flex items-center gap-2 text-xs px-3 py-1.5 bg-yellow-900/20 border border-yellow-800/40 rounded-full">
             <span className="text-yellow-400">⚠️</span>

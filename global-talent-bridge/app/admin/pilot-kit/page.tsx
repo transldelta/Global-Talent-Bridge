@@ -20,7 +20,7 @@ Sehr geehrte Frau [Name] / Sehr geehrter Herr [Name],
 wenn Sie regelmäßig internationale Bewerber prüfen, kennen Sie das Problem:
 viele Unterlagen, wenig Vorauswahl, viel manueller Aufwand.
 
-Global Talent Bridge löst genau das: Kandidaten legen ihr Profil an —
+CorridorWork löst genau das: Kandidaten legen ihr Profil an —
 Branche, Erfahrung, Deutsch- und Englischkenntnisse. Sie erstellen eine Stelle
 und sehen sofort, wer am besten passt — sortiert nach transparentem Matching-Score.
 
@@ -36,14 +36,14 @@ Oder testen Sie die Plattform direkt:
 ${CTA_URL}
 
 Mit freundlichen Grüßen
-Global Talent Bridge Team
+CorridorWork Team
 transl.delta@gmail.com`
 
 const EMAIL_SHORT = `Betreff: Kostenloser Test — Kandidaten nach Matching-Score finden
 
 Guten Tag [Name],
 
-ich baue Global Talent Bridge — eine Plattform, auf der Sie Stellen anlegen
+ich baue CorridorWork — eine Plattform, auf der Sie Stellen anlegen
 und sofort sehen, welche internationalen Kandidaten am besten passen
 (Branche, Erfahrung, Sprachkenntnisse — alles in einem Score).
 
@@ -54,17 +54,17 @@ Interesse? Hier können Sie direkt eine Pilot-Anfrage stellen:
 ${CTA_URL}
 
 Mit freundlichen Grüßen
-Global Talent Bridge Team
+CorridorWork Team
 transl.delta@gmail.com`
 
 // ── Follow-up ──
 
-const FOLLOWUP_NO_REPLY = `Betreff: Kurze Nachfrage — Pilot-Zugang Global Talent Bridge
+const FOLLOWUP_NO_REPLY = `Betreff: Kurze Nachfrage — Pilot-Zugang CorridorWork
 
 Guten Tag [Name],
 
 ich habe Ihnen vor einigen Tagen geschrieben wegen eines kostenlosen
-Pilot-Zugangs für Global Talent Bridge.
+Pilot-Zugangs für CorridorWork.
 
 Falls meine erste Nachricht untergegangen ist: Kurz zusammengefasst —
 ich biete 5–10 Unternehmen einen kostenlosen Testzugang, um internationale
@@ -80,14 +80,14 @@ Oder nutzen Sie das Kontaktformular:
 ${CTA_URL}
 
 Mit freundlichen Grüßen
-Global Talent Bridge Team
+CorridorWork Team
 transl.delta@gmail.com`
 
-const FOLLOWUP_AFTER_INTEREST = `Betreff: Nächste Schritte — Global Talent Bridge Pilot
+const FOLLOWUP_AFTER_INTEREST = `Betreff: Nächste Schritte — CorridorWork Pilot
 
 Guten Tag [Name],
 
-vielen Dank für Ihr Interesse an Global Talent Bridge!
+vielen Dank für Ihr Interesse an CorridorWork!
 
 Hier sind die nächsten Schritte, damit Sie loslegen können:
 
@@ -106,14 +106,14 @@ Ich bin persönlich erreichbar und antworte schnell.
 transl.delta@gmail.com
 
 Mit freundlichen Grüßen
-Global Talent Bridge Team
+CorridorWork Team
 transl.delta@gmail.com`
 
 // ── Telefon ──
 
 const PHONE_GUIDE = `── GESPRÄCHSEINSTIEG ──────────────────────────────────────────────────────────
 
-"Guten Tag, Global Talent Bridge — ich rufe kurz wegen unserer Plattform für
+"Guten Tag, CorridorWork — ich rufe kurz wegen unserer Plattform für
 internationales Fachkräfte-Matching an.
 Haben Sie kurz 2–3 Minuten?"
 
@@ -165,7 +165,7 @@ Plattform: ${CTA_URL}`
 
 const LINKEDIN_MSG = `Guten Tag [Name],
 
-ich baue Global Talent Bridge — strukturiertes Matching für internationale
+ich baue CorridorWork — strukturiertes Matching für internationale
 Fachkräfte und deutsche Arbeitgeber. Arbeitgeber sehen Kandidaten sortiert
 nach Matching-Score (Branche, Erfahrung, Sprachkenntnisse).
 
@@ -175,21 +175,21 @@ Kein Vertrag, keine Kosten, kein Spam.
 Wäre das etwas für Sie? Ich erkläre es gerne in 10–15 Minuten.
 
 Viele Grüße,
-Global Talent Bridge Team`
+CorridorWork Team`
 
 const WHATSAPP_MSG = `Hallo [Name]! 👋
 
-Ich baue Global Talent Bridge — eine Plattform, die internationale Fachkräfte und Arbeitgeber über Matching-Score zusammenbringt.
+Ich baue CorridorWork — eine Plattform, die internationale Fachkräfte und Arbeitgeber über Matching-Score zusammenbringt.
 
 Suche 5–10 Pilot-Unternehmen zum kostenlosen Testen. Kein Vertrag, keine Kosten.
 
 Hast du kurz Zeit für 10 Min Gespräch?
 
-LG, Global Talent Bridge Team 🙂`
+LG, CorridorWork Team 🙂`
 
 // ── Demo-Erklärung ──
 
-const DEMO_5_SENTENCES = `Global Talent Bridge ist eine Matching-Plattform, auf der internationale Fachkräfte ihr Profil mit Branche, Erfahrung und Sprachkenntnissen anlegen.
+const DEMO_5_SENTENCES = `CorridorWork ist eine Matching-Plattform, auf der internationale Fachkräfte ihr Profil mit Branche, Erfahrung und Sprachkenntnissen anlegen.
 
 Arbeitgeber erstellen Stellen mit klaren Anforderungen: Jobtitel, Standort, Mindesterfahrung, Deutsch- und Englischkenntnisse.
 

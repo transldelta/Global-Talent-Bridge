@@ -1,4 +1,4 @@
-# Security & Compliance — Global Talent Bridge
+# Security & Compliance — CorridorWork
 
 **Stand:** 2026-06-04  
 **Zweck:** Technische Sicherheitsmaßnahmen und Compliance-Status für Due-Diligence-Prüfer.

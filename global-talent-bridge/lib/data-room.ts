@@ -86,7 +86,7 @@ export type DataRoomSnapshot = {
 
 export function getAssetOverview(): AssetOverview {
   return {
-    productName: 'Global Talent Bridge',
+    productName: 'CorridorWork',
     oneLineDescription:
       'B2B SaaS marketplace connecting international talent with employers in Europe, North America and Australia via structured migration corridors.',
     targetBuyer: [

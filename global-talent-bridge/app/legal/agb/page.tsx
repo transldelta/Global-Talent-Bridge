@@ -4,8 +4,8 @@ import { PublicNavBar } from '@/app/_components/PublicNavBar'
 import { PublicFooter } from '@/app/_components/PublicFooter'
 
 export const metadata: Metadata = {
-  title: 'AGB — Global Talent Bridge',
-  description: 'Allgemeine Geschäftsbedingungen für die Nutzung von Global Talent Bridge.',
+  title: 'AGB — CorridorWork',
+  description: 'Allgemeine Geschäftsbedingungen für die Nutzung von CorridorWork.',
 }
 
 export default function AgbPage() {
@@ -33,7 +33,7 @@ export default function AgbPage() {
             <div className="text-gray-400 space-y-2">
               <p>
                 Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für die Nutzung der
-                Online-Plattform <strong className="text-white">Global Talent Bridge</strong>,
+                Online-Plattform <strong className="text-white">CorridorWork</strong>,
                 betrieben von Brahim Ben Abla / Delta Translation, Schlesier Str. 64,
                 76227 Karlsruhe, Deutschland (nachfolgend &bdquo;Anbieter&ldquo;).
               </p>
@@ -48,7 +48,7 @@ export default function AgbPage() {
             <h2 className="text-xl font-bold text-white mb-3">§ 2 Leistungen der Plattform</h2>
             <div className="text-gray-400 space-y-2">
               <p>
-                Global Talent Bridge stellt eine Online-Plattform bereit, die internationale
+                CorridorWork stellt eine Online-Plattform bereit, die internationale
                 Fachkräfte (Kandidaten) mit Arbeitgebern verbindet. Die Kernleistungen umfassen:
               </p>
               <ul className="list-none space-y-1 ml-4">

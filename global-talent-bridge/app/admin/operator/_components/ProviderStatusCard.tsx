@@ -88,7 +88,7 @@ export function ProviderStatusCard({ status }: ProviderStatusCardProps) {
                 <span className="text-gray-500">→ auf &quot;resend&quot; oder &quot;smtp&quot; setzen</span>
               )}
               {key === 'OUTREACH_FROM_EMAIL' && (
-                <span className="text-gray-500">→ z.B. team@globaltalentbridge.de</span>
+                <span className="text-gray-500">→ z.B. team@corridorwork.com</span>
               )}
               {key === 'RESEND_API_KEY' && (
                 <span className="text-gray-500">→ aus resend.com Dashboard</span>
@@ -106,7 +106,7 @@ export function ProviderStatusCard({ status }: ProviderStatusCardProps) {
           </p>
           <div className="font-mono text-xs text-gray-500 space-y-0.5">
             <p>OUTREACH_EMAIL_PROVIDER=resend</p>
-            <p>OUTREACH_FROM_EMAIL=team@globaltalentbridge.de</p>
+            <p>OUTREACH_FROM_EMAIL=team@corridorwork.com</p>
             <p>RESEND_API_KEY=re_xxxxxxxxxxxxxxxx</p>
           </div>
         </div>

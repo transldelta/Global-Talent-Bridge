@@ -1,4 +1,4 @@
-# Business Model — Global Talent Bridge
+# Business Model — CorridorWork
 
 **Dokument-Typ:** Strategisch — für Investoren, Partner, Gründer  
 **Stand:** 2026-06-04  
@@ -16,11 +16,11 @@ Keine Garantien. Keine Haftung.
 
 ## Kernthese
 
-Global Talent Bridge löst ein strukturelles Problem im internationalen Arbeitsmarkt:
+CorridorWork löst ein strukturelles Problem im internationalen Arbeitsmarkt:
 
 - **Arbeitgeber** in Ländern wie Deutschland, Kanada, UK und Australien suchen dringend internationale Fachkräfte — können diese aber nicht effizient und regulatorisch korrekt erreichen.
 - **Kandidaten** aus Indien, den Philippinen, Marokko, der Türkei, Nigeria, Brasilien und Tunesien besitzen gefragte Qualifikationen, scheitern aber an Informationsasymmetrie, Visa-Komplexität und fehlendem Matching.
-- **Global Talent Bridge** schließt diese Lücke mit KI-gestütztem Matching, strukturierter Migrationsorientierung, internationalen Karriere-Landingpages und einem vollständigen Datenökosystem für Migrations-Korridore.
+- **CorridorWork** schließt diese Lücke mit KI-gestütztem Matching, strukturierter Migrationsorientierung, internationalen Karriere-Landingpages und einem vollständigen Datenökosystem für Migrations-Korridore.
 
 ---
 
@@ -169,7 +169,7 @@ Annahme: ~3.000 EUR monatliche Betriebskosten (Hosting, Tooling, Arbeitszeit)
 
 ## Zusammenfassung
 
-Global Talent Bridge ist ein kapitaleffizientes B2B/B2C SaaS-Modell mit:
+CorridorWork ist ein kapitaleffizientes B2B/B2C SaaS-Modell mit:
 - **Klarer Nische:** internationales Fachkräfte-Matching mit Migrations-Orientierung
 - **Mehrfachen Umsatzströmen:** Abonnements + Placement Fees + Provisionen
 - **Niedrigem Break-even:** bereits bei 10–12 Arbeitgebern rentabel

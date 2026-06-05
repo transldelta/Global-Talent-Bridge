@@ -55,13 +55,13 @@ const INTEREST_LABELS: Record<string, string> = {
 
 function buildTemplate(name: string, interest: string | null): string {
   const greeting = `Hallo ${name},`
-  const signature = `\nMit freundlichen Grüßen\nGlobal Talent Bridge Team\n[KONTAKT-E-MAIL]\nhttps://globaltalentbridge.de`
+  const signature = `\nMit freundlichen Grüßen\nCorridorWork Team\n[KONTAKT-E-MAIL]\nhttps://corridorwork.com`
 
   switch (interest) {
     case 'pilot_employer':
       return `${greeting}
 
-vielen Dank für Ihre Anfrage als Pilot-Arbeitgeber bei Global Talent Bridge.
+vielen Dank für Ihre Anfrage als Pilot-Arbeitgeber bei CorridorWork.
 
 Wir befinden uns in der MVP-Phase und suchen aktiv nach Unternehmen, die unsere Plattform testen und uns ehrliches Feedback geben möchten.
 
@@ -72,7 +72,7 @@ Unsere Plattform verbindet internationale Fachkräfte mit Arbeitgebern über ein
     case 'candidate':
       return `${greeting}
 
-vielen Dank für Ihr Interesse an Global Talent Bridge.
+vielen Dank für Ihr Interesse an CorridorWork.
 
 Sie können sich kostenlos als Kandidat registrieren und Ihr Profil ausfüllen:
 https://global-talent-bridge.vercel.app/auth/register?role=candidate
@@ -82,7 +82,7 @@ Das System berechnet dann automatisch passende Job-Matches für Sie. Bei Fragen 
     case 'partnership':
       return `${greeting}
 
-vielen Dank für Ihr Interesse an einer Partnerschaft mit Global Talent Bridge.
+vielen Dank für Ihr Interesse an einer Partnerschaft mit CorridorWork.
 
 Wir sind offen für Kooperationen mit Organisationen, die internationalen Talenten helfen. Ich würde gerne mehr über Ihre Ideen erfahren.
 
@@ -91,7 +91,7 @@ Können wir einen kurzen Austausch vereinbaren?${signature}`
     case 'feedback':
       return `${greeting}
 
-vielen Dank für Ihr Feedback zu Global Talent Bridge!
+vielen Dank für Ihr Feedback zu CorridorWork!
 
 Ihr Input ist wertvoll für uns — besonders in der aktuellen MVP-Phase. Wir lesen jedes Feedback sorgfältig und berücksichtigen es bei der Weiterentwicklung.
 
@@ -100,7 +100,7 @@ Falls Sie weitere Gedanken haben, freuen wir uns über Ihre Rückmeldung.${signa
     default:
       return `${greeting}
 
-vielen Dank für Ihre Anfrage bei Global Talent Bridge.
+vielen Dank für Ihre Anfrage bei CorridorWork.
 
 Ich habe Ihre Nachricht erhalten und melde mich in Kürze mit einer Antwort zurück.${signature}`
   }

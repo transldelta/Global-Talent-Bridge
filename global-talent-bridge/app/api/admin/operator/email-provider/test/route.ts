@@ -7,7 +7,7 @@
  * - Nur Admin.
  * - Nur wenn Provider konfiguriert ist (provider !== 'none', alle Vars vorhanden).
  * - test_email muss explizit im Request stehen — kein Default.
- * - Test-E-Mail ist klar markiert: "[TEST] Global Talent Bridge test email — no employer outreach"
+ * - Test-E-Mail ist klar markiert: "[TEST] CorridorWork test email — no employer outreach"
  * - KEIN Pilot-Arbeitgeber wird kontaktiert.
  * - KEIN Draft wird als sent markiert.
  * - system_logs Eintrag wird immer geschrieben (Erfolg und Fehler).

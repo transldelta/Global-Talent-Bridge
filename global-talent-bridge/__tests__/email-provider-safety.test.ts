@@ -9,7 +9,7 @@
  * - Keine Secrets in Status-Rückgabe
  * - Draft-Eligibility: alle Blocking-Rules
  * - Safety: persönliche Namen, leere Felder
- * - Signatur: Global Talent Bridge Team
+ * - Signatur: CorridorWork Team
  * - Kein Bulk-Send (API akzeptiert nur einzelne draft_id)
  * - testMode-Flag
  * - readinessStatus-Mapping
@@ -44,7 +44,7 @@ function makeEnv(overrides: Partial<EnvSnapshot> = {}): EnvSnapshot {
 function makeResendEnv(overrides: Partial<EnvSnapshot> = {}): EnvSnapshot {
   return makeEnv({
     OUTREACH_EMAIL_PROVIDER: 'resend',
-    OUTREACH_FROM_EMAIL:     'team@globaltalentbridge.de',
+    OUTREACH_FROM_EMAIL:     'team@corridorwork.com',
     RESEND_API_KEY:          're_test_key',
     ...overrides,
   })
@@ -53,7 +53,7 @@ function makeResendEnv(overrides: Partial<EnvSnapshot> = {}): EnvSnapshot {
 function makeSmtpEnv(overrides: Partial<EnvSnapshot> = {}): EnvSnapshot {
   return makeEnv({
     OUTREACH_EMAIL_PROVIDER: 'smtp',
-    OUTREACH_FROM_EMAIL:     'team@globaltalentbridge.de',
+    OUTREACH_FROM_EMAIL:     'team@corridorwork.com',
     SMTP_HOST:               'mail.example.com',
     SMTP_PORT:               '587',
     SMTP_USER:               'user',
@@ -68,7 +68,7 @@ function makeApprovedEmailDraft(overrides: Partial<DraftForEligibility> = {}): D
     channel:        'email',
     recipient_email: 'employer@company.de',
     subject:        'Internationales Fachkräfte-Matching',
-    body:           'Sehr geehrte Damen und Herren,\n\nMit freundlichen Grüßen\nGlobal Talent Bridge Team',
+    body:           'Sehr geehrte Damen und Herren,\n\nMit freundlichen Grüßen\nCorridorWork Team',
     ...overrides,
   }
 }
@@ -139,7 +139,7 @@ describe('getDetailedProviderStatus — resend partial', () => {
   it('readinessStatus is "warning" when RESEND_API_KEY missing', () => {
     const s = getDetailedProviderStatus(makeEnv({
       OUTREACH_EMAIL_PROVIDER: 'resend',
-      OUTREACH_FROM_EMAIL:     'team@globaltalentbridge.de',
+      OUTREACH_FROM_EMAIL:     'team@corridorwork.com',
       RESEND_API_KEY:          undefined,
     }))
     expect(s.readinessStatus).toBe('warning')
@@ -148,7 +148,7 @@ describe('getDetailedProviderStatus — resend partial', () => {
   it('lists RESEND_API_KEY in missingConfig', () => {
     const s = getDetailedProviderStatus(makeEnv({
       OUTREACH_EMAIL_PROVIDER: 'resend',
-      OUTREACH_FROM_EMAIL:     'team@globaltalentbridge.de',
+      OUTREACH_FROM_EMAIL:     'team@corridorwork.com',
     }))
     expect(s.missingConfig).toContain('RESEND_API_KEY')
   })
@@ -156,7 +156,7 @@ describe('getDetailedProviderStatus — resend partial', () => {
   it('canSend=false when partially configured', () => {
     const s = getDetailedProviderStatus(makeEnv({
       OUTREACH_EMAIL_PROVIDER: 'resend',
-      OUTREACH_FROM_EMAIL:     'team@globaltalentbridge.de',
+      OUTREACH_FROM_EMAIL:     'team@corridorwork.com',
     }))
     expect(s.canSend).toBe(false)
   })
@@ -204,7 +204,7 @@ describe('getDetailedProviderStatus — smtp', () => {
   it('lists all missing smtp vars', () => {
     const s = getDetailedProviderStatus(makeEnv({
       OUTREACH_EMAIL_PROVIDER: 'smtp',
-      OUTREACH_FROM_EMAIL:     'team@globaltalentbridge.de',
+      OUTREACH_FROM_EMAIL:     'team@corridorwork.com',
     }))
     expect(s.missingConfig).toContain('SMTP_HOST')
     expect(s.missingConfig).toContain('SMTP_PORT')
@@ -233,7 +233,7 @@ describe('getDetailedProviderStatus — no secrets', () => {
   it('missingConfig contains only ENV VAR names, not values', () => {
     const s = getDetailedProviderStatus(makeEnv({
       OUTREACH_EMAIL_PROVIDER: 'resend',
-      OUTREACH_FROM_EMAIL:     'team@globaltalentbridge.de',
+      OUTREACH_FROM_EMAIL:     'team@corridorwork.com',
     }))
     // Should contain the name 'RESEND_API_KEY', not any secret value
     expect(s.missingConfig).toContain('RESEND_API_KEY')
@@ -296,7 +296,7 @@ describe('getDetailedProviderStatus — safetyNotes', () => {
 
   it('contains signature note', () => {
     const s = getDetailedProviderStatus(makeResendEnv())
-    expect(s.safetyNotes.some((n) => n.includes('Global Talent Bridge Team'))).toBe(true)
+    expect(s.safetyNotes.some((n) => n.includes('CorridorWork Team'))).toBe(true)
   })
 })
 
@@ -310,7 +310,7 @@ describe('hasPersonalNameInText', () => {
   })
 
   it('detects [DEIN NAME]', () => {
-    expect(hasPersonalNameInText('[DEIN NAME]\nGlobal Talent Bridge')).toBe(true)
+    expect(hasPersonalNameInText('[DEIN NAME]\nCorridorWork')).toBe(true)
   })
 
   it('detects Brahim Ben Abla', () => {
@@ -318,15 +318,15 @@ describe('hasPersonalNameInText', () => {
   })
 
   it('detects Gründer reference', () => {
-    expect(hasPersonalNameInText('Als Gründer von Global Talent Bridge')).toBe(true)
+    expect(hasPersonalNameInText('Als Gründer von CorridorWork')).toBe(true)
   })
 
   it('does NOT flag neutral team signature', () => {
-    expect(hasPersonalNameInText('Viele Grüße\nGlobal Talent Bridge Team')).toBe(false)
+    expect(hasPersonalNameInText('Viele Grüße\nCorridorWork Team')).toBe(false)
   })
 
   it('does NOT flag normal email body without personal names', () => {
-    const body = 'Sehr geehrte Damen und Herren,\n\nMit freundlichen Grüßen\nGlobal Talent Bridge Team'
+    const body = 'Sehr geehrte Damen und Herren,\n\nMit freundlichen Grüßen\nCorridorWork Team'
     expect(hasPersonalNameInText(body)).toBe(false)
   })
 })
@@ -419,7 +419,7 @@ describe('checkDraftEmailEligibility — blocked: provider not configured', () =
   it('canSend=false when provider partially configured', () => {
     const partialStatus = getDetailedProviderStatus(makeEnv({
       OUTREACH_EMAIL_PROVIDER: 'resend',
-      OUTREACH_FROM_EMAIL:     'team@globaltalentbridge.de',
+      OUTREACH_FROM_EMAIL:     'team@corridorwork.com',
       // RESEND_API_KEY missing
     }))
     expect(checkDraftEmailEligibility(makeApprovedEmailDraft(), partialStatus).canSend).toBe(false)
@@ -484,7 +484,7 @@ describe('checkDraftEmailEligibility — blocked: personal names', () => {
 
   it('canSend=false when body contains "Brahim Ben Abla"', () => {
     const result = checkDraftEmailEligibility(
-      makeApprovedEmailDraft({ body: 'Mein Name ist Brahim Ben Abla.\nGlobal Talent Bridge Team' }),
+      makeApprovedEmailDraft({ body: 'Mein Name ist Brahim Ben Abla.\nCorridorWork Team' }),
       makeReadyProviderStatus(),
     )
     expect(result.canSend).toBe(false)
@@ -523,12 +523,12 @@ describe('checkDraftEmailEligibility — all checks pass', () => {
 })
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// 12. Signatur — Global Talent Bridge Team
+// 12. Signatur — CorridorWork Team
 // ═══════════════════════════════════════════════════════════════════════════════
 
-describe('Signatur — Global Talent Bridge Team', () => {
-  it('body with "Global Talent Bridge Team" passes name check', () => {
-    const body = 'Sehr geehrte Damen und Herren,\n\nViele Grüße\nGlobal Talent Bridge Team'
+describe('Signatur — CorridorWork Team', () => {
+  it('body with "CorridorWork Team" passes name check', () => {
+    const body = 'Sehr geehrte Damen und Herren,\n\nViele Grüße\nCorridorWork Team'
     expect(hasPersonalNameInText(body)).toBe(false)
   })
 
@@ -538,7 +538,7 @@ describe('Signatur — Global Talent Bridge Team', () => {
 
   it('draft with correct team signature passes eligibility', () => {
     const draft = makeApprovedEmailDraft({
-      body: 'Sehr geehrte Damen und Herren,\n\nMit freundlichen Grüßen\nGlobal Talent Bridge Team\n[KONTAKT-E-MAIL]',
+      body: 'Sehr geehrte Damen und Herren,\n\nMit freundlichen Grüßen\nCorridorWork Team\n[KONTAKT-E-MAIL]',
     })
     const result = checkDraftEmailEligibility(draft, makeReadyProviderStatus())
     expect(result.canSend).toBe(true)
@@ -608,7 +608,7 @@ describe('Providerfehler-Sicherheit', () => {
   it('failed provider check includes missingConfig in reason', () => {
     const status = getDetailedProviderStatus(makeEnv({
       OUTREACH_EMAIL_PROVIDER: 'resend',
-      OUTREACH_FROM_EMAIL:     'team@globaltalentbridge.de',
+      OUTREACH_FROM_EMAIL:     'team@corridorwork.com',
       // missing RESEND_API_KEY
     }))
     const eligibility = checkDraftEmailEligibility(makeApprovedEmailDraft(), status)

@@ -69,7 +69,7 @@ export default async function PricingPage() {
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link href="/" className="text-white font-semibold hover:text-gray-200 transition-colors">
-              Global Talent Bridge
+              CorridorWork
             </Link>
           </div>
           <div className="flex items-center gap-4">
@@ -217,7 +217,7 @@ export default async function PricingPage() {
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 text-center">
           <h3 className="text-white font-semibold mb-2">🚀 MVP-Phase</h3>
           <p className="text-gray-400 text-sm max-w-xl mx-auto">
-            Global Talent Bridge befindet sich in der MVP-Phase. Alle Funktionen sind bereits
+            CorridorWork befindet sich in der MVP-Phase. Alle Funktionen sind bereits
             nutzbar. Zahlungen und Premium-Pakete werden in einer späteren Phase aktiviert.
             Jetzt kostenlos starten und erste Kandidaten finden.
           </p>

@@ -1,4 +1,4 @@
-# Real Launch Readiness Audit — Global Talent Bridge
+# Real Launch Readiness Audit — CorridorWork
 
 > **Stand:** 2026-06-04 · Sprint I Fixes verifiziert + Pilot-Start-Setup implementiert  
 > **Methode:** Direkte Code-Inspektion aller relevanten Dateien. Keine Annahmen. Keine Schönrechnerei.  
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-Global Talent Bridge hat eine **technisch solide Basis** mit funktionierendem Auth (inkl. Passwort-Reset), Matching, Bewerbungsworkflow, CV-Upload, umfangreichem Admin-System und 11 KI-Agenten.
+CorridorWork hat eine **technisch solide Basis** mit funktionierendem Auth (inkl. Passwort-Reset), Matching, Bewerbungsworkflow, CV-Upload, umfangreichem Admin-System und 11 KI-Agenten.
 
 **Sprint I hat 6 kritische Blocker behoben. Pilot-Start-Setup implementiert.** 6 Blocker bleiben offen.
 

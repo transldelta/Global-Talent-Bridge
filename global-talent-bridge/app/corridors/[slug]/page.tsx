@@ -71,11 +71,11 @@ export async function generateMetadata(
     .single()
 
   if (!data) {
-    return { title: 'Karriere-Korridor | Global Talent Bridge' }
+    return { title: 'Karriere-Korridor | CorridorWork' }
   }
 
-  const seoTitle = data.seo_title ?? `Jobs ${data.target_country ?? ''} | Global Talent Bridge`
-  const seoDesc  = data.seo_description ?? `International career opportunities via Global Talent Bridge.`
+  const seoTitle = data.seo_title ?? `Jobs ${data.target_country ?? ''} | CorridorWork`
+  const seoDesc  = data.seo_description ?? `International career opportunities via CorridorWork.`
 
   return {
     title: seoTitle,

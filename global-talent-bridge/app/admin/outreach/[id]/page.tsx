@@ -77,7 +77,7 @@ function buildPersonalizedMessage(target: OutreachTarget): string {
 wenn Sie regelmäßig internationale Bewerber für Ihr Unternehmen prüfen, kennen Sie das Problem:
 viele Unterlagen, wenig Vorauswahl, viel manueller Aufwand.
 
-Global Talent Bridge löst genau das: Kandidaten legen ihr Profil an —
+CorridorWork löst genau das: Kandidaten legen ihr Profil an —
 Branche, Erfahrung, Deutsch- und Englischkenntnisse. Sie erstellen eine Stelle
 und sehen sofort, wer am besten passt — sortiert nach transparentem Matching-Score.
 
@@ -92,7 +92,7 @@ Hätten Sie 15 Minuten für ein kurzes Gespräch?
 ${CTA_URL}
 
 Mit freundlichen Grüßen
-Global Talent Bridge Team
+CorridorWork Team
 transl.delta@gmail.com`
 }
 

@@ -71,10 +71,10 @@ export type ExitEvidence = {
 
 export function generateProductSummary(): ProductSummary {
   return {
-    name: 'Global Talent Bridge',
+    name: 'CorridorWork',
     tagline: 'International talent matching — structured, transparent, scalable.',
     description:
-      'Global Talent Bridge ist eine B2B SaaS-Plattform für strukturiertes internationales Recruiting. ' +
+      'CorridorWork ist eine B2B SaaS-Plattform für strukturiertes internationales Recruiting. ' +
       'Sie verbindet Arbeitgeber in Europa/Nordamerika/Australien mit vorqualifizierten internationalen ' +
       'Fachkräften über datengetriebene Migrations-Korridore. Die Plattform deckt den vollständigen ' +
       'Matching-Zyklus ab: Kandidaten-Onboarding, CV-Upload, Bewerbungsmanagement, Admin-Freigabe-Workflow, ' +
@@ -383,7 +383,7 @@ export function generateBuyerQuestions(): BuyerQuestion[] {
     {
       question: 'What problem does this solve?',
       answer:
-        'Structural talent shortages in high-demand sectors (nursing, IT, engineering) in Western countries. Traditional recruitment agencies lack systematic global sourcing. Global Talent Bridge provides structured corridor-based matching with data-driven prioritization.',
+        'Structural talent shortages in high-demand sectors (nursing, IT, engineering) in Western countries. Traditional recruitment agencies lack systematic global sourcing. CorridorWork provides structured corridor-based matching with data-driven prioritization.',
       honesty: 'positive',
     },
     {

@@ -9,7 +9,7 @@
  * - Nur einzelner freigegebener Draft (kein Bulk-Send)
  * - Jeder Versuch wird geloggt (Erfolg und Fehler)
  * - Keine automatischen Nachrichten ohne Freigabe
- * - Signatur immer "Global Talent Bridge Team"
+ * - Signatur immer "CorridorWork Team"
  *
  * Status-Checking-Logik liegt in lib/email-provider-status.ts (testbar, kein server-only).
  */
@@ -135,9 +135,9 @@ export async function sendTestEmail(testToEmail: string): Promise<EmailSendResul
 
   return sendApprovedEmail({
     to:      testToEmail,
-    subject: '[TEST] Global Talent Bridge test email — no employer outreach',
+    subject: '[TEST] CorridorWork test email — no employer outreach',
     body: [
-      'Dies ist eine Test-E-Mail vom Global Talent Bridge Operator System.',
+      'Dies ist eine Test-E-Mail vom CorridorWork Operator System.',
       '',
       '⚠️  DIESE NACHRICHT IST KEIN ECHTER OUTREACH.',
       '    Kein Arbeitgeber wurde kontaktiert.',
@@ -149,7 +149,7 @@ export async function sendTestEmail(testToEmail: string): Promise<EmailSendResul
       'Wenn du diese Nachricht siehst, ist der E-Mail-Provider korrekt konfiguriert.',
       '',
       'Mit freundlichen Grüßen',
-      'Global Talent Bridge Team',
+      'CorridorWork Team',
     ].join('\n'),
     fromEmail,
   })

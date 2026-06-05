@@ -113,7 +113,7 @@ export async function runMarketingStrategyAgent(): Promise<{
           country: 'Deutschland',
           priority: target.confidence >= 80 ? 'high' : 'normal',
           reason: target.reason,
-          suggested_message: `Guten Tag, wir suchen Pilot-Arbeitgeber im Bereich ${target.sector} für kostenlosen Zugang zu Global Talent Bridge — strukturiertes internationales Kandidaten-Matching. Kein Vertrag, keine Kosten.`,
+          suggested_message: `Guten Tag, wir suchen Pilot-Arbeitgeber im Bereich ${target.sector} für kostenlosen Zugang zu CorridorWork — strukturiertes internationales Kandidaten-Matching. Kein Vertrag, keine Kosten.`,
         },
         requires_approval: true,
       })
@@ -152,7 +152,7 @@ export async function runMarketingStrategyAgent(): Promise<{
           country: 'Deutschland',
           priority: 'normal',
           reason: `${count} Kandidaten im Bereich ${sector} ohne passende Jobs`,
-          suggested_message: `Haben Sie offene Stellen im Bereich ${sector}? Global Talent Bridge zeigt Ihnen sofort passende internationale Kandidaten.`,
+          suggested_message: `Haben Sie offene Stellen im Bereich ${sector}? CorridorWork zeigt Ihnen sofort passende internationale Kandidaten.`,
         },
         requires_approval: true,
       })

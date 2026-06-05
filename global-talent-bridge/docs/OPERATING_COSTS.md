@@ -1,4 +1,4 @@
-# Operating Costs — Global Talent Bridge
+# Operating Costs — CorridorWork
 
 **Stand:** 2026-06-04  
 **Zweck:** Sachliche Schätzung der Betriebskosten in drei Phasen.  

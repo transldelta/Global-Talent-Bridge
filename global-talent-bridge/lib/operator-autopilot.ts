@@ -9,7 +9,7 @@
  * - E-Mail nur bei konfiguriertem Provider (nicht 'none')
  * - LinkedIn/WhatsApp/Phone → ready_for_manual_platform_send (kein API-Send)
  * - Keine persönlichen Namen in generierten Texten
- * - Signatur immer: "Viele Grüße\nGlobal Talent Bridge Team"
+ * - Signatur immer: "Viele Grüße\nCorridorWork Team"
  * - Keine Fake-Umsätze, keine Fake-Kunden, keine Garantieversprechen
  * - pilot_employers.status: NIEMALS 'draft' oder 'demo_requested'
  */
@@ -197,9 +197,9 @@ function buildGreeting(contactName: string | null, channel: DraftChannel): strin
 }
 
 function buildSignature(channel: DraftChannel, includeContact = true): string {
-  const base = 'Viele Grüße\nGlobal Talent Bridge Team'
+  const base = 'Viele Grüße\nCorridorWork Team'
   if (!includeContact || channel === 'linkedin' || channel === 'whatsapp') return base
-  return `${base}\n[KONTAKT-E-MAIL]\nhttps://globaltalentbridge.de`
+  return `${base}\n[KONTAKT-E-MAIL]\nhttps://corridorwork.com`
 }
 
 // ── Draft Text Generation ─────────────────────────────────────────────────────
@@ -231,7 +231,7 @@ function buildEmailDraftText(employer: EmployerForDraft): {
       body:
 `${greeting},
 
-Global Talent Bridge ist eine Plattform, die Pflegekräfte aus dem Ausland mit Pflegeeinrichtungen in ${employer.country} zusammenbringt — Korridor: ${corridor}.
+CorridorWork ist eine Plattform, die Pflegekräfte aus dem Ausland mit Pflegeeinrichtungen in ${employer.country} zusammenbringt — Korridor: ${corridor}.
 
 Wir befinden uns in der Pilotphase und testen den Prozess gemeinsam mit ausgewählten Einrichtungen — kostenlos, kein Vertrag, kein Garantieversprechen. Nur ehrliches Feedback.
 
@@ -251,7 +251,7 @@ ${signature}`,
       body:
 `${greeting},
 
-Global Talent Bridge ist eine Plattform für strukturiertes internationales Recruiting im IT-Bereich — Korridor: ${corridor}.
+CorridorWork ist eine Plattform für strukturiertes internationales Recruiting im IT-Bereich — Korridor: ${corridor}.
 
 Wir befinden uns in der Pilotphase und suchen IT-Unternehmen, die den Matching-Prozess mit echten Vakanzen testen möchten — kostenlos, kein Vertrag, ehrliches Feedback.
 
@@ -271,7 +271,7 @@ ${signature}`,
     body:
 `${greeting},
 
-Global Talent Bridge ist eine Plattform, die internationale Fachkräfte mit Arbeitgebern in ${employer.country} zusammenbringt — Korridor: ${corridor}.
+CorridorWork ist eine Plattform, die internationale Fachkräfte mit Arbeitgebern in ${employer.country} zusammenbringt — Korridor: ${corridor}.
 
 Wir befinden uns in der Pilotphase und suchen Unternehmen, die den Prozess gemeinsam mit uns testen möchten — kostenlos, kein Vertrag, ehrliches Feedback.
 
@@ -308,7 +308,7 @@ function buildLinkedInDraftText(employer: EmployerForDraft): {
 
 ${employer.status === 'interested'
   ? 'vielen Dank für Ihre positive Reaktion auf unsere erste Anfrage.\n\n'
-  : ''}Global Talent Bridge bringt Pflegekräfte aus dem Ausland mit Pflegeeinrichtungen in ${employer.country} zusammen — Korridor: ${corridor}.
+  : ''}CorridorWork bringt Pflegekräfte aus dem Ausland mit Pflegeeinrichtungen in ${employer.country} zusammen — Korridor: ${corridor}.
 
 Die Plattform befindet sich in der Pilotphase — gemeinsames Testen, kostenlos, kein Vertrag, kein Garantieversprechen.
 
@@ -326,7 +326,7 @@ ${signature}`,
     body:
 `Hallo [NACHNAME],
 
-Global Talent Bridge ist eine Plattform für strukturiertes internationales Recruiting — Korridor: ${corridor}.
+CorridorWork ist eine Plattform für strukturiertes internationales Recruiting — Korridor: ${corridor}.
 
 Wir testen den Prozess in der Pilotphase mit ausgewählten Unternehmen — kostenlos, kein Vertrag.
 
@@ -372,7 +372,7 @@ export function validateDraftSafety(draft: {
   if (/brahim|ben abla/i.test(text))
     issues.push('Persönlicher Name "Brahim Ben Abla" gefunden — entfernen')
   if (/\[dein name\]|\[dein vollständiger name\]|\[ihr name\]/i.test(text))
-    issues.push('Persönlicher Namens-Platzhalter gefunden — durch "Global Talent Bridge Team" ersetzen')
+    issues.push('Persönlicher Namens-Platzhalter gefunden — durch "CorridorWork Team" ersetzen')
   if (/\bich bin gründer\b|\bals gründer\b|\bmein name ist \[/i.test(text))
     issues.push('"Gründer" als persönliche Identifikation gefunden — neutralisieren')
 
@@ -383,8 +383,8 @@ export function validateDraftSafety(draft: {
     issues.push('Möglicherweise unechte Inhalte')
 
   // Signature check
-  if (!/global talent bridge team/i.test(text))
-    issues.push('Signatur "Global Talent Bridge Team" fehlt — hinzufügen')
+  if (!/corridorwork team/i.test(text))
+    issues.push('Signatur "CorridorWork Team" fehlt — hinzufügen')
 
   // Mass-send indicators
   if (/massensend|bulk send|automated send|auto-send/i.test(text))

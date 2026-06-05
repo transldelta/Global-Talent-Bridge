@@ -1,4 +1,4 @@
-# Architektur — Global Talent Bridge
+# Architektur — CorridorWork
 
 **Stand:** 2026-06-04  
 **Zweck:** Technische Architektur für Entwickler, Käufer und technische Prüfer.

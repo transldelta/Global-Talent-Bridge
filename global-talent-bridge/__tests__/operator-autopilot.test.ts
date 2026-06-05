@@ -112,7 +112,7 @@ function makeDraft(overrides: Partial<OutreachDraft> = {}): OutreachDraft {
     channel: 'email',
     recipient_email: 'priya@northstartech.ca',
     subject: 'Test Subject',
-    body: 'Test body text\n\nViele Grüße\nGlobal Talent Bridge Team',
+    body: 'Test body text\n\nViele Grüße\nCorridorWork Team',
     status: 'approved',
     approval_required: true,
     provider: 'resend',
@@ -190,7 +190,7 @@ describe('validateDraftSafety', () => {
   it('passes a safe draft', () => {
     const result = validateDraftSafety({
       subject: 'Test',
-      body: 'Hallo,\n\nTest.\n\nViele Grüße\nGlobal Talent Bridge Team',
+      body: 'Hallo,\n\nTest.\n\nViele Grüße\nCorridorWork Team',
     })
     expect(result.safe).toBe(true)
     expect(result.issues).toHaveLength(0)
@@ -198,45 +198,45 @@ describe('validateDraftSafety', () => {
   })
 
   it('rejects personal name "Brahim Ben Abla"', () => {
-    const result = validateDraftSafety({ body: 'Brahim Ben Abla\nGlobal Talent Bridge Team' })
+    const result = validateDraftSafety({ body: 'Brahim Ben Abla\nCorridorWork Team' })
     expect(result.safe).toBe(false)
     expect(result.issues.some((i) => /brahim/i.test(i))).toBe(true)
   })
 
   it('rejects [Ihr Name] placeholder', () => {
-    const result = validateDraftSafety({ body: '[Ihr Name]\nGlobal Talent Bridge Team' })
+    const result = validateDraftSafety({ body: '[Ihr Name]\nCorridorWork Team' })
     expect(result.safe).toBe(false)
     expect(result.issues.some((i) => /platzhalter/i.test(i))).toBe(true)
   })
 
   it('rejects [DEIN NAME] placeholder', () => {
-    const result = validateDraftSafety({ body: '[DEIN NAME]\nGlobal Talent Bridge Team' })
+    const result = validateDraftSafety({ body: '[DEIN NAME]\nCorridorWork Team' })
     expect(result.safe).toBe(false)
   })
 
   it('rejects "ich bin Gründer" phrase', () => {
-    const result = validateDraftSafety({ body: 'ich bin Gründer von GTB\nGlobal Talent Bridge Team' })
+    const result = validateDraftSafety({ body: 'ich bin Gründer von GTB\nCorridorWork Team' })
     expect(result.safe).toBe(false)
     expect(result.issues.some((i) => /gründer/i.test(i))).toBe(true)
   })
 
   it('rejects "als Gründer" phrase', () => {
-    const result = validateDraftSafety({ body: 'als Gründer von GTB\nGlobal Talent Bridge Team' })
+    const result = validateDraftSafety({ body: 'als Gründer von GTB\nCorridorWork Team' })
     expect(result.safe).toBe(false)
   })
 
   it('rejects guarantee promises', () => {
-    const result = validateDraftSafety({ body: 'garantiert erfolgreich\nGlobal Talent Bridge Team' })
+    const result = validateDraftSafety({ body: 'garantiert erfolgreich\nCorridorWork Team' })
     expect(result.safe).toBe(false)
     expect(result.issues.some((i) => /garantie/i.test(i))).toBe(true)
   })
 
   it('rejects 0-Risiko claim', () => {
-    const result = validateDraftSafety({ body: '0 Risiko für Sie\nGlobal Talent Bridge Team' })
+    const result = validateDraftSafety({ body: '0 Risiko für Sie\nCorridorWork Team' })
     expect(result.safe).toBe(false)
   })
 
-  it('rejects missing "Global Talent Bridge Team" signature', () => {
+  it('rejects missing "CorridorWork Team" signature', () => {
     const result = validateDraftSafety({ body: 'Hallo,\n\nTest.\n\nViele Grüße' })
     expect(result.safe).toBe(false)
     expect(result.issues.some((i) => /signatur/i.test(i))).toBe(true)
@@ -251,13 +251,13 @@ describe('validateDraftSafety', () => {
   })
 
   it('riskLevel is medium for 1-2 issues', () => {
-    const result = validateDraftSafety({ body: '[Ihr Name]\nGlobal Talent Bridge Team' })
+    const result = validateDraftSafety({ body: '[Ihr Name]\nCorridorWork Team' })
     expect(result.riskLevel).toBe('medium')
   })
 
   it('does NOT reject "geprüft" (correct word)', () => {
     const result = validateDraftSafety({
-      body: 'Alle Kandidaten wurden sorgfältig geprüft.\n\nViele Grüße\nGlobal Talent Bridge Team',
+      body: 'Alle Kandidaten wurden sorgfältig geprüft.\n\nViele Grüße\nCorridorWork Team',
     })
     // "geprüft" should not trigger "Garantie" check
     expect(result.safe).toBe(true)
@@ -314,9 +314,9 @@ describe('generateApprovalDraftsForBatch', () => {
     }
   })
 
-  it('all generated bodies contain "Global Talent Bridge Team"', () => {
+  it('all generated bodies contain "CorridorWork Team"', () => {
     for (const d of drafts) {
-      expect(d.body).toContain('Global Talent Bridge Team')
+      expect(d.body).toContain('CorridorWork Team')
     }
   })
 
@@ -596,7 +596,7 @@ describe('executeApprovedAction — send safety rules', () => {
   it('blocks send when safety check fails (personal name in body)', () => {
     const draft = makeDraft({
       status: 'approved',
-      body: 'Brahim Ben Abla\nGlobal Talent Bridge Team',
+      body: 'Brahim Ben Abla\nCorridorWork Team',
     })
     const plan = executeApprovedAction(draft, PROVIDER_RESEND)
     expect(plan.canExecute).toBe(false)
@@ -823,17 +823,17 @@ describe('Batch 1 integration', () => {
 // ── Signature enforcement ─────────────────────────────────────────────────────
 
 describe('Signature enforcement', () => {
-  it('all generated email bodies end with "Global Talent Bridge Team"', () => {
+  it('all generated email bodies end with "CorridorWork Team"', () => {
     const drafts = generateApprovalDraftsForBatch([NORTHSTAR, BERLIN_DIGITAL, PFLEGE_KA, SYDNEY])
     for (const d of drafts.filter((d) => d.channel === 'email')) {
-      expect(d.body).toContain('Global Talent Bridge Team')
+      expect(d.body).toContain('CorridorWork Team')
     }
   })
 
-  it('all generated linkedin bodies contain "Global Talent Bridge Team"', () => {
+  it('all generated linkedin bodies contain "CorridorWork Team"', () => {
     const drafts = generateApprovalDraftsForBatch([PFLEGE_PLUS, MEDCARE])
     for (const d of drafts.filter((d) => d.channel === 'linkedin')) {
-      expect(d.body).toContain('Global Talent Bridge Team')
+      expect(d.body).toContain('CorridorWork Team')
     }
   })
 

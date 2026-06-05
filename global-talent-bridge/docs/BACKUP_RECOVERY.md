@@ -1,4 +1,4 @@
-# Backup & Recovery — Global Talent Bridge
+# Backup & Recovery — CorridorWork
 
 > **Scope:** This document covers automated backup strategy, manual export procedures, point-in-time recovery, and disaster-recovery playbook for the GTB production database (Supabase, eu-central-1).
 

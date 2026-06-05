@@ -1,5 +1,5 @@
 /**
- * E-Mail-Abstraktionsschicht — Global Talent Bridge
+ * E-Mail-Abstraktionsschicht — CorridorWork
  *
  * Provider-Erkennung über Env-Variable EMAIL_PROVIDER:
  *   "none"   → Nur loggen, keine E-Mail (Standard / Test-Modus)
@@ -62,7 +62,7 @@ export async function sendEmail(payload: EmailPayload): Promise<EmailResult> {
  */
 async function sendViaResend(payload: EmailPayload): Promise<EmailResult> {
   const apiKey = process.env.RESEND_API_KEY
-  const fromEmail = process.env.RESEND_FROM_EMAIL ?? 'noreply@globaltalentbridge.com'
+  const fromEmail = process.env.RESEND_FROM_EMAIL ?? 'noreply@corridorwork.com'
 
   if (!apiKey) {
     console.error('[email] RESEND_API_KEY nicht gesetzt. Kein Versand.')
@@ -123,7 +123,7 @@ export function renderTemplate(
   switch (template) {
     case 'password_reset':
       return {
-        subject: 'Passwort zurücksetzen — Global Talent Bridge',
+        subject: 'Passwort zurücksetzen — CorridorWork',
         html: `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #1d4ed8;">Passwort zurücksetzen</h2>
@@ -143,35 +143,35 @@ export function renderTemplate(
 
     case 'application_submitted':
       return {
-        subject: 'Bewerbung eingegangen — Global Talent Bridge',
+        subject: 'Bewerbung eingegangen — CorridorWork',
         html: `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #1d4ed8;">Bewerbung eingegangen</h2>
             <p>Hallo ${data.candidateName},</p>
             <p>deine Bewerbung auf <strong>${data.jobTitle}</strong> bei <strong>${data.companyName}</strong> wurde erfolgreich eingereicht.</p>
             <p>Wir informieren dich, sobald der Arbeitgeber deine Bewerbung geprüft hat.</p>
-            <p style="color:#6b7280;font-size:12px;">Global Talent Bridge — Internationale Karrierechancen</p>
+            <p style="color:#6b7280;font-size:12px;">CorridorWork — Internationale Karrierechancen</p>
           </div>
         `,
       }
 
     case 'application_released':
       return {
-        subject: 'Bewerbung freigegeben — Global Talent Bridge',
+        subject: 'Bewerbung freigegeben — CorridorWork',
         html: `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #059669;">Bewerbung freigegeben ✓</h2>
             <p>Hallo ${data.candidateName},</p>
             <p>deine Bewerbung auf <strong>${data.jobTitle}</strong> wurde von <strong>${data.companyName}</strong> zur weiteren Prüfung freigegeben.</p>
             <p>Das Team wird sich in Kürze bei dir melden.</p>
-            <p style="color:#6b7280;font-size:12px;">Global Talent Bridge — Internationale Karrierechancen</p>
+            <p style="color:#6b7280;font-size:12px;">CorridorWork — Internationale Karrierechancen</p>
           </div>
         `,
       }
 
     case 'interview_requested':
       return {
-        subject: 'Interview-Einladung — Global Talent Bridge',
+        subject: 'Interview-Einladung — CorridorWork',
         html: `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #7c3aed;">Interview-Einladung 🎉</h2>
@@ -184,15 +184,15 @@ export function renderTemplate(
                 Zum Dashboard
               </a>
             </p>
-            <p style="color:#6b7280;font-size:12px;">Global Talent Bridge — Internationale Karrierechancen</p>
+            <p style="color:#6b7280;font-size:12px;">CorridorWork — Internationale Karrierechancen</p>
           </div>
         `,
       }
 
     default:
       return {
-        subject: 'Nachricht von Global Talent Bridge',
-        html: `<p>Hallo,<br/>du hast eine Nachricht von Global Talent Bridge erhalten.</p>`,
+        subject: 'Nachricht von CorridorWork',
+        html: `<p>Hallo,<br/>du hast eine Nachricht von CorridorWork erhalten.</p>`,
       }
   }
 }

@@ -1,4 +1,4 @@
-# Exit Readiness — Global Talent Bridge
+# Exit Readiness — CorridorWork
 
 **Stand:** 2026-06-04  
 **Zweck:** Übersicht über den Zustand der Plattform aus Sicht einer Übernahme oder Investition.

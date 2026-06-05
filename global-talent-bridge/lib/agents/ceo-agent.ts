@@ -139,7 +139,7 @@ export async function runCeoAgent(): Promise<{
           priority: 'high',
           reason: 'Pflege hat starken Fachkräftemangel und niedrige digitale Abdeckung',
           suggested_message:
-            'Wir suchen Pilot-Arbeitgeber für kostenlose Nutzung von Global Talent Bridge — internationales Matching ohne Aufwand.',
+            'Wir suchen Pilot-Arbeitgeber für kostenlose Nutzung von CorridorWork — internationales Matching ohne Aufwand.',
         },
         requires_approval: true,
       })

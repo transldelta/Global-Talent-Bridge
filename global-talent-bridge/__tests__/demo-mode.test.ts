@@ -916,7 +916,7 @@ describe('generateDataRoomMarkdown', () => {
 
   it('contains product name as H1', () => {
     expect(md).toContain('# ')
-    expect(md).toContain('Global Talent Bridge')
+    expect(md).toContain('CorridorWork')
   })
 
   it('contains Asset Overview section', () => {

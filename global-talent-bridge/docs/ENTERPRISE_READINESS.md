@@ -1,4 +1,4 @@
-# Enterprise Readiness Assessment — Global Talent Bridge
+# Enterprise Readiness Assessment — CorridorWork
 
 > **Purpose:** This document assesses GTB's technical maturity across 6 enterprise dimensions:
 > Test Coverage, Monitoring & Observability, Security, Scalability, Operations, and Documentation.

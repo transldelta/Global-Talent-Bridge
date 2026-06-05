@@ -226,7 +226,7 @@ export function getIndustryPitch(pitchType: IndustryPitchType): IndustryPitch {
         'Deutschland fehlen bis 2035 über 300.000 Pflegekräfte. Lokale Rekrutierung reicht nicht. ' +
         'Internationale Vermittlung ist oft intransparent und teuer.',
       benefit:
-        'Global Talent Bridge verbindet Sie mit vorqualifizierten Pflegekräften aus definierten ' +
+        'CorridorWork verbindet Sie mit vorqualifizierten Pflegekräften aus definierten ' +
         'Migrations-Korridoren. Transparente Matching-Kriterien. Admin-Freigabe-Workflow. ' +
         'Pilot zunächst ohne Vollautomatisierung — persönlich betreut.',
       pilotOffer:
@@ -244,7 +244,7 @@ export function getIndustryPitch(pitchType: IndustryPitchType): IndustryPitch {
         'Lokale IT-Fachkräfte sind knapp. Gehaltserwartungen steigen. ' +
         'Internationale Talente sind verfügbar, aber Visa/Anerkennungsprozesse sind komplex.',
       benefit:
-        'Global Talent Bridge hat IT-Korridore mit hohem Supply-Score (Nigeria, Indien, Philippinen → EU/UK/Kanada). ' +
+        'CorridorWork hat IT-Korridore mit hohem Supply-Score (Nigeria, Indien, Philippinen → EU/UK/Kanada). ' +
         'Vorqualifizierte Profile, CV-Upload, transparentes Matching. ' +
         'Keine Headhunter-Provision — SaaS-Modell.',
       pilotOffer:
@@ -262,7 +262,7 @@ export function getIndustryPitch(pitchType: IndustryPitchType): IndustryPitch {
         'Bauprojekte scheitern an Fachkräftemangel. Elektriker, Maurer, Installateure fehlen europaweit. ' +
         'Internationale Rekrutierung läuft oft über unstrukturierte Netzwerke.',
       benefit:
-        'Global Talent Bridge hat Bau-Korridore (Marokko, Türkei → Deutschland). ' +
+        'CorridorWork hat Bau-Korridore (Marokko, Türkei → Deutschland). ' +
         'Kandidaten mit Sprach-Check und Berufsquali-Nachweis. ' +
         'Strukturierter Onboarding-Prozess, kein Wildwuchs.',
       pilotOffer:
@@ -280,7 +280,7 @@ export function getIndustryPitch(pitchType: IndustryPitchType): IndustryPitch {
         'Gastgewerbe hat historisch hohe Fluktuation und saisonalen Mehrbedarf. ' +
         'Lokale Bewerber fehlen. Sprache ist oft Barriere.',
       benefit:
-        'Global Talent Bridge hat Hospitality-Korridore mit sprachaffinen Kandidaten. ' +
+        'CorridorWork hat Hospitality-Korridore mit sprachaffinen Kandidaten. ' +
         'Tunesien, Marokko → Frankreich, Deutschland. ' +
         'Vorauswahl nach Sprachniveau und Berufserfahrung.',
       pilotOffer:
@@ -298,7 +298,7 @@ export function getIndustryPitch(pitchType: IndustryPitchType): IndustryPitch {
         'Europa fehlen hunderttausende Lkw-Fahrer. Führerscheinklasse CE international anerkannt, ' +
         'aber Bürokratie ist komplex.',
       benefit:
-        'Global Talent Bridge hat Logistik-Korridore (Kenia, Türkei → Deutschland). ' +
+        'CorridorWork hat Logistik-Korridore (Kenia, Türkei → Deutschland). ' +
         'Kandidaten mit EU-Fahrerschein oder gleichwertigem Ausweis. ' +
         'Anerkennungsweg dokumentiert.',
       pilotOffer:
@@ -316,7 +316,7 @@ export function getIndustryPitch(pitchType: IndustryPitchType): IndustryPitch {
         'Fachkräftemangel betrifft viele Branchen. Internationale Rekrutierung ist aufwendig ' +
         'und intransparent.',
       benefit:
-        'Global Talent Bridge bietet strukturiertes internationales Matching mit Admin-Kontrolle. ' +
+        'CorridorWork bietet strukturiertes internationales Matching mit Admin-Kontrolle. ' +
         'Kein Wildwuchs, kein unkontrollierter Versand. ' +
         'Pilot: Validierung ob Korridor zu Ihrer Branche passt.',
       pilotOffer:
@@ -348,7 +348,7 @@ export function getObjectionResponse(key: ObjectionKey): ObjectionResponse {
       objectionKey: 'already_have_recruiter',
       objection: 'Wir haben schon Recruiter.',
       response:
-        'Das ist gut. Recruiter und Global Talent Bridge schließen sich nicht aus. ' +
+        'Das ist gut. Recruiter und CorridorWork schließen sich nicht aus. ' +
         'Wir ergänzen bestehende Sourcing-Kanäle um strukturierte internationale Korridore. ' +
         'Oft decken lokale Recruiter nur lokale Märkte ab — wir liefern Kandidaten, ' +
         'die sonst nicht erreichbar wären. Pilot: 4 Wochen testen ob das einen Unterschied macht.',
@@ -457,7 +457,7 @@ export function getCallScript(): CallScript {
       id: 'opening',
       label: '30-Sekunden-Eröffnung',
       script:
-        'Guten Tag, hier ist Global Talent Bridge. ' +
+        'Guten Tag, hier ist CorridorWork. ' +
         'Wir helfen [Branche]-Unternehmen in [Land], qualifizierte internationale Fachkräfte ' +
         'strukturiert und transparent zu rekrutieren. ' +
         'Haben Sie kurz 5 Minuten? Ich möchte kurz klären ob unser Ansatz zu Ihnen passt.',

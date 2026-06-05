@@ -3,29 +3,30 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: {
-    default: 'Global Talent Bridge — Internationale Talente treffen globale Arbeitgeber',
-    template: '%s | Global Talent Bridge',
+    default: 'CorridorWork — Cross-border Hiring. Fully Controlled.',
+    template: '%s | CorridorWork',
   },
   description:
-    'Kostenlose Plattform für internationale Fachkräfte und Arbeitgeber. Strukturiertes Matching nach Erfahrung, Sprachlevel und Branche.',
+    'Approval-basierte Plattform für internationales Recruiting. Strukturiertes Matching, manuelle Freigabe, vollständige Risikokontrolle.',
   keywords: [
+    'internationales Recruiting',
+    'Cross-border Hiring',
     'internationale Fachkräfte',
-    'Jobs für Ausländer',
-    'internationales Matching',
     'Arbeitgeber internationale Kandidaten',
-    'Sprachlevel Job Matching',
+    'Workforce Corridor',
+    'approval-based hiring',
   ],
-  authors: [{ name: 'Global Talent Bridge' }],
-  creator: 'Global Talent Bridge',
-  metadataBase: new URL('https://global-talent-bridge.vercel.app'),
+  authors: [{ name: 'CorridorWork' }],
+  creator: 'CorridorWork',
+  metadataBase: new URL('https://corridorwork.com'),
   openGraph: {
     type: 'website',
     locale: 'de_DE',
-    url: 'https://global-talent-bridge.vercel.app',
-    siteName: 'Global Talent Bridge',
-    title: 'Global Talent Bridge — Internationale Talente treffen globale Arbeitgeber',
+    url: 'https://corridorwork.com',
+    siteName: 'CorridorWork',
+    title: 'CorridorWork — Cross-border Hiring. Fully Controlled.',
     description:
-      'Kostenlose Plattform für internationale Fachkräfte und Arbeitgeber. Strukturiertes Matching nach Erfahrung, Sprachlevel und Branche.',
+      'Approval-basierte Plattform für internationales Recruiting. Strukturiertes Matching, manuelle Freigabe, vollständige Risikokontrolle.',
   },
   robots: {
     index: true,
