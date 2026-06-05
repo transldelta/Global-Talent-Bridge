@@ -69,7 +69,7 @@ export async function POST(request: Request) {
     ])
 
     await sendEmail({
-      to: 'admin@globaltalentbridge.com', // Platzhalter — echter Versand erst nach Admin-Freigabe
+      to: 'admin@corridorwork.com', // Platzhalter — echter Versand erst nach Admin-Freigabe
       template: 'interview_requested',
       data: {
         candidateName: 'Kandidat', // Auth-E-Mail nicht direkt abrufbar — Admin kennt Namen

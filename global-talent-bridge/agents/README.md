@@ -1,4 +1,4 @@
-# Global Talent Bridge — Agenten-Architektur
+# CorridorWork — Agenten-Architektur
 
 Das System folgt dem Prinzip eines großen Unternehmens mit CEO-Zentrale und spezialisierten Abteilungen.
 

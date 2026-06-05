@@ -13,7 +13,7 @@ export default function LoginPage({ searchParams }: Props) {
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Global Talent Bridge</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">CorridorWork</h1>
           <p className="text-gray-400">Willkommen zurück</p>
         </div>
 

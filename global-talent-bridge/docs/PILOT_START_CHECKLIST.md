@@ -1,4 +1,4 @@
-# Pilot-Start-Checkliste — Global Talent Bridge
+# Pilot-Start-Checkliste — CorridorWork
 
 > **Zweck:** Schritt-für-Schritt-Vorbereitung bevor die ersten echten Pilot-Arbeitgeber und Kandidaten die Plattform nutzen.  
 > **Admin-Dashboard:** `/admin/pilot-launch` — enthält interaktive Version dieser Checkliste.  

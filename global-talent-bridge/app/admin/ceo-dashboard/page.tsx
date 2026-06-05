@@ -428,6 +428,8 @@ export default async function CeoDashboardPage() {
   const [
     plEmpTotalRes, plEmpActiveRes, plEmpInterestedRes, plEmpDemoRes,
     plCandTotalRes, plTasksOpenRes, plFeedbackCritRes,
+    // Pilot-Outreach KPIs (neu: Sprint J)
+    plOutreachPreparedRes, plOutreachContactedRes, plOutreachInterestedRes, plOutreachDemoRes, plOutreachRejectedRes,
   ] = await Promise.all([
     supabase.from('pilot_employers').select('*', { count: 'exact', head: true }),
     supabase.from('pilot_employers').select('*', { count: 'exact', head: true }).eq('status', 'active_pilot'),
@@ -436,15 +438,27 @@ export default async function CeoDashboardPage() {
     supabase.from('pilot_candidates').select('*', { count: 'exact', head: true }),
     supabase.from('pilot_tasks').select('*', { count: 'exact', head: true }).eq('status', 'open'),
     supabase.from('pilot_feedback').select('*', { count: 'exact', head: true }).in('priority', ['high','critical']).eq('status', 'new'),
+    // Outreach-Funnel KPIs
+    supabase.from('pilot_employers').select('*', { count: 'exact', head: true }).eq('status', 'identified'),
+    supabase.from('pilot_employers').select('*', { count: 'exact', head: true }).eq('status', 'contacted_manual'),
+    supabase.from('pilot_employers').select('*', { count: 'exact', head: true }).eq('status', 'interested'),
+    supabase.from('pilot_employers').select('*', { count: 'exact', head: true }).eq('status', 'demo_scheduled'),
+    supabase.from('pilot_employers').select('*', { count: 'exact', head: true }).eq('status', 'rejected'),
   ])
   const plKpis = {
-    empTotal:    plEmpTotalRes.count ?? 0,
-    empActive:   plEmpActiveRes.count ?? 0,
-    empInterest: plEmpInterestedRes.count ?? 0,
-    empDemo:     plEmpDemoRes.count ?? 0,
-    candTotal:   plCandTotalRes.count ?? 0,
-    tasksOpen:   plTasksOpenRes.count ?? 0,
-    feedbackCrit:plFeedbackCritRes.count ?? 0,
+    empTotal:         plEmpTotalRes.count ?? 0,
+    empActive:        plEmpActiveRes.count ?? 0,
+    empInterest:      plEmpInterestedRes.count ?? 0,
+    empDemo:          plEmpDemoRes.count ?? 0,
+    candTotal:        plCandTotalRes.count ?? 0,
+    tasksOpen:        plTasksOpenRes.count ?? 0,
+    feedbackCrit:     plFeedbackCritRes.count ?? 0,
+    // Outreach-Funnel
+    outreachPrepared: plOutreachPreparedRes.count ?? 0,
+    outreachContacted:plOutreachContactedRes.count ?? 0,
+    outreachInterested:plOutreachInterestedRes.count ?? 0,
+    outreachDemo:     plOutreachDemoRes.count ?? 0,
+    outreachRejected: plOutreachRejectedRes.count ?? 0,
   }
 
   // ── Launch Readiness — Audit Scores (2026-06-04, Sprint I vollständige Fixes) ──
@@ -1658,9 +1672,14 @@ export default async function CeoDashboardPage() {
                 Sale Readiness · Übernahmefähigkeit · Dokumentation · Technische Transparenz
               </p>
             </div>
-            <Link href="/admin/sale-readiness" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors text-xs">
-              📁 Sale Readiness →
-            </Link>
+            <div className="flex gap-2 flex-wrap">
+              <Link href="/admin/sale-readiness" className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors text-xs">
+                📁 Sale Readiness →
+              </Link>
+              <Link href="/admin/data-room" className="px-3 py-1.5 bg-blue-900/30 hover:bg-blue-900/50 text-blue-300 border border-blue-800/40 rounded-lg transition-colors text-xs">
+                🏛️ Buyer Data Room →
+              </Link>
+            </div>
           </div>
 
           {/* DD KPI Row */}
@@ -2280,10 +2299,55 @@ export default async function CeoDashboardPage() {
         <div>
           <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
             <h2 className="text-xl font-bold text-white">🚀 Pilot Launch</h2>
-            <div className="flex gap-3">
-              <Link href="/admin/pilot-launch" className="text-xs text-blue-400 hover:text-blue-300">
+            <div className="flex gap-3 flex-wrap">
+              <Link href="/admin/pilot-execution" className="text-xs text-purple-400 hover:text-purple-300">
+                🚀 Execution Center →
+              </Link>
+              <Link href="/admin/pilot-outreach" className="text-xs text-green-400 hover:text-green-300">
+                📤 Outreach-Cockpit →
+              </Link>
+              <Link href="/admin/pilot-offer" className="text-xs text-yellow-400 hover:text-yellow-300">
+                🎯 Pilot Offer →
+              </Link>
+              <Link href="/admin/employer-responses" className="text-xs text-blue-400 hover:text-blue-300">
+                📋 Responses →
+              </Link>
+              <Link href="/admin/exit-readiness" className="text-xs text-orange-400 hover:text-orange-300">
+                📋 Exit Readiness →
+              </Link>
+              <Link href="/admin/data-room" className="text-xs text-indigo-400 hover:text-indigo-300">
+                🏛️ Data Room →
+              </Link>
+              <Link href="/admin/pilot-launch" className="text-xs text-gray-400 hover:text-gray-300">
                 📋 Pilot Dashboard →
               </Link>
+            </div>
+          </div>
+
+          {/* Outreach-Funnel KPIs (Sprint J) */}
+          <div className="mb-4">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Outreach-Funnel</p>
+            <div className="grid grid-cols-5 gap-3">
+              <div className="bg-gray-900 rounded-xl border border-gray-800 p-3 text-center">
+                <p className="text-xl font-bold text-gray-400">{plKpis.outreachPrepared}</p>
+                <p className="text-xs text-gray-600 mt-0.5">Vorbereitet</p>
+              </div>
+              <div className={`bg-gray-900 rounded-xl border p-3 text-center ${plKpis.outreachContacted > 0 ? 'border-blue-800' : 'border-gray-800'}`}>
+                <p className={`text-xl font-bold ${plKpis.outreachContacted > 0 ? 'text-blue-400' : 'text-gray-500'}`}>{plKpis.outreachContacted}</p>
+                <p className="text-xs text-gray-600 mt-0.5">Kontaktiert</p>
+              </div>
+              <div className={`bg-gray-900 rounded-xl border p-3 text-center ${plKpis.outreachInterested > 0 ? 'border-yellow-800' : 'border-gray-800'}`}>
+                <p className={`text-xl font-bold ${plKpis.outreachInterested > 0 ? 'text-yellow-400' : 'text-gray-500'}`}>{plKpis.outreachInterested}</p>
+                <p className="text-xs text-gray-600 mt-0.5">Interessiert</p>
+              </div>
+              <div className={`bg-gray-900 rounded-xl border p-3 text-center ${plKpis.outreachDemo > 0 ? 'border-purple-800' : 'border-gray-800'}`}>
+                <p className={`text-xl font-bold ${plKpis.outreachDemo > 0 ? 'text-purple-400' : 'text-gray-500'}`}>{plKpis.outreachDemo}</p>
+                <p className="text-xs text-gray-600 mt-0.5">Demo</p>
+              </div>
+              <div className="bg-gray-900 rounded-xl border border-gray-800 p-3 text-center">
+                <p className={`text-xl font-bold ${plKpis.outreachRejected > 0 ? 'text-red-400' : 'text-gray-500'}`}>{plKpis.outreachRejected}</p>
+                <p className="text-xs text-gray-600 mt-0.5">Abgelehnt</p>
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">

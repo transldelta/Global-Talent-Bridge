@@ -1,4 +1,4 @@
-# 🧠 Global Talent Bridge — Corridor Intelligence
+# 🧠 CorridorWork — Corridor Intelligence
 
 ## Was ist Corridor Intelligence?
 

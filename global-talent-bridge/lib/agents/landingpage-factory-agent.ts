@@ -67,12 +67,12 @@ function generateSeoTitle(
   const mainProfession = professions[0] ?? sector
 
   const templates: Record<string, string> = {
-    en: `${mainProfession} Jobs in ${targetCountry} for ${sourceCountry} Professionals | Global Talent Bridge`,
-    de: `${mainProfession}-Jobs in ${targetCountry} für Fachkräfte aus ${sourceCountry} | Global Talent Bridge`,
-    fr: `Emplois ${mainProfession} en ${targetCountry} pour professionnels de ${sourceCountry} | Global Talent Bridge`,
-    tr: `${targetCountry}'da ${mainProfession} İş Fırsatları — ${sourceCountry} Uzmanları İçin | Global Talent Bridge`,
-    pt: `Vagas de ${mainProfession} em ${targetCountry} para profissionais de ${sourceCountry} | Global Talent Bridge`,
-    ar: `وظائف ${mainProfession} في ${targetCountry} للمهنيين من ${sourceCountry} | Global Talent Bridge`,
+    en: `${mainProfession} Jobs in ${targetCountry} for ${sourceCountry} Professionals | CorridorWork`,
+    de: `${mainProfession}-Jobs in ${targetCountry} für Fachkräfte aus ${sourceCountry} | CorridorWork`,
+    fr: `Emplois ${mainProfession} en ${targetCountry} pour professionnels de ${sourceCountry} | CorridorWork`,
+    tr: `${targetCountry}'da ${mainProfession} İş Fırsatları — ${sourceCountry} Uzmanları İçin | CorridorWork`,
+    pt: `Vagas de ${mainProfession} em ${targetCountry} para profissionais de ${sourceCountry} | CorridorWork`,
+    ar: `وظائف ${mainProfession} في ${targetCountry} للمهنيين من ${sourceCountry} | CorridorWork`,
   }
   return templates[language] ?? templates.en
 }

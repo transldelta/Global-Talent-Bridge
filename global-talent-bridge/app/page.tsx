@@ -4,11 +4,11 @@ import { PublicNavBar } from '@/app/_components/PublicNavBar'
 import { PublicFooter } from '@/app/_components/PublicFooter'
 
 export const metadata: Metadata = {
-  title: 'Global Talent Bridge — Internationale Talente treffen globale Arbeitgeber',
+  title: 'CorridorWork — Internationale Talente treffen globale Arbeitgeber',
   description:
     'Kostenlose Registrierung für internationale Fachkräfte und Arbeitgeber. KI-gestütztes Matching nach Erfahrung, Sprachlevel und Zielland.',
   openGraph: {
-    title: 'Global Talent Bridge',
+    title: 'CorridorWork',
     description: 'Internationale Talente treffen globale Arbeitgeber — kostenloses Matching.',
     type: 'website',
     locale: 'de_DE',
@@ -93,7 +93,7 @@ export default function HomePage() {
             Unsere Lösung
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-10">
-            Global Talent Bridge bringt strukturierte Kandidatenprofile und
+            CorridorWork bringt strukturierte Kandidatenprofile und
             klare Job-Anforderungen zusammen — mit einem transparenten Matching-Score.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
@@ -236,7 +236,7 @@ export default function HomePage() {
       <section className="px-4 py-16 border-t border-gray-800 bg-gray-900/30">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-10">
-            Warum Global Talent Bridge?
+            Warum CorridorWork?
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[

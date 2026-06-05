@@ -1,8 +1,8 @@
-# 🎯 Global Talent Bridge — Candidate Acquisition Engine
+# 🎯 CorridorWork — Candidate Acquisition Engine
 
 ## Was ist die Candidate Acquisition Engine?
 
-Die Candidate Acquisition Engine ist das Modul, das Global Talent Bridge dabei hilft, **die richtigen Kandidatenquellen weltweit zu identifizieren, zu priorisieren und strategisch zu nutzen**.
+Die Candidate Acquisition Engine ist das Modul, das CorridorWork dabei hilft, **die richtigen Kandidatenquellen weltweit zu identifizieren, zu priorisieren und strategisch zu nutzen**.
 
 Ziel ist nicht, automatisch Kandidaten anzusprechen — sondern dem Admin zu helfen, **die wertvollsten Quellen zu erkennen** und **gezielte, gut vorbereitete Aktionen zu planen**.
 

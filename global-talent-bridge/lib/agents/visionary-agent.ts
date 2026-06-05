@@ -53,7 +53,7 @@ export async function runVisionaryAgent(): Promise<{ suggestions: number }> {
     {
       title: '🤝 B2B-Paket für Personalvermittler & Headhunter',
       description:
-        'Personalvermittler könnten Global Talent Bridge als White-Label-Tool nutzen: Sie zahlen ein monatliches Paket, nutzen das Matching für ihre Kunden. Kein direktes Employer-Onboarding nötig — Vermittler bringt Kunden mit.',
+        'Personalvermittler könnten CorridorWork als White-Label-Tool nutzen: Sie zahlen ein monatliches Paket, nutzen das Matching für ihre Kunden. Kein direktes Employer-Onboarding nötig — Vermittler bringt Kunden mit.',
       impact_score: 8,
       effort_score: 7,
       risk_score: 5,
@@ -79,7 +79,7 @@ export async function runVisionaryAgent(): Promise<{ suggestions: number }> {
     {
       title: '🎓 Partnerschaften mit Sprachschulen',
       description:
-        'Kooperation mit Deutsch-Sprachschulen im Ausland: Schüler, die B1/B2 erreichen, werden automatisch auf Global Talent Bridge aufmerksam gemacht. Sprachschulen empfehlen die Plattform als nächsten Schritt nach dem Sprachkurs.',
+        'Kooperation mit Deutsch-Sprachschulen im Ausland: Schüler, die B1/B2 erreichen, werden automatisch auf CorridorWork aufmerksam gemacht. Sprachschulen empfehlen die Plattform als nächsten Schritt nach dem Sprachkurs.',
       impact_score: 7,
       effort_score: 6,
       risk_score: 3,

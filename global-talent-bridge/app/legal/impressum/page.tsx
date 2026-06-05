@@ -4,7 +4,7 @@ import { PublicNavBar } from '@/app/_components/PublicNavBar'
 import { PublicFooter } from '@/app/_components/PublicFooter'
 
 export const metadata: Metadata = {
-  title: 'Impressum — Global Talent Bridge',
+  title: 'Impressum — CorridorWork',
   description: 'Impressum und Anbieterkennzeichnung gemäß § 5 TMG.',
 }
 
@@ -70,7 +70,7 @@ export default function ImpressumPage() {
             <h2 className="text-lg font-semibold text-white mb-3">Plattform</h2>
             <div className="text-gray-400 text-sm space-y-2">
               <p>
-                <strong className="text-white">Global Talent Bridge</strong> ist eine
+                <strong className="text-white">CorridorWork</strong> ist eine
                 Online-Plattform zur Verbindung internationaler Fachkräfte mit Arbeitgebern.
               </p>
               <p>

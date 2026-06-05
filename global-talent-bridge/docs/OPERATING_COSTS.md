@@ -1,4 +1,4 @@
-# Operating Costs — Global Talent Bridge
+# Operating Costs — CorridorWork
 
 **Stand:** 2026-06-04  
 **Zweck:** Sachliche Schätzung der Betriebskosten in drei Phasen.  
@@ -17,7 +17,7 @@
 |--------|------|-------------|-----------|
 | Vercel | Hobby / Pro | 0–20 USD | Hobby reicht für Dev, Pro für Custom Domain + SLAs |
 | Supabase | Free / Pro | 0–25 USD | Free bis 500 MB DB, Pro für Daily Backups |
-| Domain | Standard | ~1–2 USD | global-talent-bridge.com oder .de |
+| Domain | Standard | ~1–2 USD | corridorwork.com oder .de |
 | E-Mail (Transactional) | Resend Free / Starter | 0–20 USD | Noch nicht aktiv |
 | Storage | Supabase (inkl.) | 0 USD | Profile-Fotos noch nicht implementiert |
 | **Gesamt** | | **~2–67 USD/Monat** | |

@@ -4,11 +4,11 @@ import { PublicNavBar } from '@/app/_components/PublicNavBar'
 import { PublicFooter } from '@/app/_components/PublicFooter'
 
 export const metadata: Metadata = {
-  title: 'Über uns — Global Talent Bridge',
+  title: 'Über uns — CorridorWork',
   description:
-    'Was ist Global Talent Bridge? Mission, Fokus auf internationale Talente und ehrliche Beschreibung der MVP-Phase.',
+    'Was ist CorridorWork? Mission, Fokus auf internationale Talente und ehrliche Beschreibung der MVP-Phase.',
   openGraph: {
-    title: 'Über uns — Global Talent Bridge',
+    title: 'Über uns — CorridorWork',
     description: 'Mission: Internationale Talente und globale Arbeitgeber strukturiert verbinden.',
     type: 'website',
   },
@@ -24,7 +24,7 @@ export default function AboutPage() {
         {/* Header */}
         <div className="text-center">
           <h1 className="text-4xl font-bold text-white mb-4">
-            Über Global Talent Bridge
+            Über CorridorWork
           </h1>
           <p className="text-gray-400 text-lg max-w-xl mx-auto leading-relaxed">
             Eine Plattform, die internationale Fachkräfte mit Arbeitgebern verbindet —
@@ -42,7 +42,7 @@ export default function AboutPage() {
             und Fachkenntnissen.
           </p>
           <p className="text-gray-400 leading-relaxed">
-            Global Talent Bridge schafft eine strukturierte Verbindung: Kandidaten geben ihr
+            CorridorWork schafft eine strukturierte Verbindung: Kandidaten geben ihr
             Profil einmal an — Branche, Erfahrung, Sprachkenntnisse. Arbeitgeber definieren
             klare Anforderungen. Das System berechnet einen transparenten Matching-Score.
             Keine Vermutungen, keine versteckten Kriterien.
@@ -131,7 +131,7 @@ export default function AboutPage() {
         <div className="bg-yellow-900/20 border border-yellow-800/40 rounded-2xl p-6">
           <h2 className="text-xl font-bold text-yellow-300 mb-3">⚠️ Ehrlicher MVP-Hinweis</h2>
           <p className="text-yellow-200/70 text-sm leading-relaxed mb-3">
-            Global Talent Bridge befindet sich in der MVP-Phase (Minimum Viable Product).
+            CorridorWork befindet sich in der MVP-Phase (Minimum Viable Product).
             Das bedeutet: Die Kernfunktionen (Profil, Matching, Job-Verwaltung, Kandidaten-Matches)
             sind vollständig funktionsfähig und live nutzbar.
           </p>
@@ -146,12 +146,12 @@ export default function AboutPage() {
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
           <h2 className="text-xl font-bold text-white mb-3">Betrieben von</h2>
           <p className="text-gray-400 text-sm leading-relaxed">
-            Global Talent Bridge wird betrieben von{' '}
+            CorridorWork wird betrieben von{' '}
             <span className="text-white">Delta Translation</span>,
             Karlsruhe, Deutschland. Inhaber: Brahim Ben Abla.
           </p>
           <p className="text-gray-500 text-sm mt-2">
-            Hinweis: Wenn Global Talent Bridge als eigene Firma geführt wird,
+            Hinweis: Wenn CorridorWork als eigene Firma geführt wird,
             werden diese Angaben angepasst.
           </p>
           <div className="mt-4 flex gap-4">

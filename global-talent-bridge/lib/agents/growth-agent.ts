@@ -49,15 +49,13 @@ function buildEmailDraft(target: {
     ? ` aus ${target.city}${target.country ? ', ' + target.country : ''}`
     : ''
 
-  const subject = `Global Talent Bridge – Internationale Fachkräfte für ${target.company_name}`
+  const subject = `CorridorWork – Internationale Fachkräfte für ${target.company_name}`
 
   const body = `${greeting}
 
-mein Name ist [Ihr Name] vom Team Global Talent Bridge.
+CorridorWork ist eine spezialisierte Plattform für internationales Talent-Matching${sectorText}. Unsere Kandidaten verfügen über dokumentierte Sprachkenntnisse (Deutsch/Englisch) und passende Berufserfahrung.
 
-Wir sind eine spezialisierte Plattform für internationales Talent-Matching${sectorText}. Unsere vorqualifizierten Kandidaten verfügen über nachgewiesene Sprachkenntnisse (Deutsch/Englisch) und passende Berufserfahrung.
-
-**Warum Global Talent Bridge${locationText}?**
+**Warum CorridorWork${locationText}?**
 - Vorqualifizierte internationale Fachkräfte – kein Aufwand bei der Vorauswahl
 - Kostenlose Pilot-Nutzung für erste Unternehmen
 - DSGVO-konform, vollständig dokumentiert
@@ -66,8 +64,7 @@ Wir sind eine spezialisierte Plattform für internationales Talent-Matching${sec
 Hätten Sie Interesse an einem kurzen 15-minütigen Gespräch, um zu sehen, ob wir Ihnen helfen können, offene Stellen schneller zu besetzen?
 
 Mit freundlichen Grüßen
-[Ihr Name]
-Global Talent Bridge
+CorridorWork Team
 
 ---
 ℹ️ Entwurf vom Growth Agent · wartet auf Admin-Freigabe · kein automatischer Versand`
@@ -85,13 +82,13 @@ function buildWhatsAppDraft(target: {
 
   return `Guten Tag${name}! 👋
 
-Ich schreibe Ihnen von Global Talent Bridge${sector} – wir helfen Unternehmen wie ${target.company_name}, internationale Fachkräfte gezielt zu finden.
+Ich schreibe Ihnen von CorridorWork${sector} – wir helfen Unternehmen wie ${target.company_name}, internationale Fachkräfte gezielt zu finden.
 
 Wir haben vorqualifizierte Kandidaten mit Deutsch-Kenntnissen, die kurzfristig verfügbar sind.
 
 Hätten Sie 5 Minuten für ein kurzes Gespräch? 🙏
 
-– Global Talent Bridge Team
+– CorridorWork Team
 
 ℹ️ Entwurf – wartet auf Admin-Freigabe`
 }
@@ -105,17 +102,17 @@ function buildFollowUpEmailDraft(target: {
     : `Guten Tag,`
 
   return {
-    subject: `Nachfrage: Global Talent Bridge – ${target.company_name}`,
+    subject: `Nachfrage: CorridorWork – ${target.company_name}`,
     body: `${greeting}
 
 ich wollte kurz nachfragen, ob unsere frühere Anfrage angekommen ist und ob Sie inzwischen Interesse an unserer Plattform haben.
 
-Global Talent Bridge vermittelt vorqualifizierte internationale Fachkräfte – kostenfrei für Pilot-Unternehmen.
+CorridorWork vermittelt vorqualifizierte internationale Fachkräfte – kostenfrei für Pilot-Unternehmen.
 
 Darf ich Ihnen mehr Details schicken?
 
 Mit freundlichen Grüßen
-[Ihr Name] · Global Talent Bridge
+CorridorWork Team
 
 ---
 ℹ️ Follow-up-Entwurf vom Growth Agent – wartet auf Freigabe`,

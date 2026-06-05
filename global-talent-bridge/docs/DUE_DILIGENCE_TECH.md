@@ -1,4 +1,4 @@
-# Technical Due Diligence Report — Global Talent Bridge
+# Technical Due Diligence Report — CorridorWork
 
 **Dokumenttyp:** Technische Due-Diligence  
 **Stand:** 2026-06-04  

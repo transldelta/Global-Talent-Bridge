@@ -4,11 +4,11 @@ import { PublicNavBar } from '@/app/_components/PublicNavBar'
 import { PublicFooter } from '@/app/_components/PublicFooter'
 
 export const metadata: Metadata = {
-  title: 'Für Kandidaten — Global Talent Bridge',
+  title: 'Für Kandidaten — CorridorWork',
   description:
     'Internationale Fachkräfte: Kostenloses Profil, strukturiertes Matching, transparenter Score. Finde Jobs, die zu dir passen.',
   openGraph: {
-    title: 'Für Kandidaten — Global Talent Bridge',
+    title: 'Für Kandidaten — CorridorWork',
     description: 'Kostenloses Profil und KI-gestütztes Matching für internationale Fachkräfte.',
     type: 'website',
   },
@@ -120,7 +120,7 @@ export default function ForCandidatesPage() {
           <div className="bg-blue-900/20 border border-blue-800/40 rounded-2xl p-6">
             <h3 className="text-blue-300 font-semibold mb-2">💡 Hinweis: MVP-Phase</h3>
             <p className="text-blue-200/70 text-sm leading-relaxed">
-              Global Talent Bridge befindet sich in der MVP-Phase. Das Matching ist
+              CorridorWork befindet sich in der MVP-Phase. Das Matching ist
               regelbasiert und wird kontinuierlich verbessert. Alle Grundfunktionen
               (Profil, Matching, Matches ansehen) sind bereits vollständig nutzbar.
               KI-gestütztes Matching und erweiterte Funktionen sind in Vorbereitung.

@@ -5,7 +5,7 @@ import { PublicFooter } from '@/app/_components/PublicFooter'
 import { ContactForm } from './ContactForm'
 
 export const metadata: Metadata = {
-  title: 'Kontakt — Global Talent Bridge',
+  title: 'Kontakt — CorridorWork',
   description:
     'Kontaktformular für Fragen, Feedback und Partnerschaftsanfragen. Keine automatischen E-Mails — wir melden uns manuell.',
 }

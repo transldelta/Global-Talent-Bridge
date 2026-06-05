@@ -19,7 +19,7 @@ export async function PublicNavBar() {
           href="/"
           className="text-white font-bold text-lg hover:text-gray-200 transition-colors shrink-0"
         >
-          Global Talent Bridge
+          CorridorWork
         </Link>
 
         {/* Center links — hidden on mobile */}

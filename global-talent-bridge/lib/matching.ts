@@ -1,5 +1,5 @@
 /**
- * Global Talent Bridge — Basic Matching Engine
+ * CorridorWork — Basic Matching Engine
  * Keine KI, kein ML. Einfaches regelbasiertes Scoring.
  */
 

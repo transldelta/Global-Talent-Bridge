@@ -1,4 +1,4 @@
-# 🌍 Global Talent Bridge — Global Expansion Strategy
+# 🌍 CorridorWork — Global Expansion Strategy
 
 ## Warum globale Migrations-Korridore den SaaS-Wert multiplizieren
 
@@ -177,7 +177,7 @@ Statt 500 unqualifizierter Profile:
 
 ## 9. Investor-Narrative
 
-> **"Global Talent Bridge ist kein deutsches Job-Portal.
+> **"CorridorWork ist kein deutsches Job-Portal.
 > Es ist die Betriebssoftware für internationale Talentmigration —
 > das erste Unternehmen, das Migrations-Korridore als strukturierte
 > SaaS-Produkte verpackt und damit den 2,5-Milliarden-Euro-Markt

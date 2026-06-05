@@ -1,5 +1,5 @@
 /**
- * Global Talent Bridge — Datenbank-Typen
+ * CorridorWork — Datenbank-Typen
  * Phase 1 MVP
  */
 

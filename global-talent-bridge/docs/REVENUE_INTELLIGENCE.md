@@ -16,7 +16,7 @@ Die Revenue Intelligence dient ausschließlich der internen Planung und Investor
 
 ## Übersicht
 
-Die Revenue Intelligence Engine modelliert die Monetarisierungsstruktur von Global Talent Bridge.
+Die Revenue Intelligence Engine modelliert die Monetarisierungsstruktur von CorridorWork.
 Sie analysiert Revenue-Pläne, berechnet MRR/ARR-Forecasts in drei Szenarien und leitet Break-even-Schätzungen ab.
 
 **Was der Agent tut:**

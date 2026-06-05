@@ -4,8 +4,8 @@ import { PublicNavBar } from '@/app/_components/PublicNavBar'
 import { PublicFooter } from '@/app/_components/PublicFooter'
 
 export const metadata: Metadata = {
-  title: 'Datenschutz — Global Talent Bridge',
-  description: 'Datenschutzerklärung für Global Talent Bridge gemäß DSGVO.',
+  title: 'Datenschutz — CorridorWork',
+  description: 'Datenschutzerklärung für CorridorWork gemäß DSGVO.',
 }
 
 export default function DatenschutzPage() {

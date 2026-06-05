@@ -4,11 +4,11 @@ import { PublicNavBar } from '@/app/_components/PublicNavBar'
 import { PublicFooter } from '@/app/_components/PublicFooter'
 
 export const metadata: Metadata = {
-  title: 'Für Arbeitgeber — Global Talent Bridge',
+  title: 'Für Arbeitgeber — CorridorWork',
   description:
     'Qualifizierte internationale Kandidaten finden. Jobs einstellen, Matching-Scores sehen, Kandidaten kontaktieren. Kostenlos starten.',
   openGraph: {
-    title: 'Für Arbeitgeber — Global Talent Bridge',
+    title: 'Für Arbeitgeber — CorridorWork',
     description: 'Internationale Talente finden — strukturiert, mit transparentem Matching-Score.',
     type: 'website',
   },
@@ -157,7 +157,7 @@ export default function ForEmployersPage() {
             </div>
             <h2 className="text-3xl font-bold text-white mb-3">Pilot-Arbeitgeber gesucht</h2>
             <p className="text-gray-400 text-base leading-relaxed max-w-2xl mx-auto">
-              Global Talent Bridge ist live und voll funktionsfähig — jetzt suchen wir Unternehmen,
+              CorridorWork ist live und voll funktionsfähig — jetzt suchen wir Unternehmen,
               die die Plattform als erste testen und mitgestalten.
             </p>
           </div>

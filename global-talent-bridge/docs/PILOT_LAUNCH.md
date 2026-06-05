@@ -1,6 +1,6 @@
-# Pilot Launch — Global Talent Bridge
+# Pilot Launch — CorridorWork
 
-> **Zweck:** Dieses Dokument erklärt, wie Global Talent Bridge systematisch erste echte Pilot-Arbeitgeber und Pilot-Kandidaten gewinnt, verwaltet und in messbare Geschäftsergebnisse umwandelt — ohne automatischen externen Versand, mit vollständiger Admin-Kontrolle.
+> **Zweck:** Dieses Dokument erklärt, wie CorridorWork systematisch erste echte Pilot-Arbeitgeber und Pilot-Kandidaten gewinnt, verwaltet und in messbare Geschäftsergebnisse umwandelt — ohne automatischen externen Versand, mit vollständiger Admin-Kontrolle.
 
 ---
 
