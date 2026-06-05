@@ -2294,9 +2294,15 @@ export default async function CeoDashboardPage() {
         <div>
           <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
             <h2 className="text-xl font-bold text-white">🚀 Pilot Launch</h2>
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-wrap">
+              <Link href="/admin/pilot-execution" className="text-xs text-purple-400 hover:text-purple-300">
+                🚀 Execution Center →
+              </Link>
               <Link href="/admin/pilot-outreach" className="text-xs text-green-400 hover:text-green-300">
                 📤 Outreach-Cockpit →
+              </Link>
+              <Link href="/admin/exit-readiness" className="text-xs text-yellow-400 hover:text-yellow-300">
+                📋 Exit Readiness →
               </Link>
               <Link href="/admin/pilot-launch" className="text-xs text-blue-400 hover:text-blue-300">
                 📋 Pilot Dashboard →
