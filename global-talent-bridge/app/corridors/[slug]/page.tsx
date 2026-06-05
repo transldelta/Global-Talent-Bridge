@@ -81,13 +81,13 @@ export async function generateMetadata(
     title: seoTitle,
     description: seoDesc,
     alternates: {
-      canonical: `https://global-talent-bridge.vercel.app/corridors/${data.slug}`,
+      canonical: `https://corridorwork.com/corridors/${data.slug}`,
     },
     openGraph: {
       title: seoTitle,
       description: seoDesc,
       type: 'website',
-      url: `https://global-talent-bridge.vercel.app/corridors/${data.slug}`,
+      url: `https://corridorwork.com/corridors/${data.slug}`,
     },
     twitter: {
       card: 'summary_large_image',

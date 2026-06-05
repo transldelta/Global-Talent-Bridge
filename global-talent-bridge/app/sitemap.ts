@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 import { createAdminClient } from '@/lib/supabase/admin'
 
-const BASE_URL = 'https://global-talent-bridge.vercel.app'
+const BASE_URL = 'https://corridorwork.com'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()

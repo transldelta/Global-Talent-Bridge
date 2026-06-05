@@ -251,7 +251,7 @@ export function getTechnicalProof(): TechnicalProof[] {
       label: 'Production Deployment',
       value: 'Vercel',
       verified: true,
-      note: 'Deployed to https://global-talent-bridge.vercel.app. Supabase EU-Central-1.',
+      note: 'Deployed to https://corridorwork.com. Supabase EU-Central-1.',
     },
     {
       label: 'Database Tables',

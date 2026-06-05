@@ -75,7 +75,7 @@ Unsere Plattform verbindet internationale Fachkräfte mit Arbeitgebern über ein
 vielen Dank für Ihr Interesse an CorridorWork.
 
 Sie können sich kostenlos als Kandidat registrieren und Ihr Profil ausfüllen:
-https://global-talent-bridge.vercel.app/auth/register?role=candidate
+https://corridorwork.com/auth/register?role=candidate
 
 Das System berechnet dann automatisch passende Job-Matches für Sie. Bei Fragen stehe ich gerne zur Verfügung.${signature}`
 

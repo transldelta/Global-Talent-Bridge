@@ -7,7 +7,7 @@ import { CopyButton } from './CopyButton'
 // ── Konstanten ────────────────────────────────────────────────────────────────
 
 const CTA_URL =
-  'https://global-talent-bridge.vercel.app/contact?role=employer&interest=pilot_employer'
+  'https://corridorwork.com/contact?role=employer&interest=pilot_employer'
 
 // ── Vorlagen ──────────────────────────────────────────────────────────────────
 
@@ -92,7 +92,7 @@ vielen Dank für Ihr Interesse an CorridorWork!
 Hier sind die nächsten Schritte, damit Sie loslegen können:
 
 1. Konto erstellen (kostenlos, keine Kreditkarte):
-   https://global-talent-bridge.vercel.app/auth/register?role=employer
+   https://corridorwork.com/auth/register?role=employer
 
 2. Unternehmensprofil anlegen (ca. 5 Minuten)
 

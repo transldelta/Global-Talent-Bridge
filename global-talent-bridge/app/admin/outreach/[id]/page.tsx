@@ -65,7 +65,7 @@ const PRIORITY_LABELS: Record<string, string> = {
 // ── Personalisierte Nachricht ─────────────────────────────────────────────────
 
 const CTA_URL =
-  'https://global-talent-bridge.vercel.app/contact?role=employer&interest=pilot_employer'
+  'https://corridorwork.com/contact?role=employer&interest=pilot_employer'
 
 function buildPersonalizedMessage(target: OutreachTarget): string {
   const greeting = target.contact_person
