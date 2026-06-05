@@ -7,9 +7,13 @@
  * - Draft muss status === 'approved' haben
  * - channel muss 'email' sein
  * - recipient_email muss vorhanden sein
- * - Provider darf NICHT 'none' sein
- * - Safety-Check muss bestanden sein
+ * - Provider muss konfiguriert sein (nicht 'none')
+ * - from email muss vorhanden sein
+ * - Body darf NICHT leer sein
+ * - Betreff darf NICHT leer sein
+ * - Safety-Check: keine persönlichen Namen, keine Fake-Versprechen
  * - Kein Bulk-Send (immer nur 1 Draft pro Request)
+ * - Bei Providerfehler: Draft bleibt NICHT auf 'sent' — kein falsches Status-Update
  * - Alles wird in system_logs + pilot_employer_interactions protokolliert
  */
 import { NextRequest, NextResponse } from 'next/server'
@@ -22,8 +26,13 @@ import {
 } from '@/lib/operator-autopilot'
 import {
   sendApprovedEmail,
-  getProviderStatus,
+  getDetailedProviderStatus,
 } from '@/lib/outreach-email-provider'
+import {
+  checkDraftEmailEligibility,
+  type EnvSnapshot,
+  type DraftForEligibility,
+} from '@/lib/email-provider-status'
 
 export async function POST(req: NextRequest) {
   const admin = await getCurrentAdminUser()
@@ -52,30 +61,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Draft nicht gefunden' }, { status: 404 })
   }
 
-  const providerStatus = getProviderStatus()
+  const providerStatus = getDetailedProviderStatus(process.env as EnvSnapshot)
 
-  // Execution plan (pure logic check)
-  const plan = executeApprovedAction(draft as OutreachDraft, {
-    provider: providerStatus.provider,
-    fromEmail: providerStatus.fromEmail,
-  })
+  // ── LinkedIn/WhatsApp/Phone: nie automatisch senden ─────────────────────────
+  if (draft.channel === 'linkedin' || draft.channel === 'whatsapp' || draft.channel === 'phone') {
+    if (draft.status !== 'approved') {
+      return NextResponse.json(
+        { error: `Draft muss "approved" sein, ist aber "${draft.status}".` },
+        { status: 422 },
+      )
+    }
 
-  if (!plan.canExecute) {
-    return NextResponse.json(
-      {
-        error: 'Send blocked',
-        reason: plan.blockedReason ?? plan.reason,
-        providerStatus,
-      },
-      { status: 422 },
-    )
-  }
-
-  // LinkedIn/WhatsApp/Phone → mark as ready for manual platform, don't send
-  if (plan.action === 'mark_manual_platform_ready') {
     const { data: updated } = await db
       .from('pilot_outreach_drafts')
-      .update({ ...plan.draftUpdates, updated_at: new Date().toISOString() })
+      .update({
+        status:     'ready_for_manual_platform_send',
+        provider:   draft.channel === 'linkedin' ? 'linkedin_manual' : 'manual_platform',
+        updated_at: new Date().toISOString(),
+      })
       .eq('id', draft_id)
       .select()
       .single()
@@ -83,7 +86,7 @@ export async function POST(req: NextRequest) {
     await db.from('system_logs').insert({
       agent_name: 'operator_autopilot',
       status:     'info',
-      message:    `Draft ${draft_id} als "ready_for_manual_platform_send" markiert (Kanal: ${draft.channel})`,
+      message:    `Draft ${draft_id} als "ready_for_manual_platform_send" markiert (Kanal: ${draft.channel}) | Admin: ${admin.email}`,
     })
 
     return NextResponse.json({
@@ -92,81 +95,131 @@ export async function POST(req: NextRequest) {
     })
   }
 
-  // Email send
-  if (plan.action === 'send_email') {
-    const result = await sendApprovedEmail({
-      to:      draft.recipient_email!,
-      subject: draft.subject ?? '(kein Betreff)',
-      body:    draft.body,
-      fromEmail: providerStatus.fromEmail,
-      draftId: draft_id,
-    })
+  // ── E-Mail: vollständiger Safety-Check ──────────────────────────────────────
 
-    if (result.success) {
-      // Mark as sent
-      const { data: updated } = await db
-        .from('pilot_outreach_drafts')
-        .update({
-          status:     'sent',
-          sent_at:    new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          provider:   result.provider,
-        })
-        .eq('id', draft_id)
-        .select()
-        .single()
+  // Layer 1: checkDraftEmailEligibility (neue umfassende Prüfung)
+  const eligibility = checkDraftEmailEligibility(
+    draft as DraftForEligibility,
+    providerStatus,
+  )
 
-      // Log to system_logs
-      await db.from('system_logs').insert({
-        agent_name: 'operator_autopilot',
-        status:     'success',
-        message:    `E-Mail gesendet: ${draft.recipient_email} | Provider: ${result.provider} | Draft: ${draft_id}`,
-      })
-
-      // Log to pilot_employer_interactions
-      await db.from('pilot_employer_interactions').insert({
-        pilot_employer_id: draft.pilot_employer_id,
-        interaction_type:  'email_manual',
-        response_type:     'no_response',
-        summary:           `E-Mail gesendet via Operator-Autopilot | Betreff: ${draft.subject ?? '—'} | Provider: ${result.provider}`,
-        next_action:       'Antwort abwarten',
-        next_follow_up_at: draft.next_follow_up_at,
-        created_by:        admin.email,
-        demo:              draft.demo,
-      })
-
-      return NextResponse.json({
-        message:   'E-Mail erfolgreich gesendet.',
-        messageId: result.messageId,
-        draft:     updated,
-      })
-    } else {
-      // Mark as failed
-      await db
-        .from('pilot_outreach_drafts')
-        .update({
-          status:        'failed',
-          error_message: result.error ?? result.blockedReason ?? 'Unbekannter Fehler',
-          updated_at:    new Date().toISOString(),
-        })
-        .eq('id', draft_id)
-
-      await db.from('system_logs').insert({
-        agent_name: 'operator_autopilot',
-        status:     'error',
-        message:    `E-Mail-Versand fehlgeschlagen: ${result.error ?? result.blockedReason} | Draft: ${draft_id}`,
-      })
-
-      return NextResponse.json(
-        {
-          error:    'E-Mail-Versand fehlgeschlagen.',
-          details:  result.error ?? result.blockedReason,
-          blocked:  result.blocked,
+  if (!eligibility.canSend) {
+    return NextResponse.json(
+      {
+        error:           'Send blocked',
+        reason:          eligibility.reason,
+        checks:          eligibility.checks,
+        providerStatus: {
+          provider:        providerStatus.provider,
+          readinessStatus: providerStatus.readinessStatus,
+          canSend:         providerStatus.canSend,
+          missingConfig:   providerStatus.missingConfig,
         },
-        { status: result.blocked ? 422 : 500 },
-      )
-    }
+      },
+      { status: 422 },
+    )
   }
 
-  return NextResponse.json({ error: 'Unbekannter Ausführungsplan' }, { status: 500 })
+  // Layer 2: executeApprovedAction (Business-Logic-Prüfung aus operator-autopilot)
+  const plan = executeApprovedAction(draft as OutreachDraft, {
+    provider:  providerStatus.provider,
+    fromEmail: providerStatus.fromEmailConfigured ? process.env.OUTREACH_FROM_EMAIL : undefined,
+  })
+
+  if (!plan.canExecute) {
+    return NextResponse.json(
+      {
+        error:  'Send blocked (operator-autopilot check)',
+        reason: plan.blockedReason ?? plan.reason,
+      },
+      { status: 422 },
+    )
+  }
+
+  // ── Senden ──────────────────────────────────────────────────────────────────
+  const result = await sendApprovedEmail({
+    to:        draft.recipient_email!,
+    subject:   draft.subject ?? '(kein Betreff)',
+    body:      draft.body,
+    fromEmail: providerStatus.fromEmailConfigured ? process.env.OUTREACH_FROM_EMAIL : undefined,
+    draftId:   draft_id,
+  })
+
+  if (result.success) {
+    // Nur bei echtem Erfolg: Status auf 'sent' setzen
+    const { data: updated } = await db
+      .from('pilot_outreach_drafts')
+      .update({
+        status:     'sent',
+        sent_at:    new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        provider:   result.provider,
+      })
+      .eq('id', draft_id)
+      .select()
+      .single()
+
+    // Audit-Log
+    const auditLog = createAuditLogForAction(
+      {
+        action_type: 'send_email',
+        title:       `E-Mail gesendet: ${draft.recipient_email}`,
+        priority:    'high',
+        status:      'done',
+        risk_level:  draft.risk_level ?? 'low',
+      },
+      draft as OutreachDraft,
+    )
+
+    // system_logs
+    await db.from('system_logs').insert({
+      agent_name: auditLog.agent_name,
+      status:     auditLog.status,
+      message:    `E-Mail gesendet: ${draft.recipient_email} | Provider: ${result.provider} | Draft: ${draft_id} | Admin: ${admin.email}`,
+    })
+
+    // pilot_employer_interactions
+    await db.from('pilot_employer_interactions').insert({
+      pilot_employer_id: draft.pilot_employer_id,
+      interaction_type:  'email_manual',
+      response_type:     'no_response',
+      summary:           `E-Mail gesendet via Operator-Autopilot | Betreff: ${draft.subject ?? '—'} | Provider: ${result.provider}`,
+      next_action:       'Antwort abwarten',
+      next_follow_up_at: draft.next_follow_up_at ?? null,
+      created_by:        admin.email,
+      demo:              draft.demo ?? false,
+    })
+
+    return NextResponse.json({
+      message:   'E-Mail erfolgreich gesendet.',
+      messageId: result.messageId,
+      draft:     updated,
+    })
+
+  } else {
+    // Bei Fehler: NICHT auf 'sent' setzen — error_message speichern
+    await db
+      .from('pilot_outreach_drafts')
+      .update({
+        status:        'failed',
+        error_message: result.error ?? result.blockedReason ?? 'Unbekannter Fehler',
+        updated_at:    new Date().toISOString(),
+      })
+      .eq('id', draft_id)
+
+    await db.from('system_logs').insert({
+      agent_name: 'operator_autopilot',
+      status:     'error',
+      message:    `E-Mail-Versand fehlgeschlagen: ${result.error ?? result.blockedReason} | Draft: ${draft_id} | Admin: ${admin.email}`,
+    })
+
+    return NextResponse.json(
+      {
+        error:   'E-Mail-Versand fehlgeschlagen. Draft-Status: failed.',
+        details: result.error ?? result.blockedReason,
+        blocked: result.blocked,
+      },
+      { status: result.blocked ? 422 : 500 },
+    )
+  }
 }

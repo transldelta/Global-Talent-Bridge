@@ -10,10 +10,22 @@
  * - Jeder Versuch wird geloggt (Erfolg und Fehler)
  * - Keine automatischen Nachrichten ohne Freigabe
  * - Signatur immer "Global Talent Bridge Team"
+ *
+ * Status-Checking-Logik liegt in lib/email-provider-status.ts (testbar, kein server-only).
  */
 import 'server-only'
 
-export type EmailProvider = 'none' | 'resend' | 'smtp'
+import {
+  detectProvider,
+  getDetailedProviderStatus,
+  type EmailProvider,
+  type EnvSnapshot,
+  type DetailedProviderStatus,
+} from './email-provider-status'
+
+// Re-export types for callers
+export type { EmailProvider, DetailedProviderStatus }
+export { getDetailedProviderStatus }
 
 export interface EmailSendRequest {
   to: string
@@ -32,13 +44,10 @@ export interface EmailSendResult {
   blockedReason?: string
 }
 
-// ── Provider Detection ────────────────────────────────────────────────────────
+// ── Provider helpers ──────────────────────────────────────────────────────────
 
 export function getConfiguredProvider(): EmailProvider {
-  const raw = process.env.OUTREACH_EMAIL_PROVIDER ?? 'none'
-  if (raw === 'resend') return 'resend'
-  if (raw === 'smtp') return 'smtp'
-  return 'none'
+  return detectProvider(process.env as EnvSnapshot)
 }
 
 export function isEmailProviderConfigured(): boolean {
@@ -49,100 +58,106 @@ export function getFromEmail(): string {
   return process.env.OUTREACH_FROM_EMAIL ?? ''
 }
 
-export function getProviderStatus(): {
-  provider: EmailProvider
-  configured: boolean
-  fromEmail: string
-  missingEnvVars: string[]
-} {
-  const provider = getConfiguredProvider()
-  const fromEmail = getFromEmail()
-  const missing: string[] = []
-
-  if (!fromEmail) missing.push('OUTREACH_FROM_EMAIL')
-
-  if (provider === 'resend') {
-    if (!process.env.RESEND_API_KEY) missing.push('RESEND_API_KEY')
-  }
-
-  if (provider === 'smtp') {
-    if (!process.env.SMTP_HOST) missing.push('SMTP_HOST')
-    if (!process.env.SMTP_PORT) missing.push('SMTP_PORT')
-    if (!process.env.SMTP_USER) missing.push('SMTP_USER')
-    if (!process.env.SMTP_PASS) missing.push('SMTP_PASS')
-  }
-
-  return {
-    provider,
-    configured: provider !== 'none' && missing.length === 0,
-    fromEmail,
-    missingEnvVars: missing,
-  }
+/** @deprecated Use getDetailedProviderStatus(process.env) instead */
+export function getProviderStatus() {
+  return getDetailedProviderStatus(process.env as EnvSnapshot)
 }
 
-// ── Send Function ─────────────────────────────────────────────────────────────
+// ── Send: approved outreach email ─────────────────────────────────────────────
 
 /**
  * Sendet eine einzelne freigegebene E-Mail.
  * Bei provider=none: gibt geblockte Antwort zurück, sendet NICHTS.
  */
-export async function sendApprovedEmail(
-  req: EmailSendRequest,
-): Promise<EmailSendResult> {
-  const provider = getConfiguredProvider()
+export async function sendApprovedEmail(req: EmailSendRequest): Promise<EmailSendResult> {
+  const status = getDetailedProviderStatus(process.env as EnvSnapshot)
 
-  // Hard block: provider not configured
-  if (provider === 'none') {
+  if (!status.canSend) {
+    if (status.provider === 'none') {
+      return {
+        success: false,
+        provider: 'none',
+        blocked: true,
+        blockedReason:
+          'E-Mail-Provider ist nicht konfiguriert (OUTREACH_EMAIL_PROVIDER=none). ' +
+          'Setze OUTREACH_EMAIL_PROVIDER=resend oder smtp in der .env-Datei.',
+      }
+    }
     return {
       success: false,
-      provider: 'none',
+      provider: status.provider,
       blocked: true,
       blockedReason:
-        'E-Mail-Provider ist nicht konfiguriert (OUTREACH_EMAIL_PROVIDER=none). ' +
-        'Setze OUTREACH_EMAIL_PROVIDER=resend oder smtp in der .env-Datei.',
-    }
-  }
-
-  const fromEmail = getFromEmail()
-  if (!fromEmail) {
-    return {
-      success: false,
-      provider,
-      blocked: true,
-      blockedReason: 'OUTREACH_FROM_EMAIL ist nicht gesetzt.',
+        `Provider "${status.provider}" unvollständig konfiguriert. Fehlend: ${status.missingConfig.join(', ')}.`,
     }
   }
 
   if (!req.to) {
     return {
       success: false,
-      provider,
+      provider: status.provider,
       blocked: true,
       blockedReason: 'Empfänger-E-Mail fehlt.',
     }
   }
 
-  if (provider === 'resend') {
-    return await sendViaResend(req, fromEmail)
+  const fromEmail = req.fromEmail ?? process.env.OUTREACH_FROM_EMAIL ?? ''
+
+  if (status.provider === 'resend') return sendViaResend(req, fromEmail)
+  if (status.provider === 'smtp')   return sendViaSmtp(req, fromEmail)
+
+  return { success: false, provider: status.provider, error: 'Unbekannter Provider.' }
+}
+
+// ── Send: safe test email ─────────────────────────────────────────────────────
+
+/**
+ * Sendet eine Test-E-Mail NUR an die angegebene Adresse.
+ * KEIN Pilot-Arbeitgeber wird kontaktiert.
+ * KEIN Draft wird als sent markiert.
+ */
+export async function sendTestEmail(testToEmail: string): Promise<EmailSendResult> {
+  const status = getDetailedProviderStatus(process.env as EnvSnapshot)
+
+  if (!status.canSend) {
+    return {
+      success: false,
+      provider: status.provider,
+      blocked: true,
+      blockedReason:
+        status.provider === 'none'
+          ? 'email_provider_not_configured'
+          : `Provider unvollständig. Fehlend: ${status.missingConfig.join(', ')}`,
+    }
   }
 
-  if (provider === 'smtp') {
-    return await sendViaSmtp(req, fromEmail)
-  }
+  const fromEmail = process.env.OUTREACH_FROM_EMAIL ?? ''
 
-  return {
-    success: false,
-    provider,
-    error: 'Unbekannter Provider.',
-  }
+  return sendApprovedEmail({
+    to:      testToEmail,
+    subject: '[TEST] Global Talent Bridge test email — no employer outreach',
+    body: [
+      'Dies ist eine Test-E-Mail vom Global Talent Bridge Operator System.',
+      '',
+      '⚠️  DIESE NACHRICHT IST KEIN ECHTER OUTREACH.',
+      '    Kein Arbeitgeber wurde kontaktiert.',
+      '    Kein Draft wurde als "gesendet" markiert.',
+      '',
+      `Provider:     ${status.provider}`,
+      `Zeitpunkt:    ${new Date().toISOString()}`,
+      '',
+      'Wenn du diese Nachricht siehst, ist der E-Mail-Provider korrekt konfiguriert.',
+      '',
+      'Mit freundlichen Grüßen',
+      'Global Talent Bridge Team',
+    ].join('\n'),
+    fromEmail,
+  })
 }
 
 // ── Provider Implementations ──────────────────────────────────────────────────
 
-async function sendViaResend(
-  req: EmailSendRequest,
-  fromEmail: string,
-): Promise<EmailSendResult> {
+async function sendViaResend(req: EmailSendRequest, fromEmail: string): Promise<EmailSendResult> {
   const apiKey = process.env.RESEND_API_KEY
   if (!apiKey) {
     return {
@@ -161,10 +176,10 @@ async function sendViaResend(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: fromEmail,
-        to: [req.to],
+        from:    fromEmail,
+        to:      [req.to],
         subject: req.subject,
-        text: req.body,
+        text:    req.body,
       }),
     })
 
@@ -178,11 +193,7 @@ async function sendViaResend(
     }
 
     const data = await res.json() as { id?: string }
-    return {
-      success: true,
-      provider: 'resend',
-      messageId: data.id,
-    }
+    return { success: true, provider: 'resend', messageId: data.id }
   } catch (e) {
     return {
       success: false,
@@ -192,13 +203,9 @@ async function sendViaResend(
   }
 }
 
-async function sendViaSmtp(
-  req: EmailSendRequest,
-  fromEmail: string,
-): Promise<EmailSendResult> {
+async function sendViaSmtp(req: EmailSendRequest, fromEmail: string): Promise<EmailSendResult> {
   // SMTP implementation placeholder.
   // In production: use nodemailer or similar.
-  // For now: return structured "not yet implemented" response.
   void fromEmail
   void req
   return {

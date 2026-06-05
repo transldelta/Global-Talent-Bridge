@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import { DryRunButton } from './DryRunButton'
 
 interface DraftApprovalCardProps {
   draft: {
@@ -178,7 +179,7 @@ export function DraftApprovalCard({ draft, providerConfigured }: DraftApprovalCa
 
         {/* Send email button — only when approved + provider configured */}
         {canSendEmail && (
-          <div>
+          <div className="space-y-1">
             <button
               onClick={sendEmail}
               disabled={disabled}
@@ -186,10 +187,16 @@ export function DraftApprovalCard({ draft, providerConfigured }: DraftApprovalCa
             >
               {loading === 'send' ? '…Wird gesendet…' : '📤 Freigegebene E-Mail senden'}
             </button>
-            <p className="text-xs text-gray-600 mt-1">
+            <p className="text-xs text-gray-600">
               Provider konfiguriert · Kein automatischer Versand · Nur dieser Draft
             </p>
+            <DryRunButton draftId={draft.id} channel={draft.channel} />
           </div>
+        )}
+
+        {/* Dry-run also available when approved but provider not yet configured */}
+        {isApproved && draft.channel === 'email' && !providerConfigured && (
+          <DryRunButton draftId={draft.id} channel={draft.channel} />
         )}
 
         {isApproved && draft.channel === 'email' && !providerConfigured && (

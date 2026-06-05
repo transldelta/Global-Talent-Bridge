@@ -21,10 +21,11 @@ import {
   getNextBestActionForEmployer,
   type EmployerForDraft,
 } from '@/lib/operator-autopilot'
-import { isEmailProviderConfigured } from '@/lib/outreach-email-provider'
+import { getDetailedProviderStatus, type EnvSnapshot } from '@/lib/email-provider-status'
 import { DraftApprovalCard } from './_components/DraftApprovalCard'
 import { ActionDecisionButtons } from './_components/ActionDecisionButtons'
 import { GenerateDraftsButton } from './_components/GenerateDraftsButton'
+import { ProviderStatusCard } from './_components/ProviderStatusCard'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -72,7 +73,8 @@ export default async function OperatorPage() {
   if (!admin) redirect('/auth/login')
 
   const db = createAdminClient()
-  const providerConfigured = isEmailProviderConfigured()
+  const providerStatus = getDetailedProviderStatus(process.env as EnvSnapshot)
+  const providerConfigured = providerStatus.canSend
 
   // Load pilot employers
   const { data: employersRaw } = await db
@@ -173,11 +175,17 @@ export default async function OperatorPage() {
             <span className="text-xs px-2 py-0.5 rounded-full bg-blue-900/30 text-blue-300 border border-blue-800/50">
               Autopilot
             </span>
-            {!providerConfigured && (
-              <span className="text-xs px-2 py-0.5 rounded-full bg-orange-900/30 text-orange-300 border border-orange-800/50">
-                ⚙️ E-Mail-Provider: none
-              </span>
-            )}
+            <span className={`text-xs px-2 py-0.5 rounded-full border ${
+              providerStatus.readinessStatus === 'ready'
+                ? 'bg-green-900/30 text-green-300 border-green-800/50'
+                : providerStatus.readinessStatus === 'warning'
+                ? 'bg-yellow-900/30 text-yellow-300 border-yellow-800/50'
+                : 'bg-orange-900/30 text-orange-300 border-orange-800/50'
+            }`}>
+              {providerStatus.readinessStatus === 'ready' ? '✉️ E-Mail: bereit' :
+               providerStatus.readinessStatus === 'warning' ? '⚠️ E-Mail: teilweise' :
+               '⚙️ E-Mail: blockiert'}
+            </span>
           </div>
           <p className="text-gray-400 text-sm">
             Ziel: 10 Minuten pro Tag. System bereitet vor — du prüfst und klickst JA / NEIN / SPÄTER.
@@ -374,21 +382,8 @@ export default async function OperatorPage() {
           </section>
         )}
 
-        {/* ── Provider-Status ── */}
-        {!providerConfigured && (
-          <section className="bg-orange-900/10 border border-orange-800/30 rounded-2xl p-5">
-            <h2 className="text-base font-semibold text-orange-300 mb-2">⚙️ E-Mail-Provider nicht konfiguriert</h2>
-            <p className="text-orange-200/60 text-xs leading-relaxed mb-3">
-              Aktuell ist <code className="bg-orange-900/30 px-1 rounded">OUTREACH_EMAIL_PROVIDER=none</code>.
-              E-Mail-Drafts können freigegeben, aber nicht automatisch gesendet werden.
-            </p>
-            <div className="space-y-1 text-xs text-orange-200/50 font-mono">
-              <p>OUTREACH_EMAIL_PROVIDER=resend</p>
-              <p>OUTREACH_FROM_EMAIL=team@globaltalentbridge.de</p>
-              <p>RESEND_API_KEY=re_xxxxxxxx</p>
-            </div>
-          </section>
-        )}
+        {/* ── E. Provider-Status (immer anzeigen) ── */}
+        <ProviderStatusCard status={providerStatus} />
 
         {/* ── Navigation ── */}
         <div className="flex gap-4 flex-wrap pb-4 text-sm">

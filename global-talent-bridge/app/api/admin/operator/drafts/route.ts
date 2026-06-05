@@ -1,9 +1,10 @@
 /**
  * POST /api/admin/operator/drafts
- *   body { action: 'generate_batch' }   — Batch-1-Drafts generieren
- *   body { action: 'approve', draft_id } — Draft genehmigen
- *   body { action: 'reject',  draft_id } — Draft ablehnen
- *   body { action: 'postpone',draft_id } — Draft verschieben
+ *   body { action: 'generate_batch' }         — Batch-1-Drafts generieren
+ *   body { action: 'approve',   draft_id }    — Draft genehmigen
+ *   body { action: 'reject',    draft_id }    — Draft ablehnen
+ *   body { action: 'postpone',  draft_id }    — Draft verschieben
+ *   body { action: 'dry_run',   draft_id }    — Eligibility prüfen, NICHTS senden
  *
  * Kein automatischer Versand. Nur Status-Änderungen und DB-Writes.
  */
@@ -20,6 +21,12 @@ import {
   type EmployerForDraft,
   type OutreachDraft,
 } from '@/lib/operator-autopilot'
+import {
+  checkDraftEmailEligibility,
+  getDetailedProviderStatus,
+  type EnvSnapshot,
+  type DraftForEligibility,
+} from '@/lib/email-provider-status'
 
 // ── Generate Batch ────────────────────────────────────────────────────────────
 
@@ -198,8 +205,50 @@ export async function POST(req: NextRequest) {
     return handleDraftDecision(action, draft_id, admin)
   }
 
+  if (action === 'dry_run') {
+    if (!draft_id) {
+      return NextResponse.json({ error: 'draft_id required' }, { status: 400 })
+    }
+    return handleDryRun(draft_id)
+  }
+
   return NextResponse.json(
-    { error: 'action must be generate_batch | approve | reject | postpone' },
+    { error: 'action must be generate_batch | approve | reject | postpone | dry_run' },
     { status: 400 },
   )
+}
+
+// ── Dry Run ───────────────────────────────────────────────────────────────────
+
+async function handleDryRun(draftId: string) {
+  const db = createAdminClient()
+
+  const { data: draft, error: loadErr } = await db
+    .from('pilot_outreach_drafts')
+    .select('*')
+    .eq('id', draftId)
+    .single()
+
+  if (loadErr || !draft) {
+    return NextResponse.json({ error: 'Draft nicht gefunden' }, { status: 404 })
+  }
+
+  const providerStatus = getDetailedProviderStatus(process.env as EnvSnapshot)
+  const eligibility = checkDraftEmailEligibility(draft as DraftForEligibility, providerStatus)
+
+  return NextResponse.json({
+    draftId,
+    channel:    draft.channel,
+    status:     draft.status,
+    canSend:    eligibility.canSend,
+    reason:     eligibility.reason,
+    checks:     eligibility.checks,
+    provider: {
+      provider:        providerStatus.provider,
+      readinessStatus: providerStatus.readinessStatus,
+      canSend:         providerStatus.canSend,
+      missingConfig:   providerStatus.missingConfig,
+    },
+    note: 'Dry-Run — es wurde NICHTS gesendet. Kein Status wurde geändert.',
+  })
 }
