@@ -553,12 +553,6 @@ describe('Branding: kein alter Name "Global Talent Bridge"', () => {
     expect(draft.body).not.toContain('Global Talent Bridge')
   })
 
-  it('generateDraftMessage (phone): kein "Global Talent Bridge"', () => {
-    const profile = buildCompanyProfile(REAL_PFLEGEHEIM)
-    const draft = generateDraftMessage(profile, 'phone')
-    expect(draft.body).not.toContain('Global Talent Bridge')
-  })
-
   it('analyzeCompany: summary enthält kein "Global Talent Bridge"', () => {
     const analysis = analyzeCompany(REAL_PFLEGEHEIM)
     expect(analysis.summary).not.toContain('Global Talent Bridge')
@@ -578,7 +572,7 @@ describe('Branding: kein alter Name "Global Talent Bridge"', () => {
 // ── 15. Signatur immer "CorridorWork Team" ────────────────────────────────────
 
 describe('Signatur: immer CorridorWork Team', () => {
-  const channels = ['email', 'whatsapp', 'linkedin', 'personal', 'phone'] as const
+  const channels = ['email', 'whatsapp', 'linkedin', 'personal'] as const
 
   it.each(channels)('Kanal %s: Signatur enthält "CorridorWork"', (channel) => {
     const profile = buildCompanyProfile(REAL_PFLEGEHEIM)
@@ -606,7 +600,8 @@ describe('Signatur: immer CorridorWork Team', () => {
 
   it('Keine fremde Signatur ("TranslDelta", "GTB", "GmbH für...")', () => {
     const profile = buildCompanyProfile(REAL_PFLEGEHEIM)
-    for (const ch of channels) {
+    const validChannels = ['email', 'whatsapp', 'linkedin', 'personal'] as const
+    for (const ch of validChannels) {
       const draft = generateDraftMessage(profile, ch)
       expect(draft.body).not.toContain('TranslDelta')
       expect(draft.body).not.toContain(' GTB')

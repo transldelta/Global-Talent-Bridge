@@ -404,9 +404,9 @@ export function OutreachAutopilotForm() {
               </div>
               <div className="bg-gray-900 rounded p-3 text-xs text-gray-300 space-y-1">
                 <div className="font-medium text-white mb-2">💡 Was tun?</div>
-                <div>✓ Echten Firmennamen eintragen (z.B. "Pflegeheim am See GmbH")</div>
-                <div>✓ Website ergänzen (z.B. "https://www.pflegeheim-see.de")</div>
-                <div>✓ Branche wählen (z.B. "Altenpflege")</div>
+                <div>{'✓ Echten Firmennamen eintragen (z.B. "Pflegeheim am See GmbH")'}</div>
+                <div>{'✓ Website ergänzen (z.B. "https://www.pflegeheim-see.de")'}</div>
+                <div>{'✓ Branche wählen (z.B. "Altenpflege")'}</div>
                 <div>✓ Personalbedarf-Hinweis eintragen</div>
               </div>
               <button
