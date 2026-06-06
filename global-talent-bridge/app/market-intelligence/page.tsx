@@ -8,7 +8,7 @@ import type { Metadata } from 'next'
 import { MarketIntelForm } from './_components/MarketIntelForm'
 
 export const metadata: Metadata = {
-  title: 'Market Intelligence Reports | CorridorWork',
+  title: 'Market Intelligence Reports',
   description:
     'Aggregierte Talent-Korridor-Daten für B2B-Entscheider: Nachfragebranchen, Arbeitgeberbedarf, Korridor-Scores. Keine personenbezogenen Daten. Beta-Zugang kostenfrei.',
   keywords: [

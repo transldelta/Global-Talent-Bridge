@@ -208,10 +208,11 @@ describe('Datenschutz- und Impressum-Links vorhanden', () => {
 // ══════════════════════════════════════════════════════════════════════════════
 
 describe('SEO-Metadaten — Revenue Pages', () => {
+  // Next.js template '%s | CorridorWork' appends the brand — these are the raw page titles
   const PAGE_TITLES = {
-    employers: 'Kostenloser Employer Pilot | CorridorWork',
-    agencies: 'Partner-Pilot für Agenturen | CorridorWork',
-    marketIntel: 'Market Intelligence Reports | CorridorWork',
+    employers: 'Kostenloser Employer Pilot',
+    agencies: 'Partner-Pilot für Agenturen',
+    marketIntel: 'Market Intelligence Reports',
   }
 
   const PAGE_DESCRIPTIONS = {
@@ -220,20 +221,22 @@ describe('SEO-Metadaten — Revenue Pages', () => {
     marketIntel: 'Aggregierte Talent-Korridor-Daten für B2B-Entscheider',
   }
 
-  it('Employer-Pilot Title enthält "CorridorWork"', () => {
-    expect(PAGE_TITLES.employers).toMatch(/CorridorWork/)
-  })
-
   it('Employer-Pilot Title enthält "Pilot"', () => {
     expect(PAGE_TITLES.employers).toMatch(/pilot/i)
   })
 
-  it('Agencies Title enthält "CorridorWork"', () => {
-    expect(PAGE_TITLES.agencies).toMatch(/CorridorWork/)
+  it('Agencies Title enthält "Agenturen"', () => {
+    expect(PAGE_TITLES.agencies).toMatch(/agenturen/i)
   })
 
-  it('Market Intel Title enthält "CorridorWork"', () => {
-    expect(PAGE_TITLES.marketIntel).toMatch(/CorridorWork/)
+  it('Market Intel Title enthält "Market Intelligence"', () => {
+    expect(PAGE_TITLES.marketIntel).toMatch(/market intelligence/i)
+  })
+
+  it('Titles enthalten kein "Global Talent Bridge"', () => {
+    Object.values(PAGE_TITLES).forEach(t => {
+      expect(t).not.toMatch(/global talent bridge/i)
+    })
   })
 
   it('Employer Description enthält keine Jobgarantie-Versprechen', () => {

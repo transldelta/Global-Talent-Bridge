@@ -7,7 +7,7 @@ import type { Metadata } from 'next'
 import { AgencyPartnerForm } from './_components/AgencyPartnerForm'
 
 export const metadata: Metadata = {
-  title: 'Partner-Pilot für Agenturen | CorridorWork',
+  title: 'Partner-Pilot für Agenturen',
   description:
     'White-Label Talent-Matching für Recruiting-Agenturen, Sprachschulen und Relocation-Dienstleister. Pilot kostenlos — keine automatische Zahlung, keine verbindlichen Verträge.',
   keywords: [

@@ -8,7 +8,7 @@ import type { Metadata } from 'next'
 import { EmployerPilotForm } from './_components/EmployerPilotForm'
 
 export const metadata: Metadata = {
-  title: 'Kostenloser Employer Pilot | CorridorWork',
+  title: 'Kostenloser Employer Pilot',
   description:
     'Internationale Fachkräfte für Pflege, Bau, IT und Gastronomie. Kostenloser Pilot — kein Abo, keine automatische Zahlung, keine Jobgarantie. Unverbindlich anfragen.',
   keywords: [
