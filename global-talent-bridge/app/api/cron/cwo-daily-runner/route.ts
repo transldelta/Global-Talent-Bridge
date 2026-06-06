@@ -131,8 +131,40 @@ export async function GET(req: NextRequest) {
     ? tageslage.complianceViolations
     : ['Keine offenen Compliance-Probleme']
 
-  // ── 4. In autonomous_worklog schreiben (service_role, RLS-bypass) ─────────
+  // ── 4a. Revenue Leads zählen (interne DB-Abfrage, kein externer Call) ──────
   const supabase = createAdminClient()
+
+  const { count: newLeadsTotal }    = await supabase
+    .from('revenue_leads')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'new')
+
+  const { count: employerLeads }    = await supabase
+    .from('revenue_leads')
+    .select('id', { count: 'exact', head: true })
+    .eq('lead_type', 'employer_pilot')
+    .eq('status', 'new')
+
+  const { count: agencyLeads }      = await supabase
+    .from('revenue_leads')
+    .select('id', { count: 'exact', head: true })
+    .eq('lead_type', 'agency_partner')
+    .eq('status', 'new')
+
+  const { count: intelLeads }       = await supabase
+    .from('revenue_leads')
+    .select('id', { count: 'exact', head: true })
+    .eq('lead_type', 'market_intelligence')
+    .eq('status', 'new')
+
+  const newLeadsCount = newLeadsTotal ?? 0
+
+  // Revenue-Leads in completedItems aufnehmen
+  if (newLeadsCount > 0) {
+    completedItems.push(`${newLeadsCount} neue Inbound-Leads (${employerLeads ?? 0} Employer, ${agencyLeads ?? 0} Agency, ${intelLeads ?? 0} Intel)`)
+  }
+
+  // ── 4b. In autonomous_worklog schreiben (service_role, RLS-bypass) ────────
 
   const { data, error } = await supabase
     .from('autonomous_worklog')
@@ -184,6 +216,12 @@ export async function GET(req: NextRequest) {
     blockedRisksCount: state.blockedRisks.length,
     completedItems,
     openItems,
+    revenueLeads: {
+      newTotal:       newLeadsCount,
+      employerPilot:  employerLeads  ?? 0,
+      agencyPartner:  agencyLeads    ?? 0,
+      marketIntel:    intelLeads     ?? 0,
+    },
     // Safety invariants im Response bestätigen
     safetyConfirmed: {
       noEmailSent:          true,

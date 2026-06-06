@@ -6,6 +6,7 @@
 import { redirect }            from 'next/navigation'
 import { getCurrentAdminUser } from '@/lib/admin'
 import { generateCWOState, generateTageslageSummary } from '@/lib/cwo-agent'
+import { createAdminClient }   from '@/lib/supabase/admin'
 import { LastRunPanel }        from './_components/LastRunPanel'
 
 export const dynamic = 'force-dynamic'
@@ -16,6 +17,21 @@ export default async function CWOCommandCenterPage() {
 
   const state      = generateCWOState()
   const tageslage  = generateTageslageSummary()
+
+  // Revenue Leads — neue Inbound-Leads zählen
+  const supabase = createAdminClient()
+  const { count: newLeadsCount } = await supabase
+    .from('revenue_leads')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'new')
+  const { data: topLeadRow } = await supabase
+    .from('revenue_leads')
+    .select('lead_type')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  const newLeads = newLeadsCount ?? 0
+  const topLeadType = topLeadRow?.lead_type ?? null
   const statusColor = tageslage.status === 'green' ? 'text-green-600' : tageslage.status === 'yellow' ? 'text-yellow-600' : 'text-red-600'
   const statusBg    = tageslage.status === 'green' ? 'bg-green-50 border-green-200' : tageslage.status === 'yellow' ? 'bg-yellow-50 border-yellow-200' : 'bg-red-50 border-red-200'
 
@@ -46,6 +62,40 @@ export default async function CWOCommandCenterPage() {
             Autonomy: {state.systemInvariants.currentAutonomyLevel} &nbsp;·&nbsp;
             noScraping: {String(state.systemInvariants.noScraping)} &nbsp;·&nbsp;
             noEmailSent: {String(state.systemInvariants.noEmailSent)}
+          </div>
+        </div>
+      </div>
+
+      {/* Inbound Revenue Leads */}
+      <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">📥 Inbound Revenue Leads</h2>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Inbound-Leads können geprüft werden. Kein automatischer Versand aktiv.
+            </p>
+          </div>
+          <a href="/admin/revenue-inbox" className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg font-medium hover:bg-blue-700 transition-colors">
+            Inbox öffnen →
+          </a>
+        </div>
+        <div className="mt-4 grid grid-cols-3 gap-3">
+          <div className={`rounded-lg p-3 text-center border ${newLeads > 0 ? 'bg-yellow-50 border-yellow-200' : 'bg-gray-50 border-gray-200'}`}>
+            <div className={`text-2xl font-bold ${newLeads > 0 ? 'text-yellow-700' : 'text-gray-400'}`}>{newLeads}</div>
+            <div className="text-xs text-gray-500">Neue Leads</div>
+          </div>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-semibold text-blue-700">
+              {topLeadType === 'employer_pilot'      ? '🏭 Employer Pilot' :
+               topLeadType === 'agency_partner'       ? '🤝 Agency Partner' :
+               topLeadType === 'market_intelligence'  ? '📊 Market Intel' :
+               '—'}
+            </div>
+            <div className="text-xs text-blue-500">Top Lead-Typ</div>
+          </div>
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-semibold text-green-700">Leads prüfen</div>
+            <div className="text-xs text-green-500">Nächster Revenue-Schritt</div>
           </div>
         </div>
       </div>

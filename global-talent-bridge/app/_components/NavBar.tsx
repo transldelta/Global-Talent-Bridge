@@ -302,6 +302,13 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
               >
                 ⚙️ Ops
               </Link>
+              {/* Inbound Revenue Activation */}
+              <Link
+                href="/admin/revenue-inbox"
+                className="text-sm text-green-400 hover:text-green-200 transition-colors font-semibold"
+              >
+                📥 Inbox
+              </Link>
             </>
           )}
 
