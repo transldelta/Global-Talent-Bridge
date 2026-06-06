@@ -5,7 +5,7 @@ import { PublicFooter } from '@/app/_components/PublicFooter'
 import { ContactForm } from './ContactForm'
 
 export const metadata: Metadata = {
-  title: 'Kontakt — CorridorWork',
+  title: 'Kontakt',
   description:
     'Kontaktformular für Fragen, Feedback und Partnerschaftsanfragen. Keine automatischen E-Mails — wir melden uns manuell.',
 }

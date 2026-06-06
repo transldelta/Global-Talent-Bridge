@@ -4,7 +4,7 @@ import { PublicNavBar } from '@/app/_components/PublicNavBar'
 import { PublicFooter } from '@/app/_components/PublicFooter'
 
 export const metadata: Metadata = {
-  title: 'Datenschutz — CorridorWork',
+  title: 'Datenschutz',
   description: 'Datenschutzerklärung für CorridorWork gemäß DSGVO.',
 }
 

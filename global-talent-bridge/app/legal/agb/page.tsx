@@ -4,7 +4,7 @@ import { PublicNavBar } from '@/app/_components/PublicNavBar'
 import { PublicFooter } from '@/app/_components/PublicFooter'
 
 export const metadata: Metadata = {
-  title: 'AGB — CorridorWork',
+  title: 'AGB',
   description: 'Allgemeine Geschäftsbedingungen für die Nutzung von CorridorWork.',
 }
 

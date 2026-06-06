@@ -4,7 +4,7 @@ import { PublicNavBar } from '@/app/_components/PublicNavBar'
 import { PublicFooter } from '@/app/_components/PublicFooter'
 
 export const metadata: Metadata = {
-  title: 'Für Kandidaten — CorridorWork',
+  title: 'Für Kandidaten',
   description:
     'Internationale Fachkräfte: Kostenloses Profil, strukturiertes Matching, transparenter Score. Finde Jobs, die zu dir passen.',
   openGraph: {

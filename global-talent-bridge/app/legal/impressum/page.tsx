@@ -4,7 +4,7 @@ import { PublicNavBar } from '@/app/_components/PublicNavBar'
 import { PublicFooter } from '@/app/_components/PublicFooter'
 
 export const metadata: Metadata = {
-  title: 'Impressum — CorridorWork',
+  title: 'Impressum',
   description: 'Impressum und Anbieterkennzeichnung gemäß § 5 TMG.',
 }
 

@@ -4,7 +4,7 @@ import { PublicNavBar } from '@/app/_components/PublicNavBar'
 import { PublicFooter } from '@/app/_components/PublicFooter'
 
 export const metadata: Metadata = {
-  title: 'Über uns — CorridorWork',
+  title: 'Über uns',
   description:
     'Was ist CorridorWork? Mission, Fokus auf internationale Talente und ehrliche Beschreibung der MVP-Phase.',
   openGraph: {
