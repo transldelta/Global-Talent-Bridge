@@ -1,0 +1,207 @@
+/**
+ * app/admin/cwo-command-center/page.tsx
+ *
+ * CWO Command Center — Hauptseite des Autonomous Revenue Operating System
+ */
+import { redirect }            from 'next/navigation'
+import { getCurrentAdminUser } from '@/lib/admin'
+import { generateCWOState, generateTageslageSummary } from '@/lib/cwo-agent'
+
+export const dynamic = 'force-dynamic'
+
+export default async function CWOCommandCenterPage() {
+  const user = await getCurrentAdminUser()
+  if (!user) redirect('/auth/login?redirectTo=/admin/cwo-command-center')
+
+  const state      = generateCWOState()
+  const tageslage  = generateTageslageSummary()
+  const statusColor = tageslage.status === 'green' ? 'text-green-600' : tageslage.status === 'yellow' ? 'text-yellow-600' : 'text-red-600'
+  const statusBg    = tageslage.status === 'green' ? 'bg-green-50 border-green-200' : tageslage.status === 'yellow' ? 'bg-yellow-50 border-yellow-200' : 'bg-red-50 border-red-200'
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">🧠 CWO Command Center</h1>
+          <p className="text-gray-500 mt-1">Autonomous Revenue Operating System — Phase 1</p>
+          <p className="text-xs text-gray-400 mt-1">Generiert: {new Date(state.generatedAt).toLocaleString('de-DE')}</p>
+        </div>
+        <div className={`px-4 py-2 rounded-full border text-sm font-semibold ${statusColor} ${statusBg}`}>
+          System: {tageslage.status === 'green' ? '✅ OK' : tageslage.status === 'yellow' ? '⚠️ Hinweise' : '🔴 Prüfen'}
+        </div>
+      </div>
+
+      {/* Safety Banner */}
+      <div className="bg-slate-900 text-white rounded-xl p-4 flex items-center gap-4">
+        <span className="text-2xl">🛡️</span>
+        <div>
+          <div className="font-semibold text-green-400">Alle Sicherheitsinvarianten eingehalten</div>
+          <div className="text-sm text-slate-300">
+            EMAIL_PROVIDER: {state.systemInvariants.emailProvider} &nbsp;·&nbsp;
+            OUTREACH: {state.systemInvariants.outreachEmailProvider} &nbsp;·&nbsp;
+            Phase {state.systemInvariants.phase} &nbsp;·&nbsp;
+            Autonomy: {state.systemInvariants.currentAutonomyLevel} &nbsp;·&nbsp;
+            noScraping: {String(state.systemInvariants.noScraping)} &nbsp;·&nbsp;
+            noEmailSent: {String(state.systemInvariants.noEmailSent)}
+          </div>
+        </div>
+      </div>
+
+      {/* Tageslage */}
+      <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
+        <h2 className="text-xl font-bold text-gray-900">📋 Aktuelle Tageslage</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <div className="text-xs font-semibold text-green-700 uppercase mb-1">🌟 Top-Opportunity</div>
+            <div className="text-sm text-green-900">{tageslage.topOpportunity}</div>
+          </div>
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <div className="text-xs font-semibold text-amber-700 uppercase mb-1">⚠️ Top-Risiko (blockiert)</div>
+            <div className="text-sm text-amber-900">{tageslage.topRisk}</div>
+          </div>
+        </div>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="text-xs font-semibold text-blue-700 uppercase mb-1">🎯 Nächste Aktion</div>
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-blue-900">{tageslage.immediateAction}</div>
+            <a href={tageslage.immediateActionHref} className="ml-4 px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors whitespace-nowrap">
+              Zum Bereich →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-lg border border-gray-200 p-4 text-center">
+          <div className="text-3xl font-bold text-blue-600">{tageslage.corridorsAnalyzed}</div>
+          <div className="text-xs text-gray-500 mt-1">Talent-Korridore</div>
+        </div>
+        <div className="bg-white rounded-lg border border-gray-200 p-4 text-center">
+          <div className="text-3xl font-bold text-purple-600">{tageslage.sectorsAnalyzed}</div>
+          <div className="text-xs text-gray-500 mt-1">Arbeitgeber-Sektoren</div>
+        </div>
+        <div className="bg-white rounded-lg border border-gray-200 p-4 text-center">
+          <div className="text-3xl font-bold text-green-600">{tageslage.revenueStreams}</div>
+          <div className="text-xs text-gray-500 mt-1">Revenue-Streams</div>
+        </div>
+        <div className="bg-white rounded-lg border border-gray-200 p-4 text-center">
+          <div className="text-3xl font-bold text-red-600">{tageslage.blockedRisks}</div>
+          <div className="text-xs text-gray-500 mt-1">Blockierte Risiken</div>
+        </div>
+      </div>
+
+      {/* Top 3 Corridors */}
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold text-gray-900">🌍 Top-Talent-Korridore</h2>
+          <a href="/admin/global-demand-radar" className="text-sm text-blue-600 hover:underline">Alle anzeigen →</a>
+        </div>
+        <div className="space-y-3">
+          {state.topCorridors.map((corridor, idx) => (
+            <div key={corridor.id} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+              <div className="text-2xl font-bold text-gray-300 w-8">#{idx + 1}</div>
+              <div className="text-2xl">{corridor.originFlag}</div>
+              <div className="text-gray-400">→</div>
+              <div className="text-2xl">{corridor.destinationFlag}</div>
+              <div className="flex-1">
+                <div className="font-medium text-gray-900">{corridor.origin} → {corridor.destination}</div>
+                <div className="text-xs text-gray-500">{corridor.primarySectors.join(', ')}</div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="text-right">
+                  <div className="text-lg font-bold text-blue-600">{corridor.score}</div>
+                  <div className="text-xs text-gray-400">Score</div>
+                </div>
+                <span className={`px-2 py-0.5 rounded text-xs font-semibold ${corridor.priority === 'high' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                  {corridor.priority}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Revenue Streams */}
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold text-gray-900">💰 Sofort testbare Revenue-Streams</h2>
+          <a href="/admin/revenue-pragmatist" className="text-sm text-blue-600 hover:underline">Alle anzeigen →</a>
+        </div>
+        <div className="space-y-3">
+          {state.topRevenueStreams.map(stream => (
+            <div key={stream.id} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+              <div className="text-2xl">{stream.icon}</div>
+              <div className="flex-1">
+                <div className="font-medium text-gray-900">{stream.name}</div>
+                <div className="text-xs text-gray-500">{stream.timeToRevenue}</div>
+              </div>
+              <div className="text-right">
+                <div className="text-sm font-bold text-green-600">Potenzial: {stream.incomePotential}%</div>
+                <div className="text-xs text-gray-400">Risiko: {stream.legalRisk}%</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Top Tasks */}
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <h2 className="text-lg font-bold text-gray-900 mb-4">✅ Priorisierte Aufgaben (Auto-generiert)</h2>
+        <div className="space-y-2">
+          {state.topTasks.map((task, idx) => (
+            <div key={task.id} className="flex items-start gap-3 p-3 border border-gray-100 rounded-lg">
+              <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-600 text-xs font-bold flex items-center justify-center">{idx + 1}</div>
+              <div className="flex-1">
+                <div className="font-medium text-gray-900 text-sm">{task.title}</div>
+                <div className="text-xs text-gray-500 mt-0.5">{task.description}</div>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <span className={`text-xs px-2 py-0.5 rounded font-semibold ${task.priority === 'high' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                  {task.priority}
+                </span>
+                <a href={task.actionHref} className="text-xs text-blue-600 hover:underline">→</a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Departments Grid */}
+      <div>
+        <h2 className="text-lg font-bold text-gray-900 mb-4">🏢 Agent Departments</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {state.departments.filter(d => d.id !== 'ceo_agent').map(dept => (
+            <a key={dept.id} href={dept.href} className="bg-white border border-gray-200 rounded-xl p-4 hover:border-blue-300 hover:shadow-sm transition-all group">
+              <div className="text-2xl mb-2">{dept.icon}</div>
+              <div className="font-semibold text-gray-900 text-sm group-hover:text-blue-700">{dept.name}</div>
+              <div className="text-xs text-gray-500 mt-1">{dept.description}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Blocked Risks Summary */}
+      <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+        <h2 className="text-lg font-bold text-red-900 mb-3">🚫 Automatisch blockierte Risiken</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          {state.blockedRisks.slice(0, 4).map(risk => (
+            <div key={risk.id} className="flex items-start gap-2 text-sm">
+              <span className="text-red-500 mt-0.5 flex-shrink-0">✗</span>
+              <div>
+                <span className="font-medium text-red-900">{risk.category}:</span>{' '}
+                <span className="text-red-700">{risk.description}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-3 text-xs text-red-600">
+          {state.blockedRisks.length} Risiken blockiert · Kein manueller Override möglich in Phase 1
+        </div>
+      </div>
+
+    </div>
+  )
+}

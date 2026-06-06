@@ -259,6 +259,49 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
               >
                 CEO Dashboard
               </Link>
+              {/* CWO Operating System */}
+              <Link
+                href="/admin/cwo-command-center"
+                className="text-sm text-blue-400 hover:text-blue-200 transition-colors font-semibold"
+              >
+                🧠 CWO
+              </Link>
+              <Link
+                href="/admin/global-demand-radar"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                🌍 Radar
+              </Link>
+              <Link
+                href="/admin/employer-demand-map"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                🏭 Demand
+              </Link>
+              <Link
+                href="/admin/candidate-magnet"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                🧲 Magnet
+              </Link>
+              <Link
+                href="/admin/inbound-growth-engine"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                📈 Growth
+              </Link>
+              <Link
+                href="/admin/revenue-pragmatist"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                💰 Rev
+              </Link>
+              <Link
+                href="/admin/autonomous-worklog"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                ⚙️ Ops
+              </Link>
             </>
           )}
 
