@@ -227,7 +227,12 @@ export function AgencyPartnerForm() {
         <p className="text-xs text-gray-600 font-semibold uppercase">Hinweise</p>
         <p className="text-xs text-gray-500">✗ {COMPLIANCE_DISCLAIMER.noAutoContact}</p>
         <p className="text-xs text-gray-500">✗ White-Label ist Pilotprojekt — keine verbindlichen Verträge in Phase 1.</p>
-        <p className="text-xs text-gray-500">✓ {COMPLIANCE_DISCLAIMER.gdprNote}</p>
+        <p className="text-xs text-gray-500">
+          ✓ {COMPLIANCE_DISCLAIMER.gdprNote}{' '}
+          <a href={COMPLIANCE_DISCLAIMER.datenschutzUrl} className="underline text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">
+            Datenschutzerklärung
+          </a>
+        </p>
       </div>
 
       <div className="flex items-start gap-3">
@@ -238,7 +243,13 @@ export function AgencyPartnerForm() {
           onChange={e => setForm(f => ({ ...f, consent_to_contact: e.target.checked }))}
         />
         <label htmlFor="consent_agency" className="text-sm text-gray-700">
-          <span className="text-red-500">*</span> Ich möchte zum Partner-Pilot kontaktiert werden und stimme zu, dass CorridorWork meine Angaben verarbeitet (freiwillig, widerrufbar).
+          <span className="text-red-500">*</span>{' '}
+          Ich möchte, dass CorridorWork mich zur Bearbeitung dieser Anfrage kontaktiert.
+          Ich stimme der Speicherung meiner Angaben gemäß der{' '}
+          <a href={COMPLIANCE_DISCLAIMER.datenschutzUrl} className="underline text-purple-600 hover:text-purple-800">
+            Datenschutzerklärung
+          </a>{' '}
+          zu (freiwillig, jederzeit widerrufbar).
         </label>
       </div>
 

@@ -145,6 +145,11 @@ export const COMPLIANCE_DISCLAIMER = {
   noAutoContact:       'Keine automatische Kontaktaufnahme. Ihr Lead wird manuell geprüft.',
   gdprNote:            'Ihre Daten werden nur zur Bearbeitung Ihrer Anfrage verwendet (DSGVO Art. 6 Abs. 1 lit. b).',
   phase1Note:          'CorridorWork befindet sich in Phase 1 (Pilot). Keine laufenden Verträge ohne schriftliche Vereinbarung.',
+  // Legal-Readiness-Ergänzungen (Revenue Leads)
+  datenschutzUrl:      '/legal/datenschutz',
+  impressumUrl:        '/legal/impressum',
+  legalContact:        'transl.delta@gmail.com',
+  consentText:         'Ich möchte, dass CorridorWork mich zur Bearbeitung dieser Anfrage kontaktiert. Ich stimme der Speicherung meiner Angaben gemäß der Datenschutzerklärung zu (freiwillig, jederzeit widerrufbar).',
 } as const
 
 // ── Safety Export ─────────────────────────────────────────────────────────────

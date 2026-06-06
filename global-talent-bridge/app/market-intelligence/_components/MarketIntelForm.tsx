@@ -180,7 +180,12 @@ export function MarketIntelForm() {
         <p className="text-xs text-green-700">✗ Keine Kandidatenlisten</p>
         <p className="text-xs text-green-700">✗ Keine individuellen Profile</p>
         <p className="text-xs text-green-700">✓ Nur aggregierte, anonymisierte Marktdaten</p>
-        <p className="text-xs text-green-700">✓ {COMPLIANCE_DISCLAIMER.gdprNote}</p>
+        <p className="text-xs text-green-700">
+          ✓ {COMPLIANCE_DISCLAIMER.gdprNote}{' '}
+          <a href={COMPLIANCE_DISCLAIMER.datenschutzUrl} className="underline text-green-800 hover:text-green-900" target="_blank" rel="noopener noreferrer">
+            Datenschutzerklärung
+          </a>
+        </p>
       </div>
 
       <div className="flex items-start gap-3">
@@ -191,7 +196,13 @@ export function MarketIntelForm() {
           onChange={e => setForm(f => ({ ...f, consent_to_contact: e.target.checked }))}
         />
         <label htmlFor="consent_intel" className="text-sm text-gray-700">
-          <span className="text-red-500">*</span> Ich möchte informiert werden, wenn Reports verfügbar sind, und stimme der Verarbeitung meiner Kontaktdaten zu.
+          <span className="text-red-500">*</span>{' '}
+          Ich möchte, dass CorridorWork mich zur Bearbeitung dieser Anfrage kontaktiert.
+          Ich stimme der Speicherung meiner Angaben gemäß der{' '}
+          <a href={COMPLIANCE_DISCLAIMER.datenschutzUrl} className="underline text-green-700 hover:text-green-900">
+            Datenschutzerklärung
+          </a>{' '}
+          zu (freiwillig, jederzeit widerrufbar).
         </label>
       </div>
 

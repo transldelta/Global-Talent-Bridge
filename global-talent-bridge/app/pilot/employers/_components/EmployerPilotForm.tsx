@@ -195,7 +195,12 @@ export function EmployerPilotForm() {
         <p className="text-xs text-gray-500">✗ {COMPLIANCE_DISCLAIMER.noJobGuarantee}</p>
         <p className="text-xs text-gray-500">✗ {COMPLIANCE_DISCLAIMER.noVisaGuarantee}</p>
         <p className="text-xs text-gray-500">✗ {COMPLIANCE_DISCLAIMER.noAutoPayment}</p>
-        <p className="text-xs text-gray-500">✓ {COMPLIANCE_DISCLAIMER.gdprNote}</p>
+        <p className="text-xs text-gray-500">
+          ✓ {COMPLIANCE_DISCLAIMER.gdprNote}{' '}
+          <a href={COMPLIANCE_DISCLAIMER.datenschutzUrl} className="underline text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">
+            Datenschutzerklärung
+          </a>
+        </p>
       </div>
 
       <div className="flex items-start gap-3">
@@ -206,7 +211,13 @@ export function EmployerPilotForm() {
           onChange={e => setForm(f => ({ ...f, consent_to_contact: e.target.checked }))}
         />
         <label htmlFor="consent" className="text-sm text-gray-700">
-          <span className="text-red-500">*</span> Ich möchte zum Pilot kontaktiert werden und stimme zu, dass CorridorWork meine Angaben zur Bearbeitung dieser Anfrage speichert (freiwillig, jederzeit widerrufbar).
+          <span className="text-red-500">*</span>{' '}
+          Ich möchte, dass CorridorWork mich zur Bearbeitung dieser Anfrage kontaktiert.
+          Ich stimme der Speicherung meiner Angaben gemäß der{' '}
+          <a href={COMPLIANCE_DISCLAIMER.datenschutzUrl} className="underline text-blue-600 hover:text-blue-800">
+            Datenschutzerklärung
+          </a>{' '}
+          zu (freiwillig, jederzeit widerrufbar).
         </label>
       </div>
 

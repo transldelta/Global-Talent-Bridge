@@ -190,6 +190,109 @@ export default function DatenschutzPage() {
               </a>
             </p>
           </div>
+
+          {/* 10. Pilot-, Partner- und Market-Intelligence-Anfragen */}
+          <div className="border-t border-gray-700 pt-6">
+            <h2 className="text-xl font-bold text-white mb-3">
+              10. Pilot-, Partner- und Market-Intelligence-Anfragen
+            </h2>
+            <p className="text-gray-400 mb-4">
+              Über die öffentlichen Formulare auf{' '}
+              <span className="text-white">/pilot/employers</span>,{' '}
+              <span className="text-white">/pilot/agencies</span> und{' '}
+              <span className="text-white">/market-intelligence</span>{' '}
+              können Arbeitgeber, Recruiting-Agenturen und B2B-Interessenten
+              unverbindliche Anfragen einreichen. Die dabei anfallenden Daten werden
+              in der internen Tabelle <code className="text-green-400 text-xs bg-gray-800 px-1 rounded">revenue_leads</code> gespeichert.
+            </p>
+
+            <div className="space-y-4 text-gray-400">
+              <div>
+                <p className="text-white font-medium mb-1">Erhobene Daten</p>
+                <ul className="list-none space-y-1 text-sm">
+                  {[
+                    'Organisation / Firmenname',
+                    'Ansprechpartner (Name)',
+                    'E-Mail-Adresse',
+                    'Land und Stadt (optional)',
+                    'Branche / Korridor-Interesse (optional)',
+                    'Nachricht / Freitext (optional)',
+                    'Zeitpunkt der Anfrage (automatisch)',
+                    'Art der Anfrage (Employer Pilot / Agency Partner / Market Intelligence)',
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="text-blue-400 shrink-0 mt-0.5">·</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <p className="text-white font-medium mb-1">Zweck der Verarbeitung</p>
+                <p className="text-sm">
+                  Die Daten werden ausschließlich zur Bearbeitung der eingereichten
+                  Anfrage verwendet — d.h. zur Prüfung, ob eine Zusammenarbeit im
+                  Rahmen des CorridorWork-Piloten sinnvoll ist. Rechtsgrundlage:{' '}
+                  <strong className="text-white">Art. 6 Abs. 1 lit. b DSGVO</strong>{' '}
+                  (Vertragsanbahnung) in Verbindung mit der ausdrücklichen Einwilligung
+                  (Art. 6 Abs. 1 lit. a DSGVO), die vor dem Einreichen der Anfrage
+                  erteilt wird.
+                </p>
+              </div>
+
+              <div>
+                <p className="text-white font-medium mb-1">Was NICHT passiert</p>
+                <ul className="list-none space-y-1 text-sm">
+                  {[
+                    'Es werden keine automatischen E-Mails an die anfragende Person gesendet.',
+                    'Es findet kein automatischer Outreach durch das System statt.',
+                    'Es werden keine Zahlungen ausgelöst.',
+                    'Kein Bulk-Versand, kein Cold-Outreach.',
+                    'E-Mail-Provider ist deaktiviert (EMAIL_PROVIDER = none).',
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="text-red-400 shrink-0 mt-0.5">✗</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <p className="text-white font-medium mb-1">Weitergabe an Dritte</p>
+                <p className="text-sm">
+                  Die Anfragedaten werden nicht an Dritte verkauft, vermietet oder für
+                  Werbezwecke weitergegeben. Technische Dienstleister (Supabase für
+                  Datenbank, Vercel für Hosting) erhalten nur die zur Bereitstellung
+                  des Dienstes notwendigen Daten und verarbeiten diese ausschließlich
+                  auf Weisung.
+                </p>
+              </div>
+
+              <div>
+                <p className="text-white font-medium mb-1">Speicherdauer</p>
+                <p className="text-sm">
+                  Anfragedaten werden für die Dauer des Piloten gespeichert, längstens
+                  jedoch 24 Monate nach Eingang, sofern keine längere Aufbewahrung
+                  gesetzlich erforderlich ist. Auf Wunsch werden Daten jederzeit
+                  gelöscht.
+                </p>
+              </div>
+
+              <div>
+                <p className="text-white font-medium mb-1">Deine Rechte</p>
+                <p className="text-sm">
+                  Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung
+                  der Verarbeitung sowie das Recht, die Einwilligung jederzeit zu
+                  widerrufen — ohne Angabe von Gründen. Wende dich dazu an:{' '}
+                  <a href="mailto:transl.delta@gmail.com" className="text-blue-400">
+                    transl.delta@gmail.com
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
