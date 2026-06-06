@@ -224,6 +224,12 @@ export async function NavBar({ badge, badgeColor = 'blue' }: NavBarProps) {
                 Pilot-Kit
               </Link>
               <Link
+                href="/admin/first-pilot"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                🎯 First Pilot
+              </Link>
+              <Link
                 href="/admin/system-check"
                 className="text-sm text-gray-400 hover:text-white transition-colors"
               >
