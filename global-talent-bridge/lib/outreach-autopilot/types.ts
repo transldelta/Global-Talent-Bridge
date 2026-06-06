@@ -24,6 +24,25 @@ export type EntryStatus =
   | 'contacted_manual'
   | 'blocked'
 
+// ── Placeholder Detection ──────────────────────────────────────────────────────
+
+export type PlaceholderDetectionResult = {
+  isPlaceholder:   boolean
+  matchedPattern:  string | null
+  userMessage:     string | null
+  improvementHint: string | null
+}
+
+// ── Score Improvement Hints ────────────────────────────────────────────────────
+
+export type ScoreImprovementHint = {
+  field:       string
+  label:       string
+  explanation: string
+  example:     string
+  scoreGain:   number        // geschätzter Score-Zuwachs wenn Feld ausgefüllt
+}
+
 // ── Research Agent ─────────────────────────────────────────────────────────────
 
 export type CompanyInput = {
@@ -119,17 +138,19 @@ export type DeliveryCheckResult = {
 // ── Orchestrator Output ────────────────────────────────────────────────────────
 
 export type AutopilotAnalysis = {
-  profile:           CompanyProfile
-  fitScore:          FitScoreResult
-  compliance:        ComplianceResult
-  draft:             DraftMessage
-  approval:          ApprovalState
-  delivery:          DeliveryCheckResult
+  profile:             CompanyProfile
+  fitScore:            FitScoreResult
+  compliance:          ComplianceResult
+  draft:               DraftMessage
+  approval:            ApprovalState
+  delivery:            DeliveryCheckResult
+  placeholder:         PlaceholderDetectionResult
+  scoreHints:          ScoreImprovementHint[]
   // Aggregated for UI
-  overallSafe:       boolean
-  recommendedChannel: ContactMethod
-  spamRisk:          SpamRisk
-  summary:           string
+  overallSafe:         boolean
+  recommendedChannel:  ContactMethod
+  spamRisk:            SpamRisk
+  summary:             string
 }
 
 // ── DB Row ─────────────────────────────────────────────────────────────────────

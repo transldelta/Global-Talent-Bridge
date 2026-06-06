@@ -235,8 +235,13 @@ export function OutreachAutopilotForm() {
   }
 
   const canCopy = analysis
-    ? analysis.compliance.status !== 'blocked' && !analysis.fitScore.blockedByScore
+    ? !analysis.placeholder.isPlaceholder &&
+      analysis.compliance.status !== 'blocked' &&
+      !analysis.fitScore.blockedByScore
     : false
+
+  const isPlaceholder = analysis?.placeholder.isPlaceholder ?? false
+  const showScoreHelp = analysis && !isPlaceholder && analysis.fitScore.blockedByScore
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
@@ -384,6 +389,73 @@ export function OutreachAutopilotForm() {
       {/* ════════════ SCHRITT 2: Analyse-Ergebnisse ════════════ */}
       {step === 2 && analysis && (
         <div className="space-y-5">
+
+          {/* ── Placeholder-Warnung ── */}
+          {isPlaceholder && (
+            <div className="bg-red-900/30 border border-red-700 rounded-lg p-4 space-y-3">
+              <div className="flex items-start gap-3">
+                <span className="text-red-400 text-xl">🚫</span>
+                <div>
+                  <div className="text-red-300 font-medium text-sm">Test- oder Platzhalternamen erkannt</div>
+                  <div className="text-red-200 text-sm mt-1">
+                    {analysis!.placeholder.userMessage}
+                  </div>
+                </div>
+              </div>
+              <div className="bg-gray-900 rounded p-3 text-xs text-gray-300 space-y-1">
+                <div className="font-medium text-white mb-2">💡 Was tun?</div>
+                <div>✓ Echten Firmennamen eintragen (z.B. "Pflegeheim am See GmbH")</div>
+                <div>✓ Website ergänzen (z.B. "https://www.pflegeheim-see.de")</div>
+                <div>✓ Branche wählen (z.B. "Altenpflege")</div>
+                <div>✓ Personalbedarf-Hinweis eintragen</div>
+              </div>
+              <button
+                type="button"
+                onClick={() => { setStep(1); setAnalysis(null) }}
+                className="px-4 py-2 bg-red-800 hover:bg-red-700 text-white rounded text-sm font-medium transition-colors"
+              >
+                ✏️ Daten verbessern und neu analysieren
+              </button>
+            </div>
+          )}
+
+          {/* ── Score < 70 Hilfe ── */}
+          {showScoreHelp && (
+            <div className="bg-yellow-900/20 border border-yellow-700 rounded-lg p-4 space-y-3">
+              <div className="flex items-start gap-3">
+                <span className="text-yellow-400 text-xl">⚠️</span>
+                <div>
+                  <div className="text-yellow-300 font-medium text-sm">
+                    Score {analysis!.fitScore.score}/100 — Mindestens 70 erforderlich
+                  </div>
+                  <div className="text-yellow-200 text-sm mt-1">
+                    Der Outreach ist noch nicht freigegeben. So erhöhst du den Score:
+                  </div>
+                </div>
+              </div>
+              {analysis!.scoreHints.length > 0 && (
+                <div className="space-y-2">
+                  {analysis!.scoreHints.map((hint, i) => (
+                    <div key={i} className="bg-gray-900 rounded p-3 text-xs space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-green-400 font-bold">+{hint.scoreGain} Punkte</span>
+                        <span className="text-white font-medium">{hint.label}</span>
+                      </div>
+                      <div className="text-gray-400">{hint.explanation}</div>
+                      <div className="text-blue-300">Beispiel: {hint.example}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={() => { setStep(1); setAnalysis(null) }}
+                className="px-4 py-2 bg-yellow-800 hover:bg-yellow-700 text-white rounded text-sm font-medium transition-colors"
+              >
+                ✏️ Daten verbessern und neu analysieren
+              </button>
+            </div>
+          )}
 
           {/* Score-Übersicht */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

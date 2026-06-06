@@ -13,7 +13,7 @@
  *
  * Reine Funktion. Kein DB-Call, kein API-Call.
  */
-import type { ComplianceResult, ComplianceViolation, SpamRisk } from './types'
+import type { ComplianceResult, ComplianceViolation, SpamRisk, PlaceholderDetectionResult } from './types'
 
 // ── Pflicht-Bestandteile ───────────────────────────────────────────────────────
 
@@ -122,6 +122,29 @@ function hasRegistrationLink(text: string): boolean {
 }
 
 // ── Main Export ────────────────────────────────────────────────────────────────
+
+/**
+ * Prüft ob ein Placeholder-Eintrag die Compliance blockieren soll.
+ * Gibt null zurück wenn kein Problem, sonst ComplianceResult mit status=blocked.
+ */
+export function checkComplianceForPlaceholder(
+  placeholder: PlaceholderDetectionResult,
+): ComplianceResult | null {
+  if (!placeholder.isPlaceholder) return null
+
+  return {
+    status:     'blocked',
+    violations: [{
+      rule:        'placeholder_company_name',
+      severity:    'error',
+      description: placeholder.userMessage ?? 'Test- oder Platzhalternamen erkannt.',
+    }],
+    warnings:             [],
+    hasSignature:         false,
+    hasPilotNote:         false,
+    hasNoSpamIndicators:  true,
+  }
+}
 
 /**
  * Prüft einen Nachrichtentext auf Compliance.
