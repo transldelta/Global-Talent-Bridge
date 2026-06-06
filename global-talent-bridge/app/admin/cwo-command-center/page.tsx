@@ -6,6 +6,7 @@
 import { redirect }            from 'next/navigation'
 import { getCurrentAdminUser } from '@/lib/admin'
 import { generateCWOState, generateTageslageSummary } from '@/lib/cwo-agent'
+import { LastRunPanel }        from './_components/LastRunPanel'
 
 export const dynamic = 'force-dynamic'
 
@@ -48,6 +49,9 @@ export default async function CWOCommandCenterPage() {
           </div>
         </div>
       </div>
+
+      {/* Daily Runner — letzter automatischer Lauf */}
+      <LastRunPanel />
 
       {/* Tageslage */}
       <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
