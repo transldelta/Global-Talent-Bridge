@@ -158,6 +158,7 @@ export const REVENUE_LEAD_INVARIANTS = {
   no_email_sent:      true  as const,
   no_auto_outreach:   true  as const,
   no_payment_started: true  as const,
+  no_scraping:        true  as const,
   emailProvider:      'none' as const,
   phase:              1     as const,
 } as const

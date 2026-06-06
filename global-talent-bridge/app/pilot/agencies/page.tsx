@@ -8,7 +8,29 @@ import { AgencyPartnerForm } from './_components/AgencyPartnerForm'
 
 export const metadata: Metadata = {
   title: 'Partner-Pilot für Agenturen | CorridorWork',
-  description: 'White-Label Talent-Matching für Recruiting-Agenturen, Sprachschulen und Relocation-Dienstleister. Pilotphase kostenlos.',
+  description:
+    'White-Label Talent-Matching für Recruiting-Agenturen, Sprachschulen und Relocation-Dienstleister. Pilot kostenlos — keine automatische Zahlung, keine verbindlichen Verträge.',
+  keywords: [
+    'White-Label Recruiting',
+    'Partner-Pilot Agentur',
+    'Talent-Matching Agentur',
+    'Recruiting-Agentur internationales Matching',
+    'Sprachschule Partner',
+    'Relocation Dienstleister',
+    'CorridorWork Partner',
+  ],
+  openGraph: {
+    title: 'Partner-Pilot für Agenturen — White-Label Talent-Matching | CorridorWork',
+    description:
+      'Recruiting-Agenturen und Relocation-Dienstleister nutzen das CorridorWork-System als Partnerlösung. Pilot kostenlos, manuell gesteuert.',
+    url: 'https://corridorwork.com/pilot/agencies',
+    type: 'website',
+    locale: 'de_DE',
+    siteName: 'CorridorWork',
+  },
+  alternates: {
+    canonical: 'https://corridorwork.com/pilot/agencies',
+  },
 }
 
 export default function AgenciesPilotPage() {

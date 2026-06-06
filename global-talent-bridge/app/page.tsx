@@ -337,6 +337,85 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── PILOT & PARTNER CTAs ─────────────────────── */}
+      <section className="px-4 py-16 border-t border-gray-800 bg-gray-900/50">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-900/40 border border-green-700/50 text-green-300 text-xs font-medium mb-4">
+              🚀 Pilot-Phase aktiv — Inbound-Leads offen
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-3">Jetzt Pilot anfragen</h2>
+            <p className="text-gray-400 max-w-xl mx-auto text-sm">
+              Kostenlos · Unverbindlich · Kein Abo · Keine automatische Zahlung · Manuell geprüft
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Arbeitgeber-Pilot */}
+            <div className="bg-gray-900 border border-blue-800/50 rounded-2xl p-6 flex flex-col">
+              <div className="text-3xl mb-3">🏭</div>
+              <h3 className="text-white font-bold text-lg mb-2">Arbeitgeber-Pilot</h3>
+              <p className="text-gray-400 text-sm mb-4 flex-1">
+                Internationales Talent-Matching für Pflege, Bau, IT, Gastronomie und Logistik.
+                Kein Risiko, kostenloser Pilot.
+              </p>
+              <div className="space-y-1 mb-5">
+                <p className="text-xs text-gray-500">✗ Keine Jobgarantie</p>
+                <p className="text-xs text-gray-500">✗ Keine Visa-Garantie</p>
+                <p className="text-xs text-gray-500">✗ Keine automatische Zahlung</p>
+              </div>
+              <Link
+                href="/pilot/employers"
+                className="w-full text-center px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors text-sm"
+              >
+                Arbeitgeber-Pilot anfragen →
+              </Link>
+            </div>
+
+            {/* Agentur-/Partner-Pilot */}
+            <div className="bg-gray-900 border border-purple-800/50 rounded-2xl p-6 flex flex-col">
+              <div className="text-3xl mb-3">🤝</div>
+              <h3 className="text-white font-bold text-lg mb-2">Agentur-/Partner-Pilot</h3>
+              <p className="text-gray-400 text-sm mb-4 flex-1">
+                Recruiting-Agenturen, Sprachschulen und Relocation-Dienstleister nutzen
+                CorridorWork als White-Label Partnerlösung.
+              </p>
+              <div className="space-y-1 mb-5">
+                <p className="text-xs text-gray-500">✗ Kein verbindlicher Vertrag</p>
+                <p className="text-xs text-gray-500">✗ Kein automatischer Versand</p>
+                <p className="text-xs text-gray-500">✓ Pilot kostenlos</p>
+              </div>
+              <Link
+                href="/pilot/agencies"
+                className="w-full text-center px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-semibold rounded-xl transition-colors text-sm"
+              >
+                Partner-Pilot anfragen →
+              </Link>
+            </div>
+
+            {/* Market Intelligence */}
+            <div className="bg-gray-900 border border-emerald-800/50 rounded-2xl p-6 flex flex-col">
+              <div className="text-3xl mb-3">📊</div>
+              <h3 className="text-white font-bold text-lg mb-2">Market Intelligence</h3>
+              <p className="text-gray-400 text-sm mb-4 flex-1">
+                Aggregierte Korridor-Scores, Branchennachfrage und Arbeitgeberbedarf
+                für B2B-Entscheider. Keine personenbezogenen Daten.
+              </p>
+              <div className="space-y-1 mb-5">
+                <p className="text-xs text-gray-500">✗ Keine Kandidatendaten</p>
+                <p className="text-xs text-gray-500">✗ Keine automatische E-Mail</p>
+                <p className="text-xs text-gray-500">✓ Beta-Zugang kostenfrei</p>
+              </div>
+              <Link
+                href="/market-intelligence"
+                className="w-full text-center px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl transition-colors text-sm"
+              >
+                Report-Interesse anmelden →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── CTA UNTEN ────────────────────────────────── */}
       <section className="px-4 py-16 border-t border-gray-800 bg-gradient-to-r from-blue-900/20 to-purple-900/20">
         <div className="max-w-2xl mx-auto text-center">

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 
 /**
- * PublicNavBar — für öffentliche Seiten (Landing, About, Contact, Legal, etc.)
+ * PublicNavBar — für öffentliche Seiten (Landing, About, Contact, Legal, Pilot, etc.)
  * Server Component — prüft Auth-Status für bedingte Links (Login vs. Dashboard).
  */
 export async function PublicNavBar() {
@@ -23,25 +23,25 @@ export async function PublicNavBar() {
         </Link>
 
         {/* Center links — hidden on mobile */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-5">
           <Link href="/for-candidates" className="text-sm text-gray-400 hover:text-white transition-colors">
             Für Kandidaten
           </Link>
           <Link href="/for-employers" className="text-sm text-gray-400 hover:text-white transition-colors">
             Für Arbeitgeber
           </Link>
-          <Link href="/pricing" className="text-sm text-gray-400 hover:text-white transition-colors">
-            Pricing
+          <Link href="/pilot/employers" className="text-sm text-gray-400 hover:text-white transition-colors">
+            Employer Pilot
           </Link>
-          <Link href="/about" className="text-sm text-gray-400 hover:text-white transition-colors">
-            Über uns
+          <Link href="/pilot/agencies" className="text-sm text-gray-400 hover:text-white transition-colors">
+            Partner-Pilot
           </Link>
-          <Link href="/contact" className="text-sm text-gray-400 hover:text-white transition-colors">
-            Kontakt
+          <Link href="/market-intelligence" className="text-sm text-gray-400 hover:text-white transition-colors">
+            Market Intelligence
           </Link>
         </div>
 
-        {/* Right: Auth */}
+        {/* Right: Pilot CTA + Auth */}
         <div className="flex items-center gap-3 shrink-0">
           {user ? (
             <Link
@@ -57,6 +57,12 @@ export async function PublicNavBar() {
                 className="text-sm text-gray-400 hover:text-white transition-colors hidden sm:block"
               >
                 Login
+              </Link>
+              <Link
+                href="/pilot/employers"
+                className="text-sm px-4 py-1.5 bg-green-600 hover:bg-green-500 text-white rounded-lg transition-colors hidden sm:block"
+              >
+                🚀 Pilot anfragen
               </Link>
               <Link
                 href="/auth/register"

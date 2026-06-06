@@ -9,7 +9,29 @@ import { MarketIntelForm } from './_components/MarketIntelForm'
 
 export const metadata: Metadata = {
   title: 'Market Intelligence Reports | CorridorWork',
-  description: 'Aggregierte Talent-Korridor-Daten für B2B-Entscheider. Nachfragebranchen, Arbeitgeberbedarf, Korridor-Scores. Keine personenbezogenen Daten.',
+  description:
+    'Aggregierte Talent-Korridor-Daten für B2B-Entscheider: Nachfragebranchen, Arbeitgeberbedarf, Korridor-Scores. Keine personenbezogenen Daten. Beta-Zugang kostenfrei.',
+  keywords: [
+    'Market Intelligence Recruiting',
+    'Talent-Korridor Daten',
+    'internationales Recruiting Marktdaten',
+    'Arbeitgeberbedarf Fachkräfte',
+    'Korridor-Score',
+    'B2B Marktdaten',
+    'CorridorWork Market Intelligence',
+  ],
+  openGraph: {
+    title: 'Market Intelligence Reports — Talent-Korridor Insights | CorridorWork',
+    description:
+      'Aggregierte Marktdaten zu internationalen Talent-Korridoren: Korridor-Scores, Branchennachfrage, Arbeitgeberbedarf. Keine personenbezogenen Daten.',
+    url: 'https://corridorwork.com/market-intelligence',
+    type: 'website',
+    locale: 'de_DE',
+    siteName: 'CorridorWork',
+  },
+  alternates: {
+    canonical: 'https://corridorwork.com/market-intelligence',
+  },
 }
 
 export default function MarketIntelligencePage() {

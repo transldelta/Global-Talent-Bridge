@@ -9,7 +9,29 @@ import { EmployerPilotForm } from './_components/EmployerPilotForm'
 
 export const metadata: Metadata = {
   title: 'Kostenloser Employer Pilot | CorridorWork',
-  description: 'Testen Sie internationales Talent-Matching kostenlos. Kein Abo. Keine automatische Zahlung. Unverbindlicher Pilot für Arbeitgeber.',
+  description:
+    'Internationale Fachkräfte für Pflege, Bau, IT und Gastronomie. Kostenloser Pilot — kein Abo, keine automatische Zahlung, keine Jobgarantie. Unverbindlich anfragen.',
+  keywords: [
+    'internationales Recruiting',
+    'internationale Fachkräfte',
+    'Employer Pilot',
+    'Arbeitgeber internationales Talent',
+    'Pflege Fachkräfte international',
+    'Cross-border Hiring',
+    'CorridorWork Pilot',
+  ],
+  openGraph: {
+    title: 'Kostenloser Employer Pilot — Internationales Talent-Matching | CorridorWork',
+    description:
+      'Internationale Fachkräfte aus geprüften Talent-Korridoren. Pilot kostenlos starten — manuell geprüft, DSGVO-konform, kein Abo.',
+    url: 'https://corridorwork.com/pilot/employers',
+    type: 'website',
+    locale: 'de_DE',
+    siteName: 'CorridorWork',
+  },
+  alternates: {
+    canonical: 'https://corridorwork.com/pilot/employers',
+  },
 }
 
 export default function EmployerPilotPage() {

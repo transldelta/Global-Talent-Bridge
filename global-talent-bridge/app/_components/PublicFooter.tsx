@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 /**
  * PublicFooter — Footer für alle öffentlichen Seiten.
- * Enthält rechtliche Links, Navigation und MVP-Hinweis.
+ * Enthält rechtliche Links, Navigation, Revenue-Pilot-Links und MVP-Hinweis.
  */
 export function PublicFooter() {
   const year = new Date().getFullYear()
@@ -35,6 +35,33 @@ export function PublicFooter() {
                   Über uns
                 </Link>
               </li>
+              <li>
+                <Link href="/contact" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
+                  Kontakt
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Pilot & Partner — Revenue Pages */}
+          <div>
+            <h3 className="text-white text-sm font-semibold mb-3">Pilot & Partner</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/pilot/employers" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
+                  🏭 Arbeitgeber-Pilot
+                </Link>
+              </li>
+              <li>
+                <Link href="/pilot/agencies" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
+                  🤝 Agentur-/Partner-Pilot
+                </Link>
+              </li>
+              <li>
+                <Link href="/market-intelligence" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
+                  📊 Market Intelligence
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -55,18 +82,6 @@ export function PublicFooter() {
               <li>
                 <Link href="/auth/login" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
                   Login
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Support */}
-          <div>
-            <h3 className="text-white text-sm font-semibold mb-3">Support</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/contact" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
-                  Kontakt
                 </Link>
               </li>
             </ul>

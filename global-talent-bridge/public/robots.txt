@@ -7,6 +7,8 @@ Allow: /about
 Allow: /contact
 Allow: /legal/
 Allow: /corridors/
+Allow: /pilot/
+Allow: /market-intelligence
 
 # Kein Zugriff auf Admin- und Auth-Bereich
 Disallow: /admin/
@@ -15,4 +17,4 @@ Disallow: /candidate/
 Disallow: /employer/
 Disallow: /api/
 
-Sitemap: https://global-talent-bridge.vercel.app/sitemap.xml
+Sitemap: https://corridorwork.com/sitemap.xml

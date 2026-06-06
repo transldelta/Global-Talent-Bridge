@@ -100,6 +100,58 @@ export default async function CWOCommandCenterPage() {
         </div>
       </div>
 
+      {/* Revenue Pages Live — Public Visibility Status */}
+      <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">🌐 Revenue Pages — Public Visibility</h2>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Alle drei Inbound-Seiten sind live, öffentlich verlinkbar und in der Sitemap. Kein Versand, kein Stripe.
+            </p>
+          </div>
+          <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full border border-green-200">
+            ✅ LIVE
+          </span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+          <a href="/pilot/employers" target="_blank" rel="noopener noreferrer"
+             className="flex items-center gap-3 p-3 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors">
+            <span className="text-xl">🏭</span>
+            <div>
+              <div className="text-sm font-semibold text-blue-900">/pilot/employers</div>
+              <div className="text-xs text-blue-600">Arbeitgeber-Pilot</div>
+            </div>
+          </a>
+          <a href="/pilot/agencies" target="_blank" rel="noopener noreferrer"
+             className="flex items-center gap-3 p-3 bg-purple-50 border border-purple-200 rounded-lg hover:bg-purple-100 transition-colors">
+            <span className="text-xl">🤝</span>
+            <div>
+              <div className="text-sm font-semibold text-purple-900">/pilot/agencies</div>
+              <div className="text-xs text-purple-600">Agentur-/Partner-Pilot</div>
+            </div>
+          </a>
+          <a href="/market-intelligence" target="_blank" rel="noopener noreferrer"
+             className="flex items-center gap-3 p-3 bg-emerald-50 border border-emerald-200 rounded-lg hover:bg-emerald-100 transition-colors">
+            <span className="text-xl">📊</span>
+            <div>
+              <div className="text-sm font-semibold text-emerald-900">/market-intelligence</div>
+              <div className="text-xs text-emerald-600">Market Intelligence</div>
+            </div>
+          </a>
+        </div>
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start gap-3">
+          <span className="text-lg shrink-0">🎯</span>
+          <div>
+            <div className="text-sm font-semibold text-amber-900">Nächster sicherer Schritt</div>
+            <div className="text-xs text-amber-700 mt-0.5">
+              Inbound-Seiten intern testen → erste Leads abwarten → Leads in{' '}
+              <a href="/admin/revenue-inbox" className="underline font-medium">Revenue Inbox</a> prüfen →
+              erst nach 3 erfolgreichen Pilot-Abschlüssen extern teilen. Kein Outreach, keine E-Mails, kein Stripe.
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Daily Runner — letzter automatischer Lauf */}
       <LastRunPanel />
 
