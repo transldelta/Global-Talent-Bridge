@@ -161,13 +161,13 @@ export default function DemoSandboxPage() {
           <Link href="/global/employers"
             className="flex flex-col items-center p-5 bg-blue-50 border-2 border-blue-300 rounded-xl text-center hover:bg-blue-100 transition-colors">
             <span className="text-3xl mb-2">🏢</span>
-            <div className="font-bold text-blue-900">I'm an Employer</div>
+            <div className="font-bold text-blue-900">I&apos;m an Employer</div>
             <div className="text-sm text-blue-700 mt-1">Register global hiring need</div>
           </Link>
           <Link href="/global/candidates"
             className="flex flex-col items-center p-5 bg-green-50 border-2 border-green-300 rounded-xl text-center hover:bg-green-100 transition-colors">
             <span className="text-3xl mb-2">👤</span>
-            <div className="font-bold text-green-900">I'm a Candidate</div>
+            <div className="font-bold text-green-900">I&apos;m a Candidate</div>
             <div className="text-sm text-green-700 mt-1">Register interest — free</div>
           </Link>
           <Link href="/strategic-partnership"
