@@ -1,0 +1,3 @@
+# Drop licensed human footage clips here.
+# See docs/video/HUMAN_FOOTAGE_ASSET_LIST.md for required clips and license requirements.
+# Run scripts/build-human-promo-video.sh to generate the final video.
