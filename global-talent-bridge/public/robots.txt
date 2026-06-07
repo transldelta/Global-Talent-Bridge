@@ -12,6 +12,8 @@ Allow: /market-intelligence
 Allow: /industries/
 Allow: /solutions/
 Allow: /demo
+Allow: /global/
+Allow: /demo/sandbox
 
 # Kein Zugriff auf Admin- und Auth-Bereich
 Disallow: /admin/
