@@ -290,18 +290,75 @@ export default async function CWOCommandCenterPage() {
         </div>
       </div>
 
+      {/* ── Google Indexing Follow-up Panel ─────────────────────────────────── */}
+      <div className="bg-blue-50 border-2 border-blue-400 rounded-xl p-5">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">🔍 Google Indexing Follow-up</h2>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Kein Google API · Kein Scraping · Alles manuell in Search Console
+            </p>
+          </div>
+          <a href="/admin/seo-indexing-control"
+             className="px-3 py-1.5 bg-blue-600 text-white text-xs rounded-lg font-medium hover:bg-blue-700 transition-colors">
+            Indexing-Assistent →
+          </a>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-green-700">✅ Bestätigt</div>
+            <div className="text-xs text-green-600">Domain verifiziert</div>
+          </div>
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-green-700">✅ Eingereicht</div>
+            <div className="text-xs text-green-600">Sitemap.xml</div>
+          </div>
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-green-700">✅ Beantragt</div>
+            <div className="text-xs text-green-600">/demo</div>
+          </div>
+          <div className="bg-blue-100 border border-blue-300 rounded-lg p-3 text-center">
+            <div className="text-2xl font-bold text-blue-700">6</div>
+            <div className="text-xs text-blue-600">Prioritäts-URLs offen</div>
+          </div>
+        </div>
+        <div className="bg-white border border-blue-200 rounded-lg p-3">
+          <div className="text-xs font-semibold text-gray-700 mb-2">⏳ Nächster Schritt: Diese URLs in Google Search Console prüfen</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
+            {[
+              '/strategic-partnership',
+              '/partners',
+              '/pilot/employers',
+              '/launch',
+              '/buyer-snapshot',
+              '/market-intelligence',
+            ].map(path => (
+              <a key={path} href={`https://corridorwork.com${path}`} target="_blank" rel="noopener noreferrer"
+                 className="flex items-center gap-2 px-2 py-1.5 bg-blue-50 border border-blue-200 rounded text-xs font-mono text-blue-700 hover:bg-blue-100 transition-colors">
+                <span className="w-1.5 h-1.5 bg-blue-400 rounded-full shrink-0"/>
+                {path}
+                <span className="text-blue-400 ml-auto">↗</span>
+              </a>
+            ))}
+          </div>
+          <div className="text-xs text-gray-500 mt-2">
+            <a href="/admin/seo-indexing-control" className="text-blue-600 underline">Schritt-für-Schritt-Anleitung →</a>
+          </div>
+        </div>
+      </div>
+
       {/* SEO Indexing Control Panel */}
       <div className="bg-white rounded-xl border border-gray-200 p-5">
         <div className="flex items-center justify-between mb-3">
           <div>
             <h2 className="text-lg font-bold text-gray-900">🔍 SEO Indexing & Google Search Console</h2>
             <p className="text-xs text-gray-500 mt-0.5">
-              16 öffentliche Seiten · Sitemap bereit · robots.txt korrekt · Google API: nicht aktiv ✓
+              16+ öffentliche Seiten · Sitemap bereit · robots.txt korrekt · Google API: nicht aktiv ✓
             </p>
           </div>
           <div className="flex gap-2 items-center">
-            <span className="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full border border-amber-200">
-              ⏳ DNS-Eintrag ausstehend
+            <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full border border-green-200">
+              ✅ Domain bestätigt
             </span>
             <a href="/admin/seo-indexing-control"
                className="px-3 py-1.5 bg-blue-600 text-white text-xs rounded-lg font-medium hover:bg-blue-700 transition-colors">
@@ -332,7 +389,7 @@ export default async function CWOCommandCenterPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
             <div className="flex items-center gap-1.5 text-green-700">
               <span>✅</span>
-              <span>Google Search Console Setup: <strong>vorbereitet</strong></span>
+              <span>Google Search Console: <strong>Domain bestätigt · Sitemap eingereicht</strong></span>
             </div>
             <div className="flex items-center gap-1.5 text-blue-700">
               <span>✅</span>

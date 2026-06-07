@@ -24,6 +24,16 @@ import {
 
 export const dynamic = 'force-dynamic'
 
+// ── Schritt 6: Follow-up Indexierungs-URLs (Google Search Console URL-Prüfung) ─
+const FOLLOWUP_URLS_FOR_INDEXING = [
+  { path: '/strategic-partnership', label: 'Strategic Partnership', note: 'Rang 1 Revenue-Pfad — höchste Priorität', priority: 'high' },
+  { path: '/partners',              label: 'Partner-Programm',      note: 'Rang 2 Revenue-Pfad — Agency Partner',   priority: 'high' },
+  { path: '/pilot/employers',       label: 'Employer Pilot',        note: 'Rang 3 Revenue-Pfad — primäre B2B-Page', priority: 'high' },
+  { path: '/launch',                label: 'Launch-Übersicht',      note: 'Öffentliche Einstiegsseite alle Pfade',  priority: 'high' },
+  { path: '/buyer-snapshot',        label: 'Buyer Snapshot',        note: 'Für Käufer/Investoren-Traffic',          priority: 'medium' },
+  { path: '/market-intelligence',   label: 'Market Intelligence',   note: 'Rang 4 Revenue-Pfad — B2B-Zielgruppe',  priority: 'medium' },
+]
+
 const PRIORITY_URLS_FOR_INDEXING = [
   { path: '/demo',                          label: 'Demo',                    note: 'Hohe Konversionsrelevanz' },
   { path: '/pilot/employers',               label: 'Employer Pilot',          note: 'Primäre Revenue-Page' },
@@ -260,7 +270,86 @@ export default async function SeoIndexingControlPage() {
         </div>
       </div>
 
-      {/* ── URL-PRIORITÄTEN ────────────────────────────────────────────────────── */}
+      {/* ── SCHRITT 6 — Google Indexing Follow-up ─────────────────────────────── */}
+      <div className="bg-blue-50 rounded-xl border-2 border-blue-400 p-6">
+        <div className="flex items-center gap-3 mb-1">
+          <div className="w-9 h-9 rounded-full bg-blue-600 text-white font-bold text-base flex items-center justify-center flex-shrink-0">6</div>
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">Als Nächstes bei Google manuell indexieren</h2>
+            <p className="text-xs text-gray-500">Google Search Console → URL-Prüfung → Indexierung beantragen · Kein Google API · Kostenlos</p>
+          </div>
+        </div>
+
+        {/* Status Badges */}
+        <div className="flex flex-wrap gap-2 mb-5 mt-3">
+          <span className="px-3 py-1 bg-green-100 border border-green-300 text-green-800 text-xs font-semibold rounded-full">✅ Sitemap eingereicht</span>
+          <span className="px-3 py-1 bg-green-100 border border-green-300 text-green-800 text-xs font-semibold rounded-full">✅ /demo beantragt</span>
+          <span className="px-3 py-1 bg-blue-100 border border-blue-300 text-blue-800 text-xs font-semibold rounded-full">⏳ 6 Prioritäts-URLs offen</span>
+        </div>
+
+        {/* Anleitung */}
+        <div className="bg-white rounded-xl border border-blue-200 p-4 mb-4">
+          <div className="text-sm font-semibold text-gray-800 mb-3">📋 Anleitung (für jede URL wiederholen):</div>
+          <ol className="space-y-2">
+            {[
+              { step: '1', text: 'URL aus der Liste unten kopieren (Kopieren-Symbol oder Zeile anklicken)' },
+              { step: '2', text: <>{'Google Search Console öffnen → '}<a href="https://search.google.com/search-console" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-medium">search.google.com/search-console</a></> },
+              { step: '3', text: 'Oben in das Suchfeld „URL prüfen" die kopierte URL einfügen' },
+              { step: '4', text: '„Indexierung beantragen" klicken — fertig für diese URL' },
+              { step: '5', text: 'Nächste URL aus der Liste nehmen und Schritte 1–4 wiederholen' },
+            ].map(row => (
+              <li key={row.step} className="flex items-start gap-3">
+                <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{row.step}</span>
+                <span className="text-sm text-gray-700">{row.text}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        {/* Priority URL List */}
+        <div className="space-y-2">
+          {FOLLOWUP_URLS_FOR_INDEXING.map((entry, idx) => (
+            <div key={entry.path}
+                 className={`flex items-center gap-3 p-3 rounded-xl border ${
+                   entry.priority === 'high'
+                     ? 'bg-white border-blue-200 hover:bg-blue-50'
+                     : 'bg-white border-gray-200 hover:bg-gray-50'
+                 } transition-colors`}>
+              <div className={`w-6 h-6 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0 ${
+                entry.priority === 'high' ? 'bg-blue-600' : 'bg-gray-500'
+              }`}>
+                {idx + 1}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-mono text-gray-900 select-all truncate font-medium">
+                  {BASE_URL}{entry.path}
+                </div>
+                <div className="text-xs text-gray-500 mt-0.5">
+                  {entry.label} — {entry.note}
+                  {entry.priority === 'high' && (
+                    <span className="ml-2 px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-semibold">hohe Priorität</span>
+                  )}
+                </div>
+              </div>
+              <a href={`${BASE_URL}${entry.path}`} target="_blank" rel="noopener noreferrer"
+                 className="text-xs text-blue-600 hover:underline flex-shrink-0 px-2 py-1 bg-blue-50 rounded border border-blue-200">
+                Live ↗
+              </a>
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-4 flex items-start gap-2">
+          <span className="text-lg shrink-0">💡</span>
+          <div className="text-xs text-amber-800">
+            <strong>Tipp:</strong> Du musst nicht alle 6 auf einmal machen. 2–3 pro Tag reichen.
+            Google bearbeitet Indexierungsanfragen normalerweise innerhalb von 1–7 Tagen.
+            Kein Google API — alles manuell und kostenlos.
+          </div>
+        </div>
+      </div>
+
+      {/* ── URL-PRIORITÄTEN (bestehend) ────────────────────────────────────────── */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <h2 className="text-lg font-bold text-gray-900 mb-1">🎯 Diese URLs zuerst indexieren</h2>
         <p className="text-sm text-gray-500 mb-4">

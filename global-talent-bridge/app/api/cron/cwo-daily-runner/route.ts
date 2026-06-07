@@ -197,6 +197,17 @@ export async function GET(req: NextRequest) {
     '  · launch overview: /launch',
   ].join('\n'))
 
+  // Google Indexing Follow-up — reine Konfigurationsnotiz, kein externer API-Call
+  completedItems.push([
+    'Google indexing follow-up prepared:',
+    '  · Domain verifiziert: ja',
+    '  · Sitemap eingereicht: ja',
+    '  · /demo beantragt: ja',
+    '  · Prioritäts-URLs offen: /strategic-partnership, /partners, /pilot/employers, /launch, /buyer-snapshot, /market-intelligence',
+    '  · Nächster Schritt: URLs manuell in Google Search Console URL-Prüfung eintragen',
+    '  · Kein Google API · Kein Scraping · Kein externer Call',
+  ].join('\n'))
+
   // Revenue-Leads in completedItems aufnehmen
   if (newLeadsCount > 0) {
     completedItems.push(`${newLeadsCount} neue Inbound-Leads (${strategicNew} Strategic, ${employerLeads ?? 0} Employer, ${agencyLeads ?? 0} Agency, ${intelLeads ?? 0} Intel)`)
