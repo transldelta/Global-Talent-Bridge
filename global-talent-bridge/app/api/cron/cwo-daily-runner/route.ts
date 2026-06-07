@@ -21,6 +21,7 @@ import { createAdminClient }         from '@/lib/supabase/admin'
 import { generateCWOState }          from '@/lib/cwo-agent'
 import { generateTageslageSummary }  from '@/lib/cwo-agent/ceo-agent'
 import { validateInvariants, SYSTEM_INVARIANTS } from '@/lib/cwo-agent/compliance-guard'
+import { generateSeoCheckItems }     from '@/lib/seo-indexing'
 
 // ── Sicherheits-Konstante ─────────────────────────────────────────────────────
 
@@ -118,6 +119,9 @@ export async function GET(req: NextRequest) {
     `=== INVARIANTEN: EMAIL_PROVIDER=${SYSTEM_INVARIANTS.emailProvider} | noEmailSent=${SYSTEM_INVARIANTS.noEmailSent} | noScraping=${SYSTEM_INVARIANTS.noScraping} ===`,
   ].join('\n')
 
+  // SEO Indexing Check — reine Konfigurationsprüfung, kein externer Call
+  const seoCheckItems = generateSeoCheckItems()
+
   const completedItems = [
     `Tageslage generiert: ${tageslage.status}`,
     `${topCorridors.length} Korridore analysiert`,
@@ -125,6 +129,8 @@ export async function GET(req: NextRequest) {
     `${topRevenue.length} Revenue-Streams geprüft`,
     `${state.topTasks.length} Aufgaben priorisiert`,
     `${state.blockedRisks.length} Risiken blockiert (Phase 1)`,
+    // SEO Visibility Check (kein externer Call, reine Konfiguration)
+    ...seoCheckItems,
   ]
 
   const openItems = tageslage.complianceViolations.length > 0
