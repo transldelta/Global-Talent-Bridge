@@ -2,36 +2,34 @@
  * __tests__/promo-video-page.test.ts
  *
  * Tests for /promo-video page (app/promo-video/page.tsx)
- * Covers: human footage pipeline, slide draft, assets, compliance, brand,
- *         forbidden phrases, safety, subtitles, CTAs, build scripts.
+ * Covers: human footage video (LIVE), license notes, slide draft, assets,
+ *         compliance, brand, forbidden phrases, safety, subtitles, CTAs.
  *
  * Checks:
  * - Page file exists
- * - Human Footage pipeline section present
+ * - Human Footage video (final/corridorwork-promo-human-en.mp4) exists + >1MB
+ * - Human Footage video embedded in page
+ * - License notes doc exists
+ * - 10 real clips in source-clips/
  * - Asset list doc exists
  * - Voiceover script doc exists
  * - Build pipeline script exists (sh)
  * - source-clips/ and final/ directories present
  * - Human SRT files exist (10 languages) in subtitles/human/
- * - Draft MP4 still exists (technical draft)
- * - Video player embedded (technical draft)
+ * - Draft MP4 still exists (technical draft, clearly labeled)
  * - Subtitle tracks referenced
  * - Brand "CorridorWork" present
  * - Domain "corridorwork.com" present
  * - No job guarantee / visa guarantee language
- * - No Stripe / no email / no scraping as active features
+ * - No Stripe / no email / no scraping
  * - Compliance banner present
- * - No robot voice in final version statement
- * - 10 language subtitle codes present
- * - All 6 human scene titles present
+ * - No robot voice
+ * - Human footage section shows LIVE status
+ * - License notes reference Pexels
  * - All 3 CTAs present
  * - PublicFooter imported
  * - /promo-video in sitemap.ts
  * - Footer contains /promo-video link
- * - Human SRT files contain valid timecodes
- * - Human footage pipeline instructions present
- * - No old brand names
- * - build-human-promo-video.sh contains ffmpeg
  */
 import { describe, it, expect } from 'vitest'
 import { readFileSync, existsSync } from 'fs'
@@ -49,13 +47,31 @@ const HUMAN_SRT    = join(ROOT, 'public/promo-video/subtitles/human')
 const CLIPS_DIR    = join(ROOT, 'public/promo-video/source-clips')
 const FINAL_DIR    = join(ROOT, 'public/promo-video/final')
 
+// Human footage final video
+const HUMAN_MP4    = join(ROOT, 'public/promo-video/final/corridorwork-promo-human-en.mp4')
+
 // Docs
 const ASSET_LIST   = join(ROOT, 'docs/video/HUMAN_FOOTAGE_ASSET_LIST.md')
 const VO_SCRIPT    = join(ROOT, 'docs/video/HUMAN_FOOTAGE_VOICEOVER_SCRIPT.md')
+const LICENSE_NOTES = join(ROOT, 'docs/video/HUMAN_FOOTAGE_LICENSE_NOTES.md')
 
 // Scripts
 const BUILD_HUMAN  = join(ROOT, 'scripts/build-human-promo-video.sh')
 const BUILD_SLIDE  = join(ROOT, 'scripts/build-promo-video.py')
+
+// Required source clips
+const REQUIRED_CLIPS = [
+  '01-empty-office.mp4',
+  '02-hr-team.mp4',
+  '03-candidates-global.mp4',
+  '04-healthcare-worker.mp4',
+  '05-it-developer.mp4',
+  '06-skilled-trades.mp4',
+  '07-candidate-laptop.mp4',
+  '08-employer-interview.mp4',
+  '09-world-map-city.mp4',
+  '10-global-teamwork.mp4',
+]
 
 // Languages
 const SLIDE_LANGS  = ['en', 'de', 'fr', 'ar', 'es', 'pt', 'hi', 'ur', 'fil', 'tr']
@@ -100,7 +116,103 @@ describe('/promo-video — File Existence', () => {
   })
 })
 
-// ── 2. Pipeline Directories ───────────────────────────────────────────────────
+// ── 2. Human Footage Final Video ──────────────────────────────────────────────
+
+describe('/promo-video — Human Footage Final Video', () => {
+  it('corridorwork-promo-human-en.mp4 existiert', () => {
+    expect(existsSync(HUMAN_MP4)).toBe(true)
+  })
+
+  it('corridorwork-promo-human-en.mp4 ist größer als 1MB', () => {
+    const { statSync } = require('fs')
+    const size = statSync(HUMAN_MP4).size
+    expect(size).toBeGreaterThan(1024 * 1024) // > 1MB
+  })
+
+  it('corridorwork-promo-human-en.mp4 ist größer als 5MB (echte Footage)', () => {
+    const { statSync } = require('fs')
+    const size = statSync(HUMAN_MP4).size
+    expect(size).toBeGreaterThan(5 * 1024 * 1024) // > 5MB
+  })
+
+  it('Seite referenziert corridorwork-promo-human-en.mp4', () => {
+    expect(readPage()).toContain('corridorwork-promo-human-en.mp4')
+  })
+
+  it('Seite zeigt Human Footage als LIVE', () => {
+    const c = readPage()
+    expect(c).toMatch(/LIVE|✅.*LIVE|live.*human/i)
+  })
+
+  it('Seite hat <video> für Human-Version mit source', () => {
+    const c = readPage()
+    expect(c).toContain('/promo-video/final/')
+    expect(c).toContain('video/mp4')
+  })
+})
+
+// ── 2b. Real Source Clips ─────────────────────────────────────────────────────
+
+describe('/promo-video — Real Source Clips (Pexels Free License)', () => {
+  it('Mindestens 4 echte Clips vorhanden', () => {
+    const count = REQUIRED_CLIPS.filter(clip =>
+      existsSync(join(CLIPS_DIR, clip))
+    ).length
+    expect(count).toBeGreaterThanOrEqual(4)
+  })
+
+  it('Alle 10 Clips vorhanden', () => {
+    for (const clip of REQUIRED_CLIPS) {
+      expect(existsSync(join(CLIPS_DIR, clip))).toBe(true)
+    }
+  })
+
+  it('Alle Clips größer als 1MB (echte Video-Dateien)', () => {
+    const { statSync } = require('fs')
+    for (const clip of REQUIRED_CLIPS) {
+      const path = join(CLIPS_DIR, clip)
+      if (existsSync(path)) {
+        const size = statSync(path).size
+        expect(size).toBeGreaterThan(1024 * 1024)
+      }
+    }
+  })
+})
+
+// ── 2c. License Notes ─────────────────────────────────────────────────────────
+
+describe('/promo-video — License Notes', () => {
+  it('HUMAN_FOOTAGE_LICENSE_NOTES.md existiert', () => {
+    expect(existsSync(LICENSE_NOTES)).toBe(true)
+  })
+
+  it('License Notes enthält Pexels', () => {
+    const c = readFileSync(LICENSE_NOTES, 'utf-8')
+    expect(c).toContain('Pexels')
+  })
+
+  it('License Notes enthält Pexels License URL', () => {
+    const c = readFileSync(LICENSE_NOTES, 'utf-8')
+    expect(c).toContain('pexels.com/license')
+  })
+
+  it('License Notes enthält alle 10 Clip-Dateinamen', () => {
+    const c = readFileSync(LICENSE_NOTES, 'utf-8')
+    for (const clip of REQUIRED_CLIPS) {
+      expect(c).toContain(clip)
+    }
+  })
+
+  it('License Notes enthält keine Job-Garantie', () => {
+    const c = readFileSync(LICENSE_NOTES, 'utf-8').toLowerCase()
+    expect(c).not.toContain('guaranteed job')
+    expect(c).not.toContain('guaranteed visa')
+  })
+
+  it('License Notes enthält CorridorWork', () => {
+    expect(readFileSync(LICENSE_NOTES, 'utf-8')).toContain('CorridorWork')
+  })
+})
 
 describe('/promo-video — Pipeline Directories', () => {
   it('public/promo-video/source-clips/ existiert', () => {
@@ -234,48 +346,46 @@ describe('/promo-video — Human Footage Pipeline', () => {
     expect(c).toMatch(/human.?footage/)
   })
 
-  it('Seite enthält Pipeline-Status Banner', () => {
-    const c = readPage()
-    expect(c).toContain('PIPELINE READY')
+  it('Seite zeigt Human Footage LIVE Status', () => {
+    // Video is now live — shows LIVE badge or live section
+    expect(readPage()).toMatch(/LIVE|Human Footage Version/i)
   })
 
-  it('Seite enthält source-clips Verzeichnis-Verweis', () => {
-    expect(readPage()).toContain('source-clips')
+  it('Seite enthält Human Footage final/ MP4 Verweis', () => {
+    const c = readPage()
+    expect(c).toContain('/promo-video/final/')
+    expect(c).toContain('corridorwork-promo-human-en.mp4')
   })
 
   it('Seite enthält build-human-promo-video.sh Verweis', () => {
     expect(readPage()).toContain('build-human-promo-video.sh')
   })
 
-  it('Seite enthält Clip-Liste (required clips)', () => {
-    expect(readPage()).toContain('source-clips/')
+  it('Seite enthält Human Footage Clips (.mp4)', () => {
+    // Real clips referenced through the video element or data constants
     expect(readPage()).toContain('.mp4')
+    expect(readPage()).toContain('HUMAN_VIDEO_CLIPS')
   })
 
-  it('Seite enthält Verweise auf freie Lizenz-Quellen', () => {
-    const c = readPage()
-    expect(c).toContain('Pexels')
-    expect(c).toContain('Mixkit')
+  it('Seite enthält Pexels Lizenz-Verweis', () => {
+    expect(readPage()).toContain('Pexels')
   })
 
   it('Seite enthält Human SRT Verweise', () => {
-    const c = readPage()
-    expect(c).toContain('corridorwork-human-en.srt')
+    expect(readPage()).toContain('corridorwork-human-en.srt')
   })
 
   it('Seite markiert alte Version als Technical Draft', () => {
-    const c = readPage()
-    expect(c).toContain('Technical Draft')
+    expect(readPage()).toContain('Technical Draft')
   })
 
-  it('Seite enthält Voiceover Script Preview', () => {
-    const c = readPage()
-    expect(c).toContain('Voiceover Script')
+  it('Seite enthält Voiceover Script Verweis', () => {
+    // Link to voiceover script docs
+    expect(readPage()).toMatch(/HUMAN_FOOTAGE_VOICEOVER_SCRIPT|voiceover/i)
   })
 
   it('Seite enthält Hinweis "No robot voice"', () => {
-    const c = readPage().toLowerCase()
-    expect(c).toMatch(/no robot voice|not.*robot|robot.*voice/)
+    expect(readPage().toLowerCase()).toMatch(/no robot voice|not.*robot|robot.*voice/)
   })
 })
 
