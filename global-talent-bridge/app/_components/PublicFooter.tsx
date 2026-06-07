@@ -107,6 +107,11 @@ export function PublicFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/promo-video" className="text-pink-400 text-sm hover:text-pink-300 transition-colors font-medium">
+                  🎬 Promo Video
+                </Link>
+              </li>
+              <li>
                 <Link href="/buyer-snapshot" className="text-amber-400 text-sm hover:text-amber-300 transition-colors">
                   📋 Buyer Snapshot
                 </Link>

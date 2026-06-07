@@ -214,6 +214,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.82,
     },
+    // Promo Video Preview
+    {
+      url: `${BASE_URL}/promo-video`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.78,
+    },
     // New Global Corridor pages
     { url: `${BASE_URL}/corridors/india-canada`,           lastModified: now, changeFrequency: 'monthly', priority: 0.80 },
     { url: `${BASE_URL}/corridors/india-australia`,        lastModified: now, changeFrequency: 'monthly', priority: 0.80 },
