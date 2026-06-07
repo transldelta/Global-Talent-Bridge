@@ -679,6 +679,56 @@ export default async function CWOCommandCenterPage() {
         </div>
       </div>
 
+      {/* ── Commercial Proof & Sale Room Panel ─────────────────────────────── */}
+      <div className="bg-emerald-50 border-2 border-emerald-400 rounded-xl p-5">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">🏪 Commercial Proof &amp; Sale Room</h2>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Verkaufsfähigkeit · Test-Leads getrennt von echten · Ehrlicher Umsatz-Stand
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <a href="/admin/sale-room"
+               className="px-3 py-1.5 bg-emerald-600 text-white text-xs rounded-lg font-medium hover:bg-emerald-700 transition-colors">
+              Sale Room →
+            </a>
+            <a href="/admin/commercial-proof-tracker"
+               className="px-3 py-1.5 bg-gray-600 text-white text-xs rounded-lg font-medium hover:bg-gray-700 transition-colors">
+              Proof Tracker →
+            </a>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+          <div className="bg-white border border-emerald-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-emerald-700">✅ Ready</div>
+            <div className="text-xs text-emerald-600">Sale Room</div>
+          </div>
+          <div className="bg-white border border-emerald-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-emerald-700">✅ Ready</div>
+            <div className="text-xs text-emerald-600">Commercial Proof Tracker</div>
+          </div>
+          <div className="bg-white border border-emerald-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-emerald-700">✅ Live</div>
+            <div className="text-xs text-emerald-600">Global Intake</div>
+          </div>
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-red-700">0 EUR</div>
+            <div className="text-xs text-red-600">Echter Umsatz</div>
+          </div>
+        </div>
+        <div className="bg-white border border-emerald-100 rounded-lg p-3 flex items-start gap-3">
+          <span className="text-lg shrink-0">🚀</span>
+          <div className="text-xs text-gray-700">
+            <strong className="text-emerald-700">Nächster Wert-Booster:</strong>{' '}
+            1 echten Lead oder 1 Partnergespräch gewinnen —
+            hebt Commercial Proof Score von 4/20 auf 7+/20 und macht CorridorWork deutlich verkaufsfähiger.
+            <a href="/strategic-partnership" target="_blank" rel="noopener noreferrer"
+              className="ml-2 text-emerald-600 hover:underline">→ Strategic Partnership</a>
+          </div>
+        </div>
+      </div>
+
       {/* Blocked Risks Summary */}
       <div className="bg-red-50 border border-red-200 rounded-xl p-6">
         <h2 className="text-lg font-bold text-red-900 mb-3">🚫 Automatisch blockierte Risiken</h2>

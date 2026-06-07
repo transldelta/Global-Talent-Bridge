@@ -25,6 +25,25 @@ export default function DemoSandboxPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+
+      {/* ⚠️ Demonstration-Only Banner */}
+      <div className="bg-amber-50 border-b-2 border-amber-300 px-4 py-3">
+        <div className="max-w-5xl mx-auto flex items-center gap-3">
+          <span className="text-xl shrink-0">🧪</span>
+          <div className="text-sm">
+            <span className="font-bold text-amber-800">Demo-Modus — Synthetische Daten:</span>
+            <span className="text-amber-700 ml-1">
+              Diese Seite zeigt ausschließlich Plattformfähigkeiten. Keine echten Kunden, keine echten Umsätze,
+              keine echten Kandidaten- oder Arbeitgeberdaten. Alle Zahlen sind Demo-Daten.
+            </span>
+          </div>
+          <Link href="/strategic-partnership"
+            className="shrink-0 px-3 py-1.5 bg-amber-500 text-white text-xs font-bold rounded-lg hover:bg-amber-400 transition-colors">
+            Echter Käufer? →
+          </Link>
+        </div>
+      </div>
+
       {/* Header */}
       <div className="bg-gradient-to-r from-indigo-900 to-blue-900 text-white py-14 px-4">
         <div className="max-w-5xl mx-auto">
@@ -141,6 +160,25 @@ export default function DemoSandboxPage() {
                 <div className="text-sm text-gray-600">{step.desc}</div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Honest Demo Disclaimer */}
+        <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-5">
+          <div className="font-bold text-amber-800 mb-2">🧪 Demo Disclaimer — Was diese Seite zeigt und was nicht</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <div>
+              <div className="font-semibold text-green-700 mb-1">✅ Was gezeigt wird:</div>
+              {['Plattformarchitektur (echt)', 'Technische Fähigkeiten (echt)', '21 Sektoren-Taxonomie (echt)', '15+ Korridor-Seiten (echt)', 'Test-Zahlen (synthetisch)', 'Demo-Inhalte (zur Illustration)'].map(item => (
+                <div key={item} className="flex items-center gap-1.5 text-green-700 text-xs"><span>✓</span>{item}</div>
+              ))}
+            </div>
+            <div>
+              <div className="font-semibold text-red-700 mb-1">❌ Was NICHT gezeigt wird:</div>
+              {['Echte Kunden (0)', 'Echter Umsatz (0 EUR)', 'Echte Traction (keine)', 'Echter Traffic (nicht messbar)', 'Echte Placements (keine)', 'Fake-Erfolgszahlen (keine)'].map(item => (
+                <div key={item} className="flex items-center gap-1.5 text-red-700 text-xs"><span>✗</span>{item}</div>
+              ))}
+            </div>
           </div>
         </div>
 

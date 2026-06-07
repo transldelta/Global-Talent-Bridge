@@ -1,7 +1,9 @@
 # Buyer Satisfaction & Gap Closure — CorridorWork
 
-> Sprint: Global Buyer Satisfaction & Autonomous Revenue Sprint (June 2026)
+> Sprint: Global Buyer Satisfaction & Autonomous Revenue Sprint + Commercial Proof Sprint (June 2026)
 > Buyer Readiness Score: 66/100 (up from 0 at project start)
+> Commercial Proof Score: 4–5/20 (Phase 1 — honest, no fake traction)
+> Update: Test leads explicitly separated from real leads. Global Intake live and smoke-tested.
 
 ## What This Sprint Closes
 
@@ -114,9 +116,11 @@ This document tracks which buyer concerns were addressed in the Global Buyer Sat
 |--------|-------|---------------|
 | Pre-sprint | ~20 | Basic MVP |
 | Buyer-Readiness Sprint | 66/100 | Transfer docs, admin pages |
-| Global Revenue Sprint | 66/100* | Global intake, demo sandbox, 21 sectors |
+| Global Revenue Sprint | 66/100 | Global intake, demo sandbox, 21 sectors |
+| Commercial Proof Sprint | 66/100* | Test/real lead separation, sale room finalized, honest proof tracking |
 
-*Score stays 66/100 — Commercial Proof (4/20) can only improve with real customers.
+*Score stays 66/100 — Commercial Proof (4–5/20) can only improve with real customers, not test leads.
+Test leads are explicitly marked `rejected`/`archived` with admin note and do NOT count as proof.
 
 ---
 

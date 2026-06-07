@@ -26,12 +26,21 @@ export const dynamic = 'force-dynamic'
 
 // ── Schritt 6: Follow-up Indexierungs-URLs (Google Search Console URL-Prüfung) ─
 const FOLLOWUP_URLS_FOR_INDEXING = [
-  { path: '/strategic-partnership', label: 'Strategic Partnership', note: 'Rang 1 Revenue-Pfad — höchste Priorität', priority: 'high' },
-  { path: '/partners',              label: 'Partner-Programm',      note: 'Rang 2 Revenue-Pfad — Agency Partner',   priority: 'high' },
-  { path: '/pilot/employers',       label: 'Employer Pilot',        note: 'Rang 3 Revenue-Pfad — primäre B2B-Page', priority: 'high' },
-  { path: '/launch',                label: 'Launch-Übersicht',      note: 'Öffentliche Einstiegsseite alle Pfade',  priority: 'high' },
-  { path: '/buyer-snapshot',        label: 'Buyer Snapshot',        note: 'Für Käufer/Investoren-Traffic',          priority: 'medium' },
-  { path: '/market-intelligence',   label: 'Market Intelligence',   note: 'Rang 4 Revenue-Pfad — B2B-Zielgruppe',  priority: 'medium' },
+  // Revenue-Pfade
+  { path: '/strategic-partnership',          label: 'Strategic Partnership',       note: 'Rang 1 Revenue-Pfad — höchste Priorität',        priority: 'high' },
+  { path: '/partners',                       label: 'Partner-Programm',            note: 'Rang 2 Revenue-Pfad — Agency Partner',            priority: 'high' },
+  { path: '/pilot/employers',                label: 'Employer Pilot',              note: 'Rang 3 Revenue-Pfad — primäre B2B-Page',          priority: 'high' },
+  { path: '/launch',                         label: 'Launch-Übersicht',            note: 'Öffentliche Einstiegsseite alle Pfade',           priority: 'high' },
+  { path: '/buyer-snapshot',                 label: 'Buyer Snapshot',              note: 'Für Käufer/Investoren-Traffic',                   priority: 'medium' },
+  { path: '/market-intelligence',            label: 'Market Intelligence',         note: 'Rang 4 Revenue-Pfad — B2B-Zielgruppe',           priority: 'medium' },
+  // Global Intake (neu)
+  { path: '/global/employers',               label: '🌍 Global Employer Intake',   note: 'Weltweite Arbeitgeber-Registrierung — alle Branchen', priority: 'high' },
+  { path: '/global/candidates',              label: '🌍 Global Candidate Intake',  note: 'Weltweite Kandidaten-Registrierung — kostenlos',      priority: 'high' },
+  { path: '/demo/sandbox',                   label: '🔬 Demo Sandbox',             note: 'Öffentliche Demo — kein Login — Plattformfähigkeit',  priority: 'high' },
+  // Globale Korridore (Top 3 für SEO)
+  { path: '/corridors/india-canada',         label: '🇮🇳→🇨🇦 India → Canada',     note: 'Top IT & Engineering Korridor, Score 88',             priority: 'medium' },
+  { path: '/corridors/philippines-healthcare', label: '🇵🇭→🌍 Philippines Healthcare', note: 'Top Healthcare Korridor, Score 92',              priority: 'medium' },
+  { path: '/corridors/pakistan-gulf',        label: '🇵🇰→🌏 Pakistan → Gulf',      note: 'Top Construction Korridor, Score 85',                 priority: 'medium' },
 ]
 
 const PRIORITY_URLS_FOR_INDEXING = [

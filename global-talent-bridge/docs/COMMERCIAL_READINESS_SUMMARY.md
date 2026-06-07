@@ -2,6 +2,7 @@
 
 > **Ehrlicher Stand: 2026-06-07 | Phase 1 Pilot**
 > Keine erfundenen Umsätze. Keine Fake-Traction. Nur verifizierbare Fakten.
+> Update Juni 2026: Global Intake live. Test-Leads explizit von echten Leads getrennt.
 
 ---
 
@@ -31,6 +32,17 @@ CorridorWork ist ein voll funktionsfähiges SaaS-Asset in Phase 1 (Pre-Revenue).
 | 4 | Market Intelligence | /market-intelligence | ✅ Live | 0 |
 
 Alle Revenue-Formulare funktionieren (getestet, verifiziert). Alle bisherigen Leads = interne Testdaten (als `rejected` markiert).
+
+**Zusätzlich (Global Intake — seit Juni 2026):**
+
+| Pfad | URL | Status | Echte Leads |
+|---|---|---|---|
+| Global Employer Intake (`global_employer_leads`) | /global/employers | ✅ Live | 0 (ohne Test-Leads) |
+| Global Candidate Intake (`candidate_interest_leads`) | /global/candidates | ✅ Live | 0 (ohne Test-Leads) |
+
+> **Hinweis Test-Leads:** 2 interne Smoke-Tests wurden durchgeführt und sind als
+> `admin_note = "Internal Global Intake Smoke Test — no contact"` mit Status `rejected`/`archived` markiert.
+> Sie zählen **nicht** als echte Leads und erhöhen den Commercial Proof Score **nicht**.
 
 ---
 

@@ -1,7 +1,8 @@
 # Final Completion & Monetization Readiness — CorridorWork
 
-> As of: June 2026 — Global Buyer Satisfaction Sprint complete
-> Buyer Readiness: 66/100 | Tests: 2317 passing | Revenue: 0 EUR
+> As of: June 2026 — Commercial Proof & Sale Room Sprint complete
+> Buyer Readiness: 66/100 | Tests: 2317+ passing | Revenue: 0 EUR
+> Commercial Proof: 4–5/20 | Test leads: explicitly separated | Global Intake: live + smoke-tested
 
 ## Executive Summary
 

@@ -267,20 +267,52 @@ export async function GET(req: NextRequest) {
     '  Kein Scraping · Kein Versand · Kein Ads-Start · Inbound-only',
   ].join('\n'))
 
+  // ── 4a-3. Commercial Proof Counts (real vs. test) ─────────────────────────
+  const { count: globalEmployerAllCount } = await supabase
+    .from('global_employer_leads')
+    .select('id', { count: 'exact', head: true })
+  const { count: globalEmployerTestCount } = await supabase
+    .from('global_employer_leads')
+    .select('id', { count: 'exact', head: true })
+    .ilike('admin_note', '%smoke test%')
+  const { count: candidateAllCount } = await supabase
+    .from('candidate_interest_leads')
+    .select('id', { count: 'exact', head: true })
+  const { count: candidateTestCount } = await supabase
+    .from('candidate_interest_leads')
+    .select('id', { count: 'exact', head: true })
+    .ilike('admin_note', '%smoke test%')
+
+  const realEmployerLeads  = Math.max(0, (globalEmployerAllCount ?? 0) - (globalEmployerTestCount ?? 0))
+  const realCandidateLeads = Math.max(0, (candidateAllCount ?? 0) - (candidateTestCount ?? 0))
+  const testLeadCount      = (globalEmployerTestCount ?? 0) + (candidateTestCount ?? 0)
+  const realLeadCount      = realEmployerLeads + realCandidateLeads + (newLeadsCount ?? 0)
+  const revenueAmount      = 0  // Stripe nicht aktiv — bleibt 0
+
+  // Commercial Proof Score: nur echte Leads
+  const commercialProofBase  = 4
+  const commercialProofBonus = realLeadCount > 0 ? 1 : 0
+  const commercialProofScore = commercialProofBase + commercialProofBonus
+
   // Buyer Readiness Status — reine Konfigurationsnotiz, kein externer Call
   const buyerReadinessScore   = 66
   const topBuyerConcern       = 'Kein echter Umsatz — 0 zahlende Kunden, 0 EUR'
-  const nextValueBooster      = 'Ersten Strategic Partnership Deal oder White-Label abschließen'
-  const commercialProofStatus = 'schwach (4/20) — Phase 1 Pilot, keine echten Leads'
+  const nextValueBooster      = '1 echten Lead oder 1 Partnergespräch gewinnen'
+  const commercialProofStatus = `schwach (${commercialProofScore}/20) — ${realLeadCount} echte Leads, 0 EUR Umsatz`
+  const saleRoomStatus        = 'ready — /admin/sale-room'
 
   completedItems.push([
-    'Buyer Readiness Status:',
-    `  · Score: ${buyerReadinessScore}/100 (ehrlich — kein Schönreden)`,
+    'Buyer Readiness & Commercial Proof Status:',
+    `  · Buyer Readiness Score: ${buyerReadinessScore}/100 (ehrlich — kein Schönreden)`,
+    `  · Commercial Proof Score: ${commercialProofScore}/20`,
+    `  · Echte Leads: ${realLeadCount} (Test-Leads ausgeschlossen: ${testLeadCount})`,
+    `  · Echter Umsatz: ${revenueAmount} EUR (Stripe nicht aktiv)`,
     `  · Top Concern: ${topBuyerConcern}`,
     `  · Next Value Booster: ${nextValueBooster}`,
-    `  · Commercial Proof: ${commercialProofStatus}`,
-    '  · Transfer Docs: vorhanden (5 Dokumente)',
-    '  · Demo-ready: ja',
+    `  · Sale Room Status: ${saleRoomStatus}`,
+    '  · Transfer Docs: vorhanden (9 Dokumente)',
+    '  · Demo-ready: ja (/demo/sandbox)',
+    '  · Global Intake: live (/global/employers + /global/candidates)',
     '  · Payment-ready: nein (Stripe nicht konfiguriert)',
   ].join('\n'))
 
@@ -377,8 +409,14 @@ export async function GET(req: NextRequest) {
       topBuyerConcern,
       nextValueBooster,
       commercialProofStatus,
+      commercialProofScore,
+      realLeadCount,
+      testLeadCount,
+      revenueAmount,
+      saleRoomStatus,
       transferDocsReady:    true,
       demoReady:            true,
+      globalIntakeReady:    true,
       paymentReady:         false,
     },
     globalRevenue: {
