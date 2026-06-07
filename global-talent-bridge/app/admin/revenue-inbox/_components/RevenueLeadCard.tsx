@@ -9,9 +9,10 @@ import { useState } from 'react'
 import {
   LEAD_TYPE_LABELS, LEAD_TYPE_COLORS,
   STATUS_LABELS, STATUS_COLORS,
+  INTEREST_TYPE_LABELS,
   calculateLeadScore,
 } from '@/lib/revenue-leads'
-import type { RevenueLead, LeadStatus } from '@/lib/revenue-leads'
+import type { RevenueLead, LeadStatus, InterestType } from '@/lib/revenue-leads'
 
 interface Props {
   lead:      RevenueLead
@@ -74,8 +75,17 @@ export function RevenueLeadCard({ lead, onUpdated }: Props) {
 
   const scoreColor = score >= 80 ? 'text-green-600' : score >= 60 ? 'text-yellow-600' : 'text-red-600'
 
+  const interestLabel = lead.interest_type
+    ? INTEREST_TYPE_LABELS[lead.interest_type as InterestType] ?? lead.interest_type
+    : null
+
+  const isStrategic = lead.lead_type === 'strategic_partner'
+
   return (
-    <div className={`bg-white rounded-xl border ${lead.status === 'new' ? 'border-yellow-300' : 'border-gray-200'} p-5 space-y-3`}>
+    <div className={`bg-white rounded-xl border-2 ${
+      isStrategic && lead.status === 'new' ? 'border-amber-400' :
+      lead.status === 'new' ? 'border-yellow-300' : 'border-gray-200'
+    } p-5 space-y-3`}>
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
@@ -87,6 +97,11 @@ export function RevenueLeadCard({ lead, onUpdated }: Props) {
               {STATUS_LABELS[lead.status]}
             </span>
             <span className={`text-sm font-bold ml-2 ${scoreColor}`}>Score: {score}</span>
+            {interestLabel && (
+              <span className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                {interestLabel}
+              </span>
+            )}
           </div>
           <div className="font-semibold text-gray-900 mt-1">{lead.organization_name}</div>
           <div className="text-sm text-gray-600">{lead.contact_name} · {lead.email}</div>

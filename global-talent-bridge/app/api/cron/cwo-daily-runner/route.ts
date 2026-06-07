@@ -163,11 +163,34 @@ export async function GET(req: NextRequest) {
     .eq('lead_type', 'market_intelligence')
     .eq('status', 'new')
 
-  const newLeadsCount = newLeadsTotal ?? 0
+  const { count: strategicLeads }   = await supabase
+    .from('revenue_leads')
+    .select('id', { count: 'exact', head: true })
+    .eq('lead_type', 'strategic_partner')
+    .eq('status', 'new')
+
+  const { count: strategicTotal }   = await supabase
+    .from('revenue_leads')
+    .select('id', { count: 'exact', head: true })
+    .eq('lead_type', 'strategic_partner')
+
+  const newLeadsCount   = newLeadsTotal   ?? 0
+  const strategicNew    = strategicLeads  ?? 0
+  const strategicAll    = strategicTotal  ?? 0
+
+  // Top Revenue Path bestimmen
+  const topRevenuePath =
+    strategicNew > 0 ? 'strategic_partner (schnellster Weg)' :
+    (agencyLeads ?? 0) > 0 ? 'agency_partner' :
+    (employerLeads ?? 0) > 0 ? 'employer_pilot' :
+    'kein neuer Lead — SEO-Sichtbarkeit ausbauen'
+
+  // Revenue Accelerator Status in completedItems
+  completedItems.push(`Revenue Accelerator: ${newLeadsCount} neue Leads | ${strategicAll} Strategic-Leads gesamt | Top-Pfad: ${topRevenuePath}`)
 
   // Revenue-Leads in completedItems aufnehmen
   if (newLeadsCount > 0) {
-    completedItems.push(`${newLeadsCount} neue Inbound-Leads (${employerLeads ?? 0} Employer, ${agencyLeads ?? 0} Agency, ${intelLeads ?? 0} Intel)`)
+    completedItems.push(`${newLeadsCount} neue Inbound-Leads (${strategicNew} Strategic, ${employerLeads ?? 0} Employer, ${agencyLeads ?? 0} Agency, ${intelLeads ?? 0} Intel)`)
   }
 
   // ── 4b. In autonomous_worklog schreiben (service_role, RLS-bypass) ────────
@@ -223,10 +246,13 @@ export async function GET(req: NextRequest) {
     completedItems,
     openItems,
     revenueLeads: {
-      newTotal:       newLeadsCount,
-      employerPilot:  employerLeads  ?? 0,
-      agencyPartner:  agencyLeads    ?? 0,
-      marketIntel:    intelLeads     ?? 0,
+      newTotal:           newLeadsCount,
+      strategicPartner:   strategicNew,
+      strategicTotal:     strategicAll,
+      employerPilot:      employerLeads  ?? 0,
+      agencyPartner:      agencyLeads    ?? 0,
+      marketIntel:        intelLeads     ?? 0,
+      topRevenuePath,
     },
     // Safety invariants im Response bestätigen
     safetyConfirmed: {

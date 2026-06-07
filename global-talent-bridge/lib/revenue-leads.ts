@@ -10,7 +10,9 @@
  * - Alle Leads landen zur manuellen Prüfung im Admin-Inbox
  */
 
-export type LeadType = 'employer_pilot' | 'agency_partner' | 'market_intelligence'
+export type LeadType = 'employer_pilot' | 'agency_partner' | 'market_intelligence' | 'strategic_partner'
+
+export type InterestType = 'partnership' | 'white_label' | 'licensing' | 'acquisition_discussion' | 'market_intelligence'
 
 export type LeadStatus = 'new' | 'reviewed' | 'qualified' | 'rejected' | 'contacted_manual'
 
@@ -31,6 +33,8 @@ export interface RevenueLead {
   no_email_sent:      boolean
   no_auto_outreach:   boolean
   no_payment_started: boolean
+  lead_score:         number | null
+  interest_type:      InterestType | null
   created_at:         string
   updated_at:         string
 }
@@ -46,6 +50,7 @@ export interface LeadFormInput {
   message?:           string
   consent_to_contact: boolean
   source_page:        string
+  interest_type?:     InterestType
   // Honeypot — muss leer sein
   website?:           string
 }
@@ -77,7 +82,7 @@ export function validateLeadInput(input: LeadFormInput): { valid: boolean; error
     errors.push('Gültige E-Mail-Adresse ist erforderlich.')
   }
 
-  if (!['employer_pilot', 'agency_partner', 'market_intelligence'].includes(input.lead_type)) {
+  if (!['employer_pilot', 'agency_partner', 'market_intelligence', 'strategic_partner'].includes(input.lead_type)) {
     errors.push('Ungültiger Lead-Typ.')
   }
 
@@ -95,6 +100,7 @@ export function calculateLeadScore(lead: Pick<RevenueLead, 'lead_type' | 'consen
 
   // Lead-Typ Gewichtung
   if (lead.lead_type === 'employer_pilot')       score += 30
+  if (lead.lead_type === 'strategic_partner')    score += 35  // höchste Priorität
   if (lead.lead_type === 'agency_partner')        score += 25
   if (lead.lead_type === 'market_intelligence')   score += 15
 
@@ -112,13 +118,66 @@ export const LEAD_TYPE_LABELS: Record<LeadType, string> = {
   employer_pilot:       '🏭 Employer Pilot',
   agency_partner:       '🤝 Agency Partner',
   market_intelligence:  '📊 Market Intelligence',
+  strategic_partner:    '🎯 Strategic Partner',
 }
 
 export const LEAD_TYPE_COLORS: Record<LeadType, string> = {
   employer_pilot:      'bg-blue-100 text-blue-800 border-blue-200',
   agency_partner:      'bg-purple-100 text-purple-800 border-purple-200',
   market_intelligence: 'bg-green-100 text-green-800 border-green-200',
+  strategic_partner:   'bg-amber-100 text-amber-800 border-amber-200',
 }
+
+export const INTEREST_TYPE_LABELS: Record<InterestType, string> = {
+  partnership:             '🤝 Partnerschaft',
+  white_label:             '🏷️ White-Label',
+  licensing:               '📜 Lizenzierung',
+  acquisition_discussion:  '🏢 Übernahme / Beteiligung',
+  market_intelligence:     '📊 Market Intelligence',
+}
+
+export const REVENUE_PATHS = [
+  {
+    id:          'strategic',
+    rank:        1,
+    icon:        '🎯',
+    label:       'Strategic Partner / White-Label',
+    description: 'Sofortige Gespräche möglich. Kein Stripe. Kein Outreach.',
+    path:        '/strategic-partnership',
+    leadType:    'strategic_partner' as LeadType,
+    speed:       'schnellster Weg',
+  },
+  {
+    id:          'agency',
+    rank:        2,
+    icon:        '🤝',
+    label:       'Agency / White-Label Partner',
+    description: 'Recruiting-Agenturen, Sprachschulen, Relocation.',
+    path:        '/partners',
+    leadType:    'agency_partner' as LeadType,
+    speed:       'schnell',
+  },
+  {
+    id:          'employer',
+    rank:        3,
+    icon:        '🏭',
+    label:       'Employer Pilot',
+    description: 'Direkte Arbeitgeber-Anfragen für internationales Recruiting.',
+    path:        '/pilot/employers',
+    leadType:    'employer_pilot' as LeadType,
+    speed:       'mittel',
+  },
+  {
+    id:          'intel',
+    rank:        4,
+    icon:        '📊',
+    label:       'Market Intelligence',
+    description: 'Aggregierte Korridor- und Nachfragedaten.',
+    path:        '/market-intelligence',
+    leadType:    'market_intelligence' as LeadType,
+    speed:       'mittel',
+  },
+] as const
 
 export const STATUS_LABELS: Record<LeadStatus, string> = {
   new:               '🆕 Neu',

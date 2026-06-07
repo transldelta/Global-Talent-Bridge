@@ -50,18 +50,28 @@ export function PublicFooter() {
             <h3 className="text-white text-sm font-semibold mb-3">Pilot & Partner</h3>
             <ul className="space-y-2">
               <li>
+                <Link href="/strategic-partnership" className="text-amber-500 text-sm hover:text-amber-300 transition-colors font-medium">
+                  🎯 Strategic Partnership
+                </Link>
+              </li>
+              <li>
+                <Link href="/partners" className="text-purple-400 text-sm hover:text-purple-300 transition-colors font-medium">
+                  🤝 Partner-Programm
+                </Link>
+              </li>
+              <li>
                 <Link href="/pilot/employers" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
                   🏭 Arbeitgeber-Pilot
                 </Link>
               </li>
               <li>
-                <Link href="/pilot/agencies" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
-                  🤝 Agentur-/Partner-Pilot
+                <Link href="/market-intelligence" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
+                  📊 Market Intelligence
                 </Link>
               </li>
               <li>
-                <Link href="/market-intelligence" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
-                  📊 Market Intelligence
+                <Link href="/demo" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
+                  🎬 Demo ansehen
                 </Link>
               </li>
               <li>

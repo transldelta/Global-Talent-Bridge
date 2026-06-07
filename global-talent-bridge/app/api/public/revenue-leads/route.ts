@@ -16,8 +16,8 @@
  */
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient }         from '@/lib/supabase/admin'
-import { validateLeadInput }         from '@/lib/revenue-leads'
-import type { LeadFormInput }        from '@/lib/revenue-leads'
+import { validateLeadInput, calculateLeadScore } from '@/lib/revenue-leads'
+import type { LeadFormInput }                    from '@/lib/revenue-leads'
 
 export const dynamic = 'force-dynamic'
 
@@ -104,6 +104,14 @@ export async function POST(req: NextRequest) {
       consent_to_contact: body.consent_to_contact,
       source_page:        body.source_page || 'unknown',
       status:             'new',
+      lead_score:         calculateLeadScore({
+        lead_type:          body.lead_type,
+        consent_to_contact: body.consent_to_contact,
+        sector:             body.sector?.trim() || null,
+        country:            body.country?.trim() || null,
+        message:            body.message?.trim() || null,
+      }),
+      interest_type:      body.interest_type || null,
       // Safety constraints (DB CHECK stellt sicher, dass diese nie false sein können)
       no_email_sent:       true,
       no_auto_outreach:    true,

@@ -48,7 +48,7 @@ export function RevenueInboxClient({ initialLeads }: Props) {
     <div className="space-y-4">
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-center">
           <div className="text-2xl font-bold text-yellow-700">{newCount}</div>
           <div className="text-xs text-yellow-600">Neue Leads</div>
@@ -56,6 +56,12 @@ export function RevenueInboxClient({ initialLeads }: Props) {
         <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
           <div className="text-2xl font-bold text-green-700">{qualifiedCount}</div>
           <div className="text-xs text-green-600">Qualifiziert</div>
+        </div>
+        <div className={`rounded-lg p-3 text-center border-2 ${leads.filter(l => l.lead_type === 'strategic_partner').length > 0 ? 'bg-amber-50 border-amber-400' : 'bg-gray-50 border-gray-200'}`}>
+          <div className={`text-2xl font-bold ${leads.filter(l => l.lead_type === 'strategic_partner').length > 0 ? 'text-amber-700' : 'text-gray-400'}`}>
+            {leads.filter(l => l.lead_type === 'strategic_partner').length}
+          </div>
+          <div className={`text-xs ${leads.filter(l => l.lead_type === 'strategic_partner').length > 0 ? 'text-amber-600' : 'text-gray-400'}`}>🎯 Strategic</div>
         </div>
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
           <div className="text-2xl font-bold text-blue-700">{leads.filter(l => l.lead_type === 'employer_pilot').length}</div>

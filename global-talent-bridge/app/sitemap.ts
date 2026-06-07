@@ -76,6 +76,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     // Revenue Lead Pages — Inbound Pilot
     {
+      url: `${BASE_URL}/strategic-partnership`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/partners`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.80,
+    },
+    {
       url: `${BASE_URL}/pilot/employers`,
       lastModified: now,
       changeFrequency: 'monthly',

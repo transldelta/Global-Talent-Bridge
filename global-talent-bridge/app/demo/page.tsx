@@ -186,6 +186,78 @@ export default function DemoPage() {
         </div>
       </section>
 
+      {/* Revenue System Overview */}
+      <section className="max-w-4xl mx-auto px-4 pb-12">
+        <h2 className="text-white font-bold text-xl mb-2">⚙️ CWO Revenue Operating System</h2>
+        <p className="text-slate-400 text-sm mb-4">
+          CorridorWork läuft als Autonomous Revenue Operating System — täglich automatisch, compliance-first.
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          {[
+            { icon: '🔄', label: 'Daily Runner',      desc: 'Täglich automatisch: Tageslage, Korridore, Tasks' },
+            { icon: '📥', label: 'Lead Capture',       desc: '4 Inbound-Revenue-Pfade aktiv' },
+            { icon: '🌐', label: 'SEO Network',        desc: '16 öffentliche Seiten, 12 neue SEO-Seiten' },
+            { icon: '⚖️', label: 'Compliance-First',  desc: 'Safety-Invarianten: kein Scraping, kein Outreach' },
+          ].map(f => (
+            <div key={f.label} className="bg-slate-800/80 rounded-xl border border-slate-700 p-4 text-center">
+              <div className="text-2xl mb-1">{f.icon}</div>
+              <div className="text-white text-sm font-semibold">{f.label}</div>
+              <div className="text-slate-400 text-xs mt-1">{f.desc}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <a href="/strategic-partnership"
+             className="bg-gradient-to-br from-amber-900/60 to-slate-800 border border-amber-700/50 rounded-xl p-5 hover:border-amber-500/70 transition-colors group">
+            <div className="text-2xl mb-2">🎯</div>
+            <div className="text-white font-bold mb-1 group-hover:text-amber-300 transition-colors">
+              Strategic Partnership / Übernahme
+            </div>
+            <div className="text-slate-400 text-sm">
+              White-Label, Lizenzierung, Acquisition Interest. Vertraulich. Manuell geprüft.
+            </div>
+            <div className="mt-3 text-amber-400 text-xs font-semibold">Strategische Gespräche →</div>
+          </a>
+
+          <a href="/partners"
+             className="bg-gradient-to-br from-purple-900/60 to-slate-800 border border-purple-700/50 rounded-xl p-5 hover:border-purple-500/70 transition-colors group">
+            <div className="text-2xl mb-2">🤝</div>
+            <div className="text-white font-bold mb-1 group-hover:text-purple-300 transition-colors">
+              Partner-Programm
+            </div>
+            <div className="text-slate-400 text-sm">
+              Recruiting-Agenturen, Sprachschulen, Relocation, HR-Berater. White-Label + API.
+            </div>
+            <div className="mt-3 text-purple-400 text-xs font-semibold">Partner werden →</div>
+          </a>
+
+          <a href="/pilot/employers"
+             className="bg-gradient-to-br from-blue-900/60 to-slate-800 border border-blue-700/50 rounded-xl p-5 hover:border-blue-500/70 transition-colors group">
+            <div className="text-2xl mb-2">🏭</div>
+            <div className="text-white font-bold mb-1 group-hover:text-blue-300 transition-colors">
+              Employer Pilot
+            </div>
+            <div className="text-slate-400 text-sm">
+              Direkter Arbeitgeber-Zugang. Internationales Talent-Matching. Kostenlos testen.
+            </div>
+            <div className="mt-3 text-blue-400 text-xs font-semibold">Pilot starten →</div>
+          </a>
+
+          <a href="/market-intelligence"
+             className="bg-gradient-to-br from-emerald-900/60 to-slate-800 border border-emerald-700/50 rounded-xl p-5 hover:border-emerald-500/70 transition-colors group">
+            <div className="text-2xl mb-2">📊</div>
+            <div className="text-white font-bold mb-1 group-hover:text-emerald-300 transition-colors">
+              Market Intelligence
+            </div>
+            <div className="text-slate-400 text-sm">
+              Aggregierte Korridor- und Nachfragedaten. Für Analysen und strategische Entscheidungen.
+            </div>
+            <div className="mt-3 text-emerald-400 text-xs font-semibold">Daten ansehen →</div>
+          </a>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="max-w-2xl mx-auto px-4 pb-16">
         <div className="bg-white rounded-2xl shadow-2xl p-8 text-center">
@@ -193,7 +265,7 @@ export default function DemoPage() {
           <p className="text-gray-500 text-sm mb-6">
             Kostenlos · Unverbindlich · Kein Abo · Keine automatische Zahlung · Keine Jobgarantie
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center flex-wrap">
             <a
               href="/pilot/employers"
               className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
@@ -201,10 +273,16 @@ export default function DemoPage() {
               🏭 Arbeitgeber-Pilot →
             </a>
             <a
-              href="/pilot/agencies"
+              href="/partners"
               className="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors"
             >
-              🤝 Agentur-Pilot →
+              🤝 Partner-Programm →
+            </a>
+            <a
+              href="/strategic-partnership"
+              className="px-6 py-3 bg-amber-600 text-white font-semibold rounded-lg hover:bg-amber-700 transition-colors"
+            >
+              🎯 Strategic Partnership →
             </a>
           </div>
           <p className="text-xs text-gray-400 mt-4">

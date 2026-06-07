@@ -18,20 +18,32 @@ export default async function CWOCommandCenterPage() {
   const state      = generateCWOState()
   const tageslage  = generateTageslageSummary()
 
-  // Revenue Leads — neue Inbound-Leads zählen
+  // Revenue Leads — Inbound-Leads zählen (inkl. Strategic)
   const supabase = createAdminClient()
-  const { count: newLeadsCount } = await supabase
-    .from('revenue_leads')
-    .select('id', { count: 'exact', head: true })
-    .eq('status', 'new')
+  const [
+    { count: newLeadsCount },
+    { count: strategicLeadsCount },
+    { count: agencyLeadsCount },
+  ] = await Promise.all([
+    supabase.from('revenue_leads').select('id', { count: 'exact', head: true }).eq('status', 'new'),
+    supabase.from('revenue_leads').select('id', { count: 'exact', head: true }).eq('lead_type', 'strategic_partner').eq('status', 'new'),
+    supabase.from('revenue_leads').select('id', { count: 'exact', head: true }).eq('lead_type', 'agency_partner').eq('status', 'new'),
+  ])
   const { data: topLeadRow } = await supabase
     .from('revenue_leads')
     .select('lead_type')
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle()
-  const newLeads = newLeadsCount ?? 0
+  const newLeads         = newLeadsCount      ?? 0
+  const strategicLeads   = strategicLeadsCount ?? 0
+  const agencyLeads      = agencyLeadsCount    ?? 0
   const topLeadType = topLeadRow?.lead_type ?? null
+  const fastestRevPath   =
+    strategicLeads > 0 ? '🎯 Strategic Partner' :
+    agencyLeads    > 0 ? '🤝 Agency Partner' :
+    newLeads       > 0 ? '🏭 Employer Pilot' :
+    '⏳ Noch keine Leads'
   const statusColor = tageslage.status === 'green' ? 'text-green-600' : tageslage.status === 'yellow' ? 'text-yellow-600' : 'text-red-600'
   const statusBg    = tageslage.status === 'green' ? 'bg-green-50 border-green-200' : tageslage.status === 'yellow' ? 'bg-yellow-50 border-yellow-200' : 'bg-red-50 border-red-200'
 
@@ -66,6 +78,50 @@ export default async function CWOCommandCenterPage() {
         </div>
       </div>
 
+      {/* ── Revenue Accelerator Status Panel ────────────────────────────────── */}
+      <div className={`rounded-xl border-2 p-5 ${strategicLeads > 0 ? 'bg-amber-50 border-amber-400' : 'bg-white border-gray-200'}`}>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">⚡ Revenue Accelerator Status</h2>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Live-Status der Revenue-Pfade · Kein Outreach · Kein Stripe · Inbound only
+            </p>
+          </div>
+          <a href="/admin/revenue-accelerator"
+             className="px-3 py-1.5 bg-blue-600 text-white text-xs rounded-lg font-medium hover:bg-blue-700 transition-colors">
+            Revenue Accelerator →
+          </a>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-green-700">✅ LIVE</div>
+            <div className="text-xs text-green-600">Revenue Pages</div>
+          </div>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-blue-700">16 Seiten</div>
+            <div className="text-xs text-blue-600">SEO Network</div>
+          </div>
+          <div className={`rounded-lg p-3 text-center border ${strategicLeads > 0 ? 'bg-amber-100 border-amber-400' : 'bg-gray-50 border-gray-200'}`}>
+            <div className={`text-2xl font-bold ${strategicLeads > 0 ? 'text-amber-700' : 'text-gray-400'}`}>{strategicLeads}</div>
+            <div className={`text-xs ${strategicLeads > 0 ? 'text-amber-600' : 'text-gray-400'}`}>🎯 Strategic Leads</div>
+          </div>
+          <div className={`rounded-lg p-3 text-center border ${newLeads > 0 ? 'bg-yellow-50 border-yellow-300' : 'bg-gray-50 border-gray-200'}`}>
+            <div className={`text-2xl font-bold ${newLeads > 0 ? 'text-yellow-700' : 'text-gray-400'}`}>{newLeads}</div>
+            <div className={`text-xs ${newLeads > 0 ? 'text-yellow-600' : 'text-gray-400'}`}>Neue Leads</div>
+          </div>
+        </div>
+        <div className="bg-slate-800 text-white rounded-lg p-3 flex items-center justify-between">
+          <div className="text-xs">
+            <span className="text-slate-400">Schnellster Revenue-Weg: </span>
+            <span className="font-semibold text-white">{fastestRevPath}</span>
+          </div>
+          <div className="flex gap-3 text-xs">
+            <a href="/strategic-partnership" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">strategic-partnership ↗</a>
+            <a href="/partners" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">partners ↗</a>
+          </div>
+        </div>
+      </div>
+
       {/* Inbound Revenue Leads */}
       <div className="bg-white rounded-xl border border-gray-200 p-5">
         <div className="flex items-center justify-between">
@@ -86,9 +142,10 @@ export default async function CWOCommandCenterPage() {
           </div>
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
             <div className="text-sm font-semibold text-blue-700">
-              {topLeadType === 'employer_pilot'      ? '🏭 Employer Pilot' :
-               topLeadType === 'agency_partner'       ? '🤝 Agency Partner' :
-               topLeadType === 'market_intelligence'  ? '📊 Market Intel' :
+              {topLeadType === 'strategic_partner'   ? '🎯 Strategic Partner' :
+               topLeadType === 'employer_pilot'      ? '🏭 Employer Pilot' :
+               topLeadType === 'agency_partner'      ? '🤝 Agency Partner' :
+               topLeadType === 'market_intelligence' ? '📊 Market Intel' :
                '—'}
             </div>
             <div className="text-xs text-blue-500">Top Lead-Typ</div>
