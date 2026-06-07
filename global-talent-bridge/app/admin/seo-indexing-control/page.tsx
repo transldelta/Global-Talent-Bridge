@@ -135,15 +135,15 @@ export default async function SeoIndexingControlPage() {
           <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
             <span className="text-blue-600 font-bold text-sm mt-0.5">→</span>
             <div>
-              <div className="text-sm font-semibold text-gray-800">„+ Property hinzufügen" klicken</div>
+              <div className="text-sm font-semibold text-gray-800">{'„+ Property hinzufügen“ klicken'}</div>
               <div className="text-xs text-gray-500 mt-0.5">Oben links im Search Console Dashboard</div>
             </div>
           </div>
           <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
             <span className="text-blue-600 font-bold text-sm mt-0.5">→</span>
             <div>
-              <div className="text-sm font-semibold text-gray-800">Property-Typ: <span className="text-blue-700">„Domain"</span> auswählen</div>
-              <div className="text-xs text-gray-500 mt-0.5">Nicht „URL-Präfix" — Domain erfasst automatisch http/https/www</div>
+              <div className="text-sm font-semibold text-gray-800">{'Property-Typ: '}<span className="text-blue-700">{'„Domain"'}</span>{' auswählen'}</div>
+              <div className="text-xs text-gray-500 mt-0.5">{'Nicht „URL-Präfix" — Domain erfasst automatisch http/https/www'}</div>
             </div>
           </div>
           <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
@@ -159,7 +159,7 @@ export default async function SeoIndexingControlPage() {
           <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
             <span className="text-blue-600 font-bold text-sm mt-0.5">→</span>
             <div>
-              <div className="text-sm font-semibold text-gray-800">„Weiter" klicken</div>
+              <div className="text-sm font-semibold text-gray-800">{'„Weiter" klicken'}</div>
               <div className="text-xs text-gray-500 mt-0.5">Google zeigt dann einen DNS-TXT-Wert zur Verifizierung</div>
             </div>
           </div>
@@ -216,8 +216,8 @@ export default async function SeoIndexingControlPage() {
           </div>
         </div>
         <p className="text-sm text-gray-600 mb-4">
-          Füge den Google TXT-Wert ein und klicke „DNS prüfen" — das System prüft,
-          ob der Eintrag für <span className="font-mono">corridorwork.com</span> im öffentlichen DNS sichtbar ist.
+          {'Füge den Google TXT-Wert ein und klicke „DNS prüfen" — das System prüft, ob der Eintrag für '}
+          <span className="font-mono">corridorwork.com</span>{' im öffentlichen DNS sichtbar ist.'}
         </p>
         <DnsTxtChecker />
       </div>
@@ -229,7 +229,7 @@ export default async function SeoIndexingControlPage() {
           <h2 className="text-lg font-bold text-gray-900">Sitemap einreichen</h2>
         </div>
         <p className="text-sm text-gray-600 mb-4">
-          Nach erfolgreicher Verifizierung: Im linken Menü der Search Console auf <strong>„Sitemaps"</strong> klicken.
+          {'Nach erfolgreicher Verifizierung: Im linken Menü der Search Console auf '}<strong>{'„Sitemaps"'}</strong>{' klicken.'}
         </p>
 
         <div className="space-y-3 mb-4">
@@ -245,7 +245,7 @@ export default async function SeoIndexingControlPage() {
           <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
             <span className="text-green-600 font-bold text-sm mt-0.5">→</span>
             <div>
-              <div className="text-sm font-semibold text-gray-800">„Einreichen" klicken</div>
+              <div className="text-sm font-semibold text-gray-800">{'„Einreichen" klicken'}</div>
               <div className="text-xs text-gray-500 mt-0.5">Google crawlt die Sitemap und findet alle {indexableCount} indexierbaren Seiten</div>
             </div>
           </div>
@@ -264,8 +264,7 @@ export default async function SeoIndexingControlPage() {
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <h2 className="text-lg font-bold text-gray-900 mb-1">🎯 Diese URLs zuerst indexieren</h2>
         <p className="text-sm text-gray-500 mb-4">
-          In Search Console → „URL-Prüfung" → URL eingeben → „Indexierung beantragen".
-          Für jede URL einzeln, höchste Priorität zuerst.
+          {'In Search Console → „URL-Prüfung" → URL eingeben → „Indexierung beantragen". Für jede URL einzeln, höchste Priorität zuerst.'}
         </p>
         <div className="space-y-2">
           {PRIORITY_URLS_FOR_INDEXING.map((entry, idx) => (
@@ -337,7 +336,7 @@ export default async function SeoIndexingControlPage() {
             <div>1. <a href={GSC_URL} target="_blank" rel="noopener noreferrer" className="underline font-semibold">Google Search Console öffnen</a></div>
             <div>2. Property corridorwork.com als <strong>Domain</strong> hinzufügen</div>
             <div>3. DNS-TXT-Wert von Google kopieren und bei DNS-Anbieter eintragen</div>
-            <div>4. Hier auf dieser Seite mit „DNS prüfen" verifizieren</div>
+            <div>{'4. Hier auf dieser Seite mit „DNS prüfen" verifizieren'}</div>
             <div>5. In GSC: <strong>{SITEMAP_URL}</strong> einreichen</div>
             <div>6. Top-6 URLs einzeln zur Indexierung beantragen</div>
           </div>

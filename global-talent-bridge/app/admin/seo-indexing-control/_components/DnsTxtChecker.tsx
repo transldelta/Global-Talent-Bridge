@@ -62,7 +62,7 @@ export function DnsTxtChecker() {
           className="w-full text-sm font-mono border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
         />
         <p className="text-xs text-gray-500 mt-1">
-          Aus Google Search Console kopieren → „Property hinzufügen" → „DNS-Eintrag" → TXT-Wert
+          {'Aus Google Search Console kopieren → „Property hinzufügen" → „DNS-Eintrag" → TXT-Wert'}
         </p>
       </div>
 
