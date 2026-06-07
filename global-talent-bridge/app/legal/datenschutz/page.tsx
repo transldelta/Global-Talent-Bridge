@@ -191,10 +191,120 @@ export default function DatenschutzPage() {
             </p>
           </div>
 
-          {/* 10. Pilot-, Partner- und Market-Intelligence-Anfragen */}
+          {/* 10. Globale Arbeitgeber- und Kandidaten-Interessensregistrierung */}
           <div className="border-t border-gray-700 pt-6">
             <h2 className="text-xl font-bold text-white mb-3">
-              10. Pilot-, Partner- und Market-Intelligence-Anfragen
+              10. Globale Arbeitgeber- und Kandidaten-Interessensregistrierung
+            </h2>
+            <p className="text-gray-400 mb-4">
+              Über die öffentlichen Formulare auf{' '}
+              <span className="text-white">/global/employers</span> und{' '}
+              <span className="text-white">/global/candidates</span>{' '}
+              können Arbeitgeber und Kandidaten weltweit unverbindliches Interesse
+              an CorridorWork bekunden. Die dabei anfallenden Daten werden in den
+              internen Tabellen{' '}
+              <code className="text-green-400 text-xs bg-gray-800 px-1 rounded">global_employer_leads</code> und{' '}
+              <code className="text-green-400 text-xs bg-gray-800 px-1 rounded">candidate_interest_leads</code> gespeichert.
+            </p>
+
+            <div className="space-y-4 text-gray-400">
+              <div>
+                <p className="text-white font-medium mb-1">Erhobene Daten — Arbeitgeber</p>
+                <ul className="list-none space-y-1 text-sm">
+                  {[
+                    'Organisationsname / Firmenname',
+                    'Ansprechpartner (Name)',
+                    'E-Mail-Adresse',
+                    'Land und Stadt (optional)',
+                    'Branche(n) — Mehrfachauswahl aus 21 Kategorien (optional)',
+                    'Qualifikationsniveau, Dringlichkeit, Zielnachricht (optional)',
+                    'Ziel-Kandidatenregionen (optional)',
+                    'Freitextnachricht (optional)',
+                    'Einwilligung zur Kontaktaufnahme (DSGVO-Pflicht)',
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="text-blue-400 shrink-0 mt-0.5">·</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <p className="text-white font-medium mb-1">Erhobene Daten — Kandidaten</p>
+                <ul className="list-none space-y-1 text-sm">
+                  {[
+                    'Anzeigename / Vorname (Pseudonym möglich)',
+                    'E-Mail-Adresse',
+                    'Herkunftsland und Zielland (optional)',
+                    'Branche(n) — Mehrfachauswahl aus 21 Kategorien (optional)',
+                    'Erfahrungsniveau, Umzugsbereitschaft (optional)',
+                    'Sprachen, Qualifikationen (optional)',
+                    'Freitextnachricht (optional)',
+                    'Einwilligung zur Kontaktaufnahme (DSGVO-Pflicht)',
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="text-green-400 shrink-0 mt-0.5">·</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <p className="text-white font-medium mb-1">Zweck der Verarbeitung</p>
+                <p className="text-sm">
+                  Die Daten werden ausschließlich zur Bearbeitung des eingereichten
+                  Interesses verwendet — d.h. zur Prüfung, ob eine Vermittlung oder
+                  Zusammenarbeit im Rahmen von CorridorWork möglich ist.
+                  Rechtsgrundlage:{' '}
+                  <strong className="text-white">Art. 6 Abs. 1 lit. a DSGVO</strong>{' '}
+                  (ausdrückliche Einwilligung, die vor dem Einreichen erteilt wird) in
+                  Verbindung mit{' '}
+                  <strong className="text-white">Art. 6 Abs. 1 lit. b DSGVO</strong>{' '}
+                  (vorvertragliche Maßnahmen).
+                </p>
+              </div>
+
+              <div>
+                <p className="text-white font-medium mb-1">Garantien und Einschränkungen</p>
+                <ul className="list-none space-y-1 text-sm">
+                  {[
+                    'Keine Jobgarantie — die Registrierung stellt kein Jobangebot dar.',
+                    'Keine Visagarantie — CorridorWork übernimmt keine Verantwortung für Visumprozesse.',
+                    'Keine Gebühren für Kandidaten — die Registrierung ist und bleibt kostenlos.',
+                    'Keine automatischen E-Mails an registrierte Personen.',
+                    'Kein automatischer Outreach durch das System.',
+                    'Keine Zahlungen werden ausgelöst.',
+                    'E-Mail-Provider ist deaktiviert (EMAIL_PROVIDER = none).',
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="text-red-400 shrink-0 mt-0.5">✗</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <p className="text-white font-medium mb-1">Speicherdauer und Löschung</p>
+                <p className="text-sm">
+                  Interessensdaten werden für die Dauer des Piloten gespeichert,
+                  längstens jedoch 24 Monate nach Eingang, sofern keine längere
+                  Aufbewahrung gesetzlich erforderlich ist. Auf Wunsch werden Daten
+                  jederzeit gelöscht — Anfrage an:{' '}
+                  <a href="mailto:transl.delta@gmail.com" className="text-blue-400">
+                    transl.delta@gmail.com
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* 11. Pilot-, Partner- und Market-Intelligence-Anfragen */}
+          <div className="border-t border-gray-700 pt-6">
+            <h2 className="text-xl font-bold text-white mb-3">
+              11. Pilot-, Partner- und Market-Intelligence-Anfragen
             </h2>
             <p className="text-gray-400 mb-4">
               Über die öffentlichen Formulare auf{' '}

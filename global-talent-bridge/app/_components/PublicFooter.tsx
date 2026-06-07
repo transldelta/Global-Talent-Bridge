@@ -87,6 +87,33 @@ export function PublicFooter() {
             </ul>
           </div>
 
+          {/* Global Intake */}
+          <div>
+            <h3 className="text-white text-sm font-semibold mb-3">Global Intake</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/global/employers" className="text-blue-400 text-sm hover:text-blue-300 transition-colors font-medium">
+                  🌍 Global Employers
+                </Link>
+              </li>
+              <li>
+                <Link href="/global/candidates" className="text-green-400 text-sm hover:text-green-300 transition-colors font-medium">
+                  🌍 Global Candidates
+                </Link>
+              </li>
+              <li>
+                <Link href="/demo/sandbox" className="text-indigo-400 text-sm hover:text-indigo-300 transition-colors font-medium">
+                  🔬 Demo Sandbox
+                </Link>
+              </li>
+              <li>
+                <Link href="/buyer-snapshot" className="text-amber-400 text-sm hover:text-amber-300 transition-colors">
+                  📋 Buyer Snapshot
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           {/* Konto */}
           <div>
             <h3 className="text-white text-sm font-semibold mb-3">Konto</h3>

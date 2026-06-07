@@ -208,6 +208,65 @@ export async function GET(req: NextRequest) {
     '  · Kein Google API · Kein Scraping · Kein externer Call',
   ].join('\n'))
 
+  // ── 4a-2. Globale Lead-Counts (neue Tabellen) ──────────────────────────────
+  const { count: globalEmployerNew }  = await supabase
+    .from('global_employer_leads')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'new')
+
+  const { count: candidateInterestNew } = await supabase
+    .from('candidate_interest_leads')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'new')
+
+  const globalEmployerCount   = globalEmployerNew   ?? 0
+  const candidateInterestCount = candidateInterestNew ?? 0
+
+  // Global Revenue Engine — täglich vorbereiten (keine externen Calls)
+  const TOP_GLOBAL_CORRIDORS = [
+    'Philippines → Global Healthcare (Score: 92)',
+    'India → Canada (Score: 88)',
+    'India → UK (Score: 87)',
+    'Pakistan → Gulf (Score: 85)',
+    'Morocco → Germany (Score: 84)',
+  ]
+  const TOP_SKILL_CATEGORIES = [
+    '🏥 Healthcare & Care (Revenue: 90/100)',
+    '💻 IT & Software (Revenue: 92/100)',
+    '🔧 Techniker & Elektriker (Revenue: 83/100)',
+    '⚙️ Engineering (Revenue: 85/100)',
+    '🏗️ Construction & Trades (Revenue: 82/100)',
+  ]
+  const TOP_EMPLOYER_SEGMENTS = [
+    '🇩🇪 Germany — Healthcare, Construction, IT',
+    '🇬🇧 UK — NHS Nursing, IT, Engineering',
+    '🇨🇦 Canada — IT, Healthcare, Skilled Trades',
+    '🇦🇺 Australia — Healthcare, Engineering, IT',
+    '🇦🇪 Gulf — Construction, Hospitality, Tech',
+  ]
+  const TOP_CANDIDATE_SEGMENTS = [
+    '🇵🇭 Philippines — Healthcare, Hospitality',
+    '🇮🇳 India — IT, Engineering, Healthcare',
+    '🇳🇬 Nigeria — IT, Nursing, Engineering',
+    '🇲🇦 Morocco — Construction, Logistics, Trades',
+    '🇵🇰 Pakistan — Construction, Engineering, IT',
+  ]
+
+  completedItems.push([
+    'Global revenue engine prepared today:',
+    '  Top 5 Korridore:',
+    ...TOP_GLOBAL_CORRIDORS.map(c => `    · ${c}`),
+    '  Top 5 Skill Categories:',
+    ...TOP_SKILL_CATEGORIES.map(c => `    · ${c}`),
+    '  Top 5 Arbeitgeber-Segmente:',
+    ...TOP_EMPLOYER_SEGMENTS.map(c => `    · ${c}`),
+    '  Top 5 Kandidaten-Segmente:',
+    ...TOP_CANDIDATE_SEGMENTS.map(c => `    · ${c}`),
+    `  Neue Globale Employer Leads: ${globalEmployerCount}`,
+    `  Neue Kandidaten-Interest Leads: ${candidateInterestCount}`,
+    '  Kein Scraping · Kein Versand · Kein Ads-Start · Inbound-only',
+  ].join('\n'))
+
   // Buyer Readiness Status — reine Konfigurationsnotiz, kein externer Call
   const buyerReadinessScore   = 66
   const topBuyerConcern       = 'Kein echter Umsatz — 0 zahlende Kunden, 0 EUR'
@@ -321,6 +380,18 @@ export async function GET(req: NextRequest) {
       transferDocsReady:    true,
       demoReady:            true,
       paymentReady:         false,
+    },
+    globalRevenue: {
+      globalEmployerLeadsNew:   globalEmployerCount,
+      candidateInterestLeadsNew: candidateInterestCount,
+      topCorridors:             TOP_GLOBAL_CORRIDORS,
+      topSkillCategories:       TOP_SKILL_CATEGORIES,
+      topEmployerSegments:      TOP_EMPLOYER_SEGMENTS,
+      topCandidateSegments:     TOP_CANDIDATE_SEGMENTS,
+      globalReady:              true,
+      multisectorCapability:    true,
+      paidAdsLive:              false,
+      outreachLive:             false,
     },
   })
 }
