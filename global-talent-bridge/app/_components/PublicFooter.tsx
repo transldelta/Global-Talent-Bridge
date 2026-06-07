@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 /**
  * PublicFooter — Footer für alle öffentlichen Seiten.
- * Enthält rechtliche Links, Navigation, Revenue-Pilot-Links und MVP-Hinweis.
+ * Enthält rechtliche Links, Navigation, Revenue-Pilot-Links, SEO-Branchen/Korridore und MVP-Hinweis.
  */
 export function PublicFooter() {
   const year = new Date().getFullYear()
@@ -10,6 +10,8 @@ export function PublicFooter() {
   return (
     <footer className="border-t border-gray-800 bg-gray-900 mt-auto">
       <div className="max-w-6xl mx-auto px-4 py-10">
+
+        {/* Top row: 4 columns */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-8">
           {/* Produkt */}
           <div>
@@ -26,8 +28,8 @@ export function PublicFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="/pricing" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
-                  Pricing
+                <Link href="/demo" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
+                  🎬 Demo ansehen
                 </Link>
               </li>
               <li>
@@ -60,6 +62,11 @@ export function PublicFooter() {
               <li>
                 <Link href="/market-intelligence" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
                   📊 Market Intelligence
+                </Link>
+              </li>
+              <li>
+                <Link href="/solutions/recruiting-agencies" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
+                  🔗 Agentur-Lösung
                 </Link>
               </li>
             </ul>
@@ -107,6 +114,45 @@ export function PublicFooter() {
                 </Link>
               </li>
             </ul>
+          </div>
+        </div>
+
+        {/* SEO row: Branchen + Korridore */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8 pt-4 border-t border-gray-800">
+          {/* Branchen */}
+          <div>
+            <h3 className="text-gray-600 text-xs font-semibold uppercase tracking-wider mb-3">Branchen</h3>
+            <div className="flex flex-wrap gap-x-4 gap-y-1">
+              {[
+                { href: '/industries/care',         label: '🏥 Pflege' },
+                { href: '/industries/hospitality',  label: '🍽️ Gastronomie' },
+                { href: '/industries/logistics',    label: '🚚 Logistik' },
+                { href: '/industries/it',           label: '💻 IT' },
+                { href: '/industries/construction', label: '🏗️ Bau & Handwerk' },
+              ].map(l => (
+                <Link key={l.href} href={l.href} className="text-gray-600 text-xs hover:text-gray-400 transition-colors">
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Korridore */}
+          <div>
+            <h3 className="text-gray-600 text-xs font-semibold uppercase tracking-wider mb-3">Talent-Korridore</h3>
+            <div className="flex flex-wrap gap-x-4 gap-y-1">
+              {[
+                { href: '/corridors/philippines-care',  label: '🇵🇭→🇩🇪 Philippinen' },
+                { href: '/corridors/india-uk',          label: '🇮🇳→🇬🇧 Indien' },
+                { href: '/corridors/morocco-germany',   label: '🇲🇦→🇩🇪 Marokko' },
+                { href: '/corridors/nigeria-tech',      label: '🇳🇬→🇩🇪 Nigeria' },
+                { href: '/corridors/tunisia-france',    label: '🇹🇳→🇫🇷 Tunesien' },
+              ].map(l => (
+                <Link key={l.href} href={l.href} className="text-gray-600 text-xs hover:text-gray-400 transition-colors">
+                  {l.label}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
 

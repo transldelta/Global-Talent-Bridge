@@ -152,6 +152,84 @@ export default async function CWOCommandCenterPage() {
         </div>
       </div>
 
+      {/* SEO Revenue Expansion — 12 neue öffentliche Seiten */}
+      <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">🚀 SEO Revenue Expansion — 12 neue Seiten</h2>
+            <p className="text-xs text-gray-500 mt-0.5">
+              5 Branchen · 5 Korridore · 1 Agentur-Lösung · 1 Demo — alle öffentlich, alle in der Sitemap.
+            </p>
+          </div>
+          <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full border border-green-200">
+            ✅ LIVE
+          </span>
+        </div>
+
+        {/* Branchen */}
+        <div className="mb-3">
+          <div className="text-xs font-semibold text-gray-400 uppercase mb-2">🏭 Branchen (5)</div>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { href: '/industries/care',         label: '🏥 Pflege' },
+              { href: '/industries/hospitality',  label: '🍽️ Gastronomie' },
+              { href: '/industries/logistics',    label: '🚚 Logistik' },
+              { href: '/industries/it',           label: '💻 IT' },
+              { href: '/industries/construction', label: '🏗️ Bau' },
+            ].map(p => (
+              <a key={p.href} href={p.href} target="_blank" rel="noopener noreferrer"
+                 className="px-3 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-xs rounded-lg hover:bg-blue-100 transition-colors">
+                {p.label}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Korridore */}
+        <div className="mb-3">
+          <div className="text-xs font-semibold text-gray-400 uppercase mb-2">🌍 Korridore (5)</div>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { href: '/corridors/philippines-care',  label: '🇵🇭 Philippinen' },
+              { href: '/corridors/india-uk',          label: '🇮🇳 Indien' },
+              { href: '/corridors/morocco-germany',   label: '🇲🇦 Marokko' },
+              { href: '/corridors/nigeria-tech',      label: '🇳🇬 Nigeria' },
+              { href: '/corridors/tunisia-france',    label: '🇹🇳 Tunesien' },
+            ].map(p => (
+              <a key={p.href} href={p.href} target="_blank" rel="noopener noreferrer"
+                 className="px-3 py-1 bg-purple-50 border border-purple-200 text-purple-700 text-xs rounded-lg hover:bg-purple-100 transition-colors">
+                {p.label}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Solutions + Demo */}
+        <div className="mb-4">
+          <div className="text-xs font-semibold text-gray-400 uppercase mb-2">🔗 Lösungen & Demo (2)</div>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { href: '/solutions/recruiting-agencies', label: '🤝 Agentur-Lösung' },
+              { href: '/demo',                          label: '🎬 Demo' },
+            ].map(p => (
+              <a key={p.href} href={p.href} target="_blank" rel="noopener noreferrer"
+                 className="px-3 py-1 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs rounded-lg hover:bg-emerald-100 transition-colors">
+                {p.label}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Öffentliche Seiten Gesamt */}
+        <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 flex items-center justify-between">
+          <div className="text-sm text-slate-700">
+            <span className="font-bold">Öffentliche Seiten gesamt:</span>{' '}
+            3 Revenue-Pilot-Seiten + 12 SEO-Expansion-Seiten + Static Pages
+          </div>
+          <div className="text-2xl font-bold text-blue-600">15+</div>
+        </div>
+      </div>
+
       {/* Daily Runner — letzter automatischer Lauf */}
       <LastRunPanel />
 

@@ -9,6 +9,9 @@ Allow: /legal/
 Allow: /corridors/
 Allow: /pilot/
 Allow: /market-intelligence
+Allow: /industries/
+Allow: /solutions/
+Allow: /demo
 
 # Kein Zugriff auf Admin- und Auth-Bereich
 Disallow: /admin/

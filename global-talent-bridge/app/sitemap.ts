@@ -93,6 +93,82 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.75,
     },
+    // Demo page
+    {
+      url: `${BASE_URL}/demo`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.80,
+    },
+    // Solutions pages
+    {
+      url: `${BASE_URL}/solutions/recruiting-agencies`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    // Industry SEO pages
+    {
+      url: `${BASE_URL}/industries/care`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.80,
+    },
+    {
+      url: `${BASE_URL}/industries/hospitality`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: `${BASE_URL}/industries/logistics`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: `${BASE_URL}/industries/it`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: `${BASE_URL}/industries/construction`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    // Static corridor SEO pages
+    {
+      url: `${BASE_URL}/corridors/philippines-care`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.80,
+    },
+    {
+      url: `${BASE_URL}/corridors/india-uk`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.80,
+    },
+    {
+      url: `${BASE_URL}/corridors/morocco-germany`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: `${BASE_URL}/corridors/nigeria-tech`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: `${BASE_URL}/corridors/tunisia-france`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.70,
+    },
   ]
 
   // Dynamic corridor landingpages (published + approved only)
