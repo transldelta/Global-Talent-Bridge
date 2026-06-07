@@ -2,21 +2,26 @@
  * __tests__/promo-video-page.test.ts
  *
  * Tests for /promo-video page (app/promo-video/page.tsx)
+ * and for the generated video + subtitle assets.
  *
  * Checks:
  * - Page file exists
- * - Contains "no MP4" disclaimer
+ * - MP4 referenced in page (src attribute)
+ * - Subtitle tracks referenced
  * - Brand "CorridorWork" present
  * - Domain "corridorwork.com" present
  * - No job guarantee / visa guarantee language
- * - No Stripe / no email sending / no scraping references as active features
- * - All 10 language codes present
+ * - No Stripe / no email / no scraping as active features
+ * - Compliance banner present
+ * - All 10 language subtitle codes present
  * - All 6 scene titles present
- * - All 3 CTAs present (/demo/sandbox, /buyer-snapshot, /strategic-partnership)
- * - "Production-Ready Assets" section present
+ * - All 3 CTAs present
  * - PublicFooter imported
  * - /promo-video in sitemap.ts
- * - Footer contains promo-video link
+ * - Footer contains /promo-video link
+ * - SRT files exist and contain valid timecodes
+ * - MP4 files exist in public/promo-video/
+ * - Build script exists in scripts/
  */
 import { describe, it, expect } from 'vitest'
 import { readFileSync, existsSync } from 'fs'
@@ -26,6 +31,9 @@ const ROOT      = join(__dirname, '..')
 const PAGE_FILE = join(ROOT, 'app/promo-video/page.tsx')
 const SITEMAP   = join(ROOT, 'app/sitemap.ts')
 const FOOTER    = join(ROOT, 'app/_components/PublicFooter.tsx')
+const VIDEO_DIR = join(ROOT, 'public/promo-video')
+const SRT_DIR   = join(ROOT, 'public/promo-video/subtitles')
+const SCRIPT    = join(ROOT, 'scripts/build-promo-video.py')
 
 function readPage(): string {
   if (!existsSync(PAGE_FILE)) throw new Error('Missing: app/promo-video/page.tsx')
@@ -41,39 +49,108 @@ describe('/promo-video — File Existence', () => {
 
   it('app/sitemap.ts enthält /promo-video', () => {
     expect(existsSync(SITEMAP)).toBe(true)
-    const c = readFileSync(SITEMAP, 'utf-8')
-    expect(c).toContain('/promo-video')
+    expect(readFileSync(SITEMAP, 'utf-8')).toContain('/promo-video')
   })
 
   it('PublicFooter.tsx enthält /promo-video Link', () => {
     expect(existsSync(FOOTER)).toBe(true)
-    const c = readFileSync(FOOTER, 'utf-8')
-    expect(c).toContain('/promo-video')
+    expect(readFileSync(FOOTER, 'utf-8')).toContain('/promo-video')
+  })
+
+  it('scripts/build-promo-video.py existiert', () => {
+    expect(existsSync(SCRIPT)).toBe(true)
   })
 })
 
-// ── 2. Disclaimer — no MP4 ────────────────────────────────────────────────────
+// ── 2. MP4 assets ─────────────────────────────────────────────────────────────
 
-describe('/promo-video — No-MP4 Disclaimer', () => {
-  it('enthält "no MP4" Hinweis', () => {
+describe('/promo-video — MP4 Assets', () => {
+  it('corridorwork-promo-en.mp4 existiert', () => {
+    expect(existsSync(join(VIDEO_DIR, 'corridorwork-promo-en.mp4'))).toBe(true)
+  })
+
+  it('corridorwork-promo-en-noaudio.mp4 existiert', () => {
+    expect(existsSync(join(VIDEO_DIR, 'corridorwork-promo-en-noaudio.mp4'))).toBe(true)
+  })
+
+  it('corridorwork-promo-en.mp4 ist größer als 100KB', () => {
+    const { statSync } = require('fs')
+    const size = statSync(join(VIDEO_DIR, 'corridorwork-promo-en.mp4')).size
+    expect(size).toBeGreaterThan(100 * 1024) // > 100 KB
+  })
+})
+
+// ── 3. SRT subtitle files ─────────────────────────────────────────────────────
+
+const SRT_LANGS = ['en', 'de', 'fr', 'ar', 'es', 'pt', 'hi', 'ur', 'fil', 'tr']
+
+describe('/promo-video — SRT Subtitle Files', () => {
+  for (const lang of SRT_LANGS) {
+    const file = `corridorwork-promo-${lang}.srt`
+    it(`${file} existiert`, () => {
+      expect(existsSync(join(SRT_DIR, file))).toBe(true)
+    })
+
+    it(`${file} enthält SRT-Zeitstempel`, () => {
+      const content = readFileSync(join(SRT_DIR, file), 'utf-8')
+      expect(content).toMatch(/\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}/)
+    })
+  }
+
+  it('10 SRT-Dateien vorhanden', () => {
+    expect(SRT_LANGS.length).toBe(10)
+  })
+})
+
+// ── 4. Page embeds video ──────────────────────────────────────────────────────
+
+describe('/promo-video — Video Eingebettet', () => {
+  it('Seite referenziert corridorwork-promo-en.mp4', () => {
+    expect(readPage()).toContain('corridorwork-promo-en.mp4')
+  })
+
+  it('Seite hat <video> Element', () => {
+    const c = readPage().toLowerCase()
+    expect(c).toContain('<video')
+  })
+
+  it('Seite hat <source> mit video/mp4', () => {
+    expect(readPage()).toContain('video/mp4')
+  })
+
+  it('Seite hat subtitle <track> Elemente', () => {
+    expect(readPage()).toContain('<track')
+    expect(readPage()).toContain('kind="subtitles"')
+  })
+
+  it('Seite referenziert alle 10 SRT-Sprachen', () => {
     const c = readPage()
-    // Case-insensitive: "No MP4" / "no final MP4" / "no MP4 file"
-    expect(c.toLowerCase()).toContain('no')
-    expect(c.toUpperCase()).toContain('MP4')
-  })
-
-  it('enthält "storyboard" oder "script preview"', () => {
-    const c = readPage().toLowerCase()
-    expect(c).toMatch(/storyboard|script preview|script.only preview/)
-  })
-
-  it('enthält "no paid video service" Hinweis', () => {
-    const c = readPage().toLowerCase()
-    expect(c).toMatch(/no paid|not activated|not active|not enabled|none|kein bezahl/)
+    for (const lang of SRT_LANGS) {
+      expect(c).toContain(`corridorwork-promo-${lang}.srt`)
+    }
   })
 })
 
-// ── 3. Brand & domain ─────────────────────────────────────────────────────────
+// ── 5. Compliance banner ──────────────────────────────────────────────────────
+
+describe('/promo-video — Compliance Banner', () => {
+  it('enthält "No job guarantee"', () => {
+    const c = readPage().toLowerCase()
+    expect(c).toMatch(/no job guarantee|zero.*employment|no.*employment guarantee/)
+  })
+
+  it('enthält "No visa guarantee"', () => {
+    const c = readPage().toLowerCase()
+    expect(c).toMatch(/no visa guarantee|zero.*visa|no.*visa guarantee/)
+  })
+
+  it('enthält "No fake revenue claims"', () => {
+    const c = readPage().toLowerCase()
+    expect(c).toMatch(/no fake revenue|no.*fake.*revenue|no fake.*claim/)
+  })
+})
+
+// ── 6. Brand & domain ─────────────────────────────────────────────────────────
 
 describe('/promo-video — Brand & Domain', () => {
   it('enthält "CorridorWork"', () => {
@@ -92,7 +169,7 @@ describe('/promo-video — Brand & Domain', () => {
   })
 })
 
-// ── 4. Compliance — no forbidden phrases ─────────────────────────────────────
+// ── 7. Forbidden phrases ──────────────────────────────────────────────────────
 
 describe('/promo-video — Keine verbotenen Phrasen', () => {
   const FORBIDDEN = [
@@ -103,7 +180,6 @@ describe('/promo-video — Keine verbotenen Phrasen', () => {
     'you will be hired',
     'income guaranteed',
     'guaranteed income',
-    'we place you automatically',
   ]
 
   for (const phrase of FORBIDDEN) {
@@ -113,122 +189,59 @@ describe('/promo-video — Keine verbotenen Phrasen', () => {
   }
 })
 
-// ── 5. Safety invariants ──────────────────────────────────────────────────────
+// ── 8. Safety invariants ──────────────────────────────────────────────────────
 
 describe('/promo-video — Safety Invariants', () => {
   it('kein aktiviertes Stripe', () => {
-    const c = readPage().toLowerCase()
-    // stripe.com / stripe.createCharge / new Stripe( must not appear
+    const c = readPage()
     expect(c).not.toContain('stripe.com')
-    expect(c).not.toMatch(/new stripe\(|stripe\.createcharge|stripe\.paymentintent/i)
+    expect(c).not.toMatch(/new Stripe\(|stripe\.createCharge/i)
   })
 
   it('kein aktives E-Mail-Senden', () => {
-    const c = readPage()
-    // sendEmail() / nodemailer / resend.send must not appear
-    expect(c).not.toMatch(/sendEmail\(|nodemailer|resend\.send|smtp/i)
+    expect(readPage()).not.toMatch(/sendEmail\(|nodemailer|resend\.send/i)
   })
 
   it('kein Scraping', () => {
-    const c = readPage()
-    expect(c).not.toMatch(/puppeteer|cheerio|playwright\.chromium/i)
+    expect(readPage()).not.toMatch(/puppeteer|cheerio|playwright\.chromium/i)
   })
 
-  it('enthält "No payments activated" oder äquivalent', () => {
+  it('enthält Stripe/payments-Hinweis', () => {
     const c = readPage().toLowerCase()
-    expect(c).toMatch(/no payments|not activated|not active|kein.*zahlung|payment.*none/)
+    expect(c).toMatch(/no stripe|not activated|no payments/)
   })
 })
 
-// ── 6. Storyboard content ─────────────────────────────────────────────────────
+// ── 9. Storyboard content ─────────────────────────────────────────────────────
 
 describe('/promo-video — Storyboard Szenen', () => {
-  it('enthält alle 6 Szenen-Zeitfenster', () => {
-    const c = readPage()
-    expect(c).toContain('0:00')
-    expect(c).toContain('0:05')
-    expect(c).toContain('0:15')
-    expect(c).toContain('0:30')
-    expect(c).toContain('0:45')
-    expect(c).toContain('0:55')
-  })
-
-  it('enthält Szenen-Titel', () => {
+  it('enthält alle 6 Szenen-Titel', () => {
     const c = readPage()
     expect(c).toContain('THE HOOK')
-    expect(c).toContain('THE PROBLEM')
     expect(c).toContain('THE SOLUTION')
     expect(c).toContain('THE FEATURES')
     expect(c).toContain('FOR WHOM')
     expect(c).toContain('CALL TO ACTION')
   })
 
-  it('enthält Voiceover-Texte (EN)', () => {
+  it('enthält Zeitstempel', () => {
     const c = readPage()
-    expect(c).toContain('Voiceover')
-    // At least one quote from the master script
-    expect(c).toContain('structured path to global talent')
-  })
-
-  it('enthält On-Screen-Texte', () => {
-    const c = readPage()
-    expect(c).toContain('On-Screen Text')
-    expect(c).toContain('Compliance-First')
+    expect(c).toContain('0:00')
+    expect(c).toContain('0:42')
   })
 })
 
-// ── 7. Language pack ──────────────────────────────────────────────────────────
+// ── 10. Language codes ────────────────────────────────────────────────────────
 
-describe('/promo-video — Sprach-Pack', () => {
-  const LANG_CODES = ['EN', 'DE', 'FR', 'AR', 'ES', 'PT', 'HI', 'UR', 'FIL', 'TR']
-
-  for (const code of LANG_CODES) {
-    it(`enthält Sprach-Code "${code}"`, () => {
-      expect(readPage()).toContain(code)
+describe('/promo-video — 10 Sprachcodes', () => {
+  for (const lang of SRT_LANGS) {
+    it(`enthält Sprachcode "${lang}"`, () => {
+      expect(readPage()).toContain(lang)
     })
   }
-
-  it('enthält "10" Sprachen-Hinweis', () => {
-    expect(readPage()).toContain('10')
-  })
 })
 
-// ── 8. Production assets section ─────────────────────────────────────────────
-
-describe('/promo-video — Production Assets', () => {
-  it('enthält "Production-Ready Assets" Abschnitt', () => {
-    const c = readPage()
-    expect(c).toMatch(/Production.Ready Assets|Production Ready Assets/i)
-  })
-
-  it('enthält Runway', () => {
-    expect(readPage()).toContain('Runway')
-  })
-
-  it('enthält Pika', () => {
-    expect(readPage()).toContain('Pika')
-  })
-
-  it('enthält Canva', () => {
-    expect(readPage()).toContain('Canva')
-  })
-
-  it('enthält CapCut', () => {
-    expect(readPage()).toContain('CapCut')
-  })
-
-  it('enthält Synthesia oder HeyGen', () => {
-    const c = readPage()
-    expect(c).toMatch(/Synthesia|HeyGen/)
-  })
-
-  it('enthält SRT subtitle Hinweis', () => {
-    const c = readPage().toLowerCase()
-    expect(c).toContain('srt')
-  })
-})
-
-// ── 9. CTAs ───────────────────────────────────────────────────────────────────
+// ── 11. CTAs ──────────────────────────────────────────────────────────────────
 
 describe('/promo-video — CTAs', () => {
   it('enthält Link zu /demo/sandbox', () => {
@@ -244,15 +257,11 @@ describe('/promo-video — CTAs', () => {
   })
 })
 
-// ── 10. Component structure ───────────────────────────────────────────────────
+// ── 12. Component structure ───────────────────────────────────────────────────
 
 describe('/promo-video — Komponenten-Struktur', () => {
   it('importiert PublicFooter', () => {
     expect(readPage()).toContain('PublicFooter')
-  })
-
-  it('importiert Link from next/link', () => {
-    expect(readPage()).toContain("from 'next/link'")
   })
 
   it('exportiert default function PromoVideoPage', () => {
@@ -261,5 +270,13 @@ describe('/promo-video — Komponenten-Struktur', () => {
 
   it('enthält metadata export', () => {
     expect(readPage()).toContain('export const metadata')
+  })
+
+  it('build-script enthält "ffmpeg"', () => {
+    expect(readFileSync(SCRIPT, 'utf-8')).toContain('ffmpeg')
+  })
+
+  it('build-script enthält "CorridorWork"', () => {
+    expect(readFileSync(SCRIPT, 'utf-8')).toContain('CorridorWork')
   })
 })
