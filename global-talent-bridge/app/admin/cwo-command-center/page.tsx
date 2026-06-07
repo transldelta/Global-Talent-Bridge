@@ -653,7 +653,7 @@ export default async function CWOCommandCenterPage() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
           <div className="bg-white border border-violet-200 rounded-lg p-3 text-center">
-            <div className="text-2xl font-bold text-violet-700">63<span className="text-sm text-gray-400">/100</span></div>
+            <div className="text-2xl font-bold text-violet-700">66<span className="text-sm text-gray-400">/100</span></div>
             <div className="text-xs text-violet-600">Readiness Score</div>
           </div>
           <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">

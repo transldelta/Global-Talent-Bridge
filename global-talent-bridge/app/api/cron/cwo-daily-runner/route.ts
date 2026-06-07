@@ -209,7 +209,7 @@ export async function GET(req: NextRequest) {
   ].join('\n'))
 
   // Buyer Readiness Status — reine Konfigurationsnotiz, kein externer Call
-  const buyerReadinessScore   = 63
+  const buyerReadinessScore   = 66
   const topBuyerConcern       = 'Kein echter Umsatz — 0 zahlende Kunden, 0 EUR'
   const nextValueBooster      = 'Ersten Strategic Partnership Deal oder White-Label abschließen'
   const commercialProofStatus = 'schwach (4/20) — Phase 1 Pilot, keine echten Leads'

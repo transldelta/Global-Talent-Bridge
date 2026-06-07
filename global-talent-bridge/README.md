@@ -4,7 +4,7 @@
 
 Live: **https://corridorwork.com**  
 Supabase-Region: eu-central-1 (Frankfurt, DE) — DSGVO-konform  
-Status: **Phase 1 Pilot** (Stand: 2026-06-07) | Buyer Readiness: 63/100
+Status: **Phase 1 Pilot** (Stand: 2026-06-07) | Buyer Readiness: 66/100
 
 ---
 

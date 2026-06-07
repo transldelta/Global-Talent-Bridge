@@ -49,7 +49,7 @@ describe('/admin/buyer-readiness — Seite', () => {
   })
 
   it('enthält Buyer Readiness Score', () => {
-    expect(content).toMatch(/buyer.*readiness.*score|readiness.*score|63.*100/i)
+    expect(content).toMatch(/buyer.*readiness.*score|readiness.*score|66.*100/i)
   })
 
   it('enthält alle 5 Transfer-Docs im Panel', () => {
@@ -274,8 +274,8 @@ describe('Daily Runner — Buyer Readiness', () => {
     expect(content).toContain('commercialProofStatus')
   })
 
-  it('Score ist 63 (ehrlich)', () => {
-    expect(content).toContain('63')
+  it('Score ist 66 (ehrlich)', () => {
+    expect(content).toContain('66')
   })
 
   it('enthält buyerReadiness im Response-Objekt', () => {
@@ -308,8 +308,8 @@ describe('CWO Command Center — Buyer Readiness Panel', () => {
     expect(content).toContain('/admin/buyer-readiness')
   })
 
-  it('zeigt Score 63', () => {
-    expect(content).toContain('63')
+  it('zeigt Score 66', () => {
+    expect(content).toContain('66')
   })
 
   it('zeigt "demo-ready: ja"', () => {
