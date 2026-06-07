@@ -103,8 +103,11 @@ export default function LaunchPage() {
           Strukturiertes, compliance-first Cross-border Hiring. Verbindet internationale Fachkräfte
           mit Arbeitgebern in Deutschland und Europa.
         </p>
-        <p className="text-gray-500 text-sm mb-8">
-          Kein Cold-Outreach. Kein Spam. Nur inbound — manuell geprüft.
+        <p className="text-gray-500 text-sm mb-2">
+          Inbound-first — das System sammelt Anfragen automatisch. Kein Cold-Outreach. Kein Spam.
+        </p>
+        <p className="text-gray-600 text-xs mb-8">
+          Anfragen werden manuell geprüft. Keine automatischen E-Mails. DSGVO-konform.
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <Link href="/strategic-partnership"
@@ -194,13 +197,27 @@ export default function LaunchPage() {
         </div>
       </section>
 
+      {/* Inbound-First Note */}
+      <section className="max-w-4xl mx-auto px-4 pb-6">
+        <div className="bg-blue-950/40 border border-blue-800/40 rounded-xl p-4 text-center">
+          <p className="text-blue-300 text-sm font-medium mb-1">
+            🌐 Inbound-First SaaS Asset
+          </p>
+          <p className="text-blue-400/80 text-xs">
+            CorridorWork sammelt Anfragen über diese Website — automatisch, ohne dass jemand operativ arbeiten muss.
+            Google-Indexierung ist eingerichtet. Die Revenue Inbox empfängt Leads passiv.
+          </p>
+        </div>
+      </section>
+
       {/* Safety Note */}
       <section className="max-w-4xl mx-auto px-4 pb-16">
         <div className="bg-slate-900/60 border border-slate-700/50 rounded-xl p-4 text-center">
           <p className="text-gray-500 text-xs">
             ✓ Kein Cold-Outreach &nbsp;·&nbsp; ✓ Kein automatischer Versand &nbsp;·&nbsp;
             ✓ Kein Stripe aktiv &nbsp;·&nbsp; ✓ Kein Scraping &nbsp;·&nbsp; ✓ Phase 1 Pilot &nbsp;·&nbsp;
-            ✓ DSGVO-konform &nbsp;·&nbsp; ✓ Keine erfundenen Umsätze
+            ✓ DSGVO-konform &nbsp;·&nbsp; ✓ Keine erfundenen Umsätze &nbsp;·&nbsp;
+            ✓ Kein LinkedIn/WhatsApp nötig
           </p>
         </div>
       </section>

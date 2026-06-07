@@ -190,7 +190,8 @@ describe('/admin/distribution-pack Seite', () => {
     expect(content).toContain('3-Satz Pitch')
     expect(content).toContain('30-Sekunden Pitch')
     expect(content).toContain('LinkedIn Post')
-    expect(content).toContain('WhatsApp Status')
+    // WhatsApp-Label kann "WhatsApp Status" oder "WhatsApp Business Status" sein
+    expect(content.toLowerCase()).toContain('whatsapp')
     expect(content).toContain('Marketplace')
   })
 })

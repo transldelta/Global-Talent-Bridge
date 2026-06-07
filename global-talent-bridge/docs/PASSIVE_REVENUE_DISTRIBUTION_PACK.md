@@ -84,18 +84,52 @@ Fertige Copy-Paste-Texte unter `/admin/distribution-pack`:
 
 ---
 
-## Sicherer Verbreitungsweg (Schritt für Schritt)
+## Inbound-First — kein LinkedIn, kein WhatsApp nötig
 
-1. `/launch`-Link in LinkedIn-Bio, WhatsApp-Status, persönliches Profil setzen
-2. Buyer Snapshot (`/buyer-snapshot`) bei ernsthaftem Interesse-Gespräch teilen
-3. `Strategic Partnership`-Link direkt für strategische Kontakte
-4. Revenue Inbox täglich prüfen: `/admin/revenue-inbox`
-5. Leads manuell qualifizieren → Gespräch führen
+CorridorWork ist als **Inbound-first SaaS Asset** designed. Das System arbeitet für den Betreiber:
+
+- **Google-Indexierung** bringt organischen Traffic zu den Revenue-Seiten
+- **Website-Formulare** empfangen Leads automatisch
+- **Revenue Inbox** sammelt und zeigt neue Leads
+- **Daily Runner** erstellt täglich einen Bericht
+
+**Kein LinkedIn erforderlich.**
+**Keine private WhatsApp-Nummer erforderlich.**
+**Keine private Telefonnummer öffentlich verwenden.**
+
+Der Betreiber prüft nur:
+1. `/admin/revenue-inbox` — neue Leads sehen und qualifizieren
+2. `/admin/cwo-command-center` — Systemstatus beobachten
+
+---
+
+## Optional: Soziale Kanäle (nur falls vorhanden)
+
+Nur falls eigene Business-Kanäle existieren:
+
+| Kanal | Status | Hinweis |
+|---|---|---|
+| LinkedIn | Optional | Nur falls eigenes Profil vorhanden |
+| WhatsApp Business | Optional | Nur separate Business-Nummer, nicht privat |
+| Persönliche Netzwerke | Optional | Nur falls jemand fragt |
+
+**Private Telefonnummer und private WhatsApp-Nummern werden nicht empfohlen.**
+
+---
+
+## Sicherer Verbreitungsweg (minimaler Aufwand)
+
+1. Revenue Inbox regelmäßig prüfen: `/admin/revenue-inbox`
+2. CWO Command Center beobachten: `/admin/cwo-command-center`
+3. Leads manuell qualifizieren → Gespräch führen
+
+Das ist alles. Das System arbeitet für dich.
 
 **Was nicht tun:**
 - Kein Massen-Mailing
 - Keine bezahlten Anzeigen ohne rechtliche Prüfung
 - Kein automatisches Teilen in Gruppen
+- Keine private Telefonnummer öffentlich verwenden
 
 ---
 

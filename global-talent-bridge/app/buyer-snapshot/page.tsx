@@ -97,6 +97,9 @@ export default function BuyerSnapshotPage() {
           Cross-border Hiring. Das System läuft autonom, sammelt inbound Leads über 4 Revenue-Pfade
           und bereitet täglich Berichte vor.
         </p>
+        <div className="inline-flex items-center gap-2 px-3 py-2 bg-blue-900/40 border border-blue-600/40 rounded-lg text-blue-300 text-xs font-medium mb-3">
+          🌐 Inbound-first SaaS Asset — designed to work without manual social media or owner involvement.
+        </div>
         <p className="text-gray-500 text-sm">
           Phase 1 Pilot — kein laufender Revenue-Vertrag. Alle Zahlen verifizierbar.
           Keine erfundenen Umsätze.

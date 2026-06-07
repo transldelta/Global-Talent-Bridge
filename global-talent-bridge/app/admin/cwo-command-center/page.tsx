@@ -50,6 +50,43 @@ export default async function CWOCommandCenterPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
 
+      {/* ── Owner-Offload Box ────────────────────────────────────────────────── */}
+      <div className="bg-green-50 border-2 border-green-400 rounded-2xl p-5">
+        <div className="flex items-start gap-3 mb-4">
+          <span className="text-3xl shrink-0">✅</span>
+          <div>
+            <h2 className="text-green-900 font-bold text-lg">Das System arbeitet für dich.</h2>
+            <p className="text-green-700 text-sm mt-0.5">
+              Du musst nicht operativ arbeiten. CorridorWork sammelt Leads inbound — automatisch.
+            </p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-4">
+          {[
+            { label: 'Website sammelt Inbound-Leads',  status: 'aktiv ✅' },
+            { label: 'Daily Runner arbeitet automatisch', status: 'aktiv ✅' },
+            { label: 'Revenue Inbox sammelt Leads',    status: 'aktiv ✅' },
+            { label: 'Google / Sitemap vorbereitet',   status: 'aktiv ✅' },
+            { label: 'Launch-Seite live',              status: 'aktiv ✅' },
+            { label: 'Private WhatsApp/LinkedIn nötig', status: 'nein ✅' },
+          ].map(row => (
+            <div key={row.label} className="flex items-center justify-between bg-white border border-green-200 rounded-lg px-3 py-2">
+              <span className="text-gray-700 text-xs">{row.label}</span>
+              <span className={`text-xs font-semibold ${row.status.startsWith('nein') ? 'text-green-600' : 'text-green-700'}`}>
+                {row.status}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="bg-green-100 border border-green-300 rounded-xl px-4 py-3 flex items-center gap-2">
+          <span className="text-lg">👉</span>
+          <span className="text-green-900 text-sm font-medium">
+            Nächster Schritt: <strong>Revenue Inbox beobachten</strong> und <strong>CWO Command Center prüfen.</strong>{' '}
+            Mehr ist nicht nötig.
+          </span>
+        </div>
+      </div>
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

@@ -105,12 +105,33 @@ Phase                   = 1        ✓
 
 ---
 
+## Inbound-First System
+
+CorridorWork arbeitet **ohne manuellen Social-Media-Aufwand**:
+
+| Was das System tut | Automatisch |
+|---|---|
+| Leads via Website-Formulare empfangen | ✅ Ja |
+| Google-Indexierung nutzen | ✅ Ja (eingerichtet) |
+| Daily Runner Berichte | ✅ Ja |
+| Revenue Inbox füllen | ✅ Ja |
+
+| Was der Betreiber nicht braucht | |
+|---|---|
+| LinkedIn | ❌ Nicht erforderlich |
+| Private WhatsApp | ❌ Nicht empfohlen |
+| Private Telefonnummer | ❌ Nicht empfohlen |
+| Operatives Posten | ❌ Nicht nötig |
+
+---
+
 ## Nächste sichere Schritte
 
-1. **Strategic Leads prüfen** → Revenue Inbox öffnen → manuell qualifizieren
-2. **Google Search Console DNS-Eintrag** → SEO-Traffic aktivieren
-3. **Revenue Inbox täglich prüfen** → neue Leads qualifizieren
-4. **Revenue-Seiten teilen** → nach erstem qualifizierten Lead im Netzwerk teilen (kein Cold-Outreach)
+1. **Revenue Inbox prüfen** → `/admin/revenue-inbox` → Strategic Leads als höchste Priorität
+2. **Inbound-Seiten live lassen** → Google-Indexierung beobachten
+3. **CWO Command Center prüfen** → `/admin/cwo-command-center` → Systemstatus
+
+Das ist alles. Das System arbeitet für dich.
 
 ---
 

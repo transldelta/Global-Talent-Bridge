@@ -14,6 +14,8 @@ export const dynamic = 'force-dynamic'
 
 // ── Copy-Texte ─────────────────────────────────────────────────────────────────
 
+// Priorität 1: Für Plattformen (keine Social-Media-Pflicht)
+// Priorität 2: Social optional — nur falls Nutzer eigene Kanäle hat
 const DISTRIBUTION_BLOCKS = [
   {
     id:    '1-satz-pitch',
@@ -26,10 +28,10 @@ const DISTRIBUTION_BLOCKS = [
     id:    '3-satz-pitch',
     label: '3-Satz Pitch',
     icon:  '📝',
-    note:  'Für E-Mail-Signaturen, LinkedIn-Beschreibungen',
+    note:  'Für E-Mail-Signaturen oder falls jemand fragt',
     text:  `CorridorWork ist ein live betriebenes SaaS-System für strukturiertes Cross-border Hiring. Das System läuft autonom, erfasst inbound Leads über 4 Revenue-Pfade und bereitet täglich Revenue-Berichte vor.
 
-Wir sind offen für strategische Partnerschaften, White-Label-Nutzung, Lizenzierung und ernsthafte Übernahme- oder Beteiligungsgespräche. Kein Cold-Outreach — nur inbound.
+Offen für strategische Partnerschaften, White-Label-Nutzung, Lizenzierung und ernsthafte Übernahme- oder Beteiligungsgespräche. Kein Cold-Outreach — nur inbound.
 
 Live: corridorwork.com/launch`,
   },
@@ -37,20 +39,58 @@ Live: corridorwork.com/launch`,
     id:    '30-sekunden-pitch',
     label: '30-Sekunden Pitch (gesprochen)',
     icon:  '🎙️',
-    note:  'Für persönliche Gespräche, Netzwerk-Events, kurze Calls',
-    text:  `„CorridorWork ist ein live betriebenes System für Cross-border Hiring. Wir verbinden internationale Fachkräfte mit Unternehmen in Deutschland und Europa — strukturiert und compliance-first.
+    note:  'Falls jemand persönlich fragt — kein Pflichtschritt',
+    text:  `„CorridorWork ist ein live betriebenes System für Cross-border Hiring. Es verbindet internationale Fachkräfte mit Unternehmen in Deutschland und Europa — strukturiert und compliance-first.
 
-Das System läuft bereits autonom: tägliche Berichte, 4 Inbound-Lead-Pfade, 16+ SEO-Seiten. Alles verifizierbar.
+Das System läuft autonom: tägliche Berichte, 4 Inbound-Lead-Pfade, 16+ SEO-Seiten. Alles verifizierbar.
 
-Wir sind in Phase 1, ohne laufende Revenue-Verträge, aber offen für strategische Gespräche: Partnerschaft, White-Label, Lizenzierung oder Übernahme.
+Phase 1, ohne laufende Revenue-Verträge, aber offen für strategische Gespräche: Partnerschaft, White-Label, Lizenzierung oder Übernahme.
 
-Kein Pitch-Deck-Versprechen. Nur was live läuft. corridorwork.com"`,
+Nur was live läuft: corridorwork.com"`,
   },
   {
+    id:    'marketplace-listing',
+    label: 'Marketplace / Buyer Listing Text',
+    icon:  '🏪',
+    note:  'Für Acquire.com, MicroAcquire, Flippa oder ähnliche Plattformen',
+    text:  `CorridorWork — Live SaaS Asset for Cross-border Hiring
+
+ASSET TYPE: SaaS (Phase 1 Pilot)
+TECH STACK: Next.js 14, Supabase, Vercel, TypeScript
+DOMAIN: corridorwork.com (live, HTTPS)
+
+LIVE SYSTEMS:
+- Autonomous CWO Operating System (daily runner, täglich)
+- 4 Inbound Revenue Paths (strategic_partner, agency_partner, employer_pilot, market_intelligence)
+- Lead Capture with scoring (status, lead_score, interest_type)
+- 16+ SEO-indexable pages (industries, corridors, solutions)
+- Admin Dashboard (Revenue Accelerator, Revenue Inbox, CWO Command Center)
+- Sitemap.xml + robots.txt
+
+COMPLIANCE & SAFETY:
+- No emails sent (EMAIL_PROVIDER=none)
+- No auto-outreach
+- No Stripe/payments active
+- No scraping
+- Phase 1 — no active revenue contracts
+
+REVENUE PATHS PREPARED:
+1. Strategic Partner / White-Label / Acquisition
+2. Agency Partner
+3. Employer Pilot
+4. Market Intelligence
+
+INBOUND-FIRST: System collects leads via website forms — no manual social media required.
+
+PHASE: 1 (Pilot) — no revenue contracts, no fake numbers
+CONTACT: corridorwork.com/strategic-partnership`,
+  },
+  // ── OPTIONAL: Nur falls Nutzer eigene Social-Media-Kanäle hat ─────────────
+  {
     id:    'linkedin-post',
-    label: 'LinkedIn Post',
+    label: 'LinkedIn Post (optional)',
     icon:  '💼',
-    note:  'Für persönliches LinkedIn-Profil oder Unternehmensseite',
+    note:  '⚪ OPTIONAL — nur falls du ein eigenes LinkedIn-Profil nutzt. Nicht notwendig für Inbound.',
     text:  `🚀 CorridorWork ist live.
 
 Ein SaaS-System für strukturiertes, compliance-first Cross-border Hiring.
@@ -62,7 +102,7 @@ Was bereits läuft:
 ✅ Admin Revenue Dashboard
 ✅ Safety-First: kein Scraping, kein automatischer Versand
 
-Wir sind offen für:
+Offen für:
 🎯 Strategische Partnerschaft
 🏷️ White-Label-Nutzung
 📜 Lizenzierung / API-Zugang
@@ -74,9 +114,9 @@ Phase 1 Pilot. Keine erfundenen Zahlen. Nur was verifizierbar läuft.
   },
   {
     id:    'whatsapp-status',
-    label: 'WhatsApp Status',
+    label: 'WhatsApp Business Status (optional)',
     icon:  '📱',
-    note:  'Kurz genug für WhatsApp-Status (max. 250 Zeichen)',
+    note:  '⚪ OPTIONAL — nur für WhatsApp Business-Nummer, NICHT private Nummer. Nicht notwendig.',
     text:  `CorridorWork ist live 🚀
 Cross-border Hiring, 4 Revenue-Pfade offen.
 Strategic Partnership, White-Label, Pilot.
@@ -84,19 +124,19 @@ Strategic Partnership, White-Label, Pilot.
   },
   {
     id:    'partner-text',
-    label: 'Kurzer Partner-Text',
+    label: 'Kurzer Text falls jemand fragt (optional)',
     icon:  '🤝',
-    note:  'Für persönliche Nachrichten an bekannte Kontakte (kein Cold-Outreach)',
-    text:  `Ich habe CorridorWork aufgebaut — ein System für Cross-border Hiring.
+    note:  '⚪ OPTIONAL — nur falls jemand persönlich fragt. Kein Cold-Outreach.',
+    text:  `CorridorWork ist ein live betriebenes System für Cross-border Hiring.
 
 Live-Features:
 - 4 Inbound-Revenue-Pfade
 - Autonomous Daily Runner
 - 16+ SEO-Seiten
 
-Ich bin offen für Gespräche zu: Strategischer Partnerschaft, White-Label, Lizenzierung oder Übernahme.
+Offen für: Strategische Partnerschaft, White-Label, Lizenzierung oder Übernahme.
 
-Kein Pitch-Druck. Wenn es interessant klingt: corridorwork.com/strategic-partnership
+Kein Pitch-Druck. Falls es interessant klingt: corridorwork.com/strategic-partnership
 
 Alles ist verifizierbar. Keine erfundenen Zahlen.`,
   },
@@ -193,12 +233,34 @@ export default async function DistributionPackPage() {
         </div>
       </div>
 
+      {/* Inbound-First Hinweis */}
+      <div className="bg-blue-50 border-2 border-blue-300 rounded-xl p-4">
+        <div className="flex items-start gap-3">
+          <span className="text-2xl shrink-0">🌐</span>
+          <div>
+            <div className="font-bold text-blue-900 text-sm mb-1">
+              Kein LinkedIn erforderlich. Kein WhatsApp erforderlich.
+            </div>
+            <p className="text-blue-700 text-xs leading-relaxed">
+              CorridorWork arbeitet <strong>inbound-first</strong> über öffentliche Website-Formulare,
+              Google-Indexierung, die Launch-Seite und die Revenue Inbox. Du musst nicht aktiv posten.
+              Das System arbeitet für dich — du prüfst nur die Revenue Inbox und das CWO Command Center.
+            </p>
+            <p className="text-blue-600 text-xs mt-1.5 font-medium">
+              LinkedIn und WhatsApp sind optional — nur falls du eigene Business-Kanäle nutzen möchtest.
+              Private Telefonnummern und private WhatsApp-Nummern werden nicht empfohlen.
+              Falls WhatsApp: nur separates WhatsApp Business.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Copy-Paste Blocks */}
       <DistributionPackClient blocks={DISTRIBUTION_BLOCKS} />
 
       {/* Admin Note */}
       <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-xs text-gray-500 text-center">
-        Admin-only · Kein automatischer Versand · Kein Outreach · Passiv teilen: Bio, Status, persönliche Netzwerke
+        Admin-only · Kein automatischer Versand · Kein Outreach · Inbound-first: System arbeitet für dich
       </div>
     </div>
   )
