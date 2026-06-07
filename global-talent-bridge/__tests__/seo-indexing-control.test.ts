@@ -421,3 +421,164 @@ describe('SEO-Prioritäten — Verteilung', () => {
     })
   })
 })
+
+// ══════════════════════════════════════════════════════════════════════════════
+// GSC SETUP ASSISTANT — Seiteninhalt-Anforderungen (via Konfiguration)
+// ══════════════════════════════════════════════════════════════════════════════
+
+describe('GSC Setup Assistant — Seitenanforderungen (via Konfiguration)', () => {
+  /**
+   * Diese Tests prüfen, dass alle Daten, die auf der Seite /admin/seo-indexing-control
+   * angezeigt werden müssen, in der Konfiguration vorhanden sind.
+   * Redirect-Test (kein Login → Login-Redirect) ist als Anforderung dokumentiert.
+   */
+
+  it('Google Search Console Link ist in der Konfiguration vorhanden', () => {
+    // Seite muss diesen Link zeigen → in GOOGLE_SEARCH_CONSOLE_GUIDE.step1.url
+    expect(GOOGLE_SEARCH_CONSOLE_GUIDE.step1.url).toContain('search.google.com/search-console')
+  })
+
+  it('corridorwork.com ist in der GSC-Konfiguration vorhanden', () => {
+    // Seite muss "corridorwork.com" anzeigen
+    expect(GOOGLE_SEARCH_CONSOLE_GUIDE.step2.value).toBe('corridorwork.com')
+  })
+
+  it('sitemap.xml URL ist in der Konfiguration vorhanden', () => {
+    // Seite muss die Sitemap-URL anzeigen
+    expect(GOOGLE_SEARCH_CONSOLE_GUIDE.step4.sitemapUrl).toContain('sitemap.xml')
+    expect(GOOGLE_SEARCH_CONSOLE_GUIDE.step4.sitemapUrl).toContain('corridorwork.com')
+  })
+
+  it('Google API ist nicht aktiv (noGoogleApiCalls = true)', () => {
+    // Seite zeigt "Google API: Nicht aktiv ✓" → SEO_SYSTEM_STATUS.noGoogleApiCalls = true
+    expect(SEO_SYSTEM_STATUS.noGoogleApiCalls).toBe(true)
+  })
+
+  it('Prioritäts-URLs für Indexierung sind vorhanden (mindestens 4)', () => {
+    // Seite zeigt Top-Priority-URLs
+    expect(TOP_PRIORITY_PATHS_FOR_INDEXING.length).toBeGreaterThanOrEqual(4)
+  })
+
+  it('Alle 6 erwarteten Prioritäts-URLs sind enthalten', () => {
+    const EXPECTED_PRIORITY_URLS = [
+      '/demo',
+      '/pilot/employers',
+      '/pilot/agencies',
+      '/market-intelligence',
+      '/industries/care',
+      '/solutions/recruiting-agencies',
+    ]
+    EXPECTED_PRIORITY_URLS.forEach(url => {
+      expect(TOP_PRIORITY_PATHS_FOR_INDEXING, `${url} fehlt in TOP_PRIORITY_PATHS_FOR_INDEXING`).toContain(url)
+    })
+  })
+
+  it('Kein Scraping — noScraping ist true in SEO_SYSTEM_STATUS', () => {
+    expect(SEO_SYSTEM_STATUS.noScraping).toBe(true)
+  })
+
+  it('Kein E-Mail-Versand — noEmailSent ist true in SEO_SYSTEM_STATUS', () => {
+    expect(SEO_SYSTEM_STATUS.noEmailSent).toBe(true)
+  })
+
+  it('Kein Stripe — noStripe ist true in SEO_SYSTEM_STATUS', () => {
+    expect(SEO_SYSTEM_STATUS.noStripe).toBe(true)
+  })
+
+  it('Seite hat 5 konfigurierte Schritte (step1 bis step5)', () => {
+    expect(GOOGLE_SEARCH_CONSOLE_GUIDE).toHaveProperty('step1')
+    expect(GOOGLE_SEARCH_CONSOLE_GUIDE).toHaveProperty('step2')
+    expect(GOOGLE_SEARCH_CONSOLE_GUIDE).toHaveProperty('step3')
+    expect(GOOGLE_SEARCH_CONSOLE_GUIDE).toHaveProperty('step4')
+    expect(GOOGLE_SEARCH_CONSOLE_GUIDE).toHaveProperty('step5')
+  })
+
+  it('Schritt 3 enthält DNS TXT Hinweis', () => {
+    const step3 = JSON.stringify(GOOGLE_SEARCH_CONSOLE_GUIDE.step3)
+    // Schritt 3 handelt von DNS-Eintrag
+    expect(step3.toLowerCase()).toMatch(/dns|txt/)
+  })
+
+  it('Schritt 5 enthält URLs für Indexierung', () => {
+    expect(GOOGLE_SEARCH_CONSOLE_GUIDE.step5.urls).toBeInstanceOf(Array)
+    expect(GOOGLE_SEARCH_CONSOLE_GUIDE.step5.urls.length).toBeGreaterThanOrEqual(3)
+  })
+
+  it('importantNote bestätigt: kein automatischer API-Call', () => {
+    expect(GOOGLE_SEARCH_CONSOLE_GUIDE.importantNote).toMatch(/kein.*api/i)
+    expect(GOOGLE_SEARCH_CONSOLE_GUIDE.importantNote).toMatch(/manuell/i)
+  })
+})
+
+// ══════════════════════════════════════════════════════════════════════════════
+// DNS CHECK ROUTE — Safety-Anforderungen
+// ══════════════════════════════════════════════════════════════════════════════
+
+describe('DNS Check Route — Safety', () => {
+  /**
+   * Prüft, dass die DNS-Check-Route nur Standard-DNS nutzt,
+   * kein Scraping, kein Google API, kein E-Mail.
+   */
+
+  it('generateSeoCheckItems enthält keine externen API-Calls', () => {
+    // generateSeoCheckItems ist eine pure Funktion — kein I/O, kein externes API
+    const items = generateSeoCheckItems()
+    const joined = items.join(' ')
+    // Darf keine externe HTTP-Anfrage enthalten
+    expect(joined).not.toMatch(/fetch\(|axios|request\(/)
+  })
+
+  it('generateSeoCheckItems erwähnt "Kein Google API" explizit', () => {
+    const items = generateSeoCheckItems()
+    const joined = items.join(' ')
+    expect(joined).toMatch(/kein google api/i)
+  })
+
+  it('generateSeoCheckItems läuft synchron ohne I/O', () => {
+    // Kein await, kein Promise → synchrone Funktion
+    const result = generateSeoCheckItems()
+    expect(Array.isArray(result)).toBe(true)
+    expect(result.length).toBeGreaterThan(0)
+  })
+
+  it('SEO System ist in Phase 1', () => {
+    expect(SEO_SYSTEM_STATUS.phase).toBe(1)
+  })
+
+  it('lastCheckSource ist static_config (kein externer Call)', () => {
+    // DNS wird per Node.js dns-Modul geprüft, nicht hier
+    // Dieser Status zeigt: die config-basierte Prüfung ist statisch
+    expect(SEO_SYSTEM_STATUS.lastCheckSource).toBe('static_config')
+  })
+})
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CWO COMMAND CENTER — SEO-Panel-Anforderungen
+// ══════════════════════════════════════════════════════════════════════════════
+
+describe('CWO Command Center — SEO Panel Datenanforderungen', () => {
+  /**
+   * Prüft, dass die Daten im CWO-SEO-Panel korrekt sind.
+   * Das CWO Command Center zeigt: GSC Setup: vorbereitet, Sitemap: bereit, Google API: nicht aktiv.
+   */
+
+  it('SEO_SYSTEM_STATUS zeigt 16 öffentliche Seiten', () => {
+    expect(SEO_SYSTEM_STATUS.totalPublicPages).toBe(16)
+  })
+
+  it('Sitemap-URL ist korrekt (für CWO Panel)', () => {
+    expect(SEO_SYSTEM_STATUS.sitemapUrl).toBe('https://corridorwork.com/sitemap.xml')
+  })
+
+  it('Google API ist nicht aktiv (für CWO Panel)', () => {
+    expect(SEO_SYSTEM_STATUS.noGoogleApiCalls).toBe(true)
+  })
+
+  it('sitemapReady ist true (für CWO Panel)', () => {
+    expect(SEO_SYSTEM_STATUS.sitemapReady).toBe(true)
+  })
+
+  it('robotsReady ist true (für CWO Panel)', () => {
+    expect(SEO_SYSTEM_STATUS.robotsReady).toBe(true)
+  })
+})

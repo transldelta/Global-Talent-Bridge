@@ -156,22 +156,22 @@ export default async function CWOCommandCenterPage() {
       <div className="bg-white rounded-xl border border-gray-200 p-5">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">🔍 SEO Indexing</h2>
+            <h2 className="text-lg font-bold text-gray-900">🔍 SEO Indexing & Google Search Console</h2>
             <p className="text-xs text-gray-500 mt-0.5">
-              {'{'}16{'}'} öffentliche Seiten · Sitemap bereit · robots.txt korrekt · Kein Google API
+              16 öffentliche Seiten · Sitemap bereit · robots.txt korrekt · Google API: nicht aktiv ✓
             </p>
           </div>
           <div className="flex gap-2 items-center">
             <span className="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full border border-amber-200">
-              ⏳ Einreichung ausstehend
+              ⏳ DNS-Eintrag ausstehend
             </span>
             <a href="/admin/seo-indexing-control"
                className="px-3 py-1.5 bg-blue-600 text-white text-xs rounded-lg font-medium hover:bg-blue-700 transition-colors">
-              SEO Control →
+              Setup-Assistent →
             </a>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-3 mb-3">
+        <div className="grid grid-cols-4 gap-3 mb-3">
           <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
             <div className="text-xl font-bold text-green-700">16</div>
             <div className="text-xs text-green-600">Seiten indexierbar</div>
@@ -184,19 +184,44 @@ export default async function CWOCommandCenterPage() {
             <div className="text-sm font-bold text-blue-700">✅ Korrekt</div>
             <div className="text-xs text-blue-600">robots.txt</div>
           </div>
+          <div className="bg-violet-50 border border-violet-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-violet-700">🔧 Bereit</div>
+            <div className="text-xs text-violet-600">GSC Setup</div>
+          </div>
+        </div>
+        {/* GSC Setup Status */}
+        <div className="mb-3 bg-slate-50 border border-slate-200 rounded-lg p-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+            <div className="flex items-center gap-1.5 text-green-700">
+              <span>✅</span>
+              <span>Google Search Console Setup: <strong>vorbereitet</strong></span>
+            </div>
+            <div className="flex items-center gap-1.5 text-blue-700">
+              <span>✅</span>
+              <span>Sitemap: <strong>bereit</strong></span>
+            </div>
+            <div className="flex items-center gap-1.5 text-green-700">
+              <span>✅</span>
+              <span>Google API: <strong>nicht aktiv</strong></span>
+            </div>
+            <div className="flex items-center gap-1.5 text-green-700">
+              <span>✅</span>
+              <span>Kein Scraping · Kein E-Mail</span>
+            </div>
+          </div>
         </div>
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start gap-3">
           <span className="text-lg shrink-0">🎯</span>
           <div>
-            <div className="text-sm font-semibold text-amber-900">Nächste sichere Aktion (einmalig)</div>
+            <div className="text-sm font-semibold text-amber-900">Nächster manueller Schritt</div>
             <div className="text-xs text-amber-700 mt-0.5">
-              Sitemap in{' '}
               <a href="https://search.google.com/search-console" target="_blank" rel="noopener noreferrer"
-                 className="underline font-medium">Google Search Console</a>{' '}
-              einreichen:{' '}
-              <span className="font-mono bg-amber-100 px-1 rounded">https://corridorwork.com/sitemap.xml</span>
-              {' '}· Kein API · Kein Scraping · Kostenlos ·{' '}
-              <a href="/admin/seo-indexing-control" className="underline font-medium">Anleitung →</a>
+                 className="underline font-medium">Google Search Console öffnen</a>{' '}
+              → Domain-Property <span className="font-mono font-bold">corridorwork.com</span> einrichten
+              → DNS-TXT-Wert bei DNS-Anbieter eintragen → Verifizieren → Sitemap{' '}
+              <span className="font-mono bg-amber-100 px-1 rounded">https://corridorwork.com/sitemap.xml</span>{' '}
+              einreichen ·{' '}
+              <a href="/admin/seo-indexing-control" className="underline font-medium">5-Schritt-Anleitung →</a>
             </div>
           </div>
         </div>

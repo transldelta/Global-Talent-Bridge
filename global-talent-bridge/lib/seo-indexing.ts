@@ -250,9 +250,10 @@ export const SEO_PAGE_ENTRIES: SeoPageEntry[] = [
 export const TOP_PRIORITY_PATHS_FOR_INDEXING: string[] = [
   '/demo',
   '/pilot/employers',
+  '/pilot/agencies',
+  '/market-intelligence',
   '/industries/care',
   '/solutions/recruiting-agencies',
-  '/pilot/agencies',
   '/corridors/philippines-care',
   '/industries/it',
 ]
