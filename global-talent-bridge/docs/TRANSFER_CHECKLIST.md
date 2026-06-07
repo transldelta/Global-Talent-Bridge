@@ -7,7 +7,7 @@
 ## 1. GitHub Repository
 
 - [ ] GitHub Repository-Zugang übertragen (Fork oder Transfer)
-- [ ] Alle Branches übergeben: `main`, `feature/global-talent-bridge-mvp-phase-1`
+- [ ] Branch übergeben: `feature/global-talent-bridge-mvp-phase-1`
 - [ ] GitHub Actions / CI-Konfiguration prüfen
 - [ ] `.gitignore` prüfen (`.env.local` nicht committet ✅)
 
