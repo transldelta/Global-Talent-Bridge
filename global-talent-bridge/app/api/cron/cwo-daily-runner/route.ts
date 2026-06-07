@@ -208,6 +208,23 @@ export async function GET(req: NextRequest) {
     '  · Kein Google API · Kein Scraping · Kein externer Call',
   ].join('\n'))
 
+  // Buyer Readiness Status — reine Konfigurationsnotiz, kein externer Call
+  const buyerReadinessScore   = 63
+  const topBuyerConcern       = 'Kein echter Umsatz — 0 zahlende Kunden, 0 EUR'
+  const nextValueBooster      = 'Ersten Strategic Partnership Deal oder White-Label abschließen'
+  const commercialProofStatus = 'schwach (4/20) — Phase 1 Pilot, keine echten Leads'
+
+  completedItems.push([
+    'Buyer Readiness Status:',
+    `  · Score: ${buyerReadinessScore}/100 (ehrlich — kein Schönreden)`,
+    `  · Top Concern: ${topBuyerConcern}`,
+    `  · Next Value Booster: ${nextValueBooster}`,
+    `  · Commercial Proof: ${commercialProofStatus}`,
+    '  · Transfer Docs: vorhanden (5 Dokumente)',
+    '  · Demo-ready: ja',
+    '  · Payment-ready: nein (Stripe nicht konfiguriert)',
+  ].join('\n'))
+
   // Revenue-Leads in completedItems aufnehmen
   if (newLeadsCount > 0) {
     completedItems.push(`${newLeadsCount} neue Inbound-Leads (${strategicNew} Strategic, ${employerLeads ?? 0} Employer, ${agencyLeads ?? 0} Agency, ${intelLeads ?? 0} Intel)`)
@@ -295,6 +312,15 @@ export async function GET(req: NextRequest) {
       autonomyLevel:        'A2',
       externalCallsMade:    0,
       messagesSent:         0,
+    },
+    buyerReadiness: {
+      score:                buyerReadinessScore,
+      topBuyerConcern,
+      nextValueBooster,
+      commercialProofStatus,
+      transferDocsReady:    true,
+      demoReady:            true,
+      paymentReady:         false,
     },
   })
 }

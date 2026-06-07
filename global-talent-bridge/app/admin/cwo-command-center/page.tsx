@@ -637,6 +637,48 @@ export default async function CWOCommandCenterPage() {
         </div>
       </div>
 
+      {/* ── Buyer Readiness Panel ───────────────────────────────────────────── */}
+      <div className="bg-violet-50 border-2 border-violet-400 rounded-xl p-5">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">📊 Buyer Readiness</h2>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Transferability Audit — Ehrlicher Stand für Käufer, Partner und Investoren
+            </p>
+          </div>
+          <a href="/admin/buyer-readiness"
+             className="px-3 py-1.5 bg-violet-600 text-white text-xs rounded-lg font-medium hover:bg-violet-700 transition-colors">
+            Buyer Readiness →
+          </a>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+          <div className="bg-white border border-violet-200 rounded-lg p-3 text-center">
+            <div className="text-2xl font-bold text-violet-700">63<span className="text-sm text-gray-400">/100</span></div>
+            <div className="text-xs text-violet-600">Readiness Score</div>
+          </div>
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-green-700">✅ Demo-ready</div>
+            <div className="text-xs text-green-600">Buyer Demo</div>
+          </div>
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-green-700">✅ Vorhanden</div>
+            <div className="text-xs text-green-600">Transfer Docs (5)</div>
+          </div>
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-red-700">❌ Nein</div>
+            <div className="text-xs text-red-600">Payment-ready</div>
+          </div>
+        </div>
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start gap-3">
+          <span className="text-lg shrink-0">⚠️</span>
+          <div className="text-xs text-amber-800">
+            <strong>Commercial Proof: schwach (4/20)</strong> — 0 echte Kunden, 0 EUR Umsatz.
+            Technisch solide (Tech: 17/20, Security: 16/20), aber kein Umsatz-Nachweis vorhanden.
+            Schnellster Weg: Strategic Partnership Deal oder White-Label.
+          </div>
+        </div>
+      </div>
+
       {/* Blocked Risks Summary */}
       <div className="bg-red-50 border border-red-200 rounded-xl p-6">
         <h2 className="text-lg font-bold text-red-900 mb-3">🚫 Automatisch blockierte Risiken</h2>
