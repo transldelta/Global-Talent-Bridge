@@ -188,6 +188,15 @@ export async function GET(req: NextRequest) {
   // Revenue Accelerator Status in completedItems
   completedItems.push(`Revenue Accelerator: ${newLeadsCount} neue Leads | ${strategicAll} Strategic-Leads gesamt | Top-Pfad: ${topRevenuePath}`)
 
+  // Passive Distribution Links — täglich im Worklog protokollieren (kein Versand, kein externer Call)
+  completedItems.push([
+    'Distribution links ready:',
+    '  · top public link: /strategic-partnership',
+    '  · top buyer link: /buyer-snapshot',
+    '  · top employer link: /pilot/employers',
+    '  · launch overview: /launch',
+  ].join('\n'))
+
   // Revenue-Leads in completedItems aufnehmen
   if (newLeadsCount > 0) {
     completedItems.push(`${newLeadsCount} neue Inbound-Leads (${strategicNew} Strategic, ${employerLeads ?? 0} Employer, ${agencyLeads ?? 0} Agency, ${intelLeads ?? 0} Intel)`)
@@ -253,6 +262,16 @@ export async function GET(req: NextRequest) {
       agencyPartner:      agencyLeads    ?? 0,
       marketIntel:        intelLeads     ?? 0,
       topRevenuePath,
+    },
+    distributionLinks: {
+      topPublicLink:    '/strategic-partnership',
+      topBuyerLink:     '/buyer-snapshot',
+      topEmployerLink:  '/pilot/employers',
+      launchOverview:   '/launch',
+      distributionPack: '/admin/distribution-pack',
+      noEmailSent:      true,
+      noAutoOutreach:   true,
+      passiveOnly:      true,
     },
     // Safety invariants im Response bestätigen
     safetyConfirmed: {

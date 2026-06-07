@@ -105,6 +105,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.75,
     },
+    // Passive Distribution Pages
+    {
+      url: `${BASE_URL}/launch`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/buyer-snapshot`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.80,
+    },
     // Demo page
     {
       url: `${BASE_URL}/demo`,

@@ -50,6 +50,16 @@ export function PublicFooter() {
             <h3 className="text-white text-sm font-semibold mb-3">Pilot & Partner</h3>
             <ul className="space-y-2">
               <li>
+                <Link href="/launch" className="text-green-400 text-sm hover:text-green-300 transition-colors font-medium">
+                  🚀 Launch-Übersicht
+                </Link>
+              </li>
+              <li>
+                <Link href="/buyer-snapshot" className="text-amber-400 text-sm hover:text-amber-300 transition-colors font-medium">
+                  📋 Buyer Snapshot
+                </Link>
+              </li>
+              <li>
                 <Link href="/strategic-partnership" className="text-amber-500 text-sm hover:text-amber-300 transition-colors font-medium">
                   🎯 Strategic Partnership
                 </Link>
@@ -72,11 +82,6 @@ export function PublicFooter() {
               <li>
                 <Link href="/demo" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
                   🎬 Demo ansehen
-                </Link>
-              </li>
-              <li>
-                <Link href="/solutions/recruiting-agencies" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">
-                  🔗 Agentur-Lösung
                 </Link>
               </li>
             </ul>

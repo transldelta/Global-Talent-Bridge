@@ -122,6 +122,50 @@ export default async function CWOCommandCenterPage() {
         </div>
       </div>
 
+      {/* ── Passive Distribution Ready Panel ───────────────────────────────── */}
+      <div className="bg-green-50 border-2 border-green-400 rounded-xl p-5">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">🚀 Passive Distribution Ready</h2>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Launch-Seite live · Buyer Snapshot live · Distribution Pack bereit · Kein Outreach
+            </p>
+          </div>
+          <a href="/admin/distribution-pack"
+             className="px-3 py-1.5 bg-green-600 text-white text-xs rounded-lg font-medium hover:bg-green-700 transition-colors">
+            Distribution Pack →
+          </a>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+          <div className="bg-white border border-green-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-green-700">✅ LIVE</div>
+            <div className="text-xs text-green-600">/launch</div>
+          </div>
+          <div className="bg-white border border-green-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-green-700">✅ LIVE</div>
+            <div className="text-xs text-green-600">/buyer-snapshot</div>
+          </div>
+          <div className="bg-white border border-green-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-green-700">✅ Bereit</div>
+            <div className="text-xs text-green-600">Distribution Pack</div>
+          </div>
+          <div className="bg-white border border-green-200 rounded-lg p-3 text-center">
+            <div className="text-sm font-bold text-green-700">7 Texte</div>
+            <div className="text-xs text-green-600">Copy-Paste Ready</div>
+          </div>
+        </div>
+        <div className="bg-slate-800 text-white rounded-lg p-3 flex items-center justify-between">
+          <div className="text-xs">
+            <span className="text-slate-400">Nächster sicherer Schritt: </span>
+            <span className="font-semibold text-green-300">Launch-Link in Profilen / Bio / Status platzieren</span>
+          </div>
+          <div className="flex gap-3 text-xs">
+            <a href="/launch" target="_blank" rel="noopener noreferrer" className="text-green-400 hover:underline">/launch ↗</a>
+            <a href="/buyer-snapshot" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">/buyer-snapshot ↗</a>
+          </div>
+        </div>
+      </div>
+
       {/* Inbound Revenue Leads */}
       <div className="bg-white rounded-xl border border-gray-200 p-5">
         <div className="flex items-center justify-between">
