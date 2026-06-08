@@ -606,6 +606,18 @@ export function BuyerRoomClient() {
               No fake revenue · No fake customers · No Stripe · No auto-send ·
               No job guarantee · No visa guarantee
             </p>
+            {/* Market Proof Launch link */}
+            <div className="mt-3 bg-blue-950 border border-blue-700 rounded-lg px-3 py-2 inline-block">
+              <p className="text-xs text-blue-300 font-semibold mb-0.5">
+                Next step: collect 1–3 real market replies
+              </p>
+              <Link
+                href="/admin/market-proof-launch"
+                className="text-xs text-blue-400 hover:underline"
+              >
+                → Open Market Proof Launch →
+              </Link>
+            </div>
           </div>
           <div className="ml-auto shrink-0">
             <ScoreRing score={score} size="sm" />
