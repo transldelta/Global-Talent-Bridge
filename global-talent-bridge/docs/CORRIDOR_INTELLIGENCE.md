@@ -169,3 +169,70 @@ Prioritäten:
 *Dokument erstellt: 2026-06-04*
 *Branch: feature/corridor-intelligence*
 *Agent: corridor-intelligence-agent.ts*
+
+---
+
+## 8. Corridor Intelligence Sprint — lib/corridor-intelligence.ts
+
+*Sprint: 2026-06-08 · Branch: feature/global-talent-bridge-mvp-phase-1*
+
+### Neue Datei: `lib/corridor-intelligence.ts`
+
+Reine Datenschicht ohne externe API-Abhängigkeiten. Enthält:
+
+| Export | Zweck |
+|---|---|
+| `CORRIDOR_PROFILES` | 8 Korridore mit vollständigen Score-Breakdowns |
+| `DEMO_CORRIDORS` | 3 Demo-Korridore für Käufer-Demos |
+| `MONETIZATION_PATHS` | 7 Monetarisierungspfade |
+| `BUYER_VALUE_ITEMS` | 7 Käufer-Wert-Kategorien |
+| `BUYER_DIFFERENTIATION` | Positionierungsaussage |
+| `SCORE_DISCLAIMER` | Pflicht-Disclaimer für alle Scores |
+| `calculateBuyerScore()` | Score aus ScoreCriterion-Array berechnen |
+| `scoreBand()` | green/yellow/red Band + Label für Score |
+
+### Score-Methode (Buyer Opportunity Score)
+
+```typescript
+function calculateBuyerScore(criteria: ScoreCriterion[]): number {
+  // sum(value) / sum(max) * 100, rounded
+}
+```
+
+Jeder Korridor hat 7 Kriterien mit max=100 Gesamtpunkten:
+
+| Kriterium | Max | Gewicht |
+|---|---|---|
+| Employer demand strength | 20 | 20 % |
+| Candidate supply potential | 20 | 20 % |
+| Partner availability | 15 | 15 % |
+| Speed to pilot | 15 | 15 % |
+| Revenue potential | 15 | 15 % |
+| Compliance simplicity | 10 | 10 % |
+| Buyer attractiveness | 5 | 5 % |
+
+### Admin-Seite: `/admin/corridor-intelligence`
+
+Vier Tabs:
+
+1. **🌐 Corridor Scores** — 8 Korridore sortiert nach Buyer Opportunity Score, aufklappbar mit vollständigem Score-Breakdown
+2. **🎯 Demo Cards** — 3 Demo-Korridore für Käufer-Demos mit Copy-Button
+3. **💰 Monetization Map** — 7 Monetarisierungspfade sortiert nach Aufwand (low → high)
+4. **🏆 Buyer Value Layer** — Vollständige Käufer-Wert-Übersicht mit Positionierungsstatement
+
+### Tests
+
+Datei: `__tests__/corridor-intelligence.lib.test.ts`
+
+- 38 Tests · alle grün
+- Abdeckung: `calculateBuyerScore`, `scoreBand`, Datenintegrität aller Arrays, Safety-Constraints
+
+### Safety-Garantien
+
+- ❌ Kein automatischer Versand
+- ❌ Kein Scraping
+- ❌ Keine Jobgarantie
+- ❌ Keine Visagarantie
+- ❌ Kein Stripe
+- ❌ Keine Fake-Umsätze
+- ✅ SCORE_DISCLAIMER auf jeder Score-Anzeige sichtbar
