@@ -633,3 +633,74 @@ describe('/promo-video — Asset List Dokumentation', () => {
     expect(c).not.toContain('guaranteed visa')
   })
 })
+
+// ── 18. Voiceover Recording Guide (Human Voiceover Integration Sprint) ─────────
+
+describe('/promo-video — Voiceover Recording Guide', () => {
+  it('zeigt "Visual preview with subtitles" (kein LIVE bei fehlendem Voiceover)', () => {
+    expect(readPage()).toMatch(/Visual preview with subtitles/i)
+  })
+
+  it('enthält "Record a natural voiceover using this script"', () => {
+    expect(readPage()).toMatch(/Record a natural voiceover using this script/i)
+  })
+
+  it('enthält ersten Satz des finalen englischen Skripts', () => {
+    expect(readPage()).toMatch(/Across the world, employers are searching for skilled people/i)
+  })
+
+  it('enthält "CorridorWork helps structure that connection"', () => {
+    expect(readPage()).toContain('CorridorWork helps structure that connection')
+  })
+
+  it('enthält Dropzone-Pfad für Voiceover-Datei', () => {
+    expect(readPage()).toContain('corridorwork-vo-en-human.wav')
+  })
+
+  it('enthält "No robot voice" Hinweis (Roboterstimme wird nicht als final dargestellt)', () => {
+    const p = readPage().toLowerCase()
+    expect(p).toMatch(/no robot voice/)
+  })
+
+  it('präsentiert keine Roboterstimme als finale Version', () => {
+    const p = readPage()
+    // Must not claim robot voice is the finished/final audio
+    expect(p).not.toMatch(/robot voice.*is.*final|robot.*audio.*final.*version.*complete/i)
+  })
+
+  it('Script enthält "No job guarantee" (Compliance im Skript)', () => {
+    expect(readPage()).toMatch(/No job guarantee/i)
+  })
+
+  it('Script enthält "No visa guarantee" (Compliance im Skript)', () => {
+    expect(readPage()).toMatch(/No visa guarantee/i)
+  })
+
+  it('Script enthält "No automatic outreach" (Compliance im Skript)', () => {
+    expect(readPage()).toMatch(/No automatic outreach/i)
+  })
+
+  it('HUMAN_FOOTAGE_VOICEOVER_SCRIPT.md enthält finales Skript (ersten Satz)', () => {
+    const c = readFileSync(VO_SCRIPT, 'utf-8')
+    expect(c).toContain('Across the world, employers are searching for skilled people')
+  })
+
+  it('HUMAN_FOOTAGE_VOICEOVER_SCRIPT.md enthält Dropzone-Pfad', () => {
+    const c = readFileSync(VO_SCRIPT, 'utf-8')
+    expect(c).toContain('corridorwork-vo-en-human.wav')
+  })
+
+  it('kein aktives Stripe (keine stripe.com Integration)', () => {
+    const c = readPage()
+    expect(c).not.toContain('stripe.com')
+    expect(c).not.toMatch(/new Stripe\(|stripe\.createCharge/i)
+  })
+
+  it('kein E-Mail-Versand', () => {
+    expect(readPage()).not.toMatch(/sendEmail\(|nodemailer|resend\.send/i)
+  })
+
+  it('kein Scraping', () => {
+    expect(readPage()).not.toMatch(/puppeteer|cheerio|playwright\.chromium/i)
+  })
+})

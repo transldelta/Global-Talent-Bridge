@@ -31,6 +31,35 @@ export const metadata = {
 const HUMAN_VIDEO_FILE  = 'corridorwork-promo-human-en.mp4'
 const HUMAN_VIDEO_CLIPS = 10  // real human footage clips from Pexels Free License
 
+// ── Voiceover — Human recording only. NO robot voice. NO macOS say. ───────────
+// Drop file at: public/promo-video/source-clips/audio/corridorwork-vo-en-human.wav
+// Then re-run: scripts/build-human-promo-video.sh to produce the final mixed MP4.
+// Current status: Visual preview with subtitles — natural voiceover ready to record.
+const VOICEOVER_DROP_PATH = 'public/promo-video/source-clips/audio/corridorwork-vo-en-human.wav'
+
+// Final English voiceover script — record with a real human voice, NOT TTS.
+// Copy this text into your recording session verbatim.
+const VOICEOVER_SCRIPT_FINAL = `Across the world, employers are searching for skilled people.
+And qualified workers are searching for better opportunities.
+But too often, they never meet.
+
+CorridorWork helps structure that connection.
+A global platform for employer demand, candidate interest and international talent corridors.
+
+Employers can share workforce needs.
+Candidates can express interest across sectors and regions.
+Partners can explore structured collaboration models.
+
+From healthcare and IT to engineering, logistics, construction and skilled trades —
+CorridorWork is designed for a global workforce.
+
+Every workflow is consent-based and reviewed.
+No job guarantee. No visa guarantee. No automatic outreach.
+
+CorridorWork.
+Connecting global talent with opportunity.
+Visit corridorwork.com.`
+
 // ── Scene data (required for test assertions + scene labels) ──────────────────
 // Voiceover script: docs/video/HUMAN_FOOTAGE_VOICEOVER_SCRIPT.md
 // No robot voice — human recording only when added
@@ -111,8 +140,8 @@ export default function PromoVideoPage() {
                 {HUMAN_VIDEO_CLIPS} licensed clips · Pexels Free License · 60 seconds · 1280×720
               </p>
             </div>
-            <span className="text-xs px-3 py-1 bg-emerald-900/60 text-emerald-300 border border-emerald-700/50 rounded-full font-semibold shrink-0">
-              LIVE
+            <span className="text-xs px-3 py-1 bg-amber-900/60 text-amber-300 border border-amber-700/50 rounded-full font-semibold shrink-0">
+              VISUAL PREVIEW
             </span>
           </div>
 
@@ -142,12 +171,13 @@ export default function PromoVideoPage() {
           </div>
 
           {/* Audio note — honest, no robot voice */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-xl px-4 py-3 mb-5 flex items-start gap-3">
+          <div className="bg-amber-950/30 border border-amber-800/40 rounded-xl px-4 py-3 mb-5 flex items-start gap-3">
             <div className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 mt-1.5" />
-            <p className="text-slate-400 text-sm leading-relaxed">
-              <strong className="text-slate-300">Silent visual preview.</strong>{' '}
-              This version has no robot voice and no robot audio — no robot voice in the final version.
-              Professional voiceover integration available via{' '}
+            <p className="text-slate-300 text-sm leading-relaxed">
+              <strong className="text-amber-300">Visual preview with subtitles — natural voiceover ready to record.</strong>{' '}
+              No robot voice and no robot audio — no robot voice in the final version.
+              See the recording guide below to add a real human voiceover.
+              Script reference:{' '}
               <code className="text-slate-400 text-xs bg-slate-800 px-1.5 py-0.5 rounded">
                 docs/video/HUMAN_FOOTAGE_VOICEOVER_SCRIPT.md
               </code>
@@ -188,6 +218,60 @@ export default function PromoVideoPage() {
                 <span className="text-slate-400 text-[0.6rem] font-semibold uppercase group-hover:text-slate-300">{lang.code}</span>
               </a>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── VOICEOVER RECORDING GUIDE ────────────────────────────────────────── */}
+      <section className="px-6 py-10 border-t border-slate-800 bg-slate-950">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-2 h-2 rounded-full bg-indigo-500 shrink-0" />
+            <h3 className="text-white font-bold text-lg">Record a natural voiceover using this script</h3>
+          </div>
+          <p className="text-slate-500 text-sm mb-6 ml-5">
+            No robot voice · No macOS say · No TTS · Real human recording only.
+            Drop your WAV or MP3 at{' '}
+            <code className="text-indigo-400 text-xs bg-slate-800 px-1.5 py-0.5 rounded">
+              {VOICEOVER_DROP_PATH}
+            </code>{' '}
+            then re-run{' '}
+            <code className="text-slate-400 text-xs bg-slate-800 px-1.5 py-0.5 rounded">
+              scripts/build-human-promo-video.sh
+            </code>
+          </p>
+
+          {/* Recording spec */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+            {[
+              { label: 'Format', value: 'WAV 48kHz or MP3' },
+              { label: 'Duration', value: '~55 seconds' },
+              { label: 'Tone', value: 'Calm, professional' },
+              { label: 'Language', value: 'English (EN)' },
+            ].map(spec => (
+              <div key={spec.label} className="bg-slate-900 border border-slate-800 rounded-xl p-3">
+                <div className="text-slate-500 text-[0.65rem] font-semibold uppercase tracking-widest mb-1">{spec.label}</div>
+                <div className="text-slate-200 text-sm font-medium">{spec.value}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Script copy block */}
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden mb-4">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800">
+              <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Final English script — copy &amp; record</span>
+              <span className="text-slate-600 text-xs font-mono">~55s</span>
+            </div>
+            <pre className="px-4 py-5 text-slate-300 text-sm leading-relaxed whitespace-pre-wrap font-sans">
+              {VOICEOVER_SCRIPT_FINAL}
+            </pre>
+          </div>
+
+          <div className="flex flex-wrap gap-3 text-xs text-slate-500">
+            <span className="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg">No job guarantee in script ✓</span>
+            <span className="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg">No visa guarantee in script ✓</span>
+            <span className="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg">No fake promises ✓</span>
+            <span className="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg">Consent-based language ✓</span>
           </div>
         </div>
       </section>

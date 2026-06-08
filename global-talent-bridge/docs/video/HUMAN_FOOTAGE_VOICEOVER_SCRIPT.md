@@ -1,10 +1,42 @@
 # CorridorWork — Human Footage Promo Video Voiceover Script
 # docs/video/HUMAN_FOOTAGE_VOICEOVER_SCRIPT.md
 
-> **Note: This is the PREMIUM version voiceover script.**
-> For the human footage version, record this with a real human voice artist.
-> Do NOT use text-to-speech or robot voices in the final version.
-> For a silent version, use this text as on-screen titles and subtitle tracks only.
+> **IMPORTANT: Record with a real human voice ONLY.**
+> Do NOT use text-to-speech (TTS), macOS say, robot voices, or any AI voice generator.
+> Current video status: Visual preview with subtitles — natural voiceover ready to record.
+> Drop WAV/MP3 at: `public/promo-video/source-clips/audio/corridorwork-vo-en-human.wav`
+> Then run: `scripts/build-human-promo-video.sh` to produce the final mixed MP4.
+
+---
+
+## Final English Script (use this version — corridorwork.com)
+
+```
+Across the world, employers are searching for skilled people.
+And qualified workers are searching for better opportunities.
+But too often, they never meet.
+
+CorridorWork helps structure that connection.
+A global platform for employer demand, candidate interest and international talent corridors.
+
+Employers can share workforce needs.
+Candidates can express interest across sectors and regions.
+Partners can explore structured collaboration models.
+
+From healthcare and IT to engineering, logistics, construction and skilled trades —
+CorridorWork is designed for a global workforce.
+
+Every workflow is consent-based and reviewed.
+No job guarantee. No visa guarantee. No automatic outreach.
+
+CorridorWork.
+Connecting global talent with opportunity.
+Visit corridorwork.com.
+```
+
+**Compliance:** No job guarantee · No visa guarantee · No automatic outreach · Consent-based language throughout.
+
+---
 
 ---
 
