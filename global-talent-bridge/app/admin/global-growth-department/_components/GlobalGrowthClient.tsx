@@ -3,12 +3,12 @@
 /**
  * app/admin/global-growth-department/_components/GlobalGrowthClient.tsx
  *
- * CEO Global Growth Department — 5-tab admin centre.
+ * CEO Global Growth Department — persistent Supabase-backed pipeline.
  * No automatic sending. No send button. No scraping.
  * Manual approval required. Manual send only.
  */
 
-import { useState, useId } from 'react'
+import { useState, useId, useCallback } from 'react'
 import Link from 'next/link'
 import {
   CORRIDORS,
@@ -71,10 +71,42 @@ const TABS: { id: Tab; label: string }[] = [
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
-export function GlobalGrowthClient() {
+interface Props {
+  initialTargets?: Record<string, unknown>[]
+  dbError?:        string | null
+}
+
+export function GlobalGrowthClient({ initialTargets = [], dbError = null }: Props) {
   const uid = useId()
   const [activeTab, setActiveTab] = useState<Tab>('ceo')
-  const [queue, setQueue]         = useState<GrowthTarget[]>([])
+
+  // Cast server-loaded rows to GrowthTarget shape (best-effort)
+  const [queue, setQueue] = useState<GrowthTarget[]>(() =>
+    initialTargets.map((row) => ({
+      id:            String(row.id ?? ''),
+      targetKind:    (row.target_kind as GrowthTarget['targetKind']) ?? 'employer',
+      companyName:   String(row.company_name ?? ''),
+      contactEmail:  String(row.contact_email ?? ''),
+      website:       String(row.website_url ?? ''),
+      contactPage:   String(row.contact_page_url ?? ''),
+      country:       String(row.country ?? ''),
+      sourceMarket:  String(row.source_market ?? ''),
+      destMarket:    String(row.destination_market ?? ''),
+      sector:        String(row.sector ?? ''),
+      corridor:      String(row.corridor ?? ''),
+      messageType:   (row.message_type as GrowthTarget['messageType']) ?? 'employer_healthcare',
+      fitScore:      Number(row.fit_score ?? 0),
+      riskLevel:     (row.risk_level as GrowthTarget['riskLevel']) ?? 'unknown',
+      status:        (row.status as GrowthTarget['status']) ?? 'target_profile',
+      notes:         String(row.notes ?? ''),
+      subject:       '',   // loaded from growth_messages if needed
+      body:          '',
+      createdAt:     String(row.created_at ?? ''),
+    }))
+  )
+
+  const [apiError, setApiError] = useState<string | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
 
   // Batch planner state
   const [batchKind,    setBatchKind]    = useState<TargetKind>('employer')
@@ -90,32 +122,94 @@ export function GlobalGrowthClient() {
   // Queue expanded
   const [expandedId, setExpandedId] = useState<string | null>(null)
 
-  function addToQueue(items: Omit<GrowthTarget, 'id' | 'createdAt'>[]) {
-    const now = new Date().toISOString()
-    setQueue((prev) => [
-      ...prev,
-      ...items.map((item, i) => ({
-        ...item,
-        id:        `${uid}-${Date.now()}-${i}`,
-        createdAt: now,
-      })),
-    ])
-  }
+  const addToQueue = useCallback(async (items: Omit<GrowthTarget, 'id' | 'createdAt'>[]) => {
+    setIsSaving(true); setApiError(null)
+    try {
+      const payload = items.map((item) => ({
+        target_kind:        item.targetKind,
+        company_name:       item.companyName,
+        contact_email:      item.contactEmail,
+        website_url:        item.website,
+        contact_page_url:   item.contactPage,
+        country:            item.country,
+        source_market:      item.sourceMarket,
+        destination_market: item.destMarket,
+        sector:             item.sector,
+        corridor:           item.corridor,
+        message_type:       item.messageType,
+        fit_score:          item.fitScore,
+        risk_level:         item.riskLevel,
+        status:             item.status,
+        notes:              item.notes,
+        message_subject:    item.subject,
+        message_body:       item.body,
+      }))
+      const res = await fetch('/api/admin/growth/targets', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
+      })
+      const data = await res.json()
+      if (!res.ok) { setApiError(data.error ?? 'Save failed'); return }
+      // Add created items to local queue
+      const now = new Date().toISOString()
+      const newItems: GrowthTarget[] = (data.created ?? []).map((row: Record<string, unknown>, i: number) => ({
+        id:           String(row.id ?? `${uid}-${Date.now()}-${i}`),
+        targetKind:   (row.target_kind as GrowthTarget['targetKind']) ?? items[i]?.targetKind ?? 'employer',
+        companyName:  String(row.company_name ?? items[i]?.companyName ?? ''),
+        contactEmail: String(row.contact_email ?? items[i]?.contactEmail ?? ''),
+        website:      String(row.website_url ?? items[i]?.website ?? ''),
+        contactPage:  String(row.contact_page_url ?? items[i]?.contactPage ?? ''),
+        country:      String(row.country ?? items[i]?.country ?? ''),
+        sourceMarket: String(row.source_market ?? items[i]?.sourceMarket ?? ''),
+        destMarket:   String(row.destination_market ?? items[i]?.destMarket ?? ''),
+        sector:       String(row.sector ?? items[i]?.sector ?? ''),
+        corridor:     String(row.corridor ?? items[i]?.corridor ?? ''),
+        messageType:  (row.message_type as GrowthTarget['messageType']) ?? items[i]?.messageType ?? 'employer_healthcare',
+        fitScore:     Number(row.fit_score ?? items[i]?.fitScore ?? 0),
+        riskLevel:    (row.risk_level as GrowthTarget['riskLevel']) ?? items[i]?.riskLevel ?? 'unknown',
+        status:       (row.status as GrowthTarget['status']) ?? items[i]?.status ?? 'target_profile',
+        notes:        String(row.notes ?? items[i]?.notes ?? ''),
+        subject:      items[i]?.subject ?? '',
+        body:         items[i]?.body ?? '',
+        createdAt:    String(row.created_at ?? now),
+      }))
+      setQueue((prev) => [...newItems, ...prev])
+      if (data.errors?.length) setApiError(`${data.errors.length} item(s) failed to save.`)
+    } catch (e) {
+      // Fallback: add to local state only (in-memory mode if DB unavailable)
+      const now = new Date().toISOString()
+      setQueue((prev) => [...prev, ...items.map((item, i) => ({ ...item, id: `${uid}-${Date.now()}-${i}`, createdAt: now }))])
+      setApiError('DB unavailable — targets saved in-memory only (not persistent).')
+    } finally { setIsSaving(false) }
+  }, [uid])
 
-  function updateStatus(id: string, status: QueueStatus) {
+  const updateStatus = useCallback(async (id: string, status: QueueStatus) => {
     setQueue((prev) => prev.map((t) => t.id === id ? { ...t, status } : t))
-  }
+    // Persist if looks like a real UUID
+    if (id.includes('-') && id.length > 10) {
+      try {
+        await fetch(`/api/admin/growth/targets/${id}`, {
+          method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status }),
+        })
+      } catch { /* silent — local state already updated */ }
+    }
+  }, [])
 
-  function removeFromQueue(id: string) {
+  const removeFromQueue = useCallback(async (id: string) => {
     setQueue((prev) => prev.filter((t) => t.id !== id))
-  }
+    if (id.includes('-') && id.length > 10) {
+      try {
+        await fetch(`/api/admin/growth/targets/${id}`, { method: 'DELETE' })
+      } catch { /* silent */ }
+    }
+  }, [])
 
-  function handleBatchAdd() {
+  async function handleBatchAdd() {
     const spec: BatchSpec = { targetKind: batchKind, country: batchCountry, sector: batchSector, count: batchCount, messageType: batchMsgType }
-    addToQueue(generateBatchTargets(spec))
+    await addToQueue(generateBatchTargets(spec))
   }
 
-  function handleQuickAdd() {
+  async function handleQuickAdd() {
     const parsed = parseQuickAddBulk(quickText)
     if (!parsed.length) { setQuickResult('No valid lines found. Format: Name | email | Country | Sector | website'); return }
     const items = parsed.map((p) => {
@@ -141,9 +235,9 @@ export function GlobalGrowthClient() {
         body:         msg.body,
       }
     })
-    addToQueue(items)
+    await addToQueue(items)
     setQuickText('')
-    setQuickResult(`✅ ${items.length} target(s) added to Approval Queue.`)
+    setQuickResult(`✅ ${items.length} target(s) added to persistent pipeline.`)
   }
 
   // Stats
@@ -175,6 +269,24 @@ export function GlobalGrowthClient() {
           <span key={r} className="flex items-center gap-1.5 text-xs text-slate-400"><span className="text-green-500">✓</span>{r}</span>
         ))}
       </div>
+
+      {/* DB status banners */}
+      {dbError && (
+        <div className="bg-yellow-900/20 border border-yellow-800/40 rounded-xl px-4 py-3 text-xs text-yellow-300/80">
+          ⚠ DB connection issue: {dbError}. Targets saved in-memory only until resolved.
+        </div>
+      )}
+      {apiError && (
+        <div className="bg-red-900/20 border border-red-800/40 rounded-xl px-4 py-3 text-xs text-red-300/80 flex items-center justify-between">
+          <span>⚠ {apiError}</span>
+          <button onClick={() => setApiError(null)} className="text-red-400 hover:text-red-300 ml-3">✕</button>
+        </div>
+      )}
+      {isSaving && (
+        <div className="bg-blue-900/20 border border-blue-800/40 rounded-xl px-4 py-2 text-xs text-blue-300/80">
+          ⏳ Saving to persistent pipeline…
+        </div>
+      )}
 
       {/* Tab nav */}
       <div className="flex flex-wrap gap-2 border-b border-gray-800 pb-2">
@@ -223,6 +335,9 @@ export function GlobalGrowthClient() {
               ))}
             </div>
           </div>
+
+          {/* Export growth pipeline JSON */}
+          <ExportPanel />
 
           {/* Next action */}
           <div className="bg-indigo-950/40 border border-indigo-800/40 rounded-2xl p-5">
@@ -305,7 +420,7 @@ export function GlobalGrowthClient() {
                   <input type="number" min={1} max={50} value={batchCount} onChange={(e) => setBatchCount(Math.min(50, Math.max(1, Number(e.target.value))))} className="w-full px-2 py-1.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-xs focus:outline-none" />
                 </div>
               </div>
-              <button onClick={() => { setBatchKind('employer'); handleBatchAdd() }} className="px-4 py-2 bg-indigo-700 hover:bg-indigo-600 text-white text-xs font-semibold rounded-lg transition-colors">
+              <button onClick={() => { setBatchKind('employer'); void handleBatchAdd() }} className="px-4 py-2 bg-indigo-700 hover:bg-indigo-600 text-white text-xs font-semibold rounded-lg transition-colors">
                 Add {batchCount} employer targets to Approval Queue →
               </button>
             </div>
@@ -501,6 +616,62 @@ export function GlobalGrowthClient() {
         </div>
       </div>
 
+    </div>
+  )
+}
+
+// ── Export Panel ──────────────────────────────────────────────────────────────
+
+function ExportPanel() {
+  const [loading, setLoading] = useState(false)
+  const [json,    setJson]    = useState<string | null>(null)
+  const [error,   setError]   = useState<string | null>(null)
+
+  async function handleExport() {
+    setLoading(true); setError(null); setJson(null)
+    try {
+      const res = await fetch('/api/admin/growth/export')
+      if (!res.ok) { setError(`Export failed: ${res.status}`); return }
+      const data = await res.json()
+      setJson(JSON.stringify(data, null, 2))
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Export error')
+    } finally { setLoading(false) }
+  }
+
+  return (
+    <div className="bg-gray-900 border border-gray-700 rounded-2xl p-5 space-y-3">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-sm font-semibold text-white">Export growth pipeline JSON</h2>
+          <p className="text-xs text-gray-500 mt-0.5">For sale / transfer due diligence. Admin only. No PII beyond contact name.</p>
+        </div>
+        <button
+          onClick={handleExport}
+          disabled={loading}
+          className="px-4 py-2 bg-indigo-700 hover:bg-indigo-600 disabled:opacity-40 text-white text-xs font-semibold rounded-lg transition-colors shrink-0"
+        >
+          {loading ? '⏳ Exporting…' : '⬇ Export growth pipeline JSON'}
+        </button>
+      </div>
+      {error && <p className="text-xs text-red-400">{error}</p>}
+      {json && (
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-gray-500">Export ready ({json.length.toLocaleString()} chars)</span>
+            <div className="flex gap-2">
+              <button
+                onClick={() => { navigator.clipboard.writeText(json).catch(() => {}) }}
+                className="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-gray-200 text-xs font-medium rounded-lg transition-colors"
+              >
+                📋 Copy JSON
+              </button>
+              <button onClick={() => setJson(null)} className="text-xs text-gray-600 hover:text-gray-400">✕ close</button>
+            </div>
+          </div>
+          <pre className="bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs text-gray-400 overflow-x-auto max-h-60 font-mono">{json.slice(0, 3000)}{json.length > 3000 ? '\n…(truncated for display — copy full JSON above)' : ''}</pre>
+        </div>
+      )}
     </div>
   )
 }
