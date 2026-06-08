@@ -314,6 +314,164 @@ ${SIGNATURE}`,
   ]
 }
 
+// ── Example Target Profiles ──────────────────────────────────────────────────
+
+export interface ExampleTargetProfile {
+  id:                  string
+  isExample:           true       // always true — never a real lead
+  disclaimer:          string
+  targetType:          TargetGroup
+  title:               string
+  sector:              string
+  country:             string
+  whyFits:             string
+  riskLevel:           'low' | 'medium' | 'high'
+  riskNote:            string
+  suggestedMessageType: 'linkedin' | 'email' | 'whatsapp' | 'strategic'
+  firstQuestion:       string
+  nextAction:          string
+}
+
+export const EXAMPLE_TARGET_PROFILES: ExampleTargetProfile[] = [
+  {
+    id:                  'ex-healthcare-de',
+    isExample:           true,
+    disclaimer:          'Example target profile — not a real lead',
+    targetType:          'employer',
+    title:               'Healthcare employer in Germany',
+    sector:              'Healthcare & Nursing',
+    country:             'Germany',
+    whyFits:             'Germany has one of the highest documented nursing shortages in Europe. Healthcare employers here are legally allowed and financially motivated to hire internationally. Corridor matching adds immediate value.',
+    riskLevel:           'low',
+    riskNote:            'Check for AÜG licence requirements if placement is involved. Direct hire is lower risk.',
+    suggestedMessageType: 'email',
+    firstQuestion:       'Are you currently trying to fill nursing or care roles that local candidates are not filling?',
+    nextAction:          'Replace placeholder with a real clinic, care home, or hospital group in your region. Search LinkedIn for "Pflegedirektor" or "HR Manager Krankenhaus".',
+  },
+  {
+    id:                  'ex-it-uk-ca',
+    isExample:           true,
+    disclaimer:          'Example target profile — not a real lead',
+    targetType:          'employer',
+    title:               'IT employer in UK or Canada',
+    sector:              'IT & Software',
+    country:             'UK / Canada',
+    whyFits:             'IT companies in English-speaking markets are highly experienced with international hiring. Decision-makers are often reachable on LinkedIn. Language barrier is lower than DACH region.',
+    riskLevel:           'low',
+    riskNote:            'UK post-Brexit visa process and Canadian immigration are complex — clarify you provide matching, not visa services.',
+    suggestedMessageType: 'linkedin',
+    firstQuestion:       'Are you hiring software engineers or data specialists and open to international candidates?',
+    nextAction:          'Search LinkedIn for CTOs or Engineering Managers at software companies in London, Toronto, or Vancouver. Use LinkedIn message draft.',
+  },
+  {
+    id:                  'ex-engineering-gulf',
+    isExample:           true,
+    disclaimer:          'Example target profile — not a real lead',
+    targetType:          'employer',
+    title:               'Engineering employer in Gulf region',
+    sector:              'Engineering',
+    country:             'UAE / Saudi Arabia / Qatar',
+    whyFits:             'Gulf construction and engineering markets have extremely high international hiring rates. Structured matching adds value over unstructured CV pools.',
+    riskLevel:           'medium',
+    riskNote:            'Gulf labour law varies by country. Clarify that CorridorWork provides matching only — not visa sponsorship or placement guarantees.',
+    suggestedMessageType: 'email',
+    firstQuestion:       'Are you currently looking for civil, mechanical, or electrical engineers with international backgrounds?',
+    nextAction:          'Search for HR contacts at engineering or construction firms active in UAE projects. Use formal email draft.',
+  },
+  {
+    id:                  'ex-agency-morocco',
+    isExample:           true,
+    disclaimer:          'Example target profile — not a real lead',
+    targetType:          'recruiting_partner',
+    title:               'Recruiting agency in Morocco',
+    sector:              'International Recruiting',
+    country:             'Morocco',
+    whyFits:             'Moroccan recruiting agencies already work with European employer clients and have access to French and Arabic-speaking candidate pools. Strong fit for structured corridor matching as infrastructure.',
+    riskLevel:           'low',
+    riskNote:            'Position as infrastructure partner — not as competition. Use partner programme at /partners.',
+    suggestedMessageType: 'email',
+    firstQuestion:       'Are you currently placing candidates in DACH, France, or Gulf markets?',
+    nextAction:          'Search LinkedIn for "agence de recrutement internationale Maroc". Introduce CorridorWork as matching infrastructure they can use.',
+  },
+  {
+    id:                  'ex-language-school',
+    isExample:           true,
+    disclaimer:          'Example target profile — not a real lead',
+    targetType:          'recruiting_partner',
+    title:               'Language school or training provider',
+    sector:              'Language Training / Vocational',
+    country:             'Germany / Austria / Switzerland',
+    whyFits:             'Language schools that prepare international candidates for DACH employment already have the candidates CorridorWork needs. A structured matching tool is a direct product extension.',
+    riskLevel:           'low',
+    riskNote:            'Low risk. No AÜG concerns. Position as a tool that improves placement outcomes for their graduates.',
+    suggestedMessageType: 'linkedin',
+    firstQuestion:       'Do you work with candidates who are preparing to work in Germany and looking for employer connections?',
+    nextAction:          'Search for language schools with employer placement programmes on LinkedIn or their websites.',
+  },
+  {
+    id:                  'ex-relocation-partner',
+    isExample:           true,
+    disclaimer:          'Example target profile — not a real lead',
+    targetType:          'recruiting_partner',
+    title:               'Relocation service provider',
+    sector:              'Relocation / HR Services',
+    country:             'Germany / Netherlands / Sweden',
+    whyFits:             'Relocation firms work directly with HR teams at companies hiring internationally. They are trusted by employers and need matching infrastructure to add more value.',
+    riskLevel:           'low',
+    riskNote:            'Low risk. Complementary service, not competition. Use partner programme.',
+    suggestedMessageType: 'email',
+    firstQuestion:       'Do you currently work with employers who need to match and onboard international hires?',
+    nextAction:          'Search for relocation firms in Germany or Benelux on LinkedIn. Use partner email draft.',
+  },
+]
+
+// ── Guided Action ─────────────────────────────────────────────────────────────
+
+export const GUIDED_ACTION = {
+  title:   'Next safe action: prepare one pilot target',
+  subtitle: 'Choose one sector, fill one target card, check the fit score, then manually send one reviewed message.',
+  steps: [
+    { n: 1, label: 'Choose one target profile',         desc: 'Browse the example profiles below or start from a sector you know personally.' },
+    { n: 2, label: 'Replace placeholder with real data', desc: 'Fill in the Target Card with a real company name and contact you want to approach.' },
+    { n: 3, label: 'Check the fit score',               desc: 'Run through the 7 criteria. Only proceed if score ≥ 70 and no high-risk flags.' },
+    { n: 4, label: 'Copy the safest message draft',     desc: 'Select LinkedIn, email, or WhatsApp draft. Copy it. Do not modify tone significantly.' },
+    { n: 5, label: 'Send manually — only after review', desc: 'Read the message once more. Then send it yourself, from your own LinkedIn or inbox.' },
+    { n: 6, label: 'Record the response manually',      desc: 'Update the status in the Target Card. If they respond positively, open First Pilot Assistant.' },
+  ],
+} as const
+
+// ── Pilot Routes ──────────────────────────────────────────────────────────────
+
+export const PILOT_ROUTES = [
+  {
+    id:      'route-a',
+    label:   'Route A — Employer Pilot',
+    tagline: 'For employers with a genuine workforce demand',
+    bestFor: 'Healthcare · IT & Software · Engineering · Skilled Trades · Logistics · Hospitality',
+    steps:   ['Employer submits demand via /global/employers', 'You review manually', 'Fit score ≥ 70', 'One personal message sent manually', 'Pilot discussion → feedback call'],
+    link:    '/global/employers',
+    linkLabel: 'Open employer intake →',
+  },
+  {
+    id:      'route-b',
+    label:   'Route B — Recruiting / Training Partner',
+    tagline: 'For agencies, language schools, training providers, relocation partners',
+    bestFor: 'International recruiting agencies · Language schools · Vocational training providers · Relocation partners',
+    steps:   ['Partner submits enquiry via /partners', 'You review manually', 'Partnership discussion → access to matching infrastructure'],
+    link:    '/partners',
+    linkLabel: 'Open partner page →',
+  },
+  {
+    id:      'route-c',
+    label:   'Route C — Strategic Partner',
+    tagline: 'For companies that could license, white-label, or acquire CorridorWork',
+    bestFor: 'HR tech companies · Staffing groups · Agencies with employer networks · Strategic buyers',
+    steps:   ['Initial outreach via /strategic-partnership', 'You send strategic partner email manually', 'Due diligence discussion → commercial exploration'],
+    link:    '/strategic-partnership',
+    linkLabel: 'Open strategic partnership page →',
+  },
+] as const
+
 // ── Operating Rules ───────────────────────────────────────────────────────────
 
 export const OPERATING_RULES: { label: string; ok: boolean }[] = [

@@ -1,8 +1,25 @@
 # CorridorWork — First Pilot Target Strategy
 
-**Version:** 1.0 · June 2026
+**Version:** 1.1 · June 2026
 **Status:** Active · Phase 1 Pilot
 **Admin tool:** https://corridorwork.com/admin/pilot-targets
+
+---
+
+## Guided First Action
+
+**Next safe action: prepare one pilot target.**
+
+Open `/admin/pilot-targets`. Follow these 6 steps:
+
+1. **Choose one target profile** — browse the example profiles or pick a sector you know personally
+2. **Replace placeholder with real data** — fill in the Target Card with a real company name and contact
+3. **Check the fit score** — tick the 7 criteria; only proceed if score ≥ 70 and no high-risk flags
+4. **Copy the safest message draft** — LinkedIn, email, or WhatsApp; do not change the tone significantly
+5. **Send manually — only after reading it once more** — from your own LinkedIn or inbox
+6. **Record the response manually** — update the status; if positive, open First Pilot Assistant
+
+That is the entire action. One target. One message. No automation.
 
 ---
 
@@ -73,6 +90,58 @@ Best approached only after you have at least one employer or agency pilot underw
 - Formal email with the due diligence package
 - Reference the live deployment, test results, and technical architecture
 - Use `/strategic-partnership` as the landing point
+
+---
+
+## Example Target Profiles
+
+> **These are illustrative examples — not real companies or leads.**
+> Use them to understand what a good target looks like, then replace with your own real contacts.
+
+### 1. Healthcare employer in Germany
+- **Sector:** Healthcare & Nursing · **Country:** Germany
+- **Why it fits:** Germany has one of the highest documented nursing shortages in Europe. Direct hire is permitted and employers are financially motivated to hire internationally.
+- **Risk level:** Low — check AÜG only if placement is involved
+- **Suggested message:** Email
+- **First question:** "Are you currently trying to fill nursing or care roles that local candidates are not filling?"
+- **Next action:** Search LinkedIn for "Pflegedirektor" or "HR Manager Krankenhaus" in your region
+
+### 2. IT employer in UK or Canada
+- **Sector:** IT & Software · **Country:** UK / Canada
+- **Why it fits:** English-speaking IT companies are the most experienced with international hiring. Decision-makers are highly reachable on LinkedIn.
+- **Risk level:** Low
+- **Suggested message:** LinkedIn
+- **First question:** "Are you hiring software engineers or data specialists and open to international candidates?"
+- **Next action:** Search LinkedIn for CTOs or Engineering Managers at software companies in London, Toronto, or Vancouver
+
+### 3. Engineering employer in Gulf region
+- **Sector:** Engineering · **Country:** UAE / Saudi Arabia / Qatar
+- **Why it fits:** Gulf markets have the highest international hiring rates globally. Structured matching is a significant improvement over CV pools.
+- **Risk level:** Medium — clarify no visa sponsorship is provided
+- **Suggested message:** Email
+- **First question:** "Are you currently looking for civil, mechanical, or electrical engineers with international backgrounds?"
+
+### 4. Recruiting agency in Morocco
+- **Sector:** International Recruiting · **Country:** Morocco
+- **Why it fits:** Moroccan agencies already place candidates in European markets. CorridorWork is natural infrastructure for them — not competition.
+- **Risk level:** Low
+- **Suggested message:** Email (partner programme)
+- **First question:** "Are you currently placing candidates in DACH, France, or Gulf markets?"
+- **Next action:** Search LinkedIn for "agence de recrutement internationale Maroc"
+
+### 5. Language school or training provider
+- **Sector:** Language Training / Vocational · **Country:** Germany / Austria / Switzerland
+- **Why it fits:** Language schools that prepare international candidates for DACH employment already have the candidates. Matching is a direct product extension.
+- **Risk level:** Low
+- **Suggested message:** LinkedIn
+- **First question:** "Do you work with candidates preparing to work in Germany and looking for employer connections?"
+
+### 6. Relocation service provider
+- **Sector:** Relocation / HR Services · **Country:** Germany / Netherlands / Sweden
+- **Why it fits:** Relocation firms work directly with HR teams hiring internationally. They need matching infrastructure.
+- **Risk level:** Low
+- **Suggested message:** Email (partner programme)
+- **First question:** "Do you currently work with employers who need to match and onboard international hires?"
 
 ---
 
@@ -155,6 +224,46 @@ Use the `/admin/pilot-targets` tool to generate and copy the appropriate draft.
 
 **One qualified, reviewed, manually-contacted target is worth more than
 100 untested scraped leads.**
+
+---
+
+## What to Do After a Reply
+
+If the target responds positively:
+
+1. Open `/admin/first-pilot` → Step 1: enter their company name and contact
+2. Step 2: copy the appropriate template (WhatsApp / LinkedIn / Email)
+3. Send the pilot invitation manually
+4. If they register at `/auth/register?role=employer` → use Step 4 checklist
+5. Schedule a 30-minute call to walk through the matching results together
+6. Ask: "What works? What is missing? What would make you use this regularly?"
+
+If the target does not reply:
+- Wait 5–7 business days before any follow-up
+- One follow-up maximum — short, friendly, no pressure
+- If still no reply: mark status as "rejected" and move to the next target
+
+If the target asks questions you cannot answer:
+- "How many candidates do you have?" → Honest answer: the platform is in pilot phase; we are building the corridor together
+- "Can you guarantee placement?" → No. We provide matching and structured review — not placement guarantees
+- "What does it cost?" → The pilot is free. Pricing is not finalised for the post-pilot phase
+- "Can you process visas?" → No. We provide matching infrastructure only
+
+---
+
+## What the User Must Approve Manually
+
+At every step, **the user decides**:
+
+- Which target to approach
+- Whether the fit score is good enough
+- Whether to send a message at all
+- Which draft to use
+- When to follow up
+- Whether to progress to a pilot discussion
+- Whether to involve legal or commercial steps
+
+Nothing proceeds automatically. Nothing is sent by the system.
 
 ---
 

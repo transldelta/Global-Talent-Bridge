@@ -12,10 +12,14 @@
  * - RED_FLAGS: structure, severity, includes job/visa/fee flags
  * - OPERATING_RULES: includes all key rules
  * - TARGET_STATUS_OPTIONS: includes all statuses
+ * - EXAMPLE_TARGET_PROFILES: structure, disclaimer, specific profiles
+ * - GUIDED_ACTION: title, subtitle, 6 steps
+ * - PILOT_ROUTES: 3 routes A/B/C
  * - generateOutreachDrafts: 4 drafts, CorridorWork Team signed, no auto-send
- * - Page file: admin guard, noindex, no automatic outreach
- * - Component file: no send button, Fit Score, Red Flags, copy-ready drafts
- * - Docs: exists, key sections present
+ * - Page file: admin guard, noindex, guided action box
+ * - Component file: no send button, Fit Score, Red Flags, copy-ready drafts,
+ *   example profiles, "not a real lead" disclaimer, human approval required
+ * - Docs: guided action, example profiles, what to do after reply
  */
 
 import { describe, it, expect } from 'vitest'
@@ -25,6 +29,9 @@ import {
   RED_FLAGS,
   OPERATING_RULES,
   TARGET_STATUS_OPTIONS,
+  EXAMPLE_TARGET_PROFILES,
+  GUIDED_ACTION,
+  PILOT_ROUTES,
   calculateFitScore,
   fitScoreLabel,
   generateOutreachDrafts,
@@ -515,5 +522,279 @@ describe('FIRST_PILOT_TARGET_STRATEGY.md', () => {
   it('does not contain Global Talent Bridge as visible brand', () => {
     const lines = doc.split('\n').filter((l) => !l.trim().startsWith('<!--'))
     expect(lines.join('\n')).not.toContain('Global Talent Bridge')
+  })
+})
+
+// ── EXAMPLE_TARGET_PROFILES ───────────────────────────────────────────────────
+
+describe('EXAMPLE_TARGET_PROFILES', () => {
+  it('has exactly 6 example profiles', () => {
+    expect(EXAMPLE_TARGET_PROFILES).toHaveLength(6)
+  })
+
+  it('every profile has isExample: true', () => {
+    for (const p of EXAMPLE_TARGET_PROFILES) {
+      expect(p.isExample).toBe(true)
+    }
+  })
+
+  it('every profile has a disclaimer "Example target profile — not a real lead"', () => {
+    for (const p of EXAMPLE_TARGET_PROFILES) {
+      expect(p.disclaimer).toContain('Example target profile — not a real lead')
+    }
+  })
+
+  it('every profile has required fields', () => {
+    for (const p of EXAMPLE_TARGET_PROFILES) {
+      expect(typeof p.id).toBe('string')
+      expect(typeof p.title).toBe('string')
+      expect(typeof p.sector).toBe('string')
+      expect(typeof p.country).toBe('string')
+      expect(typeof p.whyFits).toBe('string')
+      expect(['low', 'medium', 'high']).toContain(p.riskLevel)
+      expect(typeof p.riskNote).toBe('string')
+      expect(['linkedin', 'email', 'whatsapp', 'strategic']).toContain(p.suggestedMessageType)
+      expect(typeof p.firstQuestion).toBe('string')
+      expect(typeof p.nextAction).toBe('string')
+    }
+  })
+
+  it('includes healthcare employer in Germany', () => {
+    const p = EXAMPLE_TARGET_PROFILES.find((e) => /healthcare/i.test(e.title) && /germany/i.test(e.country))
+    expect(p).toBeDefined()
+    expect(p!.isExample).toBe(true)
+  })
+
+  it('includes recruiting agency in Morocco', () => {
+    const p = EXAMPLE_TARGET_PROFILES.find((e) => /agency/i.test(e.title) && /morocco/i.test(e.country))
+    expect(p).toBeDefined()
+    expect(p!.isExample).toBe(true)
+  })
+
+  it('includes IT employer', () => {
+    const p = EXAMPLE_TARGET_PROFILES.find((e) => /IT/i.test(e.title))
+    expect(p).toBeDefined()
+  })
+
+  it('includes language school or training provider', () => {
+    const p = EXAMPLE_TARGET_PROFILES.find((e) => /language|training/i.test(e.title))
+    expect(p).toBeDefined()
+  })
+
+  it('no profile has a real company name (all are placeholders)', () => {
+    for (const p of EXAMPLE_TARGET_PROFILES) {
+      // Titles should be generic descriptions, not real company names
+      expect(p.title).toMatch(/employer|agency|school|provider|partner/i)
+    }
+  })
+
+  it('no profile promises job or visa guarantee (false marketing)', () => {
+    for (const p of EXAMPLE_TARGET_PROFILES) {
+      const combined = `${p.whyFits} ${p.riskNote} ${p.nextAction}`
+      // Allowed: "clarify no visa guarantee" / "not visa guarantee" (compliance notes)
+      // Disallowed: affirmative promise of a guarantee
+      expect(combined).not.toMatch(/we guarantee|guaranteed placement|guaranteed visa outcome|visa outcome guaranteed/i)
+    }
+  })
+
+  it('no profile contains Global Talent Bridge', () => {
+    for (const p of EXAMPLE_TARGET_PROFILES) {
+      const combined = JSON.stringify(p)
+      expect(combined).not.toContain('Global Talent Bridge')
+    }
+  })
+})
+
+// ── GUIDED_ACTION ─────────────────────────────────────────────────────────────
+
+describe('GUIDED_ACTION', () => {
+  it('has correct title', () => {
+    expect(GUIDED_ACTION.title).toBe('Next safe action: prepare one pilot target')
+  })
+
+  it('has a subtitle', () => {
+    expect(typeof GUIDED_ACTION.subtitle).toBe('string')
+    expect(GUIDED_ACTION.subtitle.length).toBeGreaterThan(20)
+  })
+
+  it('has exactly 6 steps', () => {
+    expect(GUIDED_ACTION.steps).toHaveLength(6)
+  })
+
+  it('every step has n, label, desc', () => {
+    for (const s of GUIDED_ACTION.steps) {
+      expect(typeof s.n).toBe('number')
+      expect(typeof s.label).toBe('string')
+      expect(typeof s.desc).toBe('string')
+    }
+  })
+
+  it('step numbers are 1-6', () => {
+    const nums = [...GUIDED_ACTION.steps].map((s) => s.n)
+    expect(nums).toEqual([1, 2, 3, 4, 5, 6])
+  })
+
+  it('step 3 references fit score', () => {
+    expect(GUIDED_ACTION.steps[2].label).toMatch(/fit score|score/i)
+  })
+
+  it('step 4 references copying a message', () => {
+    expect(GUIDED_ACTION.steps[3].label).toMatch(/copy|message|draft/i)
+  })
+
+  it('step 5 references manual sending', () => {
+    expect(GUIDED_ACTION.steps[4].label).toMatch(/send manually|manual/i)
+  })
+})
+
+// ── PILOT_ROUTES ──────────────────────────────────────────────────────────────
+
+describe('PILOT_ROUTES', () => {
+  it('has exactly 3 routes', () => {
+    expect(PILOT_ROUTES).toHaveLength(3)
+  })
+
+  it('includes Route A (Employer)', () => {
+    expect(PILOT_ROUTES.some((r) => /Employer/i.test(r.label))).toBe(true)
+  })
+
+  it('includes Route B (Recruiting Partner)', () => {
+    expect(PILOT_ROUTES.some((r) => /Recruiting|Partner/i.test(r.label))).toBe(true)
+  })
+
+  it('includes Route C (Strategic)', () => {
+    expect(PILOT_ROUTES.some((r) => /Strategic/i.test(r.label))).toBe(true)
+  })
+
+  it('every route has required fields', () => {
+    for (const r of PILOT_ROUTES) {
+      expect(typeof r.id).toBe('string')
+      expect(typeof r.label).toBe('string')
+      expect(typeof r.tagline).toBe('string')
+      expect(typeof r.bestFor).toBe('string')
+      expect(Array.isArray(r.steps)).toBe(true)
+      expect(r.steps.length).toBeGreaterThan(0)
+      expect(typeof r.link).toBe('string')
+      expect(typeof r.linkLabel).toBe('string')
+    }
+  })
+
+  it('Route A links to /global/employers', () => {
+    const routeA = PILOT_ROUTES.find((r) => /Employer/i.test(r.label))
+    expect(routeA?.link).toContain('/global/employers')
+  })
+
+  it('Route B links to /partners', () => {
+    const routeB = PILOT_ROUTES.find((r) => /Recruiting|Training/i.test(r.label))
+    expect(routeB?.link).toContain('/partners')
+  })
+
+  it('Route C links to /strategic-partnership', () => {
+    const routeC = PILOT_ROUTES.find((r) => /Strategic/i.test(r.label))
+    expect(routeC?.link).toContain('/strategic-partnership')
+  })
+})
+
+// ── Component guided-action checks ───────────────────────────────────────────
+
+describe('/admin/pilot-targets — guided action in component', () => {
+  const comp = readFile('app/admin/pilot-targets/_components/PilotTargetsClient.tsx')
+
+  it('contains "Next safe action" guided action box (via GUIDED_ACTION import)', () => {
+    // GUIDED_ACTION.title = "Next safe action: prepare one pilot target"
+    // Rendered dynamically via {GUIDED_ACTION.title} — check in lib
+    const lib = readFile('lib/pilot-target-strategy.ts')
+    expect(lib).toMatch(/Next safe action/i)
+    expect(comp).toContain('GUIDED_ACTION')
+  })
+
+  it('contains disclaimer text for example profiles (via EXAMPLE_TARGET_PROFILES import)', () => {
+    // Profile disclaimers rendered via {profile.disclaimer} — check in lib
+    const lib = readFile('lib/pilot-target-strategy.ts')
+    expect(lib).toMatch(/Example target profile.*not a real lead/i)
+    expect(comp).toContain('EXAMPLE_TARGET_PROFILES')
+  })
+
+  it('contains "Healthcare employer in Germany" in EXAMPLE_TARGET_PROFILES lib', () => {
+    // Profile titles rendered dynamically via {profile.title}
+    const lib = readFile('lib/pilot-target-strategy.ts')
+    expect(lib).toMatch(/Healthcare employer in Germany/i)
+  })
+
+  it('contains "Recruiting agency in Morocco" in EXAMPLE_TARGET_PROFILES lib', () => {
+    const lib = readFile('lib/pilot-target-strategy.ts')
+    expect(lib).toMatch(/Recruiting agency in Morocco/i)
+  })
+
+  it('contains "No automatic contact" safety notice', () => {
+    expect(comp).toMatch(/No automatic contact/i)
+  })
+
+  it('contains "Human approval required" safety notice', () => {
+    expect(comp).toMatch(/Human approval required/i)
+  })
+
+  it('has links to /admin/first-pilot, /global/employers, /partners', () => {
+    expect(comp).toContain('/admin/first-pilot')
+    expect(comp).toContain('/global/employers')
+    expect(comp).toContain('/partners')
+  })
+
+  it('imports EXAMPLE_TARGET_PROFILES', () => {
+    expect(comp).toContain('EXAMPLE_TARGET_PROFILES')
+  })
+
+  it('imports GUIDED_ACTION', () => {
+    expect(comp).toContain('GUIDED_ACTION')
+  })
+
+  it('imports PILOT_ROUTES', () => {
+    expect(comp).toContain('PILOT_ROUTES')
+  })
+
+  it('has no job guarantee promise', () => {
+    expect(comp).not.toMatch(/guaranteed.*job|job.*guaranteed|guarantee.*employment/i)
+  })
+
+  it('has no visa guarantee promise', () => {
+    expect(comp).not.toMatch(/guaranteed.*visa|visa.*guaranteed/i)
+  })
+})
+
+// ── Docs guided-action and after-reply sections ───────────────────────────────
+
+describe('FIRST_PILOT_TARGET_STRATEGY.md — guided action + after reply', () => {
+  const doc = readFile('docs/FIRST_PILOT_TARGET_STRATEGY.md')
+
+  it('contains Guided First Action section', () => {
+    expect(doc).toMatch(/Guided First Action/i)
+  })
+
+  it('contains "Next safe action" title', () => {
+    expect(doc).toMatch(/Next safe action/i)
+  })
+
+  it('contains Example Target Profiles section', () => {
+    expect(doc).toMatch(/Example Target Profiles/i)
+  })
+
+  it('contains "not real companies or leads" disclaimer in docs', () => {
+    expect(doc).toMatch(/not real companies|not a real/i)
+  })
+
+  it('contains Healthcare employer in Germany example', () => {
+    expect(doc).toMatch(/Healthcare employer in Germany/i)
+  })
+
+  it('contains Recruiting agency in Morocco example', () => {
+    expect(doc).toMatch(/Recruiting agency in Morocco/i)
+  })
+
+  it('contains what to do after a reply section', () => {
+    expect(doc).toMatch(/After a Reply|after.*reply/i)
+  })
+
+  it('contains what user must approve manually section', () => {
+    expect(doc).toMatch(/User Must Approve|must approve/i)
   })
 })
