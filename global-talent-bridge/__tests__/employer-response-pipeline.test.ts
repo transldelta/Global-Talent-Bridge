@@ -700,15 +700,15 @@ describe('Status Compliance: pilot_employers.status vs interaction response_type
 
 describe('No auto-send functions', () => {
   it('lib/employer-response-pipeline has no sendEmail function', async () => {
-    const module = await import('@/lib/employer-response-pipeline')
-    const exports = Object.keys(module)
+    const mod = await import('@/lib/employer-response-pipeline')
+    const exports = Object.keys(mod)
     const sendFunctions = exports.filter((k) => k.toLowerCase().includes('send'))
     expect(sendFunctions).toHaveLength(0)
   })
 
   it('lib/employer-response-pipeline has no sendWhatsApp function', async () => {
-    const module = await import('@/lib/employer-response-pipeline')
-    const exports = Object.keys(module)
+    const mod = await import('@/lib/employer-response-pipeline')
+    const exports = Object.keys(mod)
     const whatsappFunctions = exports.filter((k) => k.toLowerCase().includes('whatsapp'))
     expect(whatsappFunctions).toHaveLength(0)
   })

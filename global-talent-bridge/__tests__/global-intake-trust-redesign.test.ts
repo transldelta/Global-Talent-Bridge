@@ -127,7 +127,7 @@ describe('/global/employers — Form Integrity', () => {
 // ── /global/candidates page ──────────────────────────────────────────────────
 describe('/global/candidates — Professional Design', () => {
   test('has professional candidate headline', () => {
-    expect(candidatePage).toMatch(/express interest in international career opportunities/i)
+    expect(candidatePage).toMatch(/register your interest in international|express interest in international/i)
   })
 
   test('does NOT contain "kostenlos starten"', () => {

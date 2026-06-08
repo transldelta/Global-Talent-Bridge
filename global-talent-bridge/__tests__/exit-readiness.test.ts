@@ -95,9 +95,9 @@ describe('generateProductSummary', () => {
 
   it('all core modules are non-empty strings', () => {
     const ps = generateProductSummary()
-    for (const module of ps.coreModules) {
-      expect(typeof module).toBe('string')
-      expect(module.length).toBeGreaterThan(0)
+    for (const mod of ps.coreModules) {
+      expect(typeof mod).toBe('string')
+      expect(mod.length).toBeGreaterThan(0)
     }
   })
 })

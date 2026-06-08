@@ -137,28 +137,87 @@ describe('/global/candidates — CTA & Compliance', () => {
     expect(p).toContain('Submit candidate interest')
   })
 
-  it('has "No job guarantee" in trust items', () => {
+  it('has "No job guarantee" in trust notes', () => {
     expect(p).toContain('No job guarantee')
   })
 
-  it('has "No visa guarantee" in trust items', () => {
+  it('has "No visa guarantee" in trust notes', () => {
     expect(p).toContain('No visa guarantee')
   })
 
-  it('has "No candidate fee" language', () => {
-    expect(p).toMatch(/No candidate fee|no.*candidate.*fee|No automatic placement/i)
+  it('has "No candidate fee active" language', () => {
+    expect(p).toMatch(/No candidate fee active|No candidate fee|No automatic placement/i)
   })
 
   it('has "interest form, not a job offer" clarity', () => {
     expect(p).toMatch(/interest form|not a job offer/i)
   })
 
+  it('has "Consent-based interest" trust note', () => {
+    expect(p).toMatch(/Consent-based|consent.based/i)
+  })
+
+  it('has "Admin-reviewed workflow" trust note', () => {
+    expect(p).toMatch(/Admin-reviewed|admin.reviewed/i)
+  })
+
+  it('has "How it works" section', () => {
+    expect(p).toContain('How it works')
+  })
+
+  it('has 4 how-it-works steps', () => {
+    expect(p).toContain('01')
+    expect(p).toContain('02')
+    expect(p).toContain('03')
+    expect(p).toContain('04')
+  })
+
+  it('step 01 is "Submit candidate interest"', () => {
+    expect(p).toMatch(/01[\s\S]{0,200}Submit candidate interest/m)
+  })
+
+  it('step 02 is "Manual review"', () => {
+    expect(p).toMatch(/02[\s\S]{0,200}Manual review/m)
+  })
+
+  it('step 03 references "Corridor matching"', () => {
+    expect(p).toMatch(/03[\s\S]{0,200}Corridor matching/m)
+  })
+
+  it('step 04 references "follow-up"', () => {
+    expect(p).toMatch(/04[\s\S]{0,200}follow.up/im)
+  })
+
+  it('has breadcrumb linking back to CorridorWork home', () => {
+    expect(p).toMatch(/href="\/"\s*[^>]*>[\s\S]*?CorridorWork/m)
+  })
+
+  it('has "Trust notes" section label', () => {
+    expect(p).toContain('Trust notes')
+  })
+
+  it('has "How it works" anchor id', () => {
+    expect(p).toContain('id="how-it-works"')
+  })
+
+  it('uses next/image for hero', () => {
+    expect(p).toContain("import Image from 'next/image'")
+  })
+
   it('uses PublicNavBar', () => {
     expect(p).toContain('PublicNavBar')
   })
 
+  it('uses PublicFooter', () => {
+    expect(p).toContain('PublicFooter')
+  })
+
   it('does NOT have admin links', () => {
     expect(p).not.toMatch(/href="\/admin/)
+  })
+
+  it('does NOT have dashboard links', () => {
+    expect(p).not.toMatch(/href="\/.*dashboard/)
   })
 })
 
