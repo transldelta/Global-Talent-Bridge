@@ -94,7 +94,7 @@ export default function GlobalEmployersPage() {
               href="#intake-form"
               className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg transition-colors text-base"
             >
-              Submit employer demand
+              Submit workforce demand
             </a>
             <Link
               href="/demo/sandbox"

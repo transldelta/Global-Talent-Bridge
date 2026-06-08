@@ -1,10 +1,12 @@
 /**
  * app/partners/page.tsx — /partners
- * Professional partner intake page — server component wrapper.
- * Recruiting agencies, language schools, relocation services and HR consultants.
+ * Professional partner intake page — premium redesign.
+ * Recruiting agencies · Language schools · Relocation · Market intelligence
  * No automatic outreach · No Stripe · Manual review · GDPR-compliant
+ * No admin links · No internal terms · No revenue promises
  */
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { PublicNavBar } from '@/app/_components/PublicNavBar'
 import { PublicFooter } from '@/app/_components/PublicFooter'
 import Link from 'next/link'
@@ -13,11 +15,11 @@ import { PartnersForm } from './PartnersForm'
 export const metadata: Metadata = {
   title: 'Partner with CorridorWork — Global Talent Corridor Platform',
   description:
-    'Register your interest in partnering with CorridorWork. White-label, operational partnerships, licensing and market intelligence for recruiting agencies, HR consultants and relocation services.',
+    'Explore a partnership with CorridorWork. Recruiting agencies, employer networks, training providers, language schools, relocation partners and market intelligence providers.',
   openGraph: {
     title: 'Partner with CorridorWork',
     description:
-      'Register interest in white-label, licensing or operational partnership with the CorridorWork global talent platform.',
+      'Request a partnership discussion with the CorridorWork global talent corridor platform. Consent-based, manually reviewed.',
     images: [{ url: '/og-image.png', width: 1200, height: 630 }],
     locale: 'en_US',
   },
@@ -26,35 +28,27 @@ export const metadata: Metadata = {
 const PARTNER_TYPES = [
   {
     title: 'Recruiting Agencies',
-    desc: 'Extend your portfolio with structured international talent matching across 21 sectors.',
+    desc: 'Extend your portfolio with structured international talent matching across 21 workforce sectors.',
   },
   {
     title: 'Employer Networks',
-    desc: 'Aggregate workforce demand across your member employers into structured corridor intake.',
+    desc: 'Aggregate workforce demand across member employers into a structured, corridor-based intake.',
   },
   {
     title: 'Training Providers',
-    desc: 'Connect graduates and qualified candidates to international employer demand by sector.',
+    desc: 'Connect graduates and qualified candidates with international employer demand by sector.',
   },
   {
     title: 'Language Schools',
-    desc: 'Connect language competencies with employer demand across global corridors.',
+    desc: 'Link language competencies with employer demand across global talent corridors.',
   },
   {
-    title: 'Relocation Services',
+    title: 'Relocation Partners',
     desc: 'Complete your cross-border hiring offering with consent-based talent pipeline visibility.',
   },
   {
-    title: 'HR Consulting',
-    desc: 'Offer structured international matching as a managed service to your clients.',
-  },
-  {
-    title: 'B2B Platforms',
-    desc: 'API integration or white-label deployment within your existing platform.',
-  },
-  {
-    title: 'Operational Partners',
-    desc: 'Joint handling of employer demand across corridors and sectors.',
+    title: 'Market Intelligence Partners',
+    desc: 'Access aggregated corridor and sector demand data to inform strategic market decisions.',
   },
 ]
 
@@ -65,11 +59,11 @@ const ENGAGEMENT_TYPES = [
   },
   {
     title: 'Operational Partnership',
-    desc: 'Joint market coverage, revenue sharing or operational collaboration.',
+    desc: 'Joint market coverage or operational collaboration across corridors and sectors.',
   },
   {
     title: 'Licensing / API Access',
-    desc: 'Technology licence or API integration into your systems.',
+    desc: 'Technology licence or API integration into your existing systems.',
   },
   {
     title: 'Market Intelligence',
@@ -82,30 +76,47 @@ export default function PartnersPage() {
     <div className="min-h-screen bg-slate-950 flex flex-col">
       <PublicNavBar />
 
-      {/* Hero */}
-      <section className="bg-slate-950 px-6 py-20 border-b border-slate-800">
-        <div className="max-w-4xl mx-auto text-center">
+      {/* ── HERO ──────────────────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/global/employer-hero.jpg"
+            alt="Global partnership — international talent corridors"
+            fill
+            className="object-cover object-center"
+            priority
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-slate-950/80" />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-950 to-transparent" />
+        </div>
+        <div className="relative z-10 max-w-4xl mx-auto px-6 py-24 sm:py-32">
+          <p className="text-slate-400 text-sm mb-6">
+            <Link href="/" className="hover:text-white transition-colors">CorridorWork</Link>
+            <span className="mx-2 text-slate-600">·</span>
+            <span className="text-slate-300">Partners</span>
+          </p>
           <p className="text-indigo-400 text-xs font-bold tracking-widest uppercase mb-4">
             For Partners
           </p>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-5 leading-tight max-w-2xl mx-auto">
+          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-5 leading-tight max-w-2xl">
             Partner with a global talent corridor platform.
           </h1>
-          <p className="text-slate-300 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
-            Recruiting agencies, language schools, relocation services and HR consultants
-            can work with CorridorWork through white-label integration, licensing or
-            operational partnerships.
+          <p className="text-lg text-slate-300 mb-10 max-w-xl leading-relaxed">
+            Recruiting agencies, employer networks, training providers, language schools,
+            relocation partners and market intelligence providers can work with
+            CorridorWork through structured collaboration.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4">
             <a
               href="#partner-form"
               className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg transition-colors text-base"
             >
-              Register partner interest
+              Request partnership discussion
             </a>
             <Link
               href="/strategic-partnership"
-              className="px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg border border-white/25 transition-colors text-base"
+              className="px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg border border-white/25 transition-colors text-base backdrop-blur-sm"
             >
               Explore strategic partnership
             </Link>
@@ -113,13 +124,13 @@ export default function PartnersPage() {
         </div>
       </section>
 
-      {/* Who it is for */}
-      <section className="bg-slate-900 px-6 py-14 border-b border-slate-800">
+      {/* ── PARTNER TYPES ─────────────────────────────────────────────────── */}
+      <section className="bg-slate-900 px-6 py-14 border-t border-slate-800">
         <div className="max-w-5xl mx-auto">
-          <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-8">
+          <p className="text-indigo-400 text-xs font-bold tracking-widest uppercase mb-8">
             Who it is for
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {PARTNER_TYPES.map(pt => (
               <div key={pt.title} className="space-y-2">
                 <div className="w-1.5 h-6 bg-indigo-500 rounded-full" />
@@ -131,13 +142,13 @@ export default function PartnersPage() {
         </div>
       </section>
 
-      {/* Engagement types */}
-      <section className="bg-slate-950 px-6 py-14 border-b border-slate-800">
+      {/* ── ENGAGEMENT TYPES ──────────────────────────────────────────────── */}
+      <section className="bg-slate-950 px-6 py-14 border-t border-slate-800">
         <div className="max-w-5xl mx-auto">
           <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-8">
-            Engagement types
+            Engagement models
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {ENGAGEMENT_TYPES.map(et => (
               <div key={et.title} className="space-y-2">
                 <div className="w-1.5 h-6 bg-slate-600 rounded-full" />
@@ -149,13 +160,13 @@ export default function PartnersPage() {
         </div>
       </section>
 
-      {/* Partner Form */}
+      {/* ── PARTNER FORM ──────────────────────────────────────────────────── */}
       <div id="partner-form">
         <PartnersForm />
       </div>
 
-      {/* Compliance note */}
-      <section className="bg-slate-900 px-6 py-8 border-t border-slate-800">
+      {/* ── COMPLIANCE NOTE ───────────────────────────────────────────────── */}
+      <section className="bg-slate-900 px-6 py-10 border-t border-slate-800">
         <div className="max-w-3xl mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
@@ -174,13 +185,13 @@ export default function PartnersPage() {
             ))}
           </div>
           <p className="text-slate-600 text-xs mt-4">
-            All partner requests are reviewed manually. See{' '}
+            All partner requests are reviewed manually. No cold outreach. See{' '}
             <Link href="/legal/datenschutz" className="text-slate-500 hover:text-slate-300 transition-colors">
               Privacy Policy
             </Link>
-            {' '}for data handling. Interested in a deeper conversation?{' '}
+            {' '}for data handling. For deeper conversations:{' '}
             <Link href="/strategic-partnership" className="text-slate-500 hover:text-slate-300 transition-colors">
-              Explore strategic partnership
+              explore strategic partnership
             </Link>
             .
           </p>

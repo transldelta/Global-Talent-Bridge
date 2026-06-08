@@ -112,7 +112,7 @@ export function EmployerIntakeForm() {
 
         {/* Section header */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">Submit employer demand</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-2">Submit workforce demand</h2>
           <p className="text-slate-500 text-sm">
             All submissions are reviewed manually. No automatic matching, no payment, no outreach.
           </p>
@@ -268,7 +268,7 @@ export function EmployerIntakeForm() {
             disabled={status === 'loading' || !form.consent_to_contact}
             className="w-full py-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {status === 'loading' ? 'Submitting…' : 'Submit Employer Demand'}
+            {status === 'loading' ? 'Submitting…' : 'Submit Workforce Demand'}
           </button>
 
           <p className="text-xs text-center text-slate-400">
