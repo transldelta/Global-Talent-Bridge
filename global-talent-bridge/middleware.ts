@@ -51,11 +51,14 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Geschützte Routen — nicht eingeloggte Nutzer weiterleiten
+  // NOTE: /admin and its sub-routes require admin email (checked in each page/API handler)
+  // The middleware here provides the first layer of auth protection.
   const protectedPaths = [
     '/candidate',
     '/employer',
     '/jobs',
     '/admin',
+    '/dashboard',  // defense-in-depth: protect any top-level /dashboard route
   ]
 
   const isProtected = protectedPaths.some((path) => pathname.startsWith(path))

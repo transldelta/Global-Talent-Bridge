@@ -586,6 +586,35 @@ describe('No Admin Links in Public Navigation', () => {
     expect(content).not.toContain('Command Center')
   })
 
+  test('PublicNavBar does NOT contain Dashboard button (security)', () => {
+    const content = readFile('app/_components/PublicNavBar.tsx')
+    // Dashboard links must never appear in the public nav
+    expect(content).not.toContain('/candidate/dashboard')
+    expect(content).not.toContain('/employer/dashboard')
+    expect(content).not.toContain('>Dashboard<')
+  })
+
+  test('PublicNavBar does NOT contain Promo Video as nav item', () => {
+    const content = readFile('app/_components/PublicNavBar.tsx')
+    expect(content).not.toContain('href="/promo-video"')
+  })
+
+  test('MobileNavMenu client component exists and has no dashboard links', () => {
+    const content = readFile('app/_components/MobileNavMenu.tsx')
+    expect(content).toContain("'use client'")
+    expect(content).not.toContain('/candidate/dashboard')
+    expect(content).not.toContain('/employer/dashboard')
+    expect(content).not.toContain('/admin')
+  })
+
+  test('middleware.ts protects /dashboard route', () => {
+    const content = readFile('middleware.ts')
+    expect(content).toContain('/dashboard')
+    expect(content).toContain('/admin')
+    expect(content).toContain('/candidate')
+    expect(content).toContain('/employer')
+  })
+
   test('PublicFooter does not expose internal CWO terms', () => {
     const content = readFile('app/_components/PublicFooter.tsx')
     expect(content).not.toContain('CWO')

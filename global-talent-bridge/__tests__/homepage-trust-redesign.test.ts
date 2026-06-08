@@ -244,8 +244,18 @@ describe('Navigation — Simplified professional nav', () => {
     expect(nav).toContain('/demo/sandbox')
   })
 
-  test('nav contains Promo Video link', () => {
-    expect(nav).toContain('/promo-video')
+  test('nav does NOT have Promo Video as a nav item (moved to footer only)', () => {
+    // Promo Video was removed from main nav to keep navigation clean.
+    // It remains accessible via the footer and homepage buyer section.
+    expect(nav).not.toContain("href=\"/promo-video\"")
+  })
+
+  test('nav does NOT show Dashboard button publicly (security)', () => {
+    // The Dashboard button must NEVER appear in the public nav.
+    // Internal dashboards are accessible only via direct authenticated URL.
+    expect(nav).not.toContain('/candidate/dashboard')
+    expect(nav).not.toContain('/employer/dashboard')
+    expect(nav).not.toContain('>Dashboard<')
   })
 
   test('nav does NOT have emoji-heavy text like "🚀 Pilot anfragen"', () => {

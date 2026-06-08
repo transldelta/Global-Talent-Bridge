@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { logoutAction } from '@/app/actions'
-import { createClient } from '@/lib/supabase/server'
+import { PublicNavBar } from '@/app/_components/PublicNavBar'
 
 type PricingPlan = {
   plan_key: string
@@ -46,12 +45,6 @@ export default async function PricingPage() {
     .select('plan_key, name, description, monthly_price_eur, yearly_price_eur, features, active')
     .order('monthly_price_eur', { ascending: true })
 
-  // User für NavBar (optional — kann null sein wenn nicht eingeloggt)
-  const supabase = createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
   const plans: PricingPlan[] = (plansRaw ?? [])
     .map((p) => ({
       ...p,
@@ -63,43 +56,8 @@ export default async function PricingPage() {
     )
 
   return (
-    <div className="min-h-screen bg-gray-950">
-      {/* Navbar */}
-      <nav className="border-b border-gray-800 bg-gray-900">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Link href="/" className="text-white font-semibold hover:text-gray-200 transition-colors">
-              CorridorWork
-            </Link>
-          </div>
-          <div className="flex items-center gap-4">
-            {user ? (
-              <>
-                <Link href="/candidate/dashboard" className="text-sm text-gray-400 hover:text-white transition-colors">
-                  Dashboard
-                </Link>
-                <form action={logoutAction}>
-                  <button type="submit" className="text-sm text-gray-400 hover:text-white transition-colors">
-                    Logout
-                  </button>
-                </form>
-              </>
-            ) : (
-              <>
-                <Link href="/auth/login" className="text-sm text-gray-400 hover:text-white transition-colors">
-                  Login
-                </Link>
-                <Link
-                  href="/auth/register"
-                  className="text-sm px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors"
-                >
-                  Registrieren
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-slate-950">
+      <PublicNavBar />
 
       <div className="max-w-5xl mx-auto px-4 py-12 space-y-10">
         {/* Header */}
