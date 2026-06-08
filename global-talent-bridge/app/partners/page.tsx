@@ -1,273 +1,185 @@
 /**
  * app/partners/page.tsx — /partners
- *
- * Public Partner-Seite: Recruiting-Agenturen, Sprachschulen, Relocation,
- * HR-Berater, B2B-Partner können Interesse anmelden.
- *
- * Safety: Kein E-Mail · Kein Outreach · Kein Stripe · lead_type=agency_partner
+ * Professional partner intake page — server component wrapper.
+ * Recruiting agencies, language schools, relocation services and HR consultants.
+ * No automatic outreach · No Stripe · Manual review · GDPR-compliant
  */
-'use client'
-import { useState } from 'react'
 import type { Metadata } from 'next'
-import { COMPLIANCE_DISCLAIMER } from '@/lib/revenue-leads'
+import { PublicNavBar } from '@/app/_components/PublicNavBar'
+import { PublicFooter } from '@/app/_components/PublicFooter'
+import Link from 'next/link'
+import { PartnersForm } from './PartnersForm'
 
-// Metadata is handled separately in a server component via layout
-// For this page we use 'use client' for the form, metadata via head tags
+export const metadata: Metadata = {
+  title: 'Partner with CorridorWork — Global Talent Corridor Platform',
+  description:
+    'Register your interest in partnering with CorridorWork. White-label, operational partnerships, licensing and market intelligence for recruiting agencies, HR consultants and relocation services.',
+  openGraph: {
+    title: 'Partner with CorridorWork',
+    description:
+      'Register interest in white-label, licensing or operational partnership with the CorridorWork global talent platform.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    locale: 'en_US',
+  },
+}
 
-const ORG_TYPES = [
-  'Recruiting-Agentur',
-  'Sprachschule / Bildungseinrichtung',
-  'Relocation-Dienstleister',
-  'HR-Beratung',
-  'B2B-Plattform',
-  'Sonstiger B2B-Partner',
+const PARTNER_TYPES = [
+  {
+    title: 'Recruiting Agencies',
+    desc: 'Extend your portfolio with structured international talent matching across 21 sectors.',
+  },
+  {
+    title: 'Language Schools',
+    desc: 'Connect language competencies with employer demand across global corridors.',
+  },
+  {
+    title: 'Relocation Services',
+    desc: 'Complete your cross-border hiring offering with consent-based talent pipeline visibility.',
+  },
+  {
+    title: 'HR Consulting',
+    desc: 'Offer structured international matching as a managed service to your clients.',
+  },
+  {
+    title: 'B2B Platforms',
+    desc: 'API integration or white-label deployment within your existing platform.',
+  },
+  {
+    title: 'Operational Partners',
+    desc: 'Joint handling of employer demand across corridors and sectors.',
+  },
 ]
 
-const INTEREST_OPTIONS = [
-  { value: 'white_label',  label: '🏷️ White-Label Integration' },
-  { value: 'partnership',  label: '🤝 Operative Partnerschaft' },
-  { value: 'licensing',    label: '📜 Lizenzierung / API-Zugang' },
-  { value: 'market_intelligence', label: '📊 Market Intelligence' },
+const ENGAGEMENT_TYPES = [
+  {
+    title: 'White-Label Integration',
+    desc: 'Use the CorridorWork system under your own branding (Phase 2+).',
+  },
+  {
+    title: 'Operational Partnership',
+    desc: 'Joint market coverage, revenue sharing or operational collaboration.',
+  },
+  {
+    title: 'Licensing / API Access',
+    desc: 'Technology licence or API integration into your systems.',
+  },
+  {
+    title: 'Market Intelligence',
+    desc: 'Aggregated corridor and demand data for your target markets.',
+  },
 ]
 
 export default function PartnersPage() {
-  const [form, setForm] = useState({
-    organization_name: '',
-    contact_name:      '',
-    email:             '',
-    country:           '',
-    org_type:          '',
-    interest_type:     '',
-    message:           '',
-    consent:           false,
-    website:           '', // Honeypot
-  })
-  const [status,  setStatus]  = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
-  const [errMsg,  setErrMsg]  = useState('')
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!form.consent) { setErrMsg('Bitte Zustimmung erteilen.'); return }
-    setStatus('loading'); setErrMsg('')
-    try {
-      const res = await fetch('/api/public/revenue-leads', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          lead_type:         'agency_partner',
-          organization_name: form.organization_name,
-          contact_name:      form.contact_name,
-          email:             form.email,
-          country:           form.country,
-          sector:            form.org_type,
-          interest_type:     form.interest_type || undefined,
-          message:           form.message,
-          consent_to_contact: form.consent,
-          source_page:       '/partners',
-          website:           form.website, // Honeypot
-        }),
-      })
-      const data = await res.json()
-      if (!res.ok) { setErrMsg(data.error ?? 'Fehler beim Senden'); setStatus('error'); return }
-      setStatus('success')
-    } catch {
-      setErrMsg('Netzwerkfehler. Bitte erneut versuchen.'); setStatus('error')
-    }
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-950 to-slate-900">
-
-      {/* Nav */}
-      <header className="border-b border-purple-900/50">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <a href="/" className="text-white font-bold text-lg">CorridorWork</a>
-          <div className="flex gap-4 text-sm">
-            <a href="/strategic-partnership" className="text-purple-300 hover:text-white transition-colors">Strategic Partnership →</a>
-            <a href="/demo" className="text-slate-400 hover:text-white transition-colors">Demo</a>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-slate-950 flex flex-col">
+      <PublicNavBar />
 
       {/* Hero */}
-      <section className="max-w-4xl mx-auto px-4 py-16 text-center">
-        <div className="inline-block bg-purple-900/60 text-purple-300 text-xs font-semibold px-3 py-1 rounded-full mb-4 border border-purple-700/50">
-          🤝 Partner-Programm — Phase 1
-        </div>
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-          CorridorWork als<br />
-          <span className="text-purple-400">Partnerlösung nutzen</span>
-        </h1>
-        <p className="text-slate-300 text-lg mb-8 max-w-2xl mx-auto">
-          Recruiting-Agenturen, Sprachschulen, Relocation-Dienstleister und HR-Berater
-          können das CorridorWork Talent-Matching-System als White-Label-Partnerlösung oder
-          operative Partnerschaft nutzen.
-        </p>
-
-        {/* Benefits grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12 text-left">
-          {[
-            { icon: '🏷️', title: 'White-Label',     text: 'Eigenes Branding auf dem Matching-System (Phase 2+).' },
-            { icon: '🌍', title: 'Talent-Korridore', text: '10+ geprüfte internationale Migrations-Korridore.' },
-            { icon: '📊', title: 'Market Data',      text: 'Aggregierte Nachfragedaten für Ihre Märkte.' },
-            { icon: '🔗', title: 'Employer Pipeline', text: 'Vorqualifizierte Arbeitgeber-Kontakte (Pilot).' },
-          ].map(b => (
-            <div key={b.title} className="bg-slate-800/60 rounded-xl p-5 border border-purple-900/40">
-              <div className="text-2xl mb-2">{b.icon}</div>
-              <div className="font-semibold text-white text-sm mb-1">{b.title}</div>
-              <div className="text-slate-400 text-sm">{b.text}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Who is it for */}
-      <section className="max-w-4xl mx-auto px-4 pb-10">
-        <h2 className="text-white font-bold text-xl mb-4 text-center">Für wen ist das Partner-Programm?</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[
-            { icon: '🏢', title: 'Recruiting-Agenturen',         text: 'Erweitern Sie Ihr Portfolio um internationales Talent-Matching.' },
-            { icon: '🎓', title: 'Sprachschulen',                text: 'Verbinden Sie Sprachkompetenzen mit Arbeitgeber-Nachfrage.' },
-            { icon: '✈️', title: 'Relocation-Dienstleister',     text: 'Vervollständigen Sie Ihre Cross-border Hiring Services.' },
-            { icon: '👔', title: 'HR-Berater',                   text: 'Bieten Sie strukturiertes internationales Matching als Service.' },
-            { icon: '🌐', title: 'B2B-Plattformen',              text: 'API-Integration oder White-Label-Lösung für Ihre Plattform.' },
-            { icon: '🤝', title: 'Operative Partner',            text: 'Gemeinsame Bearbeitung von Arbeitgeber-Anfragen.' },
-          ].map(c => (
-            <div key={c.title} className="bg-slate-800/40 rounded-xl p-4 border border-slate-700/50">
-              <div className="text-xl mb-2">{c.icon}</div>
-              <div className="font-semibold text-white text-sm mb-1">{c.title}</div>
-              <div className="text-slate-400 text-sm">{c.text}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* CTA links */}
-      <section className="max-w-4xl mx-auto px-4 pb-8 text-center">
-        <div className="flex flex-wrap justify-center gap-3">
-          <a href="/strategic-partnership" className="px-5 py-2.5 bg-amber-600 text-white font-semibold rounded-lg hover:bg-amber-700 transition-colors text-sm">
-            🎯 Strategische Partnerschaft / Übernahme →
-          </a>
-          <a href="/demo" className="px-5 py-2.5 bg-slate-700 text-white font-medium rounded-lg hover:bg-slate-600 transition-colors text-sm">
-            Demo ansehen
-          </a>
-        </div>
-      </section>
-
-      {/* Form */}
-      <section className="max-w-2xl mx-auto px-4 pb-20">
-        <div className="bg-slate-800/60 rounded-2xl border border-purple-900/40 p-8">
-          <h2 className="text-xl font-bold text-white mb-2">🤝 Partner-Interesse anmelden</h2>
-          <p className="text-slate-400 text-sm mb-6">
-            Kostenlos und unverbindlich. Kein automatischer Versand. Manuelle Prüfung.
+      <section className="bg-slate-950 px-6 py-20 border-b border-slate-800">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-indigo-400 text-xs font-bold tracking-widest uppercase mb-4">
+            For Partners
           </p>
-
-          {status === 'success' ? (
-            <div className="bg-green-900/30 border border-green-700/50 rounded-xl p-6 text-center">
-              <div className="text-3xl mb-3">✅</div>
-              <div className="text-green-300 font-bold text-lg mb-2">Interesse registriert!</div>
-              <div className="text-slate-300 text-sm">
-                Ihre Anfrage wurde gespeichert. Wir melden uns manuell — kein automatischer Versand.
-              </div>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Honeypot */}
-              <input type="text" name="website" value={form.website} onChange={e => setForm(f => ({...f, website: e.target.value}))} className="hidden" tabIndex={-1} autoComplete="off" />
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">Organisation *</label>
-                  <input required value={form.organization_name} onChange={e => setForm(f => ({...f, organization_name: e.target.value}))}
-                    className="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
-                    placeholder="Ihre Organisation" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">Ansprechpartner *</label>
-                  <input required value={form.contact_name} onChange={e => setForm(f => ({...f, contact_name: e.target.value}))}
-                    className="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
-                    placeholder="Ihr Name" />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">E-Mail *</label>
-                  <input required type="email" value={form.email} onChange={e => setForm(f => ({...f, email: e.target.value}))}
-                    className="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
-                    placeholder="name@organisation.com" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">Land</label>
-                  <input value={form.country} onChange={e => setForm(f => ({...f, country: e.target.value}))}
-                    className="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
-                    placeholder="z.B. Deutschland" />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">Art der Organisation</label>
-                  <select value={form.org_type} onChange={e => setForm(f => ({...f, org_type: e.target.value}))}
-                    className="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm">
-                    <option value="">Bitte wählen…</option>
-                    {ORG_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">Interesse</label>
-                  <select value={form.interest_type} onChange={e => setForm(f => ({...f, interest_type: e.target.value}))}
-                    className="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm">
-                    <option value="">Bitte wählen…</option>
-                    {INTEREST_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">Nachricht</label>
-                <textarea value={form.message} onChange={e => setForm(f => ({...f, message: e.target.value}))} rows={3}
-                  className="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm resize-none"
-                  placeholder="Was interessiert Sie? Wie können wir zusammenarbeiten?" />
-              </div>
-
-              {/* Consent */}
-              <div className="bg-slate-700/40 rounded-lg p-4">
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input required type="checkbox" checked={form.consent} onChange={e => setForm(f => ({...f, consent: e.target.checked}))}
-                    className="mt-1 h-4 w-4 rounded border-slate-500 bg-slate-600 text-purple-500 flex-shrink-0" />
-                  <span className="text-slate-300 text-xs leading-relaxed">
-                    {COMPLIANCE_DISCLAIMER.consentText}{' '}
-                    <a href="/legal/datenschutz" className="underline text-purple-400">Datenschutzerklärung</a>. *
-                  </span>
-                </label>
-              </div>
-
-              {errMsg && (
-                <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-3 text-sm text-red-300">
-                  ⚠️ {errMsg}
-                </div>
-              )}
-
-              <button type="submit" disabled={status === 'loading'}
-                className="w-full py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 disabled:opacity-50 transition-colors">
-                {status === 'loading' ? '⟳ Wird gesendet…' : '🤝 Partner-Interesse anmelden'}
-              </button>
-
-              {/* Safety Badges */}
-              <div className="flex flex-wrap gap-3 justify-center text-xs text-slate-500 pt-2">
-                <span>✓ Kein automatischer Versand</span>
-                <span>·</span>
-                <span>✓ Kein Stripe</span>
-                <span>·</span>
-                <span>✓ DSGVO-konform</span>
-                <span>·</span>
-                <span>✓ Manuelle Prüfung</span>
-              </div>
-            </form>
-          )}
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-5 leading-tight max-w-2xl mx-auto">
+            Partner with a global talent corridor platform.
+          </h1>
+          <p className="text-slate-300 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
+            Recruiting agencies, language schools, relocation services and HR consultants
+            can work with CorridorWork through white-label integration, licensing or
+            operational partnerships.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="#partner-form"
+              className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg transition-colors text-base"
+            >
+              Register partner interest
+            </a>
+            <Link
+              href="/strategic-partnership"
+              className="px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg border border-white/25 transition-colors text-base"
+            >
+              Explore strategic partnership
+            </Link>
+          </div>
         </div>
       </section>
+
+      {/* Who it is for */}
+      <section className="bg-slate-900 px-6 py-14 border-b border-slate-800">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-8">
+            Who it is for
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {PARTNER_TYPES.map(pt => (
+              <div key={pt.title} className="space-y-2">
+                <div className="w-1.5 h-6 bg-indigo-500 rounded-full" />
+                <h3 className="text-white font-semibold text-sm">{pt.title}</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">{pt.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Engagement types */}
+      <section className="bg-slate-950 px-6 py-14 border-b border-slate-800">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-8">
+            Engagement types
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {ENGAGEMENT_TYPES.map(et => (
+              <div key={et.title} className="space-y-2">
+                <div className="w-1.5 h-6 bg-slate-600 rounded-full" />
+                <h3 className="text-white font-semibold text-sm">{et.title}</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">{et.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Partner Form */}
+      <div id="partner-form">
+        <PartnersForm />
+      </div>
+
+      {/* Compliance note */}
+      <section className="bg-slate-900 px-6 py-8 border-t border-slate-800">
+        <div className="max-w-3xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              'No employment guarantee',
+              'No visa guarantee',
+              'No automatic placement',
+              'No payment processing active',
+            ].map(item => (
+              <div
+                key={item}
+                className="flex items-center gap-2 px-3 py-2.5 bg-slate-800 border border-slate-700 rounded-lg"
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                <span className="text-slate-400 text-xs leading-tight">{item}</span>
+              </div>
+            ))}
+          </div>
+          <p className="text-slate-600 text-xs mt-4">
+            All partner requests are reviewed manually. See{' '}
+            <Link href="/legal/datenschutz" className="text-slate-500 hover:text-slate-300 transition-colors">
+              Privacy Policy
+            </Link>
+            {' '}for data handling. Interested in a deeper conversation?{' '}
+            <Link href="/strategic-partnership" className="text-slate-500 hover:text-slate-300 transition-colors">
+              Explore strategic partnership
+            </Link>
+            .
+          </p>
+        </div>
+      </section>
+
+      <PublicFooter />
     </div>
   )
 }
