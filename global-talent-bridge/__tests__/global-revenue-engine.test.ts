@@ -70,7 +70,11 @@ describe('lib/talent-categories.ts', () => {
 
 describe('/global/employers Page', () => {
   let content: string
-  beforeAll(() => { content = readFile('app/global/employers/page.tsx') })
+  beforeAll(() => {
+    // Combine page + extracted form component (refactored to server/client split)
+    content = readFile('app/global/employers/page.tsx') + '\n' +
+              readFile('app/global/employers/EmployerIntakeForm.tsx')
+  })
 
   it('Datei existiert', () => {
     expect(existsSync(join(ROOT, 'app/global/employers/page.tsx'))).toBe(true)
@@ -116,7 +120,11 @@ describe('/global/employers Page', () => {
 
 describe('/global/candidates Page', () => {
   let content: string
-  beforeAll(() => { content = readFile('app/global/candidates/page.tsx') })
+  beforeAll(() => {
+    // Combine page + extracted form component (refactored to server/client split)
+    content = readFile('app/global/candidates/page.tsx') + '\n' +
+              readFile('app/global/candidates/CandidateIntakeForm.tsx')
+  })
 
   it('Datei existiert', () => {
     expect(existsSync(join(ROOT, 'app/global/candidates/page.tsx'))).toBe(true)

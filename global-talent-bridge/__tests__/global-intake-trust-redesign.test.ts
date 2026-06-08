@@ -1,0 +1,345 @@
+import { describe, test, expect } from 'vitest'
+/**
+ * CorridorWork — Global Intake Trust Redesign Tests
+ * /global/employers and /global/candidates pages
+ * Verifies: professional design, no fake promises, consent present,
+ * forms functional, images exist, no brand violations.
+ */
+import { readFileSync, existsSync } from 'fs'
+import { join } from 'path'
+
+const ROOT = join(__dirname, '..')
+
+const employerPage  = readFileSync(join(ROOT, 'app/global/employers/page.tsx'), 'utf8')
+const employerForm  = readFileSync(join(ROOT, 'app/global/employers/EmployerIntakeForm.tsx'), 'utf8')
+const candidatePage = readFileSync(join(ROOT, 'app/global/candidates/page.tsx'), 'utf8')
+const candidateForm = readFileSync(join(ROOT, 'app/global/candidates/CandidateIntakeForm.tsx'), 'utf8')
+const layout        = readFileSync(join(ROOT, 'app/layout.tsx'), 'utf8')
+
+// ── /global/employers page ───────────────────────────────────────────────────
+describe('/global/employers — Professional Design', () => {
+  test('has professional employer headline', () => {
+    expect(employerPage).toMatch(/international talent interest across sectors/i)
+  })
+
+  test('does NOT contain "kostenlos starten"', () => {
+    expect(employerPage.toLowerCase()).not.toContain('kostenlos starten')
+  })
+
+  test('does NOT contain "keine kreditkarte"', () => {
+    expect(employerPage.toLowerCase()).not.toContain('keine kreditkarte')
+  })
+
+  test('uses PublicNavBar server component', () => {
+    expect(employerPage).toContain('PublicNavBar')
+  })
+
+  test('uses PublicFooter server component', () => {
+    expect(employerPage).toContain('PublicFooter')
+  })
+
+  test('uses next/image for hero photo', () => {
+    expect(employerPage).toContain("import Image from 'next/image'")
+    expect(employerPage).toContain('employer-hero.jpg')
+  })
+
+  test('has employer-specific metadata title', () => {
+    expect(employerPage).toMatch(/international talent interest/i)
+  })
+
+  test('links to demo sandbox', () => {
+    expect(employerPage).toContain('/demo/sandbox')
+  })
+
+  test('links to strategic-partnership', () => {
+    expect(employerPage).toContain('/strategic-partnership')
+  })
+
+  test('includes EmployerIntakeForm client component', () => {
+    expect(employerPage).toContain('EmployerIntakeForm')
+  })
+})
+
+describe('/global/employers — No False Promises', () => {
+  test('employer page contains "No employment guarantee"', () => {
+    expect(employerPage).toContain('No employment guarantee')
+  })
+
+  test('employer page contains "No visa guarantee"', () => {
+    expect(employerPage).toContain('No visa guarantee')
+  })
+
+  test('employer page contains "No automatic placement"', () => {
+    expect(employerPage).toContain('No automatic placement')
+  })
+
+  test('employer page does NOT claim guaranteed job placement', () => {
+    expect(employerPage.toLowerCase()).not.toContain('guaranteed placement')
+    expect(employerPage.toLowerCase()).not.toContain('guaranteed job')
+  })
+})
+
+describe('/global/employers — Form Integrity', () => {
+  test('form submits to correct API endpoint', () => {
+    expect(employerForm).toContain('/api/public/global-employer-leads')
+  })
+
+  test('form has honeypot field (bot protection)', () => {
+    expect(employerForm).toContain('website')
+    expect(employerForm).toContain('honeypot')
+  })
+
+  test('form requires consent checkbox', () => {
+    expect(employerForm).toContain('consent_to_contact')
+    expect(employerForm).toContain('type="checkbox"')
+    expect(employerForm).toContain('required')
+  })
+
+  test('form has organization name field', () => {
+    expect(employerForm).toContain('organization_name')
+  })
+
+  test('form has email field', () => {
+    expect(employerForm).toContain('type="email"')
+  })
+
+  test('consent text explains manual review, no guarantees', () => {
+    expect(employerForm).toMatch(/manual review/i)
+    expect(employerForm).toMatch(/no.*guarantee/i)
+  })
+
+  test('form does NOT send automatic emails', () => {
+    expect(employerForm.toLowerCase()).not.toContain('sendmail')
+    expect(employerForm.toLowerCase()).not.toContain('smtp')
+    expect(employerForm.toLowerCase()).not.toContain('sendemail(')
+  })
+
+  test('form does NOT reference Stripe', () => {
+    expect(employerForm.toLowerCase()).not.toContain('stripe')
+  })
+
+  test('success state does NOT promise job placement', () => {
+    expect(employerForm).not.toContain('job offer')
+    expect(employerForm.toLowerCase()).not.toContain('you got the job')
+  })
+})
+
+// ── /global/candidates page ──────────────────────────────────────────────────
+describe('/global/candidates — Professional Design', () => {
+  test('has professional candidate headline', () => {
+    expect(candidatePage).toMatch(/express interest in international career opportunities/i)
+  })
+
+  test('does NOT contain "kostenlos starten"', () => {
+    expect(candidatePage.toLowerCase()).not.toContain('kostenlos starten')
+  })
+
+  test('does NOT contain "keine kreditkarte"', () => {
+    expect(candidatePage.toLowerCase()).not.toContain('keine kreditkarte')
+  })
+
+  test('uses PublicNavBar server component', () => {
+    expect(candidatePage).toContain('PublicNavBar')
+  })
+
+  test('uses PublicFooter server component', () => {
+    expect(candidatePage).toContain('PublicFooter')
+  })
+
+  test('uses next/image for hero photo', () => {
+    expect(candidatePage).toContain("import Image from 'next/image'")
+    expect(candidatePage).toContain('candidate-hero.jpg')
+  })
+
+  test('includes CandidateIntakeForm client component', () => {
+    expect(candidatePage).toContain('CandidateIntakeForm')
+  })
+})
+
+describe('/global/candidates — No False Promises', () => {
+  test('candidate page contains "No employment guarantee"', () => {
+    expect(candidatePage).toContain('No employment guarantee')
+  })
+
+  test('candidate page contains "No visa guarantee"', () => {
+    expect(candidatePage).toContain('No visa guarantee')
+  })
+
+  test('candidate page contains "No automatic placement"', () => {
+    expect(candidatePage).toContain('No automatic placement')
+  })
+
+  test('candidate page contains the safety note', () => {
+    expect(candidatePage).toMatch(/interest form, not a job offer/i)
+  })
+
+  test('candidate page does NOT promise automatic job placement', () => {
+    expect(candidatePage.toLowerCase()).not.toContain('guaranteed job')
+    expect(candidatePage.toLowerCase()).not.toContain('instant placement')
+  })
+})
+
+describe('/global/candidates — Form Integrity', () => {
+  test('form submits to correct API endpoint', () => {
+    expect(candidateForm).toContain('/api/public/candidate-interest')
+  })
+
+  test('form has honeypot field (bot protection)', () => {
+    expect(candidateForm).toContain('website')
+    expect(candidateForm).toContain('honeypot')
+  })
+
+  test('form requires consent checkbox', () => {
+    expect(candidateForm).toContain('consent_to_contact')
+    expect(candidateForm).toContain('type="checkbox"')
+    expect(candidateForm).toContain('required')
+  })
+
+  test('form has display_name field', () => {
+    expect(candidateForm).toContain('display_name')
+  })
+
+  test('form has email field', () => {
+    expect(candidateForm).toContain('type="email"')
+  })
+
+  test('consent text explains no employment or visa guarantee', () => {
+    expect(candidateForm).toMatch(/no employment guarantee/i)
+    expect(candidateForm).toMatch(/no visa/i)
+  })
+
+  test('form does NOT send automatic emails', () => {
+    expect(candidateForm.toLowerCase()).not.toContain('sendmail')
+    expect(candidateForm.toLowerCase()).not.toContain('smtp')
+  })
+
+  test('success state correctly disclaims it is not a job offer', () => {
+    expect(candidateForm).toMatch(/not a job offer/i)
+  })
+
+  test('success state mentions manual review', () => {
+    expect(candidateForm).toMatch(/reviewed manually/i)
+  })
+})
+
+// ── Brand correctness ─────────────────────────────────────────────────────────
+describe('Brand Correctness — Both Pages', () => {
+  test('employer page uses CorridorWork brand', () => {
+    expect(employerPage).toContain('CorridorWork')
+  })
+
+  test('candidate page uses CorridorWork brand', () => {
+    expect(candidatePage).toContain('CorridorWork')
+  })
+
+  test('employer page does NOT use old brand names', () => {
+    expect(employerPage).not.toContain('SlotFill')
+    expect(employerPage).not.toContain('Global Talent Bridge')
+  })
+
+  test('candidate page does NOT use old brand names', () => {
+    expect(candidatePage).not.toContain('SlotFill')
+    expect(candidatePage).not.toContain('Global Talent Bridge')
+  })
+
+  test('employer page does NOT reference Stripe', () => {
+    expect(employerPage.toLowerCase()).not.toContain('stripe')
+  })
+
+  test('candidate page does NOT reference Stripe', () => {
+    expect(candidatePage.toLowerCase()).not.toContain('stripe')
+  })
+})
+
+// ── Favicon & OG image ────────────────────────────────────────────────────────
+describe('Favicon & OG Image', () => {
+  test('favicon.svg exists in public/', () => {
+    expect(existsSync(join(ROOT, 'public/favicon.svg'))).toBe(true)
+  })
+
+  test('og-image.png exists in public/', () => {
+    expect(existsSync(join(ROOT, 'public/og-image.png'))).toBe(true)
+  })
+
+  test('og-image.png is substantial (>10KB)', () => {
+    const { statSync } = require('fs')
+    const size = statSync(join(ROOT, 'public/og-image.png')).size
+    expect(size).toBeGreaterThan(10_000)
+  })
+
+  test('layout.tsx references favicon.svg', () => {
+    expect(layout).toContain('favicon.svg')
+  })
+
+  test('layout.tsx references og-image.png', () => {
+    expect(layout).toContain('og-image.png')
+  })
+
+  test('layout.tsx sets openGraph images array', () => {
+    expect(layout).toContain("images: [")
+  })
+
+  test('layout.tsx locale is en_US (professional global)', () => {
+    expect(layout).toContain("locale: 'en_US'")
+  })
+
+  test('layout.tsx has twitter card metadata', () => {
+    expect(layout).toContain('twitter:')
+  })
+})
+
+// ── Images exist ──────────────────────────────────────────────────────────────
+describe('Global Intake Images', () => {
+  const IMAGES_DIR = join(ROOT, 'public/images/global')
+
+  test('employer-hero.jpg exists', () => {
+    expect(existsSync(join(IMAGES_DIR, 'employer-hero.jpg'))).toBe(true)
+  })
+
+  test('employer-form-side.jpg exists', () => {
+    expect(existsSync(join(IMAGES_DIR, 'employer-form-side.jpg'))).toBe(true)
+  })
+
+  test('candidate-hero.jpg exists', () => {
+    expect(existsSync(join(IMAGES_DIR, 'candidate-hero.jpg'))).toBe(true)
+  })
+
+  test('candidate-form-side.jpg exists', () => {
+    expect(existsSync(join(IMAGES_DIR, 'candidate-form-side.jpg'))).toBe(true)
+  })
+
+  test('all global images are non-empty (>10KB)', () => {
+    const { statSync } = require('fs')
+    for (const name of ['employer-hero.jpg', 'employer-form-side.jpg', 'candidate-hero.jpg', 'candidate-form-side.jpg']) {
+      const size = statSync(join(IMAGES_DIR, name)).size
+      expect(size).toBeGreaterThan(10_000)
+    }
+  })
+})
+
+// ── License notes ─────────────────────────────────────────────────────────────
+describe('Global Intake Visual License Notes', () => {
+  const LICENSE = join(ROOT, 'docs/design/GLOBAL_INTAKE_VISUAL_LICENSE_NOTES.md')
+
+  test('license notes file exists', () => {
+    expect(existsSync(LICENSE)).toBe(true)
+  })
+
+  test('license notes references Pexels Free License', () => {
+    const notes = readFileSync(LICENSE, 'utf8')
+    expect(notes).toContain('pexels.com/license')
+  })
+
+  test('license notes documents all 4 image files', () => {
+    const notes = readFileSync(LICENSE, 'utf8')
+    expect(notes).toContain('employer-hero.jpg')
+    expect(notes).toContain('employer-form-side.jpg')
+    expect(notes).toContain('candidate-hero.jpg')
+    expect(notes).toContain('candidate-form-side.jpg')
+  })
+
+  test('license notes documents OG image', () => {
+    const notes = readFileSync(LICENSE, 'utf8')
+    expect(notes).toContain('og-image.png')
+  })
+})

@@ -3,30 +3,50 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: {
-    default: 'CorridorWork — Cross-border Hiring. Fully Controlled.',
+    default: 'CorridorWork — Global Talent Corridors for Employers, Candidates and Partners',
     template: '%s | CorridorWork',
   },
   description:
-    'Approval-basierte Plattform für internationales Recruiting. Strukturiertes Matching, manuelle Freigabe, vollständige Risikokontrolle.',
+    'CorridorWork organizes international employer demand, candidate interest and talent mobility signals across sectors and regions.',
   keywords: [
-    'internationales Recruiting',
-    'Cross-border Hiring',
-    'internationale Fachkräfte',
-    'Arbeitgeber internationale Kandidaten',
-    'Workforce Corridor',
-    'approval-based hiring',
+    'global talent mobility',
+    'international recruiting',
+    'talent corridors',
+    'employer hiring international',
+    'candidate interest global',
+    'workforce corridors',
+    'global talent platform',
   ],
   authors: [{ name: 'CorridorWork' }],
   creator: 'CorridorWork',
   metadataBase: new URL('https://corridorwork.com'),
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+  },
   openGraph: {
     type: 'website',
-    locale: 'de_DE',
+    locale: 'en_US',
     url: 'https://corridorwork.com',
     siteName: 'CorridorWork',
-    title: 'CorridorWork — Cross-border Hiring. Fully Controlled.',
+    title: 'CorridorWork — Global Talent Corridors',
     description:
-      'Approval-basierte Plattform für internationales Recruiting. Strukturiertes Matching, manuelle Freigabe, vollständige Risikokontrolle.',
+      'Organize international employer demand and candidate interest across sectors, regions and talent corridors.',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'CorridorWork — Global Talent Mobility Platform',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'CorridorWork — Global Talent Corridors',
+    description:
+      'Connecting employer demand with candidate interest across sectors and regions.',
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,
@@ -47,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="de" className="h-full">
+    <html lang="en" className="h-full">
       <body className="min-h-full flex flex-col antialiased">{children}</body>
     </html>
   )
