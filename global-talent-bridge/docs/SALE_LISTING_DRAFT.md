@@ -221,11 +221,11 @@ All of the following are available immediately:
 ## Contact
 
 CorridorWork Team  
-corridorwork.com
+corridorwork.com  
+Please contact us via the listing platform messaging system.  
+No public phone number.
 
-> **⚠️ Before publishing:** Replace this section with your actual contact information.
-> Options: LinkedIn profile URL, email address, or "Contact via [platform name] messaging".
-> Do NOT include personal phone numbers in public listings.
+Full asset transfer starts only after payment is confirmed in escrow.
 
 ---
 
