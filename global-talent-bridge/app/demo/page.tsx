@@ -188,15 +188,15 @@ export default function DemoPage() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center flex-wrap">
             <Link
               href="/global/employers"
-              className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors"
+              className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-500 transition-colors"
             >
-              I&apos;m an employer
+              For employers
             </Link>
             <Link
               href="/global/candidates"
               className="px-6 py-3 bg-emerald-700 text-white font-semibold rounded-lg hover:bg-emerald-600 transition-colors"
             >
-              I&apos;m a candidate
+              For candidates
             </Link>
             <Link
               href="/strategic-partnership"

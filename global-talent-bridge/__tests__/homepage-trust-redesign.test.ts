@@ -394,7 +394,8 @@ describe('Homepage — Split-layout hero & promo video access', () => {
   })
 
   test('hero new headline is present', () => {
-    expect(page).toContain('Organize global talent interest across employers, candidates and partners.')
+    // New premium enterprise headline — clear, direct, no AI fluff
+    expect(page).toContain('Connect employer demand with qualified international talent.')
   })
 })
 
