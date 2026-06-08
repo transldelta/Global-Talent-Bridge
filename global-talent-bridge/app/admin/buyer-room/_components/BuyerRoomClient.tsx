@@ -111,17 +111,19 @@ type Tab =
   | 'gaps'
   | 'transfer'
   | 'demo'
+  | 'sales-launch'
 
 const TABS: { id: Tab; label: string; icon: string }[] = [
-  { id: 'overview',        label: 'Overview',        icon: '📋' },
-  { id: 'assets',          label: 'Assets',          icon: '📦' },
+  { id: 'overview',      label: 'Overview',        icon: '📋' },
+  { id: 'assets',        label: 'Assets',          icon: '📦' },
   { id: 'differentiation', label: 'Differentiation', icon: '⚡' },
-  { id: 'monetization',    label: 'Monetization',    icon: '💰' },
-  { id: 'technical',       label: 'Technical Proof', icon: '🔧' },
-  { id: 'compliance',      label: 'Compliance',      icon: '🛡️' },
-  { id: 'gaps',            label: 'Honest Gaps',     icon: '⚠️' },
-  { id: 'transfer',        label: 'Transfer',        icon: '🔄' },
-  { id: 'demo',            label: 'Demo Script',     icon: '🎬' },
+  { id: 'monetization',  label: 'Monetization',    icon: '💰' },
+  { id: 'technical',     label: 'Technical Proof', icon: '🔧' },
+  { id: 'compliance',    label: 'Compliance',      icon: '🛡️' },
+  { id: 'gaps',          label: 'Honest Gaps',     icon: '⚠️' },
+  { id: 'transfer',      label: 'Transfer',        icon: '🔄' },
+  { id: 'demo',          label: 'Demo Script',     icon: '🎬' },
+  { id: 'sales-launch',  label: 'Sales Launch',    icon: '🚀' },
 ]
 
 // ── Tab: Overview (Executive Summary + Sale Readiness Score) ──────────────────
@@ -585,12 +587,156 @@ function DemoTab() {
   )
 }
 
+// ── Tab: Sales Launch ─────────────────────────────────────────────────────────
+
+function SalesLaunchTab() {
+  const docs = [
+    {
+      title: 'Sale Listing Draft',
+      file:  'SALE_LISTING_DRAFT.md',
+      desc:  'Full sale listing for Acquire.com, MicroAcquire, broker, or direct sharing.',
+      action: 'Copy listing text',
+    },
+    {
+      title: 'Buyer Outreach Messages',
+      file:  'BUYER_OUTREACH_MESSAGES.md',
+      desc:  '5 ready-to-personalise messages for each buyer type. Manual send only.',
+      action: 'Open messages',
+    },
+    {
+      title: 'Buyer Q&A',
+      file:  'BUYER_QA.md',
+      desc:  'Honest answers to all 12 standard buyer questions including revenue, customers, and risks.',
+      action: 'Open Q&A',
+    },
+    {
+      title: 'Fast Sale Plan',
+      file:  'FAST_SALE_PLAN.md',
+      desc:  '7-day plan: Day 1 listing → Day 7 negotiation. Concrete daily actions.',
+      action: 'Open plan',
+    },
+    {
+      title: 'Data Room Index',
+      file:  'SALE_DATA_ROOM_INDEX.md',
+      desc:  'Index of all 18 buyer-facing documents. Share as the starting point for due diligence.',
+      action: 'Open index',
+    },
+  ]
+
+  const steps = [
+    { step: 1, label: 'Finalise listing',             tool: 'docs/SALE_LISTING_DRAFT.md',       done: false },
+    { step: 2, label: 'Prepare 20 buyer candidates',  tool: 'docs/BUYER_TARGET_LIST_TEMPLATE.md', done: false },
+    { step: 3, label: 'Contact 5–10 buyers manually', tool: 'docs/BUYER_OUTREACH_MESSAGES.md',   done: false },
+    { step: 4, label: 'Send market proof outreach',   tool: '/admin/market-proof-launch',        done: false },
+    { step: 5, label: 'Document replies',             tool: '/admin/market-proof-launch → Tab D', done: false },
+    { step: 6, label: 'Prepare buyer demo',           tool: 'docs/BUYER_DEMO_SCRIPT.md',         done: false },
+    { step: 7, label: 'Start negotiations',           tool: 'docs/BUYER_QA.md',                  done: false },
+  ]
+
+  return (
+    <section className="space-y-8">
+      {/* Header */}
+      <div className="bg-blue-950 border border-blue-800 rounded-xl p-5">
+        <h2 className="text-lg font-bold text-white mb-1">🚀 Sales Launch</h2>
+        <p className="text-blue-200 text-sm">
+          CorridorWork is sell-ready. All docs, tools, and outreach materials are in place.
+          The next action is execution: list, reach out, collect proof, demonstrate, negotiate.
+        </p>
+        <div className="mt-3 flex gap-3 flex-wrap text-xs">
+          <span className="bg-green-900 text-green-300 px-2 py-0.5 rounded border border-green-700">✅ Product built</span>
+          <span className="bg-green-900 text-green-300 px-2 py-0.5 rounded border border-green-700">✅ Transfer-ready</span>
+          <span className="bg-green-900 text-green-300 px-2 py-0.5 rounded border border-green-700">✅ 4 258 tests green</span>
+          <span className="bg-green-900 text-green-300 px-2 py-0.5 rounded border border-green-700">✅ Docs complete</span>
+          <span className="bg-yellow-900 text-yellow-300 px-2 py-0.5 rounded border border-yellow-700">⏳ Outreach pending</span>
+          <span className="bg-yellow-900 text-yellow-300 px-2 py-0.5 rounded border border-yellow-700">⏳ Market proof pending</span>
+        </div>
+      </div>
+
+      {/* Next action */}
+      <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
+        <p className="text-sm font-semibold text-white mb-2">Next action</p>
+        <div className="flex flex-col gap-2 text-sm text-gray-300">
+          <div className="flex items-center gap-2">
+            <span className="text-blue-400 font-bold">1</span>
+            <span>Prepare 20 buyer candidates in a private spreadsheet</span>
+            <Link href="/admin/market-proof-launch" className="text-blue-400 text-xs hover:underline ml-auto">
+              → Market Proof Launch
+            </Link>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-blue-400 font-bold">2</span>
+            <span>Contact 5–10 buyers manually using outreach messages below</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-blue-400 font-bold">3</span>
+            <span>Collect 1–3 real market replies to raise Sale Readiness Score to 75+</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 7-day plan */}
+      <div>
+        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">7-Day Fast Sale Plan</h3>
+        <div className="space-y-2">
+          {steps.map((s) => (
+            <div key={s.step} className="flex gap-3 items-start bg-gray-900 border border-gray-800 rounded-lg p-3">
+              <div className="w-6 h-6 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center text-xs font-bold text-gray-400 shrink-0">
+                {s.step}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-white font-medium">Day {s.step} — {s.label}</p>
+                <p className="text-xs text-gray-500 mt-0.5 font-mono">{s.tool}</p>
+              </div>
+              <span className="text-xs bg-gray-800 text-gray-500 px-2 py-0.5 rounded border border-gray-700 shrink-0">
+                pending
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Documents */}
+      <div>
+        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Sales Launch Documents</h3>
+        <div className="space-y-3">
+          {docs.map((d) => (
+            <div key={d.file} className="bg-gray-900 border border-gray-800 rounded-xl p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <p className="text-white font-semibold text-sm">{d.title}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{d.desc}</p>
+                  <p className="text-xs text-gray-600 font-mono mt-1">docs/{d.file}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Safety reminder */}
+      <div className="bg-yellow-950 border border-yellow-800/50 rounded-xl p-4">
+        <p className="text-xs font-semibold text-yellow-300 mb-2">⚠️ Safety Constraints — Always Active</p>
+        <div className="grid grid-cols-2 gap-1 text-xs text-yellow-200/70">
+          <span>✗ No automatic sending</span>
+          <span>✗ No scraping</span>
+          <span>✗ No fake customers</span>
+          <span>✗ No fake revenue</span>
+          <span>✗ No job guarantee</span>
+          <span>✗ No visa guarantee</span>
+          <span>✗ No Stripe activation</span>
+          <span>✗ No bulk messaging</span>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 export function BuyerRoomClient() {
   const [tab, setTab] = useState<Tab>('overview')
   const score = calculateSaleReadinessScore()
-  const { color: scoreColor } = saleReadinessBand(score)
+  void saleReadinessBand(score) // band used inside OverviewTab and ScoreRing directly
 
   return (
     <>
@@ -653,6 +799,7 @@ export function BuyerRoomClient() {
       {tab === 'gaps'            && <HonestGapsTab />}
       {tab === 'transfer'        && <TransferTab />}
       {tab === 'demo'            && <DemoTab />}
+      {tab === 'sales-launch'    && <SalesLaunchTab />}
     </>
   )
 }

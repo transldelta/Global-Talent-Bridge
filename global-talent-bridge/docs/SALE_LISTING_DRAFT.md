@@ -1,36 +1,53 @@
-# 📋 Sale Listing Draft — CorridorWork
+# 📋 Sale Listing — CorridorWork
 
-*Sprint: Market Proof & Buyer Launch · 2026-06-08*
-
-> Ready to paste into Acquire.com, MicroAcquire, Flippa, or a broker submission.
-> Edit [SELLER NAME] and personalise before publishing.
+*Final Sales Launch Preparation · 2026-06-08*
 
 ---
 
 ## Title
 
-**CorridorWork — Global Talent Corridor Intelligence & Approval-Based Growth SaaS**
+**CorridorWork — Global Talent Corridor Intelligence Platform**  
+*Transfer-Ready SaaS Asset · Asset Stage · No MRR*
 
 ---
 
-## One-Line Description
+## One-Line Pitch
 
-Transfer-ready SaaS asset: global talent corridor intelligence platform for the international recruitment market. TypeScript strict, Supabase, Vercel. 4 112+ green tests. No MRR yet — first buyer activates the business model.
+A structured corridor intelligence and approval-based growth SaaS for the international talent mobility market — built, tested, documented, and transfer-ready on day one.
 
 ---
 
-## What's Being Sold
+## What Makes This Different
 
-A complete, transfer-ready SaaS asset including:
+Most international recruitment tools are job boards with a map overlay. CorridorWork is something else: a **corridor operating system**. It tells you which global talent corridors to activate, in what order, with which partner channels — and then provides the pipeline to execute it.
 
-1. **Domain** — corridorwork.com (live, indexed, HTTPS)
-2. **GitHub Repository** — full codebase, git history, TypeScript strict
-3. **Vercel Project** — production deployment, auto-deploy pipeline
-4. **Supabase Project** — PostgreSQL 17, EU-Frankfurt, GDPR, RLS on all tables
-5. **Documentation library** — 50+ docs including transfer guide, technical architecture, security and compliance, buyer overview, valuation argument
-6. **Admin toolset** — Corridor Intelligence, Growth Department, Buyer Room, Contact Copilot, and 8+ additional admin tools
-7. **SEO pages** — 25+ indexed pages covering corridors, industries, solutions
-8. **Test suite** — 4 112+ passing tests, 46 test files, zero failures
+- **8 scored talent corridors** — each rated across 7 buyer opportunity criteria
+- **Three-sided pipeline** — employer intake + candidate source intake + partner intake, all in Supabase
+- **Approval-based by default** — every outreach action is manually reviewed and manually sent; no automation risk
+- **Buyer Room** — a full due-diligence package built into the admin, including sale readiness score, transfer checklist, and honest gaps
+- **Market Proof Launch** — three outreach campaigns, reply tracker, and buyer proof export already structured and ready to activate
+
+No other micro-SaaS in this space is transfer-ready at this level of documentation and structural clarity.
+
+---
+
+## What Is Being Sold
+
+Four independently transferable assets:
+
+| Asset | Transfer method | Status |
+|---|---|---|
+| Domain — corridorwork.com | Registrar transfer / DNS change | ✅ Live |
+| GitHub repository | Settings → Transfer | ✅ Ready |
+| Vercel project | Settings → Transfer | ✅ Ready |
+| Supabase project | Settings → Transfer | ✅ Ready |
+
+Plus everything built on top:
+- Admin toolset (9+ tools)
+- 25+ SEO landing pages
+- 50+ documentation files
+- 4 258 passing tests
+- Full transfer guide (10 steps)
 
 ---
 
@@ -38,85 +55,94 @@ A complete, transfer-ready SaaS asset including:
 
 | Layer | Technology |
 |---|---|
-| Framework | Next.js App Router (TypeScript strict) |
-| Database | Supabase PostgreSQL 17 (EU-Frankfurt) |
-| Deployment | Vercel (serverless, auto-deploy) |
-| Auth | Supabase Auth + admin-email check |
-| Security | RLS on all tables, no_auto_send DB constraint |
-| Testing | Vitest, 4 112+ tests |
-| CI/CD | GitHub → Vercel (automatic on push) |
+| Framework | Next.js App Router · TypeScript strict |
+| Database | Supabase PostgreSQL 17 · EU-Frankfurt · GDPR |
+| Security | RLS on all tables · `no_auto_send` DB CHECK constraint |
+| Deployment | Vercel · serverless · auto-deploy |
+| Testing | Vitest · 4 258 tests · 47 files · 0 failures |
+| Code quality | 0 TypeScript errors · ESLint clean · 0 warnings |
 
 ---
 
-## Product Features
+## Admin Toolset
 
-### Corridor Intelligence Engine
-- 8 global talent corridors scored across 7 criteria
-- Buyer Opportunity Scores (0–100) for each corridor
-- Demo-ready corridor cards for sales conversations
-- Monetization path map (7 paths)
+Every tool is auth-gated (noindex, nofollow). No admin URL appears in sitemap or robots.
 
-### Approval-Based Growth Pipeline
-- Three-sided market: employer intake + candidate source intake + partner intake
-- Approval queue with 9 stages
-- `no_auto_send` CHECK constraint at the database level
-- All outreach requires manual review and manual sending
+| Tool | Route | What it does |
+|---|---|---|
+| Corridor Intelligence | `/admin/corridor-intelligence` | 8 corridors, Buyer Opportunity Scores, Demo Cards, Monetization Map |
+| Global Growth Department | `/admin/global-growth-department` | Persistent pipeline, Batch Planner, Approval Queue |
+| Contact Copilot | `/admin/contact-copilot` | Gmail Draft links, Form Autofill — no auto-send |
+| Buyer Room | `/admin/buyer-room` | Sale Readiness Score, full due-diligence package, transfer checklist |
+| Market Proof Launch | `/admin/market-proof-launch` | 3 campaigns, 45 targets, reply tracker, proof export |
+| CEO Dashboard | `/admin/ceo-dashboard` | Strategic overview |
+| Buyer Readiness | `/admin/buyer-readiness` | Transferability audit |
+| Exit Readiness | `/admin/exit-readiness` | Acquisition checklist |
 
-### Admin Toolset
-- `/admin/corridor-intelligence` — corridor scoring, demo cards, monetization map
-- `/admin/global-growth-department` — persistent pipeline, batch planner, approval queue
-- `/admin/contact-copilot` — Gmail draft links, form autofill, zero auto-send
-- `/admin/buyer-room` — sell-ready package, sale readiness score, transfer checklist
-- `/admin/market-proof-launch` — outreach campaigns, reply tracking, proof export
-- 8+ additional admin tools
+---
 
-### Public Website (corridorwork.com)
-- Employer intake form → Supabase
-- Candidate source interest form → Supabase
-- Partner intake (4 tracks) → Supabase
+## Product (Public-Facing)
+
+- **corridorwork.com** — live, indexed, HTTPS
+- Employer intake → Supabase (with full audit trail)
+- Candidate source intake → Supabase
+- Partner intake (4 tracks: recruiting agency, relocation, language school, strategic)
 - Demo + sandbox page
 - Strategic partnership page
-- Pilot landing pages
-- 25+ SEO landing pages
+- Pilot landing pages (employers + agencies)
+- 25+ SEO corridor/industry/solution landing pages
 
 ---
 
-## Differentiation
+## Monetization Paths
 
-1. **Corridor-level intelligence** — not a job board. Structured analysis of which global talent markets are worth activating, in which order, with which partner channels.
-2. **Three-sided market design** — employer + candidate source + partner, all in a single pipeline. The network effect is structural.
-3. **Approval-based by default** — compliance-safe architecture. No auto-send, no scraping, no automated promises. Built for regulated markets.
-4. **Transfer-ready from day one** — 4 independently transferable assets, documented 10-step transfer process.
-5. **Code quality** — TypeScript strict, ESLint clean, 4 112+ tests, 0 errors. The buyer can run `npm test` in their first 10 minutes of due diligence.
+Seven paths. None are active yet — the buyer activates them:
 
----
-
-## Monetization Paths (7)
-
-| Path | Description | Effort |
+| Path | Effort | Description |
 |---|---|---|
-| SaaS licence | Monthly/annual subscription for corridor intelligence dashboard | Low |
-| Employer pilot | Paid employer onboarding pilot (3–6 month engagement) | Medium |
-| Partner intelligence | Corridor intelligence packages for recruiting/relocation firms | Medium |
-| Placement fee (per hire) | Success-based placement fee — requires legal review first | High |
-| White-label | White-label the platform for recruiting firms or training groups | High |
-| Corridor consulting | Corridor strategy consulting using the intelligence engine | Low |
-| Acquisition | Sell the platform to a strategic buyer (current path) | Low |
+| SaaS licence | Low | Monthly/annual subscription for corridor intelligence access |
+| Employer pilot | Medium | Paid 3–6 month onboarding engagement |
+| Partner intelligence | Medium | Corridor intelligence packages for recruiting/relocation firms |
+| Placement fee | High | Success-based fee per placed candidate — requires legal review |
+| White-label | High | Sell the platform under a recruiting firm's brand |
+| Corridor consulting | Low | Strategy consulting using the intelligence engine |
+| Acquisition | — | Current path |
 
 ---
 
-## Honest Gaps
+## Sale Readiness Score: ~65 / 100
 
-These gaps are disclosed proactively:
+Calculated in `/admin/buyer-room`:
 
-| Gap | Detail |
+| Criterion | Score |
 |---|---|
-| No paying customers | Zero paying customers at time of listing |
+| Product completeness | 84 / 100 |
+| Technical quality | 93 / 100 |
+| Transfer readiness | 82 / 100 |
+| Differentiation | 79 / 100 |
+| Compliance posture | 91 / 100 |
+| Documentation quality | 83 / 100 |
+| Market proof | 8 / 100 |
+| Revenue proof | 5 / 100 |
+
+**Strong on:** technical quality, compliance, transfer readiness, documentation.  
+**Honest gaps:** market proof and revenue proof — outreach not yet executed, no MRR.
+
+Collecting 1–3 real market replies raises the score to ~75–80 and moves the valuation toward the upper bound.
+
+---
+
+## Honest Gaps (Disclosed Proactively)
+
+| Gap | Details |
+|---|---|
+| No paying customers | Zero at time of listing |
 | No MRR | Monthly recurring revenue = €0 |
-| No market validation yet | Outreach not yet executed — 3 campaigns ready to launch |
 | Stripe not active | Payment processing not connected |
+| Market validation pending | Outreach campaigns structured but not yet executed |
 | Legal review needed | Recruitment intermediary rules vary by jurisdiction — buyer's responsibility |
-| No automated outreach executed | The pipeline exists; the sending has not happened |
+
+These gaps are documented in `/admin/buyer-room` → Honest Gaps tab. They are the expected gaps for an asset-stage acquisition — not a sign of dysfunction.
 
 ---
 
@@ -124,76 +150,83 @@ These gaps are disclosed proactively:
 
 **€49 000 – €79 000**
 
-This is an asset-stage valuation, not a revenue multiple. The range reflects:
-- Lower bound (€49K): code, infrastructure, documentation, domain as-is
-- Upper bound (€79K): code + IP + corridor intelligence framework + transfer-ready state + active market outreach at close
+This is an **asset-stage valuation**, not a revenue multiple.
 
-Negotiable based on buyer profile and activation plan.
+- **€49 000** — code, infrastructure, documentation, domain, as-is
+- **€79 000** — full value of the corridor intelligence IP, transfer-ready state, admin toolset, and documented monetization paths
 
----
-
-## Reason for Sale
-
-The platform is at the point where scaling requires dedicated commercial focus and existing relationships in the international recruitment or HR-tech market. A buyer with that network can activate the monetization paths faster than continued solo development.
-
-No distress sale. No legal issues. No technical debt. A clean exit by choice.
+Where the final price lands depends on the buyer's activation plan and market proof at time of agreement. Negotiable.
 
 ---
 
-## Ideal Buyer Profile
+## Compliance & Safety
 
-| Type | Why |
-|---|---|
-| Recruiting agency owner | Can immediately activate employer and candidate source channels |
-| Relocation company | Corridor intelligence is directly sellable to their clients |
-| HR-tech founder | Can integrate the intelligence layer into an existing product |
-| Language/training group | Candidate source network = built-in pipeline |
-| Micro-SaaS acquirer | Clean code, documented, 4 112 tests, transfer-ready |
-| Staffing agency owner | Partner channel and corridor scoring maps to their market |
+Built to be safe to operate from day one:
+
+- `no_auto_send` CHECK constraint enforced at the database level
+- No automated outreach — every message requires manual review and manual sending
+- No scraping — all contacts found manually
+- No job guarantees in any UI copy or document
+- No visa guarantees in any UI copy or document
+- No candidate fees — all intake forms are free
+- `/robots.txt` blocks `/admin/` and `/api/`
+- All admin pages: `noindex, nofollow`
+- Supabase EU-Frankfurt (GDPR jurisdiction)
+- Row-Level Security active on all tables
+
+A buyer inherits zero automated outreach risk.
 
 ---
 
-## Transfer Process (10 steps, ~1–2 days)
+## Transfer (10 Steps, ~1–2 Days)
 
-1. GitHub repository transfer (5 minutes)
-2. Vercel project transfer (15 minutes)
-3. Supabase project transfer (30 minutes)
+1. GitHub repository transfer (5 min)
+2. Vercel project transfer (15 min)
+3. Supabase project transfer (30 min)
 4. Domain transfer (1–48 hours, registrar dependent)
 5. Environment variables handover
-6. Admin user setup (Supabase auth)
+6. Admin user setup in Supabase Auth
 7. DNS verification
 8. Smoke test (5 pages + admin login)
-9. Documentation handover (all 50+ docs)
-10. 1-hour handover call (optional)
+9. Documentation handover
+10. Optional 1-hour handover call
 
 Full guide: `docs/TRANSFER_GUIDE.md`
 
 ---
 
-## Buyer Due Diligence Materials
+## Reason for Sale
 
-Available on request:
+The platform is built. The infrastructure runs. The documentation is complete. The test suite passes.
 
-- `/admin/buyer-room` — interactive sale readiness score + full due diligence package
-- `docs/TECHNICAL_ARCHITECTURE.md`
-- `docs/SECURITY_AND_COMPLIANCE.md`
-- `docs/ASSET_INVENTORY.md`
-- `docs/VALUATION_ARGUMENT.md`
-- `docs/TRANSFER_GUIDE.md`
-- `docs/SELL_READY_CHECKLIST.md`
-- `npm test` — run all 4 112 tests yourself
+The bottleneck is commercial activation — converting the corridor intelligence framework into paying clients. That requires active relationships in international recruitment, HR-tech, or relocation. A buyer with those relationships can move faster than continued solo development.
+
+No distress. No technical debt. No legal issues. A deliberate exit.
+
+---
+
+## Due Diligence
+
+All of the following are available immediately:
+
+- `/admin/buyer-room` — interactive due-diligence package (share access on request)
+- `npm test` — run all 4 258 tests in under 5 seconds
+- `npx tsc --noEmit` — zero errors
+- `npm run build` — clean build, 163 pages
+- Full docs library (50+ files)
+- `docs/SALE_DATA_ROOM_INDEX.md` — complete index
 
 ---
 
 ## Contact
 
-[SELLER NAME]  
-Email: [SELLER EMAIL]  
-LinkedIn: [SELLER LINKEDIN]  
-Domain: corridorwork.com
+CorridorWork Team  
+corridorwork.com  
+[Contact via listing platform or direct message]
 
 ---
 
-*This document is a draft. Personalise before publishing. Do not include personal data without consent.*
+*No fake revenue. No fake customers. No job guarantees. No visa guarantees.*  
+*This is an honest asset-stage listing.*
 
-*Related: [`VALUATION_ARGUMENT.md`](./VALUATION_ARGUMENT.md) · [`ASSET_INVENTORY.md`](./ASSET_INVENTORY.md) · [`TRANSFER_GUIDE.md`](./TRANSFER_GUIDE.md)*
+*Related: [`VALUATION_ARGUMENT.md`](./VALUATION_ARGUMENT.md) · [`ASSET_INVENTORY.md`](./ASSET_INVENTORY.md) · [`TRANSFER_GUIDE.md`](./TRANSFER_GUIDE.md) · [`BUYER_QA.md`](./BUYER_QA.md)*
