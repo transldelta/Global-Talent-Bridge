@@ -220,6 +220,7 @@ const SIGNATURE = '— CorridorWork Team\n  https://corridorwork.com'
 
 /**
  * Generate all 4 outreach drafts for a given target.
+ * Professional B2B tone. No sales promises. No guarantees.
  * No sending. Copy and send manually.
  */
 export function generateOutreachDrafts(
@@ -232,82 +233,86 @@ export function generateOutreachDrafts(
   return [
     {
       id:      'linkedin',
-      label:   'LinkedIn message',
+      label:   'LinkedIn — language school / training provider',
       channel: 'LinkedIn',
-      note:    'Short, direct, professional. Under 300 characters recommended.',
+      note:    'For Sprachschulen, Training Provider, Placement-Koordinatoren im DACH-Raum. Unter 300 Zeichen. Manuell senden.',
       text:
-`Hi,
+`Hallo,
 
-I am building CorridorWork — a structured matching platform connecting employers in ${sec} with qualified international candidates.
+ich arbeite an CorridorWork, einer Plattform zur strukturierten Erfassung von Arbeitgeberbedarf und internationalem Kandidateninteresse.
 
-I would love to share how ${company} could benefit from a free pilot. Would a brief call work for you this week?
+Für die erste Pilotphase suche ich eine Sprachschule oder einen Training Provider, der Feedback dazu geben kann, ob dieser Ansatz für internationale Absolventen und Arbeitgeber hilfreich wäre.
+
+Es geht nicht um Jobgarantie, Visaberatung oder automatische Vermittlung, sondern um ein kurzes, unverbindliches Feedbackgespräch.
+
+Wäre ein 15-minütiger Austausch diese Woche möglich?
 
 ${SIGNATURE}`,
     },
     {
       id:      'email',
-      label:   'Email message',
+      label:   'Email — professional / formal',
       channel: 'Email',
-      note:    'Formal. Include a subject line. Send manually from your own inbox.',
+      note:    'Für formellere Kontakte oder kältere Ansprache. Betreff anpassen. Manuell aus eigenem Postfach senden.',
       text:
-`Subject: Free pilot — international workforce matching for ${company}
+`Betreff: CorridorWork — Feedbackgespräch zur Pilotphase
 
-Dear Hiring Team,
+Guten Tag,
 
-I am reaching out to invite ${company} to a free, no-commitment pilot of CorridorWork — a platform that matches employers with qualified international candidates using a transparent scoring system.
+ich wende mich an ${company} im Zusammenhang mit einem frühen Entwicklungsstadium von CorridorWork — einer Plattform zur strukturierten Erfassung von Arbeitgeberbedarf und internationalem Kandidateninteresse im Bereich ${sec}.
 
-What the pilot includes:
-→ Create a company profile and one job listing
-→ Review matched candidate profiles with a score breakdown
-→ Share feedback with our team
+Ziel der Pilotphase ist es, Feedback von Praxispartnern einzuholen: Ist dieser Ansatz für Ihre Arbeit relevant? Welche Informationen fehlen? Was wäre tatsächlich hilfreich?
 
-What the pilot does NOT include:
-→ No automated candidate outreach
-→ No fees or subscription
-→ No obligation to continue
+Zur Klarheit:
+→ Keine Jobgarantie und keine Visaberatung
+→ Keine automatische Vermittlung — alles wird manuell geprüft
+→ Kein Vertrag, keine Kosten, keine Verpflichtung zur Weiterarbeit
 
-If you are currently looking to fill roles in ${sec} with international candidates, I would be happy to walk you through the platform in a 20-minute call.
+Wäre ein kurzes, unverbindliches Gespräch (15–20 Minuten) in dieser oder nächster Woche möglich?
 
 ${SIGNATURE}`,
     },
     {
       id:      'whatsapp',
-      label:   'WhatsApp message',
+      label:   'WhatsApp — kurze persönliche Nachricht',
       channel: 'WhatsApp Business',
-      note:    'Short, casual, under 10 lines. Only send to genuine contacts.',
+      note:    'Nur für echte persönliche Kontakte. Nicht für Kaltkontakte. Kurz und direkt.',
       text:
-`Hi,
+`Hallo,
 
-quick question — is ${company} currently looking to hire internationally in ${sec}?
+ich arbeite gerade an CorridorWork — einem frühen Plattformansatz zur strukturierten Erfassung von Arbeitgeberbedarf und internationalem Kandidateninteresse.
 
-I'm running a free pilot for CorridorWork, a matching platform for cross-border hiring. No fees, no automation, no commitment.
+Ich suche Feedback von Bildungseinrichtungen oder Placement-Stellen: Ist dieser Ansatz für eure Arbeit mit ${company} relevant?
 
-Would you have 15 minutes this week?
+Kein Versprechen, keine Automatik — nur ein kurzes unverbindliches Gespräch.
+
+Wäre 15 Minuten diese Woche möglich?
 
 ${SIGNATURE}`,
     },
     {
       id:      'strategic',
-      label:   'Strategic partner message',
+      label:   'Strategic partner — agency / HR tech',
       channel: 'Email / LinkedIn',
-      note:    'For agencies, HR tech companies, or potential white-label partners.',
+      note:    'Für Recruiting-Agenturen, HR-Tech-Unternehmen oder potenzielle White-Label-Partner.',
       text:
-`Subject: CorridorWork — Strategic partnership discussion
+`Betreff: CorridorWork — Strategisches Partnergespräch
 
-Dear Team,
+Guten Tag,
 
-I am reaching out regarding a potential partnership with CorridorWork, a live SaaS platform for structured international talent matching.
+ich wende mich an ${company} bezüglich eines möglichen strategischen Austauschs zu CorridorWork — einer live betriebenen Plattform zur strukturierten Erfassung von Arbeitgeberbedarf und internationalem Kandidateninteresse im Bereich ${sec}.
 
-CorridorWork is currently deployed, fully operational, and seeking strategic partners who work with cross-border hiring at scale. Given ${company}'s position in ${sec}, I believe there could be a strong fit — whether as a channel partner, white-label licensee, or co-distribution arrangement.
+CorridorWork befindet sich in der ersten Pilotphase und sucht strategische Partner, die im Bereich Cross-border Hiring tätig sind — ob als Kanalpartner, Infrastrukturkunde oder für eine weitergehende Zusammenarbeit.
 
-The platform includes:
-→ Transparent candidate scoring (sector, experience, language)
-→ Admin-reviewed matching workflow
-→ Fully compliant architecture (GDPR, RLS, no auto-outreach)
+Zur Einordnung:
+→ Keine automatische Outreach-Funktion aktiv
+→ Manuelle Prüfung aller Matches
+→ DSGVO-konform, kein Kandidatengebührenmodell
+→ Keine Jobgarantie, keine Visaberatung
 
-I would be glad to share a technical overview, a live demo, or a due diligence package — depending on your interest level.
+Weitere Informationen: https://corridorwork.com/strategic-partnership
 
-More details: https://corridorwork.com/strategic-partnership
+Wäre ein unverbindliches Gespräch möglich?
 
 ${SIGNATURE}`,
     },

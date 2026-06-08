@@ -321,16 +321,20 @@ describe('generateOutreachDrafts', () => {
     }
   })
 
-  it('all drafts contain the company name', () => {
-    for (const d of drafts) {
-      expect(d.text).toContain('Acme GmbH')
-    }
+  it('email and strategic drafts contain the company name', () => {
+    // LinkedIn draft is a generic language-school message (not company-specific by design)
+    // WhatsApp uses company but not sector; email + strategic use both
+    const email    = drafts.find((d) => d.id === 'email')!
+    const strategic = drafts.find((d) => d.id === 'strategic')!
+    expect(email.text).toContain('Acme GmbH')
+    expect(strategic.text).toContain('Acme GmbH')
   })
 
-  it('all drafts contain the sector', () => {
-    for (const d of drafts) {
-      expect(d.text).toContain('Healthcare')
-    }
+  it('email and strategic drafts contain the sector', () => {
+    const email     = drafts.find((d) => d.id === 'email')!
+    const strategic = drafts.find((d) => d.id === 'strategic')!
+    expect(email.text).toContain('Healthcare')
+    expect(strategic.text).toContain('Healthcare')
   })
 
   it('no draft contains job guarantee language', () => {
@@ -355,6 +359,52 @@ describe('generateOutreachDrafts', () => {
     for (const d of drafts) {
       expect(d.text).not.toMatch(/sendEmail|sendMail|fetch.*send/i)
     }
+  })
+
+  it('no draft contains sales clichés (kein Abo / no free trial / no risk)', () => {
+    for (const d of drafts) {
+      expect(d.text).not.toMatch(/kein Abo|no subscription|no risk|no commitment|free trial/i)
+    }
+  })
+
+  it('LinkedIn draft uses professional B2B framing', () => {
+    const li = drafts.find((d) => d.id === 'linkedin')!
+    expect(li.text).toMatch(/unverbindlich|Feedbackgespräch|Pilotphase|strukturierte Erfassung/i)
+  })
+
+  it('LinkedIn draft explicitly states no job guarantee', () => {
+    const li = drafts.find((d) => d.id === 'linkedin')!
+    expect(li.text).toMatch(/keine Jobgarantie|keine.*Garantie|nicht um Jobgarantie/i)
+  })
+
+  it('email draft uses professional B2B framing', () => {
+    const em = drafts.find((d) => d.id === 'email')!
+    expect(em.text).toMatch(/unverbindlich|Feedbackgespräch|Pilotphase|strukturierte Erfassung/i)
+  })
+
+  it('email draft states no job guarantee and no visa advisory', () => {
+    const em = drafts.find((d) => d.id === 'email')!
+    expect(em.text).toMatch(/Jobgarantie|Visaberatung/i)
+  })
+
+  it('email draft states manual review', () => {
+    const em = drafts.find((d) => d.id === 'email')!
+    expect(em.text).toMatch(/manuell geprüft|manuelle/i)
+  })
+
+  it('WhatsApp draft is short (under 600 chars)', () => {
+    const wa = drafts.find((d) => d.id === 'whatsapp')!
+    expect(wa.text.length).toBeLessThan(600)
+  })
+
+  it('strategic draft references /strategic-partnership', () => {
+    const st = drafts.find((d) => d.id === 'strategic')!
+    expect(st.text).toContain('/strategic-partnership')
+  })
+
+  it('strategic draft states no automatic outreach', () => {
+    const st = drafts.find((d) => d.id === 'strategic')!
+    expect(st.text).toMatch(/keine automatische|no auto-outreach/i)
   })
 })
 

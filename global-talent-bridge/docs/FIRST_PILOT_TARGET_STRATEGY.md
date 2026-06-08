@@ -177,10 +177,40 @@ Use this scoring approach for each potential target:
 **All messages must be:**
 - Signed: `CorridorWork Team`
 - Free of job or visa guarantees
-- Clear that the pilot is free and non-binding
+- No "free trial" or "no risk" sales language — use "unverbindliches Feedbackgespräch"
+- No "transparent score" as a sales promise
+- No "passende Arbeitgeber" as a placement promise
 - Sent manually — never automated
 
+**Preferred framing:**
+- "strukturierte Erfassung von Arbeitgeberbedarf und Kandidateninteresse"
+- "unverbindliches Pilotgespräch"
+- "Feedback zu einem frühen Plattformansatz"
+- "manuell geprüft — keine automatische Vermittlung"
+- "keine Jobgarantie, keine Visaberatung"
+
 Use the `/admin/pilot-targets` tool to generate and copy the appropriate draft.
+
+### Recommended first message (language school / training provider DACH)
+
+```
+Hallo,
+
+ich arbeite an CorridorWork, einer Plattform zur strukturierten Erfassung
+von Arbeitgeberbedarf und internationalem Kandidateninteresse.
+
+Für die erste Pilotphase suche ich eine Sprachschule oder einen Training
+Provider, der Feedback dazu geben kann, ob dieser Ansatz für internationale
+Absolventen und Arbeitgeber hilfreich wäre.
+
+Es geht nicht um Jobgarantie, Visaberatung oder automatische Vermittlung,
+sondern um ein kurzes, unverbindliches Feedbackgespräch.
+
+Wäre ein 15-minütiger Austausch diese Woche möglich?
+
+— CorridorWork Team
+  https://corridorwork.com
+```
 
 ---
 
