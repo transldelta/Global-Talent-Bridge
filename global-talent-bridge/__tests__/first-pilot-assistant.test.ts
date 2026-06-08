@@ -190,9 +190,11 @@ describe('Kein automatischer Versand — Vorlagen', () => {
     expect(typeof email.subject).toBe('string')
     expect(typeof email.body).toBe('string')
 
-    // Keine Promises (kein async send)
-    expect(whatsApp instanceof Promise).toBe(false)
-    expect(linkedIn instanceof Promise).toBe(false)
+    // Keine Promises (kein async send) — cast to unknown required since TS
+    // already knows the return type is string (not a Promise), but we want
+    // this as an explicit runtime guard in case of future refactoring.
+    expect((whatsApp as unknown) instanceof Promise).toBe(false)
+    expect((linkedIn as unknown) instanceof Promise).toBe(false)
   })
 })
 

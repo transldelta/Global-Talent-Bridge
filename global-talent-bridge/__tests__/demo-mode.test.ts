@@ -1000,12 +1000,14 @@ describe('Demo Employer Status Compliance', () => {
   })
 
   it('demo employers do NOT use status "draft"', () => {
-    const hasDraft = getDemoEmployers().some((e) => e.status === 'draft')
+    // Cast to string to guard against future ValidPilotStatus expansions
+    const hasDraft = getDemoEmployers().some((e) => (e.status as string) === 'draft')
     expect(hasDraft).toBe(false)
   })
 
   it('demo employers do NOT use status "demo_requested"', () => {
-    const hasDemoRequested = getDemoEmployers().some((e) => e.status === 'demo_requested')
+    // Cast to string to guard against future ValidPilotStatus expansions
+    const hasDemoRequested = getDemoEmployers().some((e) => (e.status as string) === 'demo_requested')
     expect(hasDemoRequested).toBe(false)
   })
 })
