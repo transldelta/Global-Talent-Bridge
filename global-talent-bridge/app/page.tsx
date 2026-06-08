@@ -1,7 +1,7 @@
 /**
  * CorridorWork — Homepage
- * Professional Trust Redesign — 7 sections, no clutter, no false promises.
- * Design: Hero → Audience Split → What We Do → Global Scope → Trust → Buyer → CTA
+ * Premium Enterprise Redesign — 5 sections, split-layout hero, no false promises.
+ * Design: Hero → Audience Paths → How It Works → Trust & Compliance → Final CTA
  */
 import type { Metadata } from 'next'
 import Image from 'next/image'
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description:
     'CorridorWork organizes international employer demand, candidate interest and talent mobility signals across sectors and regions.',
   openGraph: {
-    title: 'CorridorWork — Global Talent Mobility Platform',
+    title: 'CorridorWork — Global Talent Corridors',
     description:
       'Connecting global employer demand with candidate interest across healthcare, technology, engineering and skilled trades.',
     type: 'website',
@@ -27,86 +27,105 @@ export default function HomePage() {
     <div className="min-h-screen bg-slate-950 flex flex-col">
       <PublicNavBar />
 
-      {/* ── A. HERO ──────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-[88vh] flex items-center justify-center overflow-hidden">
-        {/* Background image with dark overlay */}
-        <div className="absolute inset-0">
+      {/* ── A. HERO — split layout ────────────────────────────────────────────── */}
+      {/* Left: text on clean dark background. Right: image panel (desktop only). */}
+      <section className="relative min-h-[88vh] flex overflow-hidden bg-slate-950">
+
+        {/* Text panel — full width on mobile, 52% on desktop */}
+        <div className="relative z-10 flex items-center w-full lg:w-[52%] px-6 py-24 sm:px-10 lg:px-16 xl:px-24">
+          <div className="max-w-xl">
+
+            <p className="text-indigo-400 text-xs font-bold tracking-widest uppercase mb-6">
+              Global Talent Corridors
+            </p>
+
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.25rem] font-bold text-white mb-6 leading-[1.15]">
+              Organize global talent interest across employers, candidates and partners.
+            </h1>
+
+            <p className="text-lg text-slate-300 mb-10 leading-relaxed">
+              CorridorWork helps employers, candidates and partners structure
+              international workforce interest across sectors, regions and talent corridors.
+            </p>
+
+            {/* Primary + secondary audience CTAs */}
+            <div className="flex flex-col sm:flex-row gap-3 mb-6">
+              <Link
+                href="/global/employers"
+                className="px-7 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg transition-colors text-base text-center"
+              >
+                For employers
+              </Link>
+              <Link
+                href="/global/candidates"
+                className="px-7 py-3.5 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-lg border border-slate-700 transition-colors text-base text-center"
+              >
+                For candidates
+              </Link>
+            </div>
+
+            {/* Tertiary text link — promo video */}
+            <Link
+              href="/promo-video"
+              className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+            >
+              <span className="inline-flex items-center justify-center w-7 h-7 rounded-full border border-slate-600 text-slate-400">
+                ▶
+              </span>
+              Watch 60-second overview
+            </Link>
+
+          </div>
+        </div>
+
+        {/* Image panel — desktop only, right 50%, no text overlap possible */}
+        <div className="hidden lg:block absolute right-0 top-0 bottom-0 w-[52%]">
           <Image
             src="/images/home/hero-global-talent.jpg"
-            alt="Global workforce — diverse professionals working together"
+            alt="Global workforce — diverse professionals collaborating internationally"
             fill
             className="object-cover object-center"
             priority
-            sizes="100vw"
+            sizes="52vw"
           />
-          <div className="absolute inset-0 bg-slate-950/72" />
-          {/* Subtle gradient at bottom for section transition */}
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-950 to-transparent" />
+          {/* Left-edge gradient fade — prevents any colour clash at the panel seam */}
+          <div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-slate-950 to-transparent" />
+          {/* Bottom fade for smooth section transition */}
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-950 to-transparent" />
         </div>
 
-        {/* Content */}
-        <div className="relative z-10 max-w-4xl mx-auto px-6 py-28 text-center">
-          <p className="text-indigo-400 text-xs font-bold tracking-widest uppercase mb-6 sm:text-sm">
-            Global Talent Mobility Platform
-          </p>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            Global talent corridors for employers,{' '}
-            candidates and partners.
-          </h1>
-          <p className="text-lg sm:text-xl text-slate-300 mb-12 max-w-2xl mx-auto leading-relaxed">
-            CorridorWork helps organize international employer demand, candidate interest
-            and talent mobility signals across sectors and regions.
-          </p>
-          {/* Three clear audience buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/global/employers"
-              className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg transition-colors text-base"
-            >
-              I&apos;m an employer
-            </Link>
-            <Link
-              href="/global/candidates"
-              className="px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg border border-white/25 transition-colors text-base backdrop-blur-sm"
-            >
-              I&apos;m a candidate
-            </Link>
-            <Link
-              href="/strategic-partnership"
-              className="px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg border border-white/25 transition-colors text-base backdrop-blur-sm"
-            >
-              I&apos;m a partner
-            </Link>
-          </div>
-        </div>
       </section>
 
-      {/* ── B. AUDIENCE SPLIT ────────────────────────────────────────────────── */}
+      {/* ── B. AUDIENCE PATHS ────────────────────────────────────────────────── */}
       <section className="px-6 py-20 border-t border-slate-800 bg-slate-900">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
+            <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-3">
+              Three pathways
+            </p>
             <h2 className="text-3xl font-bold text-white mb-3">
               Who is CorridorWork for?
             </h2>
             <p className="text-slate-400 text-lg max-w-xl mx-auto">
-              Three clear pathways. One structured platform.
+              One structured platform. Three clear entry points.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
             {/* Employers */}
             <div className="relative overflow-hidden rounded-2xl border border-slate-700 bg-slate-800/50 hover:border-indigo-600/60 transition-colors flex flex-col">
               <div className="h-44 relative shrink-0">
                 <Image
                   src="/images/home/employers-section.jpg"
-                  alt="Professional employer team"
+                  alt="Professional employer team in discussion"
                   fill
                   className="object-cover object-center"
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />
-                <div className="absolute inset-0 bg-slate-900/55" />
+                <div className="absolute inset-0 bg-slate-900/60" />
                 <div className="absolute top-4 left-4">
-                  <span className="px-2.5 py-1 bg-indigo-600/80 text-white text-xs font-semibold rounded-md backdrop-blur-sm">
+                  <span className="px-2.5 py-1 bg-indigo-600/85 text-white text-xs font-semibold rounded-md">
                     Employers
                   </span>
                 </div>
@@ -136,9 +155,9 @@ export default function HomePage() {
                   className="object-cover object-center"
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />
-                <div className="absolute inset-0 bg-slate-900/55" />
+                <div className="absolute inset-0 bg-slate-900/60" />
                 <div className="absolute top-4 left-4">
-                  <span className="px-2.5 py-1 bg-emerald-700/80 text-white text-xs font-semibold rounded-md backdrop-blur-sm">
+                  <span className="px-2.5 py-1 bg-emerald-700/85 text-white text-xs font-semibold rounded-md">
                     Candidates
                   </span>
                 </div>
@@ -163,14 +182,14 @@ export default function HomePage() {
               <div className="h-44 relative shrink-0">
                 <Image
                   src="/images/home/partners-section.jpg"
-                  alt="Business partnership and strategic discussion"
+                  alt="Business partnership meeting"
                   fill
                   className="object-cover object-center"
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />
-                <div className="absolute inset-0 bg-slate-900/55" />
+                <div className="absolute inset-0 bg-slate-900/60" />
                 <div className="absolute top-4 left-4">
-                  <span className="px-2.5 py-1 bg-amber-700/80 text-white text-xs font-semibold rounded-md backdrop-blur-sm">
+                  <span className="px-2.5 py-1 bg-amber-700/85 text-white text-xs font-semibold rounded-md">
                     Partners
                   </span>
                 </div>
@@ -178,8 +197,8 @@ export default function HomePage() {
               <div className="p-6 flex flex-col flex-1">
                 <h3 className="text-white font-bold text-xl mb-2">For Partners</h3>
                 <p className="text-slate-400 text-sm leading-relaxed mb-6 flex-1">
-                  Explore partnership, licensing or acquisition opportunities.
-                  Strategic discussion available by arrangement.
+                  Recruiting agencies, employer networks, training providers and
+                  relocation partners can work with CorridorWork.
                 </p>
                 <Link
                   href="/strategic-partnership"
@@ -189,115 +208,102 @@ export default function HomePage() {
                 </Link>
               </div>
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* ── C. WHAT CORRIDORWORK DOES ────────────────────────────────────────── */}
-      <section className="px-6 py-20 border-t border-slate-800">
+      {/* ── C. HOW IT WORKS ──────────────────────────────────────────────────── */}
+      <section className="px-6 py-20 border-t border-slate-800 bg-slate-950">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
             <div>
               <p className="text-indigo-400 text-xs font-bold tracking-widest uppercase mb-4">
-                Platform
+                How it works
               </p>
-              <h2 className="text-3xl font-bold text-white mb-8">
-                What CorridorWork does
+              <h2 className="text-3xl font-bold text-white mb-10">
+                Structured from interest to corridor intelligence
               </h2>
-              <div className="space-y-7">
+
+              <div className="space-y-8">
+                {/* Step 1 */}
                 <div className="flex items-start gap-5">
-                  <div className="w-0.5 h-14 bg-indigo-500 rounded-full shrink-0 mt-1" />
+                  <div className="shrink-0 w-8 h-8 rounded-full bg-indigo-600/20 border border-indigo-600/40 flex items-center justify-center">
+                    <span className="text-indigo-400 text-sm font-bold">1</span>
+                  </div>
                   <div>
                     <h3 className="text-white font-semibold mb-1.5">
-                      Organizes global employer demand
+                      Employers register workforce interest
                     </h3>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                      Structures inbound employer interest across 21 sectors and multiple
-                      regions into actionable corridor intelligence.
+                      Employers describe their international hiring needs by sector,
+                      region and corridor — structured intake, admin-reviewed.
                     </p>
                   </div>
                 </div>
+
+                {/* Step 2 */}
                 <div className="flex items-start gap-5">
-                  <div className="w-0.5 h-14 bg-emerald-500 rounded-full shrink-0 mt-1" />
+                  <div className="shrink-0 w-8 h-8 rounded-full bg-emerald-600/20 border border-emerald-600/40 flex items-center justify-center">
+                    <span className="text-emerald-400 text-sm font-bold">2</span>
+                  </div>
                   <div>
                     <h3 className="text-white font-semibold mb-1.5">
-                      Collects candidate interest across sectors
+                      Candidates express interest by corridor
                     </h3>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                      Gathers structured, consent-based candidate expressions of interest —
-                      healthcare, IT, engineering, skilled trades and more.
+                      Candidates indicate where they want to work, in which sector and
+                      role — consent-based, no automatic placement or outreach.
                     </p>
                   </div>
                 </div>
+
+                {/* Step 3 */}
                 <div className="flex items-start gap-5">
-                  <div className="w-0.5 h-14 bg-amber-500 rounded-full shrink-0 mt-1" />
+                  <div className="shrink-0 w-8 h-8 rounded-full bg-amber-600/20 border border-amber-600/40 flex items-center justify-center">
+                    <span className="text-amber-400 text-sm font-bold">3</span>
+                  </div>
                   <div>
                     <h3 className="text-white font-semibold mb-1.5">
-                      Prepares corridor-based matching and partner intelligence
+                      Corridor intelligence surfaces for partners
                     </h3>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                      Delivers structured corridor data and partner-ready reporting for
-                      B2B decision-makers, acquirers and mobility ecosystem partners.
+                      Structured corridor data is prepared for B2B decision-makers,
+                      mobility partners and ecosystem collaborators — organized,
+                      not estimated.
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="relative rounded-2xl overflow-hidden h-72 lg:h-80">
+
+            {/* Map image */}
+            <div className="relative rounded-2xl overflow-hidden h-72 lg:h-[22rem]">
               <Image
                 src="/images/home/global-corridors-map.jpg"
-                alt="International talent corridors — global workforce"
+                alt="International talent corridors — global workforce map"
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
-              <div className="absolute inset-0 bg-slate-900/40" />
+              <div className="absolute inset-0 bg-slate-900/45" />
               <div className="absolute bottom-5 left-5 right-5">
-                <p className="text-white/75 text-xs leading-relaxed">
-                  Connecting talent with opportunity across regions and sectors
+                <p className="text-white/70 text-xs leading-relaxed">
+                  Connecting talent interest with employer demand across global corridors
                 </p>
               </div>
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* ── D. GLOBAL SCOPE ──────────────────────────────────────────────────── */}
-      <section className="px-6 py-20 border-t border-slate-800 bg-slate-900/50">
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="text-indigo-400 text-xs font-bold tracking-widest uppercase mb-4">
-            Scope
-          </p>
-          <h2 className="text-3xl font-bold text-white mb-3">
-            Global reach, structured corridors
-          </h2>
-          <p className="text-slate-400 mb-12 max-w-xl mx-auto leading-relaxed">
-            CorridorWork operates across sectors, regions and talent corridors —
-            organized, not estimated.
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
-            {[
-              { value: '21', label: 'Sectors covered' },
-              { value: 'Global', label: 'Candidate reach' },
-              { value: 'Global', label: 'Employer intake' },
-              { value: 'Corridor-based', label: 'Structure' },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="bg-slate-800/60 border border-slate-700 rounded-xl p-5"
-              >
-                <p className="text-2xl sm:text-3xl font-bold text-white mb-1">{stat.value}</p>
-                <p className="text-slate-400 text-sm">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── E. TRUST & COMPLIANCE ────────────────────────────────────────────── */}
-      <section className="px-6 py-20 border-t border-slate-800">
+      {/* ── D. TRUST & COMPLIANCE ────────────────────────────────────────────── */}
+      <section className="px-6 py-20 border-t border-slate-800 bg-slate-900">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+
             <div>
               <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-4">
                 Compliance
@@ -305,15 +311,19 @@ export default function HomePage() {
               <h2 className="text-3xl font-bold text-white mb-4">
                 Built on trust
               </h2>
-              <p className="text-slate-400 leading-relaxed">
+              <p className="text-slate-400 leading-relaxed max-w-md">
                 CorridorWork is designed to be transparent, compliant and honest —
-                with employers, candidates and partners alike. No guarantees,
-                no automatic processes, no payment without explicit arrangement.
+                with employers, candidates and partners alike.
               </p>
-              <p className="text-slate-500 text-sm mt-4">
+              <p className="text-slate-400 leading-relaxed mt-3 max-w-md">
+                No guarantees are made regarding employment outcomes or visa approvals.
+                No automatic processes. No contact without explicit consent.
+              </p>
+              <p className="text-slate-500 text-sm mt-5">
                 No job guarantee · No visa guarantee · Inbound-first
               </p>
             </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
                 'No employment guarantee',
@@ -325,87 +335,92 @@ export default function HomePage() {
               ].map((item) => (
                 <div
                   key={item}
-                  className="flex items-center gap-3 px-4 py-3 bg-slate-800/50 border border-slate-700/60 rounded-lg"
+                  className="flex items-center gap-3 px-4 py-3 bg-slate-800/60 border border-slate-700/70 rounded-lg"
                 >
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
                   <span className="text-slate-300 text-sm">{item}</span>
                 </div>
               ))}
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* ── F. BUYER / PARTNER SECTION ───────────────────────────────────────── */}
-      <section className="px-6 py-20 border-t border-slate-800 bg-slate-900">
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="text-amber-400 text-xs font-bold tracking-widest uppercase mb-4">
-            For Buyers &amp; Partners
+      {/* ── E. FINAL CTA ─────────────────────────────────────────────────────── */}
+      <section className="px-6 py-20 border-t border-slate-800 bg-slate-950">
+        <div className="max-w-3xl mx-auto text-center">
+
+          <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-4">
+            Get started
           </p>
           <h2 className="text-3xl font-bold text-white mb-4">
-            Built as a global talent mobility SaaS asset
+            Explore CorridorWork
           </h2>
-          <p className="text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed">
-            CorridorWork is structured for acquisition, licensing or strategic partnership.
-            Buyer documentation, demo environment and partner discussion are available
-            on request.
+          <p className="text-slate-400 mb-8 max-w-xl mx-auto leading-relaxed">
+            Choose your pathway. Express structured interest or explore the platform.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href="/buyer-snapshot"
-              className="px-6 py-3 bg-amber-600/15 hover:bg-amber-600/25 text-amber-300 font-semibold rounded-lg border border-amber-700/50 transition-colors"
-            >
-              Buyer Snapshot
-            </Link>
-            <Link
-              href="/demo/sandbox"
-              className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg border border-slate-600 transition-colors"
-            >
-              Demo Sandbox
-            </Link>
-            <Link
-              href="/promo-video"
-              className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg border border-slate-600 transition-colors"
-            >
-              Promo Video
-            </Link>
-            <Link
-              href="/strategic-partnership"
-              className="px-6 py-3 bg-indigo-600/15 hover:bg-indigo-600/25 text-indigo-300 font-semibold rounded-lg border border-indigo-700/50 transition-colors"
-            >
-              Strategic Partnership
-            </Link>
-          </div>
-        </div>
-      </section>
 
-      {/* ── G. FINAL CTA ─────────────────────────────────────────────────────── */}
-      <section className="px-6 py-20 border-t border-slate-800">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Explore CorridorWork</h2>
-          <p className="text-slate-400 mb-10 max-w-xl mx-auto leading-relaxed">
-            Choose your pathway. Express interest or explore the platform.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          {/* Primary audience CTAs */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <Link
               href="/global/employers"
               className="px-7 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg transition-colors"
             >
-              Employer Intake
+              Employer intake
             </Link>
             <Link
               href="/global/candidates"
               className="px-7 py-3.5 bg-emerald-700 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-colors"
             >
-              Candidate Interest
+              Candidate interest
             </Link>
             <Link
               href="/strategic-partnership"
               className="px-7 py-3.5 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold rounded-lg border border-slate-600 transition-colors"
             >
-              Partner Discussion
+              Partner discussion
             </Link>
           </div>
+
+          {/* Watch overview text link */}
+          <Link
+            href="/promo-video"
+            className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors mb-12"
+          >
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full border border-slate-600 text-slate-400 text-xs">
+              ▶
+            </span>
+            Watch overview
+          </Link>
+
+          {/* Buyer / partner access bar */}
+          <div className="border-t border-slate-800 pt-8">
+            <p className="text-slate-600 text-xs mb-4 tracking-wide uppercase">
+              For buyers &amp; strategic partners
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <Link
+                href="/buyer-snapshot"
+                className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium rounded-lg border border-slate-700 transition-colors"
+              >
+                Buyer Snapshot
+              </Link>
+              <Link
+                href="/demo/sandbox"
+                className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium rounded-lg border border-slate-700 transition-colors"
+              >
+                Demo Sandbox
+              </Link>
+              <Link
+                href="/promo-video"
+                className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium rounded-lg border border-slate-700 transition-colors"
+              >
+                Promo Video
+              </Link>
+            </div>
+          </div>
+
         </div>
       </section>
 

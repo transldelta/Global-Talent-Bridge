@@ -26,9 +26,14 @@ export async function PublicNavBar() {
         {/* Brand */}
         <Link
           href="/"
-          className="text-white font-bold text-lg tracking-tight hover:text-slate-200 transition-colors shrink-0"
+          className="group flex flex-col leading-none shrink-0 hover:opacity-90 transition-opacity"
         >
-          CorridorWork
+          <span className="text-white font-bold text-lg tracking-tight">
+            CorridorWork
+          </span>
+          <span className="text-slate-500 text-[0.6rem] tracking-widest uppercase font-medium group-hover:text-slate-400 transition-colors">
+            Global Talent Corridors
+          </span>
         </Link>
 
         {/* Desktop center links */}

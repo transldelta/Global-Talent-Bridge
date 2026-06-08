@@ -48,7 +48,9 @@ describe('Homepage — Hero language (no cheap promises)', () => {
   })
 
   test('contains the CorridorWork platform subheadline', () => {
-    expect(page).toMatch(/organize.*employer demand|employer demand.*candidate interest/i)
+    // New subheadline: "CorridorWork helps employers, candidates and partners structure
+    // international workforce interest across sectors, regions and talent corridors."
+    expect(page).toMatch(/structure.*international.*workforce|organize.*global.*talent.*interest/i)
   })
 })
 
@@ -79,10 +81,10 @@ describe('Homepage — Audience split (Employers / Candidates / Partners)', () =
   })
 
   test('contains three clear audience CTAs: employer, candidate, partner', () => {
-    // JSX encodes apostrophes as &apos; in the source
-    expect(page).toMatch(/I(?:'|&apos;)m an employer/)
-    expect(page).toMatch(/I(?:'|&apos;)m a candidate/)
-    expect(page).toMatch(/I(?:'|&apos;)m a partner/)
+    // Hero CTAs: "For employers" and "For candidates" — partner CTA in audience cards
+    expect(page).toMatch(/For employers/i)
+    expect(page).toMatch(/For candidates/i)
+    expect(page).toMatch(/For Partners/i)
   })
 })
 
@@ -221,8 +223,11 @@ describe('Homepage — Buyer / Partner section', () => {
     expect(page).toContain('/promo-video')
   })
 
-  test('contains "Built as a global talent mobility SaaS asset"', () => {
-    expect(page).toMatch(/Built as a global talent mobility SaaS asset/i)
+  test('contains structured/acquisition framing for buyers section', () => {
+    // The buyer section no longer uses "SaaS asset" framing — it uses structured corridor language.
+    // Verify the buyer access bar is still present and accessible.
+    expect(page).toContain('/buyer-snapshot')
+    expect(page).toContain('For buyers')
   })
 })
 
@@ -362,6 +367,51 @@ describe('Homepage — Real images in public/images/home/', () => {
 
   test('page.tsx has priority prop on hero image', () => {
     expect(page).toContain('priority')
+  })
+})
+
+// ── Hero split-layout & promo video ───────────────────────────────────────────
+describe('Homepage — Split-layout hero & promo video access', () => {
+  test('hero contains "Watch 60-second overview" text link', () => {
+    expect(page).toContain('Watch 60-second overview')
+  })
+
+  test('hero links to /promo-video (at least twice: hero + final CTA)', () => {
+    const occurrences = (page.match(/\/promo-video/g) || []).length
+    expect(occurrences).toBeGreaterThanOrEqual(2)
+  })
+
+  test('hero uses split layout (image as right panel, not full-bleed background)', () => {
+    // The image panel div must be hidden on mobile (hidden lg:block)
+    // and the text panel must NOT have the image behind it
+    expect(page).toContain('hidden lg:block')
+  })
+
+  test('hero does NOT have full-bleed text-over-image overlay (no bg-slate-950/72)', () => {
+    // The old hero had a dark overlay over a full-bleed image with text on top.
+    // The new hero keeps image strictly in a right-side panel.
+    expect(page).not.toContain('bg-slate-950/72')
+  })
+
+  test('hero new headline is present', () => {
+    expect(page).toContain('Organize global talent interest across employers, candidates and partners.')
+  })
+})
+
+// ── Security — no admin or dashboard links in page ────────────────────────────
+describe('Homepage — No admin / dashboard links exposed', () => {
+  test('page does NOT link to /admin', () => {
+    expect(page).not.toMatch(/href="\/admin/)
+    expect(page).not.toMatch(/href='\/admin/)
+  })
+
+  test('page does NOT link to /candidate/dashboard or /employer/dashboard', () => {
+    expect(page).not.toContain('/candidate/dashboard')
+    expect(page).not.toContain('/employer/dashboard')
+  })
+
+  test('page does NOT expose Dashboard button', () => {
+    expect(page).not.toMatch(/>Dashboard</)
   })
 })
 

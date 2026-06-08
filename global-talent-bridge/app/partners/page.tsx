@@ -29,6 +29,14 @@ const PARTNER_TYPES = [
     desc: 'Extend your portfolio with structured international talent matching across 21 sectors.',
   },
   {
+    title: 'Employer Networks',
+    desc: 'Aggregate workforce demand across your member employers into structured corridor intake.',
+  },
+  {
+    title: 'Training Providers',
+    desc: 'Connect graduates and qualified candidates to international employer demand by sector.',
+  },
+  {
     title: 'Language Schools',
     desc: 'Connect language competencies with employer demand across global corridors.',
   },
