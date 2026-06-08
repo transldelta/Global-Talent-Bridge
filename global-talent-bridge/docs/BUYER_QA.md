@@ -98,7 +98,18 @@ The pipeline is built. The campaigns are structured. The outreach templates are 
 
 ## Q6: Wie wird es übertragen? / How is the transfer done?
 
-10 steps, ~1–2 days:
+**Payment first. Transfer second.**
+
+No asset is transferred before payment is confirmed in escrow. The recommended process:
+
+1. Agree on price and terms in writing (LOI or term sheet)
+2. Buyer deposits funds into escrow (Escrow.com, Acquire.com escrow, or broker escrow)
+3. Escrow confirms funds are held
+4. Transfer all 4 assets (steps below)
+5. Buyer confirms receipt and functionality
+6. Escrow releases payment to seller
+
+**Transfer steps (after escrow confirmed), ~1–2 days:**
 
 1. GitHub repository transfer (5 min)
 2. Vercel project transfer (15 min)

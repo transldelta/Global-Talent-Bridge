@@ -8,6 +8,37 @@
 
 ---
 
+## ⚠️ Payment & Security Rule — No Transfer Before Confirmed Payment
+
+**This is the single most important rule in this guide.**
+
+> **No asset is transferred before payment is confirmed.**
+
+- Do NOT transfer the GitHub repository before payment clears
+- Do NOT transfer Vercel before payment clears
+- Do NOT transfer Supabase before payment clears
+- Do NOT transfer the domain before payment clears
+- Do NOT hand over .env variables or secrets before payment clears
+
+**Recommended process:**
+
+1. Use a trusted escrow service (e.g. Escrow.com, Acquire.com built-in escrow, or a reputable broker)
+2. Buyer deposits agreed amount into escrow
+3. Escrow confirms funds are held
+4. Transfer all assets (steps 1–10 below)
+5. Buyer confirms receipt and platform functionality
+6. Escrow releases payment to seller
+
+**Never agree to:**
+- "I'll pay after I see the code works" (no)
+- "Let me test with full access first" (no)
+- "Transfer the domain first, then I'll pay" (no)
+- Bank transfer before escrow confirmation (no)
+
+If a buyer refuses to use escrow, treat it as a red flag.
+
+---
+
 ## Prerequisites
 
 **Buyer needs:**
@@ -16,7 +47,7 @@
 - Supabase account (free tier sufficient; Pro recommended for production)
 - Domain registrar access (to receive corridorwork.com transfer)
 
-**Seller provides:**
+**Seller provides (only after payment confirmed in escrow):**
 - Completed transfer of each asset (steps 1–4)
 - .env values (step 5)
 - Admin email update (step 6)

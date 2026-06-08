@@ -221,8 +221,21 @@ All of the following are available immediately:
 ## Contact
 
 CorridorWork Team  
-corridorwork.com  
-[Contact via listing platform or direct message]
+corridorwork.com
+
+> **⚠️ Before publishing:** Replace this section with your actual contact information.
+> Options: LinkedIn profile URL, email address, or "Contact via [platform name] messaging".
+> Do NOT include personal phone numbers in public listings.
+
+---
+
+## Payment & Transfer Security
+
+All asset transfers happen **after payment is confirmed in escrow**. No exceptions.
+
+- Recommended: Escrow.com, Acquire.com built-in escrow, or broker escrow
+- No asset is shared before escrow confirmation
+- Full transfer guide: `docs/TRANSFER_GUIDE.md`
 
 ---
 
