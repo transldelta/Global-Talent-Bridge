@@ -70,8 +70,8 @@ describe('executive-summary.md — required content', () => {
   it('mentions transfer-ready', () => {
     expect(body.toLowerCase()).toContain('transfer-ready')
   })
-  it('mentions suggested asking price range', () => {
-    expect(body).toMatch(/49.000|49 000|49K/i)
+  it('mentions a realistic asking price or negotiable positioning', () => {
+    expect(body).toMatch(/negotiable|15.000|15 000|25.000|25 000|price ladder|realistic range/i)
   })
   it('mentions Next.js or Supabase or Vercel', () => {
     expect(body).toMatch(/Next\.js|Supabase|Vercel/)
@@ -112,9 +112,11 @@ describe('pre-revenue-disclosure.md — honest financial disclosure', () => {
 describe('asking-price-rationale.md — required content', () => {
   const body = readFileSync(join(DOCS, 'asking-price-rationale.md'), 'utf-8')
 
-  it('states suggested asking price', () => {
-    expect(body).toMatch(/49.000|49 000/i)
-    expect(body).toMatch(/79.000|79 000/i)
+  it('states a realistic asking price range with tiers', () => {
+    // Tier 1: current realistic range
+    expect(body).toMatch(/15.000|15 000|tier 1/i)
+    // Tier 3: long-term target only with proof
+    expect(body).toMatch(/50.000|69.000|tier 3/i)
   })
   it('explains asset-stage valuation', () => {
     expect(body.toLowerCase()).toMatch(/asset.?stage/)

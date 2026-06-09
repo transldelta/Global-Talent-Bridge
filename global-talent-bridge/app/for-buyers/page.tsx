@@ -35,7 +35,7 @@ const FACTS = [
   { label: 'Paying customers',   value: '0',         note: 'No commercial transactions yet' },
   { label: 'Test suite',         value: '4 352 ✅',  note: '0 failures' },
   { label: 'TypeScript errors',  value: '0',         note: 'tsc --noEmit clean' },
-  { label: 'Asking price',       value: '€49K–€79K', note: 'Asset-stage valuation' },
+  { label: 'Asking price',       value: 'Negotiable', note: 'Asset-based · no MRR multiple' },
 ]
 
 export default function ForBuyersPage() {

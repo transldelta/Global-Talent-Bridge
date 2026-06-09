@@ -1,101 +1,106 @@
 # Asking Price Rationale — CorridorWork Buyer Package
 
-*Zero-Cost Buyer Package Sprint · 2026-06-09*
+*Updated: 2026-06-09 · Zero-Cost Buyer Package Sprint*
 
 ---
 
-## Suggested asking price
+## Honest position
 
-**€49 000 – €79 000**
+CorridorWork is a **pre-revenue SaaS asset**:
 
-This is an **asset-stage valuation**, not a revenue multiple.
+- €0 MRR
+- 0 paying customers
+- Stripe not active
+- No signed LOIs
+- No confirmed pilots
 
----
+No revenue-based multiple applies. No EBITDA-based multiple applies.
+The valuation is **asset-based only**: infrastructure, codebase, domain, documentation, and market positioning.
 
-## Why asset-stage pricing
-
-At €0 MRR, no revenue-based multiple applies. The value is entirely in:
-
-1. The built, tested, transfer-ready infrastructure
-2. The corridor intelligence IP (8 corridors, Buyer Opportunity Scores)
-3. The admin toolset (10+ tools, all auth-gated and documented)
-4. The domain and brand (corridorwork.com)
-5. The documentation library (50+ files)
-6. The compliance architecture (no auto-send, RLS, GDPR)
+The current asking price is **negotiable** and depends entirely on what the buyer brings to the table.
 
 ---
 
-## Price floor — €49 000
+## Realistic price ladder — 3 tiers
 
-Justified by:
+### Tier 1 — Current realistic range: €15 000 – €25 000
+
+**Justified today, as-is, without any additional proof.**
+
+Includes:
 - Live domain (corridorwork.com) — registered, HTTPS, indexed
-- Full GitHub repository — TypeScript strict, 4 352 tests, 0 errors
-- Vercel production deployment — 163 pages, auto-deploy
+- Full GitHub repository — TypeScript strict, 4 352 green tests, 0 errors
+- Vercel production deployment — 164 pages, auto-deploy
 - Supabase project — PostgreSQL 17, EU-Frankfurt, RLS, transferable
 - 10+ admin tools (Corridor Intelligence, Growth Dept, Contact Copilot, Buyer Room, etc.)
 - 25+ public SEO landing pages
 - 50+ documentation files
+- Buyer package (9 new structured docs)
+- Clear niche positioning (global talent corridor intelligence)
 
-**Rebuild cost comparison:** Building this from scratch would cost €60 000–€127 000 in development time. The floor price is below the rebuild cost.
-
----
-
-## Price ceiling — €79 000
-
-Justified by the above plus:
-- Corridor intelligence IP — no comparable micro-SaaS at this intersection
-- Three-sided market architecture (employer + candidate source + partner)
-- Approval-based workflow — compliance-safe from day one (no legal debt for buyer)
-- Full buyer package (demo script, QA doc, transfer guide, data room index, sale listing)
-- Multiple clear monetization paths, all activation-ready
-- Buyer can demonstrate immediate value creation with existing relationships
+This range reflects the honest market reality for a transfer-ready, pre-revenue SaaS asset with no customers and no validated traction.
 
 ---
 
-## Where the price lands depends on
+### Tier 2 — With buyer signals: €30 000 – €50 000
 
-| Factor | Direction |
+**Only justified with real, documented evidence of demand.**
+
+This range becomes defensible when one or more of the following exist:
+
+- Real pilot conversations with named employers or agencies (not just interest)
+- Written feedback from 3+ potential buyers confirming willingness to pay
+- A waitlist with documented sign-ups from target customers
+- A partner LOI (letter of intent) from an agency, relocation firm, or language school
+- Market validation replies collected via the Growth Department outreach system
+
+Without this evidence, asking €30 000+ is speculative and will be challenged by serious buyers.
+
+---
+
+### Tier 3 — With revenue or strong LOIs: €50 000 – €69 000+
+
+**Only realistic with concrete commercial traction.**
+
+Requires:
+- First paying customer (any amount) — even one €500 pilot invoice changes the story
+- Active MRR (any amount) — €100/month MRR is worth multiples of that in valuation uplift
+- Signed pilot agreement with a named employer or agency
+- Strong LOI from a buyer intending to build on the platform commercially
+
+At this tier, the conversation shifts from asset-stage pricing to revenue-stage pricing, and multiples become relevant.
+
+---
+
+## How to move up the ladder
+
+| Action | Tier impact |
 |---|---|
-| Buyer has existing recruiting/HR-tech relationships | Toward €79 000 |
-| Buyer intends to activate employer pilots immediately | Toward €79 000 |
-| 1–3 real market replies collected before sale | Toward upper range |
-| Buyer has no market relationships | Toward €49 000 |
-| Market validation not yet started | Toward lower end |
-| Price is negotiated without market proof | Below €49 000 is possible |
+| Collect 1–3 real outreach replies (in writing) | Toward Tier 2 |
+| Confirm one pilot conversation (named party) | Toward Tier 2 |
+| Close one signed LOI | Upper Tier 2 |
+| Receive first payment (any amount) | Tier 3 entry |
+| Reach €100+ MRR | Tier 3 justified |
 
 ---
 
-## Comparable transactions (reference — not guarantee)
+## What is NOT included in any valuation
 
-Asset-stage SaaS platforms with similar profiles have sold in the following ranges on Acquire.com and Flippa:
-
-| Profile | Typical range |
-|---|---|
-| Live domain + code only, no product | €5 000–€20 000 |
-| Working product, no users, no revenue | €15 000–€50 000 |
-| Working product + admin tools + tested codebase | €30 000–€80 000 |
-| Same + IP differentiation + documentation | €50 000–€120 000 |
-
-CorridorWork fits the last category.
+- No revenue multiple (revenue = €0)
+- No customer value (customers = 0)
+- No team or employment contract transfer
+- No guarantee of future revenue — the buyer activates the business model
+- No guarantee of job placements, visa outcomes, or employer demand
+- No guarantee that the buyer will find customers or generate profit
 
 ---
 
-## What is NOT included in the valuation
+## Negotiation guidance
 
-- No revenue multiple — there is no revenue
-- No customer value — there are no customers
-- No team value — this is a solo-built product, no employment contracts transfer
-- No contracts or LOIs — none exist
-- No guaranteed future revenue — the buyer activates the business model
-
----
-
-## Negotiation guidance for seller
-
-- **Opening position:** €79 000 with the corridor intelligence argument
-- **Expected negotiation range:** €55 000–€75 000
-- **Walk-away point:** Below €49 000 is below rebuild cost — not recommended
-- **Value-add during negotiation:** Offer a 1-hour walkthrough call; offer the full Buyer Room access for due diligence
+- **Starting position:** Tier 1 upper range (€20 000–€25 000) with honest disclosure
+- **Upgrade argument:** present any real buyer signals collected via Market Proof Launch
+- **Never represent Tier 2 or Tier 3 pricing without the evidence that justifies it**
+- All pricing is negotiable and must reflect the honest commercial state at time of sale
 
 ---
 

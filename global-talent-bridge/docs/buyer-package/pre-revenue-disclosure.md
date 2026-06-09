@@ -38,7 +38,7 @@ The comparable question is: **how much would it cost to build this from scratch?
 | Live domain + Vercel + Supabase infrastructure | €500–€2 000 |
 | **Total rebuild estimate** | **€60 500–€127 000** |
 
-The suggested ask of €49 000–€79 000 is **below the rebuild cost** for a buyer who would need to build this from scratch.
+The current realistic asking range (€15 000–€25 000) is **below the estimated rebuild cost** for a buyer who would need to build this from scratch. Higher ranges (€30K–€69K+) require documented buyer signals or real MRR — see [`asking-price-rationale.md`](./asking-price-rationale.md).
 
 ---
 

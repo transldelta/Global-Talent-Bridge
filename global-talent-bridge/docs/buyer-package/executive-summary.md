@@ -65,10 +65,13 @@ This is an **asset-stage acquisition**. The valuation is based on the built infr
 
 ## Suggested asking price
 
-**€49 000 – €79 000** (asset-stage valuation, not a revenue multiple)
+**Negotiable · Asset-stage only · No revenue multiple**
 
-- €49 000: code + infrastructure + domain + documentation, as-is
-- €79 000: full value of corridor intelligence IP + transfer-ready state + admin toolset + monetization paths
+Current realistic range (no customers, no MRR):
+- **€15 000 – €25 000** — transfer-ready infrastructure, domain, codebase, admin toolset, documentation, as-is
+
+Higher ranges are only defensible with documented pilot conversations, buyer signals, or real MRR.
+See [`asking-price-rationale.md`](./asking-price-rationale.md) for the full 3-tier price ladder.
 
 ---
 
