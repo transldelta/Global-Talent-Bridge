@@ -140,7 +140,7 @@ export default function PromoVideoPage() {
               </p>
               <p className="text-amber-400/70 text-xs mt-1 leading-relaxed">
                 This page is not indexed (noindex). The video below has no audio track.
-                It is not ready to be used as a sale or marketing asset.
+                The video is not ready to be used as a sales or marketing asset.
                 See <code className="bg-amber-950 px-1 rounded text-amber-300">docs/video/final-voiceover-required.md</code> for next steps.
               </p>
             </div>
