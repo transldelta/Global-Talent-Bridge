@@ -295,3 +295,68 @@ describe('Promo video preview — safety sweep', () => {
     expect(src).toMatch(/TTS|macOS Samantha|NOT FINAL|not.*final/i)
   })
 })
+
+// ── 9. Public link text — homepage and footer ─────────────────────────────────
+
+describe('Public /promo-video links — honest labels (no finished-video framing)', () => {
+  const HOMEPAGE = join(ROOT, 'app/page.tsx')
+  const FOOTER   = join(ROOT, 'app/_components/PublicFooter.tsx')
+
+  let homepage: string
+  let footer: string
+  beforeAll(() => {
+    homepage = readFileSync(HOMEPAGE, 'utf-8')
+    footer   = readFileSync(FOOTER, 'utf-8')
+  })
+
+  // Homepage
+  it('homepage still links to /promo-video (link not removed entirely)', () => {
+    expect(homepage).toContain('/promo-video')
+  })
+
+  it('homepage does not use "Watch the overview" (implies finished product)', () => {
+    expect(homepage).not.toContain('Watch the overview')
+  })
+
+  it('homepage does not use "Watch 60-second overview" (implies finished product)', () => {
+    expect(homepage).not.toContain('Watch 60-second overview')
+  })
+
+  it('homepage does not use bare "Watch overview" text (implies finished product)', () => {
+    // "Watch overview" standalone — but "Video preview" and similar are fine
+    const bareWatchOverview = />\s*Watch overview\s*</
+    expect(homepage).not.toMatch(bareWatchOverview)
+  })
+
+  it('homepage video card shows "Visual preview only" or similar honest label', () => {
+    expect(homepage).toMatch(/Visual preview only|visual preview|no audio yet|no voiceover yet/i)
+  })
+
+  it('homepage video card does NOT show "Promo Video" as a prominent label', () => {
+    // "Promo Video" as a button label implies a finished product
+    expect(homepage).not.toMatch(/>\s*Promo Video\s*</)
+  })
+
+  it('homepage video section description does not promise finished video content', () => {
+    // "A 60-second walkthrough" implied a polished finished video — should be updated
+    expect(homepage).not.toContain('A 60-second walkthrough')
+  })
+
+  it('homepage shows "no audio" or "no voiceover" warning near video links', () => {
+    expect(homepage).toMatch(/no audio|no voiceover|no audio yet|no voiceover yet/i)
+  })
+
+  // Footer
+  it('footer still links to /promo-video', () => {
+    expect(footer).toContain('/promo-video')
+  })
+
+  it('footer does not use "Promo Video" as link text (implies finished product)', () => {
+    // Link text must not be the bare string "Promo Video"
+    expect(footer).not.toMatch(/>\s*Promo Video\s*</)
+  })
+
+  it('footer uses honest label ("Video preview" or similar)', () => {
+    expect(footer).toMatch(/Video preview|visual preview|preview/i)
+  })
+})

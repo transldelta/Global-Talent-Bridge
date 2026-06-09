@@ -372,8 +372,9 @@ describe('Homepage — Real images in public/images/home/', () => {
 
 // ── Hero split-layout & promo video ───────────────────────────────────────────
 describe('Homepage — Split-layout hero & promo video access', () => {
-  test('hero contains "Watch 60-second overview" text link', () => {
-    expect(page).toContain('Watch 60-second overview')
+  test('hero contains promo video preview link with honest label (no voiceover yet)', () => {
+    // Label changed from "Watch 60-second overview" to reflect preview-only status
+    expect(page).toMatch(/Promo video preview|visual preview|no voiceover yet|Video preview/i)
   })
 
   test('hero links to /promo-video (at least twice: hero + final CTA)', () => {

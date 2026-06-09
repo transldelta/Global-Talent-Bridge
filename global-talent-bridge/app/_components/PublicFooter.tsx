@@ -57,9 +57,9 @@ export function PublicFooter() {
               <li>
                 <Link
                   href="/promo-video"
-                  className="text-slate-500 text-sm hover:text-slate-300 transition-colors"
+                  className="text-slate-600 text-sm hover:text-slate-400 transition-colors"
                 >
-                  Promo Video
+                  Video preview
                 </Link>
               </li>
             </ul>

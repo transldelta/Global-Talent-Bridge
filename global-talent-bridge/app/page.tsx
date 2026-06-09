@@ -68,7 +68,7 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Video text link */}
+            {/* Video text link — preview only until voiceover is recorded */}
             <Link
               href="/promo-video"
               className="inline-flex items-center gap-2.5 text-sm text-slate-400 hover:text-white transition-colors group"
@@ -76,7 +76,7 @@ export default function HomePage() {
               <span className="inline-flex items-center justify-center w-7 h-7 rounded-full border border-slate-600 group-hover:border-slate-400 text-slate-400 group-hover:text-white transition-all shrink-0 text-xs">
                 ▶
               </span>
-              Watch 60-second overview
+              Promo video preview (no voiceover yet)
             </Link>
 
           </div>
@@ -113,44 +113,47 @@ export default function HomePage() {
               <h2 className="text-2xl font-bold text-white mb-3 leading-snug">
                 See how CorridorWork works
               </h2>
-              <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                A 60-second walkthrough of talent corridors, employer intake, candidate
-                interest and partner collaboration — no signup required.
+              <p className="text-slate-400 text-sm leading-relaxed mb-3">
+                Visual preview — human footage without voiceover.
+                Final human voiceover not recorded yet.
+              </p>
+              <p className="text-amber-500/70 text-xs mb-5">
+                ⚠️ Visual preview only — no audio track yet.
               </p>
               <Link
                 href="/promo-video"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-slate-300 transition-colors"
               >
-                Watch the overview
+                View visual preview
                 <span className="text-xs">→</span>
               </Link>
             </div>
 
-            {/* Video preview card */}
+            {/* Video preview card — VISUAL PREVIEW, no audio */}
             <Link href="/promo-video" className="group block">
-              <div className="relative aspect-video bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 group-hover:border-indigo-500/50 transition-all duration-300 shadow-xl">
-                {/* Background gradient representing the video */}
+              <div className="relative aspect-video bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 group-hover:border-slate-600 transition-all duration-300 shadow-xl">
+                {/* Background gradient */}
                 <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-indigo-950/50 to-slate-900" />
                 {/* Play button */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="flex flex-col items-center gap-3">
-                    <div className="w-14 h-14 rounded-full bg-white/10 border border-white/20 flex items-center justify-center group-hover:bg-white/20 group-hover:scale-110 transition-all duration-200 shadow-lg">
-                      <svg className="w-5 h-5 text-white ml-0.5" viewBox="0 0 24 24" fill="currentColor">
+                    <div className="w-14 h-14 rounded-full bg-white/10 border border-white/20 flex items-center justify-center group-hover:bg-white/15 transition-all duration-200 shadow-lg">
+                      <svg className="w-5 h-5 text-white/60 ml-0.5" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M8 5v14l11-7z"/>
                       </svg>
                     </div>
-                    <span className="text-white/80 text-sm font-medium group-hover:text-white transition-colors">
-                      Watch overview
+                    <span className="text-white/50 text-sm font-medium">
+                      Visual preview only
                     </span>
                   </div>
                 </div>
-                {/* Duration badge */}
-                <div className="absolute bottom-3 right-3 px-2 py-0.5 bg-black/60 rounded text-white/70 text-xs font-mono">
-                  60s
+                {/* No audio badge */}
+                <div className="absolute bottom-3 right-3 px-2 py-0.5 bg-amber-900/80 border border-amber-700/50 rounded text-amber-300 text-xs font-medium">
+                  No audio yet
                 </div>
                 {/* Top label */}
-                <div className="absolute top-3 left-3 px-2 py-0.5 bg-indigo-600/70 rounded text-white text-xs font-medium">
-                  CorridorWork
+                <div className="absolute top-3 left-3 px-2 py-0.5 bg-slate-700/80 rounded text-slate-400 text-xs font-medium">
+                  Preview only
                 </div>
               </div>
             </Link>
@@ -454,15 +457,15 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {/* Watch overview link */}
+          {/* Video preview link — no voiceover yet */}
           <Link
             href="/promo-video"
-            className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-300 transition-colors mb-12 group"
+            className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-400 transition-colors mb-12 group"
           >
-            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full border border-slate-700 group-hover:border-slate-500 text-xs transition-colors">
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full border border-slate-800 group-hover:border-slate-600 text-xs transition-colors">
               ▶
             </span>
-            Watch overview
+            Video preview (no audio yet)
           </Link>
 
           {/* Buyer / partner access bar */}
@@ -485,9 +488,9 @@ export default function HomePage() {
               </Link>
               <Link
                 href="/promo-video"
-                className="px-5 py-2.5 bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-sm font-medium rounded-lg border border-slate-700 transition-colors"
+                className="px-5 py-2.5 bg-slate-800/60 hover:bg-slate-800 text-slate-500 text-sm font-medium rounded-lg border border-slate-800 transition-colors"
               >
-                Promo Video
+                Video preview
               </Link>
             </div>
           </div>
