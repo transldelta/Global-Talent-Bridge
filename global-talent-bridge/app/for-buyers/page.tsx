@@ -57,7 +57,7 @@ export default function ForBuyersPage() {
           transfer-ready on day one.
         </p>
         <Link
-          href="/contact"
+          href="/contact?interest=buyer_acquisition"
           className="inline-block px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors text-lg"
         >
           Request details →
@@ -169,7 +169,7 @@ export default function ForBuyersPage() {
           technical documentation, and transfer details.
         </p>
         <Link
-          href="/contact"
+          href="/contact?interest=buyer_acquisition"
           className="inline-block px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors"
         >
           Request details →

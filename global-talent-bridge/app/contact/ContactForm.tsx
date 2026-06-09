@@ -14,6 +14,7 @@ const INTEREST_OPTIONS = [
   { value: 'partnership', label: '🤝 Partnerschaft' },
   { value: 'feedback', label: '💬 Feedback' },
   { value: 'other', label: '❓ Sonstiges' },
+  { value: 'buyer_acquisition', label: '🏢 Plattform erwerben / Acquisition' },
 ]
 
 function SubmitButton() {
@@ -200,6 +201,16 @@ export function ContactForm() {
                 <span className="text-red-400">*</span>
               </label>
             </div>
+
+            {/* Honeypot — hidden from humans, filled by bots; server silently rejects */}
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="hidden"
+            />
 
             <SubmitButton />
           </form>
