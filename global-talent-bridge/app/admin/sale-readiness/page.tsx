@@ -213,6 +213,43 @@ export default async function SaleReadinessPage() {
           </ul>
         </div>
 
+        {/* Market Signal Sprint status */}
+        <div className="bg-yellow-950/20 border border-yellow-700/40 rounded-xl p-5">
+          <h2 className="text-sm font-semibold text-yellow-300 mb-3">
+            📡 Market Signal Sprint — Status
+          </h2>
+          <div className="space-y-1.5 text-xs">
+            <div className="flex items-center gap-2">
+              <span className="text-green-400">✓</span>
+              <span className="text-gray-300">Sprint prepared — profiles, templates, and playbook ready</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-yellow-400">○</span>
+              <span className="text-gray-300">No outreach sent yet — 0 messages sent as of 2026-06-09</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-yellow-400">○</span>
+              <span className="text-gray-300">No responses received — 0 real written responses</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-yellow-400">○</span>
+              <span className="text-gray-300">No market proof items — Commercial Proof score remains 7 (LOW)</span>
+            </div>
+          </div>
+          <p className="mt-3 text-xs text-yellow-200/60 italic">
+            Sprint is for manual execution only. No auto-send. No fake responses. All outreach
+            requires manual review and approval before sending.
+          </p>
+          <div className="mt-3">
+            <Link
+              href="/admin/market-signals"
+              className="text-xs text-yellow-400 hover:text-yellow-300 underline transition-colors"
+            >
+              Open Market Signals →
+            </Link>
+          </div>
+        </div>
+
         {/* Safety */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
           <p className="text-xs font-semibold text-gray-400 mb-2">Safety constraints — always active</p>

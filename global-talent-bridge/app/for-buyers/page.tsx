@@ -148,6 +148,19 @@ export default function ForBuyersPage() {
         </div>
       </section>
 
+      {/* Market validation note */}
+      <section className="max-w-3xl mx-auto px-6 pb-10">
+        <div className="bg-gray-900 border border-gray-700/50 rounded-xl p-4 text-xs text-gray-400">
+          <p>
+            <span className="text-gray-300 font-medium">Market validation status:</span>{' '}
+            Market validation process prepared — no revenue or customer traction claimed.
+            The platform is pre-revenue and asset-stage. Any stated interest from parties
+            is documented via a manual outreach process; no automated outreach has been
+            or will be sent.
+          </p>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="max-w-3xl mx-auto px-6 pb-24 text-center">
         <h2 className="text-2xl font-bold text-white mb-4">Interested?</h2>
