@@ -250,25 +250,28 @@ export const OUTREACH_TEMPLATES: OutreachTemplate[] = [
     id:       'buyer-intro',
     audience: 'buyer',
     label:    'Potential Buyer — Initial Introduction',
-    subject:  'CorridorWork — transfer-ready international talent intelligence platform',
+    subject:  'CorridorWork — transfer-prepared SaaS asset in talent mobility',
     body: `Hi [Name],
 
-I'm reaching out because [Company] operates in the international talent or HR-tech space, and I wanted to introduce a platform that may be a fit for your portfolio or product roadmap.
+I'm reaching out because [Company] appears to operate in the SaaS, HR-tech, recruiting, or talent mobility space.
 
-CorridorWork is a structured corridor intelligence and approval-based growth platform for the international recruitment market. It's built, tested, and transfer-ready — currently listed for acquisition.
+I'm the owner of CorridorWork, a transfer-prepared SaaS asset for global talent corridor intelligence and approval-based candidate workflows.
 
-What it includes:
-- 8 scored global talent corridors with Buyer Opportunity Scores
-- Three-sided intake pipeline (employer + candidate source + partner)
-- 10+ admin tools including a full Buyer Room with due diligence package
-- Latest lint, TypeScript, build, and test suite passed · Supabase EU-Frankfurt
-- Domain: corridorwork.com (live)
+The product is pre-revenue — no MRR and no customers yet — so the opportunity is asset-based, not revenue-multiple based.
 
-The platform is pre-revenue — no MRR, no customers yet. The asking price reflects the built infrastructure, not a revenue multiple.
+What is included:
+- Live domain: corridorwork.com
+- Next.js / Supabase / PostgreSQL / Vercel stack
+- Public employer, candidate, partner, demo, and buyer pages
+- Protected admin and buyer-room documentation
+- Documented handover steps
+- Latest lint, TypeScript, build, and test suite passed
 
-If this is relevant to what you're building or acquiring, I'm happy to share the full Buyer Room access for technical due diligence.
+There are no job, visa, placement, revenue, or customer guarantees.
 
-No obligation. No pressure.
+If this is relevant to what you acquire or operate, I can send a short buyer overview first.
+
+No obligation and no pressure.
 
 CorridorWork Team
 corridorwork.com`,
@@ -277,8 +280,9 @@ corridorwork.com`,
       'No bulk send. No scheduled send. No automated follow-up.',
       'Personalise [Name] and [Company] before sending',
       'Do not send without manual review',
-      'No revenue claims. No MRR claims. No customer claims.',
+      'No fake traction. No MRR claims. No customer claims.',
       'If no reply in 7 days, do not follow up more than once',
+      'Offer short buyer overview first — share deeper materials only after confirmed interest',
     ],
   },
   {
