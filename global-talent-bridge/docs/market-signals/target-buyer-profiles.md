@@ -73,10 +73,10 @@
 
 **Core problem:** Looking for acquisition targets with solid technical foundations and clear niche positioning.
 
-**Why CorridorWork fits:** Transfer-ready in 1–2 days. 4 477 tests. 0 TypeScript errors. Full documentation. Clear niche. Immediate operational state.
+**Why CorridorWork fits:** CorridorWork is transfer-prepared with documented handover steps; actual transfer timing depends on domain, GitHub, Vercel, Supabase, and buyer-side account setup. Latest lint, TypeScript, build, and test suite passed. Full documentation. Clear niche.
 
 **Proof question:**
-> "Are you currently evaluating SaaS acquisitions in the HR-tech or international talent mobility space?"
+> "Are you currently evaluating small pre-revenue SaaS acquisitions in HR-tech, recruiting, or talent mobility?"
 
 **Compliance note:** Pre-revenue status must be stated clearly. No MRR claims. No customer claims. Escrow-first transfer only.
 
@@ -90,7 +90,7 @@
 
 **Core problem:** Evaluating many assets simultaneously — needs clear transfer readiness, technical quality, and honest gap disclosure to make fast decisions.
 
-**Why CorridorWork fits:** Full Buyer Package, 6-dimension Sale Readiness Score, 4 477 green tests, and escrow-first transfer reduces due diligence time significantly.
+**Why CorridorWork fits:** Full Buyer Package, 6-dimension Sale Readiness Score, latest lint/build/test suite passed, and escrow-first transfer reduces due diligence time significantly.
 
 **Proof question:**
 > "Do you currently have an operator you'd assign to an international talent tech asset if you acquired it?"

@@ -27,7 +27,7 @@ const ASSETS = [
   { icon: '🧠', label: 'Corridor engine',  detail: '8 scored global talent corridors · Buyer Opportunity Scores' },
   { icon: '🔧', label: 'Admin toolset',    detail: '10+ tools: pipeline, intelligence, approval queue, buyer room' },
   { icon: '📄', label: 'Documentation',    detail: '50+ files: architecture, security, transfer guide, buyer package' },
-  { icon: '🔄', label: 'Transfer-ready',   detail: 'All 4 assets independently transferable in 1–2 days' },
+  { icon: '🔄', label: 'Transfer-prepared', detail: 'Documented handover steps for all 4 assets; timing depends on domain, GitHub, Vercel, Supabase, and buyer-side setup' },
 ]
 
 const FACTS = [

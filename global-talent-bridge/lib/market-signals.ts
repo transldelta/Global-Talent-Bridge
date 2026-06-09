@@ -93,8 +93,8 @@ export const BUYER_PROFILES: SignalProfile[] = [
     description:    'An independent operator who buys and runs small SaaS products, typically with 1–3 person teams.',
     whyRelevant:    'Has operating discipline and can activate CorridorWork\'s monetisation paths faster than a solo founder building from scratch.',
     coreProblem:    'Looking for acquisition targets with solid technical foundations and clear niche positioning — often struggles to find transfer-ready assets.',
-    whyCWFits:      'CorridorWork is transfer-ready in 1–2 days. 4 477 tests. 0 TypeScript errors. Full documentation. Clear niche. Immediate operational state.',
-    proofQuestion:  'Are you currently evaluating SaaS acquisitions in the HR-tech or international talent mobility space?',
+    whyCWFits:      'CorridorWork is transfer-prepared with documented handover steps; actual transfer timing depends on domain, GitHub, Vercel, Supabase, and buyer-side account setup. Latest lint, TypeScript, build, and test suite passed. Full documentation. Clear niche.',
+    proofQuestion:  'Are you currently evaluating small pre-revenue SaaS acquisitions in HR-tech, recruiting, or talent mobility?',
     complianceNote: 'Pre-revenue status must be stated clearly. No MRR claims. No customer claims. Transfer guide available for technical due diligence.',
     outreachStatus: 'not-started',
     approvalRequired: true,
@@ -105,7 +105,7 @@ export const BUYER_PROFILES: SignalProfile[] = [
     description:    'A small private equity firm or operator-investor acquiring a portfolio of micro-SaaS businesses.',
     whyRelevant:    'Asset-stage acquisitions at Tier 1 pricing (€15K–€25K) fit their acquisition criteria; they assign an operator after purchase.',
     coreProblem:    'Evaluating many assets simultaneously — needs clear transfer readiness, technical quality verification, and honest gap disclosure.',
-    whyCWFits:      'Full Buyer Package (9 docs), 6-dimension Sale Readiness Score, 4 477 green tests, and escrow-first transfer protocol reduces their due diligence time.',
+    whyCWFits:      'Full Buyer Package (9 docs), 6-dimension Sale Readiness Score, latest lint/build/test suite passed, and escrow-first transfer protocol reduces their due diligence time.',
     proofQuestion:  'Do you currently have an operator you\'d assign to an international talent tech asset if you acquired it?',
     complianceNote: 'No revenue guarantee. No growth projection guarantee. Asset-stage pricing must be stated. Escrow-first transfer only.',
     outreachStatus: 'not-started',
@@ -261,7 +261,7 @@ What it includes:
 - 8 scored global talent corridors with Buyer Opportunity Scores
 - Three-sided intake pipeline (employer + candidate source + partner)
 - 10+ admin tools including a full Buyer Room with due diligence package
-- 4,477 passing tests, TypeScript strict, Supabase EU-Frankfurt
+- Latest lint, TypeScript, build, and test suite passed · Supabase EU-Frankfurt
 - Domain: corridorwork.com (live)
 
 The platform is pre-revenue — no MRR, no customers yet. The asking price reflects the built infrastructure, not a revenue multiple.

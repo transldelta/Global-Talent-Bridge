@@ -161,7 +161,7 @@ Do **not** share:
 ## Frequently asked questions
 
 **"Why should I trust a pre-revenue platform?"**
-> CorridorWork has €0 MRR but a production-ready codebase: 4 477 green tests, zero TypeScript errors, live on Vercel, and a structured buyer package. The value is the infrastructure — not traction. Think of it as buying a purpose-built building with no tenants yet.
+> CorridorWork has €0 MRR but a production-ready codebase: latest lint, TypeScript, build, and test suite all passed; live on Vercel with a structured buyer package. The value is the infrastructure — not traction. Think of it as buying a purpose-built building with no tenants yet.
 
 **"Why is it for sale?"**
 > The founder is prioritising other projects. The platform is transfer-ready and well-documented. A buyer or operator with existing distribution can activate it faster than building from scratch.
