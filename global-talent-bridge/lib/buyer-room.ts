@@ -357,6 +357,173 @@ export const DEMO_STEPS = [
   { step: 10, title: 'Buyer Room',                 url: '/admin/buyer-room',                   duration: '90s',  focus: 'Transfer checklist, asset inventory, sale readiness score' },
 ]
 
+// ── Public pages overview ─────────────────────────────────────────────────────
+
+export const PUBLIC_PAGES: { path: string; label: string; purpose: string }[] = [
+  { path: '/',                         label: 'Homepage',                 purpose: 'Positioning headline, three-sided market intro, corridor overview' },
+  { path: '/for-employers',            label: 'For Employers',            purpose: 'Employer value proposition, intake form entry point' },
+  { path: '/for-candidates',           label: 'For Candidates',           purpose: 'Candidate interest page, voluntary intake entry point' },
+  { path: '/partners',                 label: 'Partner Hub',              purpose: '4 partner tracks: agency, relocation, language school, strategic' },
+  { path: '/strategic-partnership',    label: 'Strategic Partnership',    purpose: 'High-value partnership programme landing page' },
+  { path: '/demo',                     label: 'Demo',                     purpose: 'Live product demonstration page' },
+  { path: '/demo/sandbox',             label: 'Demo Sandbox',             purpose: 'Interactive sandbox for prospective buyers' },
+  { path: '/pricing',                  label: 'Pricing',                  purpose: 'Pricing overview — no Stripe, informational only' },
+  { path: '/about',                    label: 'About',                    purpose: 'CorridorWork mission, team, market context' },
+  { path: '/contact',                  label: 'Contact',                  purpose: 'Contact form — submissions saved to DB, no auto-send' },
+  { path: '/for-buyers',               label: 'For Buyers',               purpose: 'Public acquisition inquiry page — no admin data' },
+  { path: '/corridors',                label: 'Corridors (hub)',          purpose: 'SEO hub for all talent corridor pages' },
+  { path: '/corridors/[slug]',         label: '8 Corridor pages',         purpose: '8 corridor-specific SEO landing pages' },
+  { path: '/industries/[slug]',        label: 'Industry pages',           purpose: 'Industry-specific corridor landing pages' },
+  { path: '/solutions/[slug]',         label: 'Solutions pages',          purpose: 'Solution-specific landing pages' },
+  { path: '/pilot',                    label: 'Pilot Programme',          purpose: 'Employer pilot programme landing page' },
+  { path: '/legal/impressum',          label: 'Impressum',                purpose: 'Legal — German imprint' },
+  { path: '/legal/datenschutz',        label: 'Datenschutz',              purpose: 'Legal — Privacy policy (GDPR)' },
+  { path: '/legal/agb',                label: 'AGB',                      purpose: 'Legal — Terms of service' },
+]
+
+// ── Suggested buyer profile ───────────────────────────────────────────────────
+
+export interface BuyerProfileCategory {
+  id:       string
+  label:    string
+  fit:      'ideal' | 'good' | 'possible' | 'not-recommended'
+  reasons:  string[]
+  example:  string
+}
+
+export const BUYER_PROFILES: BuyerProfileCategory[] = [
+  {
+    id:    'hr-tech',
+    label: 'HR-Tech company',
+    fit:   'ideal',
+    reasons: [
+      'Existing B2B sales motion in talent/recruitment market',
+      'Can integrate corridor intelligence into existing product',
+      'Has customer base to activate monetization paths immediately',
+      'Technical team to operate and extend the platform',
+    ],
+    example: 'A recruiting SaaS platform expanding into international talent mobility',
+  },
+  {
+    id:    'recruiting-agency',
+    label: 'Recruiting agency (international)',
+    fit:   'ideal',
+    reasons: [
+      'Already operates in the exact corridors the platform covers',
+      'Can deploy the admin tools to their existing workflow',
+      'Has employer and candidate relationships to activate pilot packages',
+      'Low technical barrier — platform is ready to use',
+    ],
+    example: 'An agency specialising in Germany-based recruitment of international healthcare workers',
+  },
+  {
+    id:    'relocation-firm',
+    label: 'Relocation / mobility firm',
+    fit:   'good',
+    reasons: [
+      'Operates in talent mobility market — adjacent to platform positioning',
+      'Can use corridor intelligence to identify growing corridors for expansion',
+      'Partner intake functionality maps directly to relocation services',
+    ],
+    example: 'A relocation firm expanding from Germany to EU-wide talent mobility',
+  },
+  {
+    id:    'solo-operator',
+    label: 'Solo operator / micro-SaaS builder',
+    fit:   'good',
+    reasons: [
+      'Transfer-ready platform reduces time-to-market to near zero',
+      'Admin toolset provides full operational capability from day one',
+      'Documentation is comprehensive for solo operation',
+    ],
+    example: 'An independent operator with 2–3 recruiting industry relationships who wants to launch a corridor intelligence service',
+  },
+  {
+    id:    'investor-portfolio',
+    label: 'SaaS portfolio investor',
+    fit:   'possible',
+    reasons: [
+      'Asset-stage pricing below rebuild cost',
+      'Clear monetization paths mapped',
+      'Transfer-ready — low onboarding cost',
+    ],
+    example: 'A micro-PE firm or operator-investor buying to hand to a portfolio operator',
+  },
+  {
+    id:    'no-market',
+    label: 'Buyer without recruitment/HR-tech relationships',
+    fit:   'not-recommended',
+    reasons: [
+      'Commercial activation depends on existing relationships in the target market',
+      'Cold-starting employer and agency relationships from zero is the hardest path',
+      'Platform is activation-ready, not a passive income asset',
+    ],
+    example: 'A software developer with no recruitment industry experience buying speculatively',
+  },
+]
+
+// ── Sale readiness dimensions (for /admin/sale-readiness) ─────────────────────
+
+export interface SaleReadinessDimension {
+  id:          string
+  label:       string
+  score:       number     // 0–100
+  band:        'high' | 'medium' | 'low'
+  description: string
+  honest_note: string
+}
+
+export const SALE_READINESS_DIMENSIONS: SaleReadinessDimension[] = [
+  {
+    id:          'technical',
+    label:       'Technical Readiness',
+    score:       90,
+    band:        'high',
+    description: 'TypeScript strict, 4 352 tests green, 0 ESLint warnings, clean build (163 pages), Vercel READY, Supabase EU-Frankfurt, RLS active.',
+    honest_note: 'Strong. A developer buyer can verify with npm test in under 5 seconds.',
+  },
+  {
+    id:          'transfer',
+    label:       'Transfer Readiness',
+    score:       82,
+    band:        'high',
+    description: 'All 4 assets independently transferable (GitHub, Vercel, Supabase, Domain). .env.example complete. TRANSFER_GUIDE.md 10-step guide. Payment-before-transfer escrow rule documented.',
+    honest_note: 'High. Estimated 1–2 working days to complete full transfer.',
+  },
+  {
+    id:          'documentation',
+    label:       'Documentation Readiness',
+    score:       83,
+    band:        'high',
+    description: '50+ docs including architecture, security, transfer guide, demo script, asset inventory, buyer QA, valuation argument, buyer package (9 new files).',
+    honest_note: 'High. Non-technical buyer may want a video walkthrough — not yet available.',
+  },
+  {
+    id:          'commercial',
+    label:       'Commercial Proof',
+    score:       7,
+    band:        'low',
+    description: '€0 MRR · 0 paying customers · Stripe not active · Market outreach not yet executed · No signed LOIs.',
+    honest_note: 'Low. This is the expected gap for a pre-revenue asset-stage acquisition. Honest, not hidden.',
+  },
+  {
+    id:          'buyer_confidence',
+    label:       'Buyer Confidence',
+    score:       80,
+    band:        'high',
+    description: 'Compliance-safe architecture. No automated outreach risk. No legal debt. Corridor intelligence IP differentiation. Honest disclosure of all gaps.',
+    honest_note: 'High for technical confidence. The commercial proof gap is the honest risk for buyers.',
+  },
+  {
+    id:          'overall',
+    label:       'Overall Sale Readiness',
+    score:       65,
+    band:        'medium',
+    description: 'Asset-stage platform. Strong technical and transfer foundation. Honest gaps on commercial proof and market validation. Correctly positioned at €49K–€79K.',
+    honest_note: 'Realistic score for an asset-stage SaaS. Not inflated. Collecting 1–3 real replies raises this to ~75–80.',
+  },
+]
+
 // ── Sell-ready checklist ──────────────────────────────────────────────────────
 
 export const SELL_READY_ITEMS: { category: string; label: string; done: boolean; note: string }[] = [

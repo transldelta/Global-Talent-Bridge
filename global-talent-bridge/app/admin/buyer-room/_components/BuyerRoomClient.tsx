@@ -4,7 +4,7 @@
  * app/admin/buyer-room/_components/BuyerRoomClient.tsx
  *
  * Buyer Room — Sell-Ready Package UI.
- * 9 tabs covering all sell-readiness sections.
+ * 11 tabs covering all sell-readiness sections.
  *
  * No fake revenue · No fake customers · No Stripe · No auto-send ·
  * No scraping · No job guarantee · No visa guarantee
@@ -25,6 +25,8 @@ import {
   VALUATION_CONTEXT,
   DEMO_STEPS,
   SELL_READY_ITEMS,
+  PUBLIC_PAGES,
+  BUYER_PROFILES,
   calculateSaleReadinessScore,
   saleReadinessBand,
 } from '@/lib/buyer-room'
@@ -112,12 +114,16 @@ type Tab =
   | 'transfer'
   | 'demo'
   | 'sales-launch'
+  | 'public-pages'
+  | 'buyer-profile'
 
 const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: 'overview',      label: 'Overview',        icon: '📋' },
   { id: 'assets',        label: 'Assets',          icon: '📦' },
+  { id: 'public-pages',  label: 'Public Pages',    icon: '🌐' },
   { id: 'differentiation', label: 'Differentiation', icon: '⚡' },
   { id: 'monetization',  label: 'Monetization',    icon: '💰' },
+  { id: 'buyer-profile', label: 'Buyer Profile',   icon: '🎯' },
   { id: 'technical',     label: 'Technical Proof', icon: '🔧' },
   { id: 'compliance',    label: 'Compliance',      icon: '🛡️' },
   { id: 'gaps',          label: 'Honest Gaps',     icon: '⚠️' },
@@ -731,6 +737,106 @@ function SalesLaunchTab() {
   )
 }
 
+// ── Tab: Public Pages ─────────────────────────────────────────────────────────
+
+function PublicPagesTab() {
+  return (
+    <section className="space-y-6">
+      <div>
+        <h2 className="text-xl font-bold text-white mb-1">🌐 Public Pages Overview</h2>
+        <p className="text-sm text-gray-400">
+          All public-facing pages included in the asset transfer.
+          No admin URLs. No dashboard links. No buyer room links.
+        </p>
+      </div>
+      <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+        <div className="divide-y divide-gray-800">
+          {PUBLIC_PAGES.map((p) => (
+            <div key={p.path} className="flex items-start gap-4 px-5 py-3">
+              <code className="text-xs text-blue-400 font-mono w-40 shrink-0 pt-0.5">{p.path}</code>
+              <div>
+                <p className="text-sm text-white font-medium">{p.label}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{p.purpose}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
+        <p className="text-sm font-semibold text-gray-300 mb-2">Public page highlights</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs text-gray-400">
+          <div><span className="text-white font-semibold">25+</span> SEO landing pages</div>
+          <div><span className="text-white font-semibold">3</span> intake forms (employer, candidate, partner)</div>
+          <div><span className="text-white font-semibold">4</span> partner tracks</div>
+          <div><span className="text-white font-semibold">8</span> corridor-specific pages</div>
+          <div><span className="text-white font-semibold">0</span> admin URLs in sitemap</div>
+          <div><span className="text-white font-semibold">HTTPS</span> live on corridorwork.com</div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ── Tab: Buyer Profile ────────────────────────────────────────────────────────
+
+function BuyerProfileTab() {
+  const fitColor: Record<string, string> = {
+    'ideal':           'bg-green-900/30 text-green-400 border-green-800/40',
+    'good':            'bg-blue-900/30 text-blue-400 border-blue-800/40',
+    'possible':        'bg-yellow-900/30 text-yellow-400 border-yellow-800/40',
+    'not-recommended': 'bg-red-900/30 text-red-400 border-red-800/40',
+  }
+  const fitLabel: Record<string, string> = {
+    'ideal':           'Ideal',
+    'good':            'Good fit',
+    'possible':        'Possible',
+    'not-recommended': 'Not recommended',
+  }
+  return (
+    <section className="space-y-6">
+      <div>
+        <h2 className="text-xl font-bold text-white mb-1">🎯 Suggested Buyer Profile</h2>
+        <p className="text-sm text-gray-400">
+          Commercial activation depends on existing market relationships.
+          The platform is activation-ready — the buyer needs to bring the commercial relationships.
+        </p>
+      </div>
+      <div className="space-y-4">
+        {BUYER_PROFILES.map((profile) => (
+          <div
+            key={profile.id}
+            className="bg-gray-900 border border-gray-800 rounded-xl p-5"
+          >
+            <div className="flex items-start justify-between gap-3 mb-3">
+              <p className="font-semibold text-white">{profile.label}</p>
+              <span className={`px-2 py-0.5 text-xs font-medium rounded-full border shrink-0 ${fitColor[profile.fit]}`}>
+                {fitLabel[profile.fit]}
+              </span>
+            </div>
+            <ul className="space-y-1 mb-3">
+              {profile.reasons.map((r) => (
+                <li key={r} className="text-xs text-gray-400 flex gap-2">
+                  <span className="text-gray-600 shrink-0">·</span>
+                  <span>{r}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-xs text-gray-600 italic">Example: {profile.example}</p>
+          </div>
+        ))}
+      </div>
+      <div className="bg-yellow-950 border border-yellow-800/50 rounded-xl p-4">
+        <p className="text-xs font-semibold text-yellow-300 mb-1">⚠️ Important for all buyers</p>
+        <p className="text-xs text-yellow-200/70">
+          CorridorWork is not a passive income asset. It is an activation-ready platform.
+          The buyer must bring commercial relationships in international recruitment, HR-tech, or relocation
+          to unlock the monetization paths. The platform does all the heavy lifting — but the buyer activates it.
+        </p>
+      </div>
+    </section>
+  )
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 export function BuyerRoomClient() {
@@ -792,8 +898,10 @@ export function BuyerRoomClient() {
       {/* Tab content */}
       {tab === 'overview'        && <OverviewTab />}
       {tab === 'assets'          && <AssetsTab />}
+      {tab === 'public-pages'    && <PublicPagesTab />}
       {tab === 'differentiation' && <DifferentiationTab />}
       {tab === 'monetization'    && <MonetizationTab />}
+      {tab === 'buyer-profile'   && <BuyerProfileTab />}
       {tab === 'technical'       && <TechnicalTab />}
       {tab === 'compliance'      && <ComplianceTab />}
       {tab === 'gaps'            && <HonestGapsTab />}
