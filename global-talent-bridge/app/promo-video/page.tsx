@@ -30,10 +30,12 @@ const FINAL_AUDIO_EXISTS = (() => {
   }
 })()
 
+// noindex: page is a visual preview — not ready to be used as a sale asset or indexed
 export const metadata = {
   title: 'Platform Overview — CorridorWork',
   description:
     'A 60-second overview of how CorridorWork works — employer demand, candidate interest and global talent corridors. corridorwork.com',
+  robots: 'noindex, nofollow',
   openGraph: {
     title: 'CorridorWork — Platform Overview',
     description: 'See how CorridorWork structures international talent corridors in 60 seconds.',
@@ -127,6 +129,25 @@ export default function PromoVideoPage() {
     <div className="min-h-screen bg-slate-950 flex flex-col text-white">
       <PublicNavBar />
 
+      {/* ── VISUAL PREVIEW BANNER (shown until final voiceover is recorded) ──── */}
+      {!FINAL_AUDIO_EXISTS && (
+        <div className="bg-amber-950/60 border-b border-amber-700/60 px-6 py-4">
+          <div className="max-w-3xl mx-auto flex items-start gap-3">
+            <span className="text-amber-400 text-lg shrink-0 mt-0.5">⚠️</span>
+            <div>
+              <p className="text-amber-200 text-sm font-semibold leading-snug">
+                Visual preview only — final human voiceover not included yet.
+              </p>
+              <p className="text-amber-400/70 text-xs mt-1 leading-relaxed">
+                This page is not indexed (noindex). The video below has no audio track.
+                It is not ready to be used as a sale or marketing asset.
+                See <code className="bg-amber-950 px-1 rounded text-amber-300">docs/video/final-voiceover-required.md</code> for next steps.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       <section className="px-6 py-16 border-b border-slate-800 bg-slate-950">
         <div className="max-w-3xl mx-auto text-center">
@@ -207,7 +228,7 @@ export default function PromoVideoPage() {
           <div className="flex items-center justify-between mb-5">
             <div>
               <h2 className="text-white font-bold text-lg">
-                {FINAL_AUDIO_EXISTS ? 'Visual footage (silent version)' : 'Human Footage Version'}
+                {FINAL_AUDIO_EXISTS ? 'Visual footage (silent version)' : 'Human Footage — Visual Preview'}
               </h2>
               <p className="text-slate-500 text-sm mt-0.5">
                 {HUMAN_VIDEO_CLIPS} licensed clips · Pexels Free License · 60 seconds · 1280×720
