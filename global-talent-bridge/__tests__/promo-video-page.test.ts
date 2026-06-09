@@ -89,14 +89,14 @@ describe('/promo-video — File Existence', () => {
     expect(existsSync(PAGE_FILE)).toBe(true)
   })
 
-  it('app/sitemap.ts enthält /promo-video', () => {
+  it('app/sitemap.ts does NOT contain /promo-video (removed — noindex page, not sale-ready)', () => {
     expect(existsSync(SITEMAP)).toBe(true)
-    expect(readFileSync(SITEMAP, 'utf-8')).toContain('/promo-video')
+    expect(readFileSync(SITEMAP, 'utf-8')).not.toContain('/promo-video')
   })
 
-  it('PublicFooter.tsx enthält /promo-video Link', () => {
+  it('PublicFooter.tsx does NOT contain public /promo-video link (removed until voiceover ready)', () => {
     expect(existsSync(FOOTER)).toBe(true)
-    expect(readFileSync(FOOTER, 'utf-8')).toContain('/promo-video')
+    expect(readFileSync(FOOTER, 'utf-8')).not.toContain('href="/promo-video"')
   })
 
   it('scripts/build-promo-video.py existiert (slide draft)', () => {

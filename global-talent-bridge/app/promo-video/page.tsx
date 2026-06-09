@@ -136,11 +136,10 @@ export default function PromoVideoPage() {
             <span className="text-amber-400 text-lg shrink-0 mt-0.5">⚠️</span>
             <div>
               <p className="text-amber-200 text-sm font-semibold leading-snug">
-                Visual preview only — final human voiceover not included yet.
+                Internal visual preview only. No final audio or voiceover is included. Do not use this page as a sales, buyer, or marketing asset.
               </p>
               <p className="text-amber-400/70 text-xs mt-1 leading-relaxed">
-                This page is not indexed (noindex). The video below has no audio track.
-                The video is not ready to be used as a sales or marketing asset.
+                The video below has no audio track.
                 See <code className="bg-amber-950 px-1 rounded text-amber-300">docs/video/final-voiceover-required.md</code> for next steps.
               </p>
             </div>

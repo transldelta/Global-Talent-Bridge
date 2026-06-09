@@ -182,36 +182,6 @@ export default function DemoSandboxPage() {
           </div>
         </div>
 
-        {/* Promo Video Script Available */}
-        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5">
-          <div className="flex items-start gap-3">
-            <span className="text-2xl">🎬</span>
-            <div>
-              <div className="font-bold text-indigo-900 mb-1">Promo Video Script Available</div>
-              <p className="text-sm text-indigo-700 leading-relaxed">
-                A <strong>multilingual promo video pack</strong> (10 languages: EN, DE, FR, AR, ES, PT, HI, UR, FIL, TR)
-                is available in <code className="bg-indigo-100 px-1 rounded text-xs">docs/video/</code>.
-                Includes 60s master script, 30s short, 10s social hook, SRT subtitles,
-                and AI generation prompts for Runway, Pika, Canva, CapCut, and Synthesia/HeyGen.
-              </p>
-              <p className="text-xs text-indigo-500 mt-1">
-                No video file yet — script only. No paid video service activated.
-                Compliance-safe: no job guarantee, no visa guarantee in any language.
-              </p>
-              <div className="mt-2 flex gap-2 flex-wrap">
-                <a href="/strategic-partnership"
-                  className="text-xs bg-indigo-700 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-800 transition-colors">
-                  🤝 Interested in a video partnership?
-                </a>
-                <a href="/demo/sandbox"
-                  className="text-xs bg-white border border-indigo-300 text-indigo-700 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors">
-                  📄 View platform demo
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Safety */}
         <div className="bg-slate-900 text-white rounded-xl p-5 text-sm">
           <div className="font-semibold text-green-400 mb-2">🛡️ Safety & Compliance</div>

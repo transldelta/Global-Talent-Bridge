@@ -59,20 +59,21 @@ describe('/promo-video page — metadata', () => {
 // ── 2. Visual preview warning banner ─────────────────────────────────────────
 
 describe('/promo-video page — visual preview banner', () => {
-  it('page source contains visual preview warning text', () => {
+  it('page source contains internal visual preview warning text', () => {
     const src = readPage()
-    expect(src).toMatch(/Visual preview only — final human voiceover not included yet/i)
+    expect(src).toMatch(/Internal visual preview only|Do not use this page as a sales.*buyer.*or marketing asset/i)
   })
 
   it('banner is conditionally shown based on FINAL_AUDIO_EXISTS', () => {
     const src = readPage()
     // Banner must be inside the !FINAL_AUDIO_EXISTS conditional block
-    expect(src).toMatch(/!FINAL_AUDIO_EXISTS[\s\S]{0,500}Visual preview only/i)
+    expect(src).toMatch(/!FINAL_AUDIO_EXISTS[\s\S]{0,500}Internal visual preview only/i)
   })
 
-  it('banner explains this page is not indexed', () => {
+  it('page metadata has noindex (page is not indexed)', () => {
     const src = readPage()
-    expect(src).toMatch(/not indexed|noindex/i)
+    // noindex is in the metadata export, not necessarily the banner text
+    expect(src).toMatch(/robots\s*:\s*['"]noindex/)
   })
 
   it('banner references the voiceover required doc', () => {
@@ -82,7 +83,7 @@ describe('/promo-video page — visual preview banner', () => {
 
   it('banner explains video has no audio track', () => {
     const src = readPage()
-    expect(src).toMatch(/no audio track|visual preview only/i)
+    expect(src).toMatch(/no audio track|no final audio|no.*voiceover.*included/i)
   })
 })
 
@@ -298,7 +299,7 @@ describe('Promo video preview — safety sweep', () => {
 
 // ── 9. Public link text — homepage and footer ─────────────────────────────────
 
-describe('Public /promo-video links — honest labels (no finished-video framing)', () => {
+describe('Public /promo-video links — removed from public pages (no audio track)', () => {
   const HOMEPAGE = join(ROOT, 'app/page.tsx')
   const FOOTER   = join(ROOT, 'app/_components/PublicFooter.tsx')
 
@@ -309,9 +310,9 @@ describe('Public /promo-video links — honest labels (no finished-video framing
     footer   = readFileSync(FOOTER, 'utf-8')
   })
 
-  // Homepage
-  it('homepage still links to /promo-video (link not removed entirely)', () => {
-    expect(homepage).toContain('/promo-video')
+  // Homepage — all /promo-video links removed
+  it('homepage does NOT link to /promo-video (removed — no audio track, not sale-ready)', () => {
+    expect(homepage).not.toContain('/promo-video')
   })
 
   it('homepage does not use "Watch the overview" (implies finished product)', () => {
@@ -323,40 +324,24 @@ describe('Public /promo-video links — honest labels (no finished-video framing
   })
 
   it('homepage does not use bare "Watch overview" text (implies finished product)', () => {
-    // "Watch overview" standalone — but "Video preview" and similar are fine
     const bareWatchOverview = />\s*Watch overview\s*</
     expect(homepage).not.toMatch(bareWatchOverview)
   })
 
-  it('homepage video card shows "Visual preview only" or similar honest label', () => {
-    expect(homepage).toMatch(/Visual preview only|visual preview|no audio yet|no voiceover yet/i)
-  })
-
   it('homepage video card does NOT show "Promo Video" as a prominent label', () => {
-    // "Promo Video" as a button label implies a finished product
     expect(homepage).not.toMatch(/>\s*Promo Video\s*</)
   })
 
   it('homepage video section description does not promise finished video content', () => {
-    // "A 60-second walkthrough" implied a polished finished video — should be updated
     expect(homepage).not.toContain('A 60-second walkthrough')
   })
 
-  it('homepage shows "no audio" or "no voiceover" warning near video links', () => {
-    expect(homepage).toMatch(/no audio|no voiceover|no audio yet|no voiceover yet/i)
-  })
-
-  // Footer
-  it('footer still links to /promo-video', () => {
-    expect(footer).toContain('/promo-video')
+  // Footer — /promo-video link removed
+  it('PublicFooter.tsx does NOT contain public /promo-video link (removed until voiceover ready)', () => {
+    expect(footer).not.toContain('href="/promo-video"')
   })
 
   it('footer does not use "Promo Video" as link text (implies finished product)', () => {
-    // Link text must not be the bare string "Promo Video"
     expect(footer).not.toMatch(/>\s*Promo Video\s*</)
-  })
-
-  it('footer uses honest label ("Video preview" or similar)', () => {
-    expect(footer).toMatch(/Video preview|visual preview|preview/i)
   })
 })

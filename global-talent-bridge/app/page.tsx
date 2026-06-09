@@ -68,16 +68,6 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Video text link — preview only until voiceover is recorded */}
-            <Link
-              href="/promo-video"
-              className="inline-flex items-center gap-2.5 text-sm text-slate-400 hover:text-white transition-colors group"
-            >
-              <span className="inline-flex items-center justify-center w-7 h-7 rounded-full border border-slate-600 group-hover:border-slate-400 text-slate-400 group-hover:text-white transition-all shrink-0 text-xs">
-                ▶
-              </span>
-              Promo video preview (no voiceover yet)
-            </Link>
 
           </div>
         </div>
@@ -97,69 +87,6 @@ export default function HomePage() {
           <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-slate-950 to-transparent" />
         </div>
 
-      </section>
-
-      {/* ── B. VIDEO OVERVIEW ────────────────────────────────────────────────── */}
-      {/* Premium video preview card — not hidden, not just a text link */}
-      <section className="px-6 py-16 border-t border-slate-800 bg-slate-900/50">
-        <div className="max-w-3xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-
-            {/* Text side */}
-            <div>
-              <p className="text-slate-500 text-[0.7rem] font-bold tracking-[0.18em] uppercase mb-4">
-                Platform overview
-              </p>
-              <h2 className="text-2xl font-bold text-white mb-3 leading-snug">
-                See how CorridorWork works
-              </h2>
-              <p className="text-slate-400 text-sm leading-relaxed mb-3">
-                Visual preview — human footage without voiceover.
-                Final human voiceover not recorded yet.
-              </p>
-              <p className="text-amber-500/70 text-xs mb-5">
-                ⚠️ Visual preview only — no audio track yet.
-              </p>
-              <Link
-                href="/promo-video"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-slate-300 transition-colors"
-              >
-                View visual preview
-                <span className="text-xs">→</span>
-              </Link>
-            </div>
-
-            {/* Video preview card — VISUAL PREVIEW, no audio */}
-            <Link href="/promo-video" className="group block">
-              <div className="relative aspect-video bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 group-hover:border-slate-600 transition-all duration-300 shadow-xl">
-                {/* Background gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-indigo-950/50 to-slate-900" />
-                {/* Play button */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="flex flex-col items-center gap-3">
-                    <div className="w-14 h-14 rounded-full bg-white/10 border border-white/20 flex items-center justify-center group-hover:bg-white/15 transition-all duration-200 shadow-lg">
-                      <svg className="w-5 h-5 text-white/60 ml-0.5" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                    </div>
-                    <span className="text-white/50 text-sm font-medium">
-                      Visual preview only
-                    </span>
-                  </div>
-                </div>
-                {/* No audio badge */}
-                <div className="absolute bottom-3 right-3 px-2 py-0.5 bg-amber-900/80 border border-amber-700/50 rounded text-amber-300 text-xs font-medium">
-                  No audio yet
-                </div>
-                {/* Top label */}
-                <div className="absolute top-3 left-3 px-2 py-0.5 bg-slate-700/80 rounded text-slate-400 text-xs font-medium">
-                  Preview only
-                </div>
-              </div>
-            </Link>
-
-          </div>
-        </div>
       </section>
 
       {/* ── C. AUDIENCE PATHS ────────────────────────────────────────────────── */}
@@ -457,17 +384,6 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {/* Video preview link — no voiceover yet */}
-          <Link
-            href="/promo-video"
-            className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-400 transition-colors mb-12 group"
-          >
-            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full border border-slate-800 group-hover:border-slate-600 text-xs transition-colors">
-              ▶
-            </span>
-            Video preview (no audio yet)
-          </Link>
-
           {/* Buyer / partner access bar */}
           <div className="border-t border-slate-800/80 pt-8">
             <p className="text-slate-600 text-[0.65rem] mb-5 tracking-[0.15em] uppercase">
@@ -485,12 +401,6 @@ export default function HomePage() {
                 className="px-5 py-2.5 bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-sm font-medium rounded-lg border border-slate-700 transition-colors"
               >
                 Demo Sandbox
-              </Link>
-              <Link
-                href="/promo-video"
-                className="px-5 py-2.5 bg-slate-800/60 hover:bg-slate-800 text-slate-500 text-sm font-medium rounded-lg border border-slate-800 transition-colors"
-              >
-                Video preview
               </Link>
             </div>
           </div>

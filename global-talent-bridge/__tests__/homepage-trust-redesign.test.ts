@@ -219,8 +219,8 @@ describe('Homepage — Buyer / Partner section', () => {
     expect(page).toContain('/demo/sandbox')
   })
 
-  test('contains promo video link', () => {
-    expect(page).toContain('/promo-video')
+  test('does NOT contain promo video link (removed — no audio track, not sale-ready)', () => {
+    expect(page).not.toContain('/promo-video')
   })
 
   test('contains structured/acquisition framing for buyers section', () => {
@@ -249,9 +249,8 @@ describe('Navigation — Simplified professional nav', () => {
     expect(nav).toContain('/demo/sandbox')
   })
 
-  test('nav does NOT have Promo Video as a nav item (moved to footer only)', () => {
-    // Promo Video was removed from main nav to keep navigation clean.
-    // It remains accessible via the footer and homepage buyer section.
+  test('nav does NOT have Promo Video as a nav item (removed — no audio track)', () => {
+    // Promo Video is not linked from public nav (no voiceover ready).
     expect(nav).not.toContain("href=\"/promo-video\"")
   })
 
@@ -370,16 +369,15 @@ describe('Homepage — Real images in public/images/home/', () => {
   })
 })
 
-// ── Hero split-layout & promo video ───────────────────────────────────────────
-describe('Homepage — Split-layout hero & promo video access', () => {
-  test('hero contains promo video preview link with honest label (no voiceover yet)', () => {
-    // Label changed from "Watch 60-second overview" to reflect preview-only status
-    expect(page).toMatch(/Promo video preview|visual preview|no voiceover yet|Video preview/i)
+// ── Hero split-layout ─────────────────────────────────────────────────────────
+describe('Homepage — Split-layout hero (promo video links removed)', () => {
+  test('homepage does NOT link to /promo-video (removed — no audio track, not sale-ready)', () => {
+    expect(page).not.toContain('/promo-video')
   })
 
-  test('hero links to /promo-video (at least twice: hero + final CTA)', () => {
-    const occurrences = (page.match(/\/promo-video/g) || []).length
-    expect(occurrences).toBeGreaterThanOrEqual(2)
+  test('homepage does not use "Watch the overview" or "Watch 60-second overview"', () => {
+    expect(page).not.toContain('Watch the overview')
+    expect(page).not.toContain('Watch 60-second overview')
   })
 
   test('hero uses split layout (image as right panel, not full-bleed background)', () => {
