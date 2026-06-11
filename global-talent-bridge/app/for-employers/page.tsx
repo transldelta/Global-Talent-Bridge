@@ -1,112 +1,133 @@
+/**
+ * app/for-employers/page.tsx — /for-employers
+ *
+ * Premium employer acquisition page for CorridorWork.
+ * Design: dark, minimal, B2B SaaS — no emoji decoration, no cheap gradients.
+ * No automatic outreach · No Stripe active · Manual review · GDPR-compliant
+ */
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PublicNavBar } from '@/app/_components/PublicNavBar'
 import { PublicFooter } from '@/app/_components/PublicFooter'
 
 export const metadata: Metadata = {
-  title: 'Für Arbeitgeber',
+  title: 'For Employers — CorridorWork',
   description:
-    'Qualifizierte internationale Kandidaten finden. Jobs einstellen, Matching-Scores sehen, Kandidaten kontaktieren. Kostenlos starten.',
+    'Connect with qualified international talent. Submit workforce demand across sectors and corridors — structured, consent-based, admin-reviewed.',
   openGraph: {
-    title: 'Für Arbeitgeber — CorridorWork',
-    description: 'Internationale Talente finden — strukturiert, mit transparentem Matching-Score.',
+    title: 'For Employers — CorridorWork',
+    description: 'International talent corridors for employers — structured, compliant, globally ready.',
     type: 'website',
   },
 }
 
+const WHAT_YOU_SEE = [
+  { title: 'Matching score (0–100)',  desc: 'A transparent score per candidate based on sector, experience and language level.' },
+  { title: 'Candidate overview',      desc: 'Sector, years of experience, German and English proficiency — at a glance.' },
+  { title: 'Job dashboard',           desc: 'All your jobs with status, match count, and detail access.' },
+  { title: 'Job status control',      desc: 'Activate or deactivate jobs at any time. Inactive jobs do not participate in matching.' },
+  { title: 'KPIs at a glance',        desc: 'Total jobs, active jobs, total matches, best score — always visible.' },
+  { title: 'Protected data',          desc: 'Candidate profiles are visible only to verified employers — never publicly accessible.' },
+]
+
+const PILOT_BENEFITS = [
+  { title: 'MVP is live',          desc: 'The platform is operational: employer profiles, job creation, matching score, candidate overview.' },
+  { title: 'No cost',              desc: 'No charges during the pilot phase. No contract, no payment obligation, no hidden terms.' },
+  { title: 'Direct contact',       desc: 'Reachable directly for questions. No support ticket system, no automated response.' },
+  { title: 'Your feedback counts', desc: 'Pilot employers shape product development directly — issues and requests are implemented fast.' },
+]
+
+const PILOT_STEPS = [
+  'Create an account or submit a pilot enquiry',
+  'Set up your company profile (5 minutes)',
+  'Create one or more job listings',
+  'Review matching scores and candidate overview',
+  'Share direct feedback on what helps and what is missing',
+]
+
 export default function ForEmployersPage() {
   return (
-    <div className="min-h-screen bg-gray-950 flex flex-col">
+    <div className="min-h-screen bg-slate-950 flex flex-col">
       <PublicNavBar />
 
       {/* Hero */}
-      <section className="px-4 py-20 text-center">
+      <section className="px-6 py-20 text-center border-b border-slate-800">
         <div className="max-w-3xl mx-auto">
-          <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-900/40 border border-green-700/50 text-green-300 text-xs font-medium mb-6">
-            🏢 Für Arbeitgeber
-          </div>
+          <p className="text-indigo-400 text-xs font-bold tracking-[0.18em] uppercase mb-6">
+            For Employers
+          </p>
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-5 leading-tight">
-            Qualifizierte internationale Talente finden
+            Find qualified international talent
           </h1>
-          <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Erstelle Jobs mit klaren Anforderungen und sieh sofort, welche Kandidaten
-            am besten passen — sortiert nach Matching-Score.
+          <p className="text-xl text-slate-400 mb-8 max-w-2xl mx-auto leading-relaxed">
+            Create structured job listings and see which candidates match — sorted by corridor
+            score. Admin-reviewed, consent-based, compliance-first.
           </p>
           <Link
             href="/auth/register?role=employer"
-            className="inline-block px-8 py-4 bg-green-700 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors text-base"
+            className="inline-block px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg transition-colors text-base"
           >
-            Kostenlos als Arbeitgeber starten →
+            Start as an employer
           </Link>
-          <p className="mt-3 text-sm text-gray-600">Kein Kreditkarte · Kostenlos starten</p>
+          <p className="mt-3 text-sm text-slate-600">No credit card · Free to start</p>
         </div>
       </section>
 
-      {/* Ablauf */}
-      <section className="px-4 py-16 border-t border-gray-800">
+      {/* How it works */}
+      <section className="px-6 py-16 border-b border-slate-800">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-white text-center mb-3">
-            In 3 Schritten zu deinen Kandidaten
-          </h2>
-          <p className="text-gray-400 text-center mb-10">
-            Keine manuelle Vorauswahl. Kein Sichten unpassender Bewerbungen.
+          <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-8 text-center">
+            How it works
           </p>
+          <h2 className="text-3xl font-bold text-white text-center mb-10">
+            Three steps to your candidates
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
               {
                 step: '1',
-                icon: '🏢',
-                title: 'Unternehmensprofil anlegen',
-                text: 'Unternehmensname, Branche, Land und Kontakt-E-Mail einmal angeben. Fertig in wenigen Minuten.',
+                title: 'Create company profile',
+                text: 'Company name, sector, country and contact email — done in a few minutes.',
               },
               {
                 step: '2',
-                icon: '💼',
-                title: 'Job erstellen',
-                text: 'Jobtitel, Branche, Standort, Mindest-Erfahrung, Sprachanforderungen (Deutsch/Englisch) und Gehalt definieren.',
+                title: 'Post a job listing',
+                text: 'Job title, sector, location, minimum experience, language requirements and salary range.',
               },
               {
                 step: '3',
-                icon: '📊',
-                title: 'Kandidaten-Matches sehen',
-                text: 'Sobald Kandidaten das Matching starten, erscheinen sie rankiert nach Score: Name, Branche, Erfahrung, Sprachlevel, Score.',
+                title: 'Review candidate matches',
+                text: 'Once candidates run matching, they appear ranked by score: name, sector, experience, language level.',
               },
             ].map((item) => (
-              <div key={item.step} className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-8 rounded-full bg-green-700 text-white text-sm font-bold flex items-center justify-center shrink-0">
-                    {item.step}
-                  </div>
-                  <span className="text-2xl">{item.icon}</span>
+              <div key={item.step} className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                <div className="w-8 h-8 rounded-full bg-indigo-600/20 border border-indigo-500/40 flex items-center justify-center mb-4">
+                  <span className="text-indigo-400 text-sm font-bold">{item.step}</span>
                 </div>
                 <h3 className="text-white font-semibold mb-2">{item.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{item.text}</p>
+                <p className="text-slate-400 text-sm leading-relaxed">{item.text}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Was Arbeitgeber sehen */}
-      <section className="px-4 py-16 border-t border-gray-800 bg-gray-900/30">
+      {/* What employers see */}
+      <section className="px-6 py-16 border-b border-slate-800 bg-slate-900/30">
         <div className="max-w-4xl mx-auto">
+          <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-8 text-center">
+            Employer view
+          </p>
           <h2 className="text-3xl font-bold text-white text-center mb-10">
-            Was du als Arbeitgeber siehst
+            What you see as an employer
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {[
-              { icon: '🎯', title: 'Matching-Score (0–100 %)', text: 'Für jeden Kandidaten ein klarer Score basierend auf Branche, Erfahrung und Sprachlevel.' },
-              { icon: '👤', title: 'Kandidaten-Details', text: 'Name, Branche, Erfahrungsjahre, Deutschkenntnisse, Englischkenntnisse — auf einen Blick.' },
-              { icon: '📋', title: 'Job-Dashboard', text: 'Alle deine Jobs mit Status (aktiv/inaktiv), Match-Anzahl und Zugang zu Detailansichten.' },
-              { icon: '🔄', title: 'Job-Status steuern', text: 'Jobs jederzeit aktivieren oder deaktivieren. Inaktive Jobs nehmen nicht am Matching teil.' },
-              { icon: '📈', title: 'KPIs im Dashboard', text: 'Jobs gesamt, aktive Jobs, Matches gesamt, bester Score — immer im Überblick.' },
-              { icon: '🔒', title: 'Sichere Daten', text: 'Kandidatenprofile sind nur für verifizierte Arbeitgeber sichtbar, nicht öffentlich zugänglich.' },
-            ].map((item) => (
-              <div key={item.title} className="flex items-start gap-4 bg-gray-900 border border-gray-800 rounded-xl p-4">
-                <div className="text-2xl shrink-0">{item.icon}</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {WHAT_YOU_SEE.map((item) => (
+              <div key={item.title} className="flex items-start gap-4 bg-slate-900 border border-slate-800 rounded-xl p-5">
+                <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 shrink-0 mt-2" />
                 <div>
-                  <p className="text-white font-medium mb-1">{item.title}</p>
-                  <p className="text-gray-400 text-sm leading-relaxed">{item.text}</p>
+                  <p className="text-white font-medium mb-1 text-sm">{item.title}</p>
+                  <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -114,152 +135,132 @@ export default function ForEmployersPage() {
         </div>
       </section>
 
-      {/* Pricing Preview */}
-      <section className="px-4 py-16 border-t border-gray-800">
+      {/* Pricing */}
+      <section className="px-6 py-16 border-b border-slate-800">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Pricing</h2>
-          <p className="text-gray-400 mb-8">
-            Für Arbeitgeber gibt es verschiedene Pakete. In der aktuellen MVP-Phase
-            sind alle Funktionen kostenlos nutzbar. Zahlungen werden in einer
-            späteren Phase aktiviert.
+          <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-4">
+            Pricing
+          </p>
+          <h2 className="text-3xl font-bold text-white mb-4">Plans</h2>
+          <p className="text-slate-400 mb-8 leading-relaxed">
+            Multiple plans are available for employers. In the current MVP phase,
+            all features are available at no cost. Payments will be activated in a later phase.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
             {[
-              { name: 'Free', price: '0 €', color: 'text-gray-300' },
-              { name: 'Starter', price: '49 €/Mo', color: 'text-blue-300' },
-              { name: 'Growth', price: '149 €/Mo', color: 'text-purple-300' },
-              { name: 'Enterprise', price: '499 €/Mo', color: 'text-amber-300' },
+              { name: 'Free',       price: '€0',       accent: 'text-slate-300' },
+              { name: 'Starter',    price: '€49/mo',   accent: 'text-indigo-300' },
+              { name: 'Growth',     price: '€149/mo',  accent: 'text-indigo-300' },
+              { name: 'Enterprise', price: '€499/mo',  accent: 'text-amber-300' },
             ].map((plan) => (
-              <div key={plan.name} className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
-                <p className={`text-sm font-semibold mb-1 ${plan.color}`}>{plan.name}</p>
-                <p className="text-white text-xs">{plan.price}</p>
+              <div key={plan.name} className="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
+                <p className={`text-sm font-semibold mb-1 ${plan.accent}`}>{plan.name}</p>
+                <p className="text-slate-400 text-xs">{plan.price}</p>
               </div>
             ))}
           </div>
-          <div className="p-3 bg-yellow-900/20 border border-yellow-800/40 rounded-xl text-sm text-yellow-300 mb-6">
-            ⚠️ Zahlungen sind in dieser MVP-Version noch nicht aktiviert.
+          <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-lg text-slate-400 text-xs mb-6">
+            <div className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+            Payment processing is not active in the current MVP phase.
           </div>
-          <Link
-            href="/pricing"
-            className="inline-block text-sm text-blue-400 hover:text-blue-300 transition-colors"
-          >
-            Alle Pricing-Details ansehen →
-          </Link>
+          <div>
+            <Link
+              href="/pricing"
+              className="text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
+            >
+              View full pricing details →
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* Pilot-Arbeitgeber-Abschnitt */}
-      <section className="px-4 py-16 border-t border-gray-800 bg-gradient-to-r from-green-900/10 to-blue-900/10">
+      {/* Pilot employers */}
+      <section className="px-6 py-16 border-b border-slate-800">
         <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-900/40 border border-green-700/50 text-green-300 text-xs font-medium mb-4">
-              🏢 Jetzt gesucht
-            </div>
-            <h2 className="text-3xl font-bold text-white mb-3">Pilot-Arbeitgeber gesucht</h2>
-            <p className="text-gray-400 text-base leading-relaxed max-w-2xl mx-auto">
-              CorridorWork ist live und voll funktionsfähig — jetzt suchen wir Unternehmen,
-              die die Plattform als erste testen und mitgestalten.
+          <div className="text-center mb-10">
+            <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-4">
+              Pilot programme
+            </p>
+            <h2 className="text-3xl font-bold text-white mb-3">Pilot employers wanted</h2>
+            <p className="text-slate-400 text-base leading-relaxed max-w-2xl mx-auto">
+              CorridorWork is live and fully operational — now looking for companies
+              to test and shape the platform first.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-            {[
-              {
-                icon: '✅',
-                title: 'MVP ist live',
-                text: 'Die Plattform funktioniert bereits: Arbeitgeber-Profile, Job-Erstellung, Matching-Score, Kandidaten-Übersicht.',
-              },
-              {
-                icon: '🆓',
-                title: 'Komplett kostenlos',
-                text: 'In der Pilot-Phase entstehen keine Kosten. Kein Vertrag, keine Zahlungspflicht, keine versteckten Bedingungen.',
-              },
-              {
-                icon: '👤',
-                title: 'Persönliche Betreuung',
-                text: 'Ich bin direkt erreichbar und beantworte Fragen persönlich. Kein Support-Ticket, kein automatisches System.',
-              },
-              {
-                icon: '💬',
-                title: 'Dein Feedback zählt',
-                text: 'Pilot-Arbeitgeber prägen direkt die Weiterentwicklung. Was fehlt, was stört, was hilft — ich setze es schnell um.',
-              },
-            ].map((item) => (
-              <div key={item.title} className="flex items-start gap-4 bg-gray-900 border border-gray-800 rounded-xl p-4">
-                <div className="text-2xl shrink-0">{item.icon}</div>
+            {PILOT_BENEFITS.map((item) => (
+              <div key={item.title} className="flex items-start gap-4 bg-slate-900 border border-slate-800 rounded-xl p-5">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 mt-2" />
                 <div>
                   <p className="text-white font-medium mb-1 text-sm">{item.title}</p>
-                  <p className="text-gray-400 text-sm leading-relaxed">{item.text}</p>
+                  <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Was Pilot-Arbeitgeber machen */}
-          <div className="bg-gray-900 border border-green-800/30 rounded-2xl p-6 mb-6">
-            <h3 className="text-white font-semibold mb-4">So läuft die Pilot-Phase ab</h3>
+          <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 mb-8">
+            <h3 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">
+              How the pilot phase works
+            </h3>
             <div className="space-y-3">
-              {[
-                { n: '1', text: 'Konto erstellen oder Pilot-Anfrage senden' },
-                { n: '2', text: 'Unternehmensprofil anlegen (5 Minuten)' },
-                { n: '3', text: 'Einen oder mehrere Jobs erstellen' },
-                { n: '4', text: 'Matching-Score und passende Kandidaten ansehen' },
-                { n: '5', text: 'Direktes Feedback an mich — was hilft, was fehlt' },
-              ].map((step) => (
-                <div key={step.n} className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-green-700 text-white text-xs font-bold flex items-center justify-center shrink-0">
-                    {step.n}
+              {PILOT_STEPS.map((step, i) => (
+                <div key={step} className="flex items-center gap-3">
+                  <div className="w-6 h-6 rounded-full bg-indigo-600/20 border border-indigo-500/40 text-indigo-400 text-xs font-bold flex items-center justify-center shrink-0">
+                    {i + 1}
                   </div>
-                  <p className="text-gray-300 text-sm">{step.text}</p>
+                  <p className="text-slate-400 text-sm">{step}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="text-center">
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/contact?role=employer&interest=pilot_employer"
-                className="px-8 py-4 bg-green-700 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors"
-              >
-                📋 Als Pilot-Arbeitgeber anfragen
-              </Link>
-              <Link
-                href="/auth/register?role=employer"
-                className="px-8 py-4 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 font-semibold rounded-xl transition-colors"
-              >
-                🏢 Direkt registrieren
-              </Link>
-            </div>
-            <p className="mt-3 text-xs text-gray-600">
-              Pilot-Anfrage = persönliches Gespräch, keine automatischen E-Mails, kein Spam.
-              Direkte Registrierung = sofort loslegen, kein Gespräch nötig.
-            </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/contact?role=employer&interest=pilot_employer"
+              className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg transition-colors text-center"
+            >
+              Request pilot access
+            </Link>
+            <Link
+              href="/auth/register?role=employer"
+              className="px-8 py-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold rounded-lg transition-colors text-center"
+            >
+              Register directly
+            </Link>
           </div>
+          <p className="mt-4 text-center text-xs text-slate-600">
+            Pilot request: direct conversation, no automated emails, no spam.
+            Direct registration: get started immediately, no conversation needed.
+          </p>
         </div>
       </section>
 
-      {/* Spätere Premium-Funktionen */}
-      <section className="px-4 py-16 border-t border-gray-800 bg-gray-900/30">
+      {/* Upcoming premium features */}
+      <section className="px-6 py-16 border-b border-slate-800 bg-slate-900/30">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-white mb-3">🚀 Kommende Premium-Funktionen</h2>
-          <p className="text-gray-400 text-sm mb-8">
-            Diese Funktionen sind in Vorbereitung und werden in Premium-Plänen verfügbar sein.
+          <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-4">
+            Roadmap
+          </p>
+          <h2 className="text-2xl font-bold text-white mb-3">Upcoming premium features</h2>
+          <p className="text-slate-400 text-sm mb-8">
+            These features are in preparation and will be available in premium plans.
           </p>
           <div className="flex flex-wrap justify-center gap-2">
             {[
-              'Erweiterte Kandidatenprofile',
-              'Direkter Kontakt zu Kandidaten',
-              'Mehr gleichzeitige Jobs',
-              'Priorität im Matching',
-              'Team-Zugänge',
-              'CSV-Export',
-              'API-Zugang',
-              'Dedizierter Support',
+              'Extended candidate profiles',
+              'Direct candidate contact',
+              'More concurrent listings',
+              'Priority matching',
+              'Team access',
+              'CSV export',
+              'API access',
+              'Dedicated support',
             ].map((f) => (
               <span
                 key={f}
-                className="text-xs px-3 py-1.5 bg-purple-900/20 border border-purple-800/30 text-purple-300 rounded-full"
+                className="text-xs px-3 py-1.5 bg-slate-900 border border-slate-700 text-slate-400 rounded-lg"
               >
                 {f}
               </span>
@@ -268,29 +269,29 @@ export default function ForEmployersPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="px-4 py-16 border-t border-gray-800 bg-gradient-to-r from-green-900/20 to-blue-900/20">
+      {/* Final CTA */}
+      <section className="px-6 py-16 border-b border-slate-800">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">Jetzt kostenlos starten</h2>
-          <p className="text-gray-400 mb-6">
-            Unternehmensprofil anlegen, ersten Job erstellen, Kandidaten finden.
+          <h2 className="text-2xl font-bold text-white mb-4">Start at no cost</h2>
+          <p className="text-slate-400 mb-8">
+            Create a company profile, post your first job, find candidates.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/auth/register?role=employer"
-              className="px-8 py-4 bg-green-700 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors"
+              className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg transition-colors"
             >
-              🏢 Als Arbeitgeber registrieren →
+              Register as employer
             </Link>
             <Link
               href="/contact?role=employer&interest=pilot_employer"
-              className="px-8 py-4 bg-blue-900/40 hover:bg-blue-800/60 border border-blue-700/60 text-blue-300 font-semibold rounded-xl transition-colors"
+              className="px-8 py-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold rounded-lg transition-colors"
             >
-              📋 Als Pilot-Arbeitgeber anfragen
+              Request pilot access
             </Link>
           </div>
-          <p className="mt-4 text-xs text-gray-600">
-            Pilot-Anfrage: Direktes Gespräch, keine automatischen E-Mails, kein Spam.
+          <p className="mt-4 text-xs text-slate-600">
+            Pilot request: direct conversation, no automated emails, no spam.
           </p>
         </div>
       </section>

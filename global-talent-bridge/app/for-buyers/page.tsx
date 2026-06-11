@@ -1,7 +1,8 @@
 /**
- * app/for-buyers/page.tsx
+ * app/for-buyers/page.tsx — /for-buyers
  *
  * Public acquisition inquiry page for CorridorWork.
+ * Design: dark, minimal, premium — aligned to slate-950 brand standard.
  * No admin data. No internal admin links. No Buyer Room link.
  * No automatic sending. No Stripe. No fake revenue claims.
  *
@@ -10,7 +11,8 @@
 
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { NavBar } from '@/app/_components/NavBar'
+import { PublicNavBar } from '@/app/_components/PublicNavBar'
+import { PublicFooter } from '@/app/_components/PublicFooter'
 
 export const metadata: Metadata = {
   title: 'For Buyers — CorridorWork',
@@ -20,65 +22,65 @@ export const metadata: Metadata = {
 }
 
 const ASSETS = [
-  { icon: '🌐', label: 'Live domain',      detail: 'corridorwork.com — registered, HTTPS, indexed' },
-  { icon: '💻', label: 'Full codebase',    detail: 'Next.js · TypeScript strict · 4 352 passing tests · 0 errors' },
-  { icon: '🗄️', label: 'Database',         detail: 'Supabase PostgreSQL 17 · EU-Frankfurt · GDPR · RLS active' },
-  { icon: '🚀', label: 'Deployment',       detail: 'Vercel · serverless · auto-deploy · 163 pages' },
-  { icon: '🧠', label: 'Corridor engine',  detail: '8 scored global talent corridors · Buyer Opportunity Scores' },
-  { icon: '🔧', label: 'Admin toolset',    detail: '10+ tools: pipeline, intelligence, approval queue, buyer room' },
-  { icon: '📄', label: 'Documentation',    detail: '50+ files: architecture, security, transfer guide, buyer package' },
-  { icon: '🔄', label: 'Transfer-prepared', detail: 'Documented handover steps for all 4 assets; timing depends on domain, GitHub, Vercel, Supabase, and buyer-side setup' },
+  { label: 'Live domain',         detail: 'corridorwork.com — registered, HTTPS, indexed' },
+  { label: 'Full codebase',       detail: 'Next.js · TypeScript strict · 4 352 passing tests · 0 errors' },
+  { label: 'Database',            detail: 'Supabase PostgreSQL 17 · EU-Frankfurt · GDPR · RLS active' },
+  { label: 'Deployment',          detail: 'Vercel · serverless · auto-deploy · 163 pages' },
+  { label: 'Corridor engine',     detail: '8 scored global talent corridors · Buyer Opportunity Scores' },
+  { label: 'Admin toolset',       detail: '10+ tools: pipeline, intelligence, approval queue, buyer room' },
+  { label: 'Documentation',       detail: '50+ files: architecture, security, transfer guide, buyer package' },
+  { label: 'Transfer-prepared',   detail: 'Documented handover steps for all 4 assets; timing depends on domain, GitHub, Vercel, Supabase, and buyer-side setup' },
 ]
 
 const FACTS = [
-  { label: 'Revenue (MRR)',      value: '€0',        note: 'Pre-revenue asset stage' },
-  { label: 'Paying customers',   value: '0',         note: 'No commercial transactions yet' },
-  { label: 'Test suite',         value: '4 352 ✅',  note: '0 failures' },
-  { label: 'TypeScript errors',  value: '0',         note: 'tsc --noEmit clean' },
-  { label: 'Asking price',       value: 'Negotiable', note: 'Asset-based · no MRR multiple' },
+  { label: 'Revenue (MRR)',     value: '€0',          note: 'Pre-revenue asset stage' },
+  { label: 'Paying customers',  value: '0',           note: 'No commercial transactions yet' },
+  { label: 'Test suite',        value: '4 352 ✓',     note: '0 failures' },
+  { label: 'TypeScript errors', value: '0',           note: 'tsc --noEmit clean' },
+  { label: 'Asking price',      value: 'Negotiable',  note: 'Asset-based · no MRR multiple' },
 ]
 
 export default function ForBuyersPage() {
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      <NavBar />
+    <div className="min-h-screen bg-slate-950 flex flex-col">
+      <PublicNavBar />
 
       {/* Hero */}
-      <section className="max-w-3xl mx-auto px-6 pt-20 pb-12 text-center">
-        <p className="text-blue-400 text-sm font-semibold tracking-widest uppercase mb-4">
+      <section className="max-w-3xl mx-auto px-6 pt-20 pb-12 text-center border-b border-slate-800">
+        <p className="text-indigo-400 text-xs font-bold tracking-[0.18em] uppercase mb-5">
           Transfer-Ready SaaS Asset · Asset Stage · Pre-Revenue
         </p>
         <h1 className="text-4xl sm:text-5xl font-bold text-white leading-tight mb-6">
           CorridorWork is available for acquisition.
         </h1>
-        <p className="text-lg text-gray-400 leading-relaxed mb-8">
+        <p className="text-lg text-slate-400 leading-relaxed mb-8">
           A structured corridor intelligence and approval-based growth SaaS for the
           international talent mobility market — built, tested, documented, and
           transfer-ready on day one.
         </p>
         <Link
           href="/contact?interest=buyer_acquisition"
-          className="inline-block px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors text-lg"
+          className="inline-block px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg transition-colors text-lg"
         >
           Request details →
         </Link>
-        <p className="text-xs text-gray-600 mt-3">
+        <p className="text-xs text-slate-600 mt-3">
           No automated follow-up. No phone calls without consent. We respond via the contact form.
         </p>
       </section>
 
       {/* Honest facts */}
-      <section className="max-w-3xl mx-auto px-6 pb-12">
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-          <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
-            Honest numbers
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <section className="max-w-3xl mx-auto px-6 py-10 border-b border-slate-800">
+        <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-5">
+          Honest numbers
+        </p>
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
             {FACTS.map((f) => (
               <div key={f.label} className="text-center">
-                <div className="text-2xl font-bold text-white">{f.value}</div>
-                <div className="text-xs text-gray-400 mt-0.5">{f.label}</div>
-                <div className="text-[10px] text-gray-600 mt-0.5">{f.note}</div>
+                <div className="text-2xl font-bold text-white mb-0.5">{f.value}</div>
+                <div className="text-xs text-slate-400">{f.label}</div>
+                <div className="text-[10px] text-slate-600 mt-0.5">{f.note}</div>
               </div>
             ))}
           </div>
@@ -86,73 +88,81 @@ export default function ForBuyersPage() {
       </section>
 
       {/* What you get */}
-      <section className="max-w-3xl mx-auto px-6 pb-12">
-        <h2 className="text-xl font-bold text-white mb-6">What you get</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {ASSETS.map((a) => (
+      <section className="max-w-3xl mx-auto px-6 py-10 border-b border-slate-800">
+        <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-5">
+          Asset overview
+        </p>
+        <h2 className="text-xl font-bold text-white mb-5">What you get</h2>
+        <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+          {ASSETS.map((a, i) => (
             <div
               key={a.label}
-              className="bg-gray-900 border border-gray-800 rounded-xl p-4 flex gap-3"
+              className={`flex gap-4 px-5 py-4 ${i < ASSETS.length - 1 ? 'border-b border-slate-800' : ''}`}
             >
-              <span className="text-2xl shrink-0 mt-0.5">{a.icon}</span>
-              <div>
-                <p className="font-semibold text-white text-sm">{a.label}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{a.detail}</p>
-              </div>
+              <span className="text-slate-500 text-sm w-36 shrink-0 font-medium">{a.label}</span>
+              <span className="text-slate-300 text-sm leading-relaxed">{a.detail}</span>
             </div>
           ))}
         </div>
       </section>
 
       {/* Tech stack */}
-      <section className="max-w-3xl mx-auto px-6 pb-12">
-        <h2 className="text-xl font-bold text-white mb-4">Technology</h2>
-        <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+      <section className="max-w-3xl mx-auto px-6 py-10 border-b border-slate-800">
+        <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-5">
+          Technology
+        </p>
+        <h2 className="text-xl font-bold text-white mb-5">Tech stack</h2>
+        <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
           {[
-            ['Framework',   'Next.js App Router · TypeScript strict'],
-            ['Database',    'Supabase PostgreSQL 17 · EU-Frankfurt · GDPR'],
-            ['Security',    'RLS on all tables · no_auto_send DB constraint'],
-            ['Deployment',  'Vercel · serverless · auto-deploy from GitHub'],
-            ['Testing',     'Vitest · 4 352 tests · 48 files · 0 failures'],
-            ['Code quality','0 TypeScript errors · ESLint clean'],
-          ].map(([layer, tech]) => (
+            ['Framework',    'Next.js App Router · TypeScript strict'],
+            ['Database',     'Supabase PostgreSQL 17 · EU-Frankfurt · GDPR'],
+            ['Security',     'RLS on all tables · no_auto_send DB constraint'],
+            ['Deployment',   'Vercel · serverless · auto-deploy from GitHub'],
+            ['Testing',      'Vitest · 4 352 tests · 48 files · 0 failures'],
+            ['Code quality', '0 TypeScript errors · ESLint clean'],
+          ].map(([layer, tech], i, arr) => (
             <div
               key={layer}
-              className="flex gap-4 px-5 py-3 border-b border-gray-800 last:border-0"
+              className={`flex gap-4 px-5 py-3 ${i < arr.length - 1 ? 'border-b border-slate-800' : ''}`}
             >
-              <span className="text-sm text-gray-500 w-28 shrink-0">{layer}</span>
-              <span className="text-sm text-gray-200">{tech}</span>
+              <span className="text-slate-500 text-sm w-28 shrink-0">{layer}</span>
+              <span className="text-slate-300 text-sm">{tech}</span>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Safety */}
-      <section className="max-w-3xl mx-auto px-6 pb-12">
-        <div className="bg-gray-900 border border-gray-700 rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-gray-300 mb-3">Compliance posture</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-gray-400">
+      {/* Compliance */}
+      <section className="max-w-3xl mx-auto px-6 py-10 border-b border-slate-800">
+        <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-5">
+          Compliance posture
+        </p>
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {[
-              '✅ No automated outreach (DB constraint)',
-              '✅ No scraping — all data manually curated',
-              '✅ No Stripe active — payment not connected',
-              '✅ No job guarantee in any copy or document',
-              '✅ No visa guarantee in any copy or document',
-              '✅ No candidate fees — intake is free',
-              '✅ Supabase EU-Frankfurt (GDPR)',
-              '✅ RLS active on all database tables',
+              'No automated outreach (DB constraint)',
+              'No scraping — all data manually curated',
+              'No Stripe active — payment not connected',
+              'No job guarantee in any copy or document',
+              'No visa guarantee in any copy or document',
+              'No candidate fees — intake is free',
+              'Supabase EU-Frankfurt (GDPR)',
+              'RLS active on all database tables',
             ].map((item) => (
-              <span key={item}>{item}</span>
+              <div key={item} className="flex items-center gap-2.5 text-slate-400 text-sm">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                {item}
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Market validation note */}
-      <section className="max-w-3xl mx-auto px-6 pb-10">
-        <div className="bg-gray-900 border border-gray-700/50 rounded-xl p-4 text-xs text-gray-400">
-          <p>
-            <span className="text-gray-300 font-medium">Market validation status:</span>{' '}
+      <section className="max-w-3xl mx-auto px-6 py-6 border-b border-slate-800">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+          <p className="text-slate-500 text-sm leading-relaxed">
+            <span className="text-slate-400 font-medium">Market validation status:</span>{' '}
             Market validation process prepared — no revenue or customer traction claimed.
             The platform is pre-revenue and asset-stage. Any stated interest from parties
             is documented via a manual outreach process; no automated outreach has been
@@ -162,23 +172,25 @@ export default function ForBuyersPage() {
       </section>
 
       {/* CTA */}
-      <section className="max-w-3xl mx-auto px-6 pb-24 text-center">
+      <section className="max-w-3xl mx-auto px-6 py-16 text-center">
         <h2 className="text-2xl font-bold text-white mb-4">Interested?</h2>
-        <p className="text-gray-400 mb-6 text-sm">
+        <p className="text-slate-400 mb-8 text-sm leading-relaxed max-w-lg mx-auto">
           Contact us via the form below. We will respond with full due diligence access,
           technical documentation, and transfer details.
         </p>
         <Link
           href="/contact?interest=buyer_acquisition"
-          className="inline-block px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors"
+          className="inline-block px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg transition-colors"
         >
           Request details →
         </Link>
-        <p className="text-xs text-gray-600 mt-4">
+        <p className="text-xs text-slate-600 mt-4">
           Full asset transfer starts only after payment is confirmed in escrow.
           No assets are shared before escrow confirmation.
         </p>
       </section>
+
+      <PublicFooter />
     </div>
   )
 }

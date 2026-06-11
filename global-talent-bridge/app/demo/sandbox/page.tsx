@@ -1,10 +1,13 @@
 /**
  * app/demo/sandbox/page.tsx — /demo/sandbox
  *
- * Demo Sandbox — öffentlich, zeigt globale Plattform-Capabilities.
- * Keine echten Daten. Keine Accounts. Kein Login nötig.
+ * Demo Sandbox — public, shows global platform capabilities.
+ * No real data. No accounts. No login required.
+ * Premium design: dark theme, clean typography, no emoji decoration.
  */
 import Link from 'next/link'
+import { PublicNavBar } from '@/app/_components/PublicNavBar'
+import { PublicFooter } from '@/app/_components/PublicFooter'
 import { TALENT_CATEGORIES, getTopCategoriesByRevenue } from '@/lib/talent-categories'
 
 export const metadata = {
@@ -24,83 +27,103 @@ export default function DemoSandboxPage() {
   const topRevCats = getTopCategoriesByRevenue(5)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-950 flex flex-col">
+      <PublicNavBar />
 
-      {/* ⚠️ Demonstration-Only Banner */}
-      <div className="bg-amber-50 border-b-2 border-amber-300 px-4 py-3">
-        <div className="max-w-5xl mx-auto flex items-center gap-3">
-          <span className="text-xl shrink-0">🧪</span>
-          <div className="text-sm">
-            <span className="font-bold text-amber-800">Demo-Modus — Synthetische Daten:</span>
-            <span className="text-amber-700 ml-1">
-              Diese Seite zeigt ausschließlich Plattformfähigkeiten. Keine echten Kunden, keine echten Umsätze,
-              keine echten Kandidaten- oder Arbeitgeberdaten. Alle Zahlen sind Demo-Daten.
-            </span>
-          </div>
-          <Link href="/strategic-partnership"
-            className="shrink-0 px-3 py-1.5 bg-amber-500 text-white text-xs font-bold rounded-lg hover:bg-amber-400 transition-colors">
+      {/* Demo notice — subtle, dark, professional */}
+      <div className="bg-slate-900 border-b border-slate-800 px-6 py-3">
+        <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
+          <p className="text-slate-400 text-xs">
+            <span className="text-amber-400 font-semibold">Demo-Modus:</span>
+            {' '}
+            Ausschließlich synthetische Daten. Keine echten Kunden, keine echten Umsätze, keine echten Kandidaten- oder Arbeitgeberdaten.
+          </p>
+          <Link
+            href="/strategic-partnership"
+            className="shrink-0 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-lg border border-slate-700 transition-colors"
+          >
             Echter Käufer? →
           </Link>
         </div>
       </div>
 
-      {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-900 to-blue-900 text-white py-14 px-4">
+      {/* Hero */}
+      <section className="border-b border-slate-800 bg-slate-900/50 px-6 py-16">
         <div className="max-w-5xl mx-auto">
-          <div className="text-sm text-indigo-300 mb-2">
-            <Link href="/" className="hover:underline">CorridorWork</Link> · Live Demo
+          <div className="flex items-center gap-2 mb-5">
+            <Link href="/" className="text-slate-500 text-sm hover:text-slate-300 transition-colors">
+              CorridorWork
+            </Link>
+            <span className="text-slate-700">·</span>
+            <span className="text-slate-400 text-sm">Platform Demo</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-black mb-4">🌍 Global Talent Corridor Platform</h1>
-          <p className="text-indigo-200 text-lg max-w-2xl mb-6">
-            Structured, compliance-first Cross-border Hiring — worldwide employers, worldwide candidates,
+          <p className="text-indigo-400 text-xs font-bold tracking-[0.18em] uppercase mb-4">
+            Platform capabilities
+          </p>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight max-w-2xl">
+            Global Talent Corridor Platform
+          </h1>
+          <p className="text-slate-400 text-lg max-w-2xl mb-8 leading-relaxed">
+            Structured, compliance-first cross-border hiring — worldwide employers, worldwide candidates,
             {' '}{TALENT_CATEGORIES.length}+ sectors, 15+ global corridors. Inbound-first. No cold outreach.
           </p>
           <div className="flex flex-wrap gap-3">
-            <Link href="/global/employers"
-              className="px-5 py-2.5 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-400 transition-colors">
-              🏢 Employer Intake →
+            <Link
+              href="/global/employers"
+              className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-semibold transition-colors text-sm"
+            >
+              Employer intake
             </Link>
-            <Link href="/global/candidates"
-              className="px-5 py-2.5 bg-green-500 text-white rounded-xl font-semibold hover:bg-green-400 transition-colors">
-              👤 Candidate Interest →
+            <Link
+              href="/global/candidates"
+              className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-semibold border border-slate-700 transition-colors text-sm"
+            >
+              Candidate interest
             </Link>
-            <Link href="/strategic-partnership"
-              className="px-5 py-2.5 bg-amber-500 text-white rounded-xl font-semibold hover:bg-amber-400 transition-colors">
-              🎯 Strategic Partnership →
+            <Link
+              href="/strategic-partnership"
+              className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-amber-300 rounded-lg font-semibold border border-slate-700 transition-colors text-sm"
+            >
+              Strategic partnership
             </Link>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
+      <div className="max-w-5xl mx-auto px-6 py-12 space-y-10 w-full">
 
-        {/* Platform Numbers */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {/* Platform metrics */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {[
-            { value: `${TALENT_CATEGORIES.length}+`, label: 'Sectors', icon: '🏭', color: 'text-indigo-600' },
-            { value: '15+',  label: 'Global Corridors', icon: '🌍', color: 'text-blue-600' },
-            { value: '4',    label: 'Revenue Paths',    icon: '💰', color: 'text-green-600' },
-            { value: '2134+', label: 'Tests Passing',   icon: '✅', color: 'text-emerald-600' },
+            { value: `${TALENT_CATEGORIES.length}+`, label: 'Sectors covered',   accent: 'text-indigo-400' },
+            { value: '15+',                           label: 'Global corridors',  accent: 'text-slate-300' },
+            { value: '4',                             label: 'Revenue pathways',  accent: 'text-slate-300' },
           ].map(s => (
-            <div key={s.label} className="bg-white border border-gray-200 rounded-xl p-4 text-center">
-              <div className="text-2xl mb-1">{s.icon}</div>
-              <div className={`text-3xl font-bold ${s.color}`}>{s.value}</div>
-              <div className="text-xs text-gray-500 mt-1">{s.label}</div>
+            <div key={s.label} className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+              <div className={`text-3xl font-bold mb-1 ${s.accent}`}>{s.value}</div>
+              <div className="text-slate-500 text-xs uppercase tracking-wider">{s.label}</div>
             </div>
           ))}
         </div>
 
         {/* Sectors */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6">
-          <h2 className="font-bold text-gray-900 text-xl mb-2">🏭 {TALENT_CATEGORIES.length} Sectors Supported</h2>
-          <p className="text-sm text-gray-500 mb-4">Not limited to healthcare or IT — all qualified sectors worldwide.</p>
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <div className="mb-5">
+            <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-1">
+              Sector coverage
+            </p>
+            <h2 className="text-white font-bold text-lg">{TALENT_CATEGORIES.length} sectors supported</h2>
+            <p className="text-slate-500 text-sm mt-1">Not limited to healthcare or IT — all qualified sectors worldwide.</p>
+          </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
             {TALENT_CATEGORIES.map(cat => (
-              <div key={cat.sector_key} className="flex items-center gap-2 p-2 bg-gray-50 border border-gray-100 rounded-lg">
-                <span>{cat.emoji}</span>
+              <div key={cat.sector_key} className="flex items-center gap-2 p-2.5 bg-slate-800/60 border border-slate-700/60 rounded-lg">
+                <span className="text-base shrink-0">{cat.emoji}</span>
                 <div className="min-w-0">
-                  <div className="text-xs font-medium text-gray-700 truncate">{cat.public_label}</div>
-                  {cat.remote_eligible && <span className="text-xs text-blue-500">🌐 Remote</span>}
+                  <div className="text-xs font-medium text-slate-300 truncate">{cat.public_label}</div>
+                  {cat.remote_eligible && (
+                    <span className="text-[10px] text-indigo-400">Remote</span>
+                  )}
                 </div>
               </div>
             ))}
@@ -108,87 +131,149 @@ export default function DemoSandboxPage() {
         </div>
 
         {/* Top Corridors */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6">
-          <h2 className="font-bold text-gray-900 text-xl mb-4">🌍 Top Talent Corridors</h2>
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-2">
+            Top talent corridors
+          </p>
+          <h2 className="text-white font-bold text-lg mb-5">Active global corridors</h2>
           <div className="space-y-2">
             {DEMO_CORRIDORS.map(c => (
-              <Link key={c.href} href={c.href}
-                className="flex items-center gap-4 p-3 bg-indigo-50 border border-indigo-100 rounded-lg hover:bg-indigo-100 transition-colors">
-                <span className="text-xl">{c.flag1}</span>
-                <span className="text-gray-400">→</span>
-                <span className="text-xl">{c.flag2}</span>
-                <span className="flex-1 font-medium text-gray-900 text-sm">{c.name}</span>
-                <span className="text-sm font-bold text-indigo-600">{c.score}/100</span>
-                <span className="text-indigo-500 text-sm">→</span>
+              <Link
+                key={c.href}
+                href={c.href}
+                className="flex items-center gap-4 p-3.5 bg-slate-800/60 border border-slate-700/60 rounded-lg hover:border-indigo-500/40 hover:bg-slate-800 transition-colors group"
+              >
+                <span className="text-lg">{c.flag1}</span>
+                <span className="text-slate-600 text-xs">→</span>
+                <span className="text-lg">{c.flag2}</span>
+                <span className="flex-1 font-medium text-slate-300 text-sm group-hover:text-white transition-colors">{c.name}</span>
+                <span className="text-sm font-bold text-indigo-400">{c.score}/100</span>
+                <span className="text-slate-600 text-xs group-hover:text-slate-400 transition-colors">→</span>
               </Link>
             ))}
-            <Link href="/corridors" className="block text-center text-sm text-blue-600 hover:underline mt-2">
+            <Link href="/corridors" className="block text-center text-sm text-indigo-400 hover:text-indigo-300 transition-colors mt-3">
               View all 15+ corridors →
             </Link>
           </div>
         </div>
 
-        {/* Top Revenue Potential */}
-        <div className="bg-green-50 border border-green-200 rounded-xl p-6">
-          <h2 className="font-bold text-gray-900 text-xl mb-4">💰 Top 5 Revenue Segments</h2>
+        {/* Top Demand Segments */}
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-2">
+            Demand intelligence
+          </p>
+          <h2 className="text-white font-bold text-lg mb-5">Top demand segments</h2>
           <div className="space-y-2">
             {topRevCats.map((cat, i) => (
-              <div key={cat.sector_key} className="flex items-center gap-3 p-3 bg-white border border-green-100 rounded-lg">
-                <span className="text-gray-400 font-bold w-5">#{i+1}</span>
-                <span>{cat.emoji}</span>
+              <div key={cat.sector_key} className="flex items-center gap-3 p-3.5 bg-slate-800/60 border border-slate-700/60 rounded-lg">
+                <span className="text-slate-600 font-bold text-xs w-5 shrink-0">#{i + 1}</span>
+                <span className="text-base shrink-0">{cat.emoji}</span>
                 <div className="flex-1">
-                  <div className="font-semibold text-gray-800 text-sm">{cat.public_label}</div>
+                  <div className="font-semibold text-slate-300 text-sm">{cat.public_label}</div>
                 </div>
-                <div className="text-sm font-bold text-green-700">{cat.revenue_potential}/100</div>
+                <div className="text-sm font-bold text-indigo-400">{cat.revenue_potential}/100</div>
               </div>
             ))}
           </div>
         </div>
 
         {/* How it works */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6">
-          <h2 className="font-bold text-gray-900 text-xl mb-4">⚙️ How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-2">
+            Platform logic
+          </p>
+          <h2 className="text-white font-bold text-lg mb-6">How it works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[
-              { step: '1', icon: '📥', title: 'Inbound Intake', desc: 'Employers and candidates register interest globally — no cold outreach needed.' },
-              { step: '2', icon: '🤖', title: 'Daily Automation', desc: 'CWO Daily Runner prepares top corridors, sectors, and revenue priorities every day — automatically.' },
-              { step: '3', icon: '🎯', title: 'Manual Review', desc: 'Admin reviews leads, qualifies matches, and takes action — compliance-first, approval-based.' },
+              {
+                n: '01',
+                title: 'Inbound intake',
+                desc: 'Employers and candidates register interest globally — no cold outreach needed.',
+              },
+              {
+                n: '02',
+                title: 'Corridor processing',
+                desc: 'Platform prepares top corridors, sectors, and demand priorities — structured and compliance-first.',
+              },
+              {
+                n: '03',
+                title: 'Manual review',
+                desc: 'Admin reviews leads, qualifies matches, and takes action — approval-based throughout.',
+              },
             ].map(step => (
-              <div key={step.step} className="text-center p-4 bg-gray-50 rounded-xl">
-                <div className="text-3xl mb-2">{step.icon}</div>
-                <div className="font-bold text-gray-900 mb-1">{step.title}</div>
-                <div className="text-sm text-gray-600">{step.desc}</div>
+              <div key={step.n} className="space-y-3">
+                <div className="text-2xl font-bold text-slate-700">{step.n}</div>
+                <h4 className="text-white font-semibold text-sm">{step.title}</h4>
+                <p className="text-slate-500 text-sm leading-relaxed">{step.desc}</p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Honest Demo Disclaimer */}
-        <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-5">
-          <div className="font-bold text-amber-800 mb-2">🧪 Demo Disclaimer — Was diese Seite zeigt und was nicht</div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+        {/* Trust — what is real, what is not */}
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-2">
+            Demo Disclaimer
+          </p>
+          <p className="text-slate-500 text-sm mb-5">Was diese Seite zeigt und was nicht</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
             <div>
-              <div className="font-semibold text-green-700 mb-1">✅ Was gezeigt wird:</div>
-              {['Plattformarchitektur (echt)', 'Technische Fähigkeiten (echt)', '21 Sektoren-Taxonomie (echt)', '15+ Korridor-Seiten (echt)', 'Test-Zahlen (synthetisch)', 'Demo-Inhalte (zur Illustration)'].map(item => (
-                <div key={item} className="flex items-center gap-1.5 text-green-700 text-xs"><span>✓</span>{item}</div>
-              ))}
+              <p className="text-slate-400 font-semibold mb-3">Was gezeigt wird</p>
+              <ul className="space-y-2">
+                {[
+                  'Plattformarchitektur (echt)',
+                  'Technische Fähigkeiten (echt)',
+                  `${TALENT_CATEGORIES.length} Sektoren-Taxonomie (echt)`,
+                  '15+ Korridor-Seiten (echt)',
+                  'Demo-Inhalte (zur Illustration)',
+                ].map(item => (
+                  <li key={item} className="flex items-center gap-2.5 text-slate-400">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
             <div>
-              <div className="font-semibold text-red-700 mb-1">❌ Was NICHT gezeigt wird:</div>
-              {['Echte Kunden (0)', 'Echter Umsatz (0 EUR)', 'Echte Traction (keine)', 'Echter Traffic (nicht messbar)', 'Echte Placements (keine)', 'Fake-Erfolgszahlen (keine)'].map(item => (
-                <div key={item} className="flex items-center gap-1.5 text-red-700 text-xs"><span>✗</span>{item}</div>
-              ))}
+              <p className="text-slate-400 font-semibold mb-3">Was nicht gezeigt wird</p>
+              <ul className="space-y-2">
+                {[
+                  'Echte Kunden (0)',
+                  'Echter Umsatz (0 EUR)',
+                  'Echte Traction (keine)',
+                  'Echte Placements (keine)',
+                  'Fake-Erfolgszahlen (keine)',
+                ].map(item => (
+                  <li key={item} className="flex items-center gap-2.5 text-slate-500">
+                    <div className="w-1.5 h-1.5 rounded-full bg-slate-600 shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
 
-        {/* Safety */}
-        <div className="bg-slate-900 text-white rounded-xl p-5 text-sm">
-          <div className="font-semibold text-green-400 mb-2">🛡️ Safety & Compliance</div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-slate-300 text-xs">
-            {['No automatic emails', 'No cold outreach', 'No scraping', 'No Stripe/payment', 'No job guarantee', 'No visa guarantee', 'No candidate fees', 'GDPR-compliant (EU region)', 'Inbound-only'].map(item => (
-              <div key={item} className="flex items-center gap-1.5">
-                <span className="text-green-400">✓</span>{item}
+        {/* Safety & Compliance */}
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-4">
+            Safety &amp; Compliance
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+            {[
+              'No automatic emails',
+              'No cold outreach',
+              'No scraping',
+              'No payment processing active',
+              'No job guarantee',
+              'No visa guarantee',
+              'No candidate fees',
+              'GDPR-compliant — EU region',
+              'Inbound-only',
+            ].map(item => (
+              <div key={item} className="flex items-center gap-2 text-slate-400 text-sm">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                {item}
               </div>
             ))}
           </div>
@@ -196,27 +281,41 @@ export default function DemoSandboxPage() {
 
         {/* CTAs */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Link href="/global/employers"
-            className="flex flex-col items-center p-5 bg-blue-50 border-2 border-blue-300 rounded-xl text-center hover:bg-blue-100 transition-colors">
-            <span className="text-3xl mb-2">🏢</span>
-            <div className="font-bold text-blue-900">I&apos;m an Employer</div>
-            <div className="text-sm text-blue-700 mt-1">Register global hiring need</div>
+          <Link
+            href="/global/employers"
+            className="flex flex-col p-6 bg-slate-900 border border-slate-800 hover:border-indigo-500/40 rounded-xl transition-colors group"
+          >
+            <span className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-3">Employers</span>
+            <div className="font-bold text-white mb-1 group-hover:text-indigo-300 transition-colors">
+              Register hiring need
+            </div>
+            <div className="text-sm text-slate-500 mt-1">International workforce demand</div>
           </Link>
-          <Link href="/global/candidates"
-            className="flex flex-col items-center p-5 bg-green-50 border-2 border-green-300 rounded-xl text-center hover:bg-green-100 transition-colors">
-            <span className="text-3xl mb-2">👤</span>
-            <div className="font-bold text-green-900">I&apos;m a Candidate</div>
-            <div className="text-sm text-green-700 mt-1">Register interest — free</div>
+          <Link
+            href="/global/candidates"
+            className="flex flex-col p-6 bg-slate-900 border border-slate-800 hover:border-emerald-500/40 rounded-xl transition-colors group"
+          >
+            <span className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-3">Candidates</span>
+            <div className="font-bold text-white mb-1 group-hover:text-emerald-300 transition-colors">
+              Register interest
+            </div>
+            <div className="text-sm text-slate-500 mt-1">Free — consent-based</div>
           </Link>
-          <Link href="/strategic-partnership"
-            className="flex flex-col items-center p-5 bg-amber-50 border-2 border-amber-300 rounded-xl text-center hover:bg-amber-100 transition-colors">
-            <span className="text-3xl mb-2">🎯</span>
-            <div className="font-bold text-amber-900">Partner / Buyer</div>
-            <div className="text-sm text-amber-700 mt-1">White-label, licensing, acquisition</div>
+          <Link
+            href="/strategic-partnership"
+            className="flex flex-col p-6 bg-slate-900 border border-slate-800 hover:border-amber-500/40 rounded-xl transition-colors group"
+          >
+            <span className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-3">Partners & Buyers</span>
+            <div className="font-bold text-white mb-1 group-hover:text-amber-300 transition-colors">
+              Strategic discussion
+            </div>
+            <div className="text-sm text-slate-500 mt-1">White-label, licensing, acquisition</div>
           </Link>
         </div>
 
       </div>
+
+      <PublicFooter />
     </div>
   )
 }
