@@ -92,8 +92,8 @@ export default function RegisterPage({ searchParams }: Props) {
                   />
                   <div className="p-3 bg-gray-800 border border-gray-700 rounded-lg text-center peer-checked:border-blue-500 peer-checked:bg-blue-900/30 transition-colors">
                     <div className="text-2xl mb-1">👤</div>
-                    <div className="text-sm font-medium text-gray-200">Kandidat</div>
-                    <div className="text-xs text-gray-500">Ich suche Arbeit</div>
+                    <div className="text-sm font-medium text-gray-200">Candidate</div>
+                    <div className="text-xs text-gray-500">I am looking for work</div>
                   </div>
                 </label>
                 <label className="relative cursor-pointer">
@@ -106,8 +106,8 @@ export default function RegisterPage({ searchParams }: Props) {
                   />
                   <div className="p-3 bg-gray-800 border border-gray-700 rounded-lg text-center peer-checked:border-blue-500 peer-checked:bg-blue-900/30 transition-colors">
                     <div className="text-2xl mb-1">🏢</div>
-                    <div className="text-sm font-medium text-gray-200">Arbeitgeber</div>
-                    <div className="text-xs text-gray-500">Ich stelle ein</div>
+                    <div className="text-sm font-medium text-gray-200">Employer</div>
+                    <div className="text-xs text-gray-500">I am hiring</div>
                   </div>
                 </label>
               </div>

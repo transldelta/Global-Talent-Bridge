@@ -37,7 +37,7 @@ export type TalentCategory = {
 export const TALENT_CATEGORIES: TalentCategory[] = [
   {
     sector_key:            'healthcare_care',
-    public_label:          'Pflege & Gesundheit',
+    public_label:          'Healthcare & Care',
     emoji:                 '🏥',
     employer_description:  'Pflegefachkräfte, Krankenpfleger/innen, Altenpfleger/innen, Medizinisches Assistenzpersonal',
     candidate_description: 'Ausgebildete Pflegekräfte mit internationaler Qualifikation suchen Stellen in DE/EU/UK/AU/CA',
@@ -63,7 +63,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'engineering',
-    public_label:          'Engineering / Ingenieurwesen',
+    public_label:          'Engineering',
     emoji:                 '⚙️',
     employer_description:  'Maschinenbauingenieure, Elektroingenieure, Bauingenieure, Verfahrenstechniker',
     candidate_description: 'Ingenieure mit internationaler Ausbildung suchen Positionen in Industrie und Technologie',
@@ -76,7 +76,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'construction_trades',
-    public_label:          'Bau & Handwerk',
+    public_label:          'Construction & Trades',
     emoji:                 '🏗️',
     employer_description:  'Maurer, Elektriker, Sanitär-Installateure, Zimmerer, Fliesen-leger, Schreiner',
     candidate_description: 'Ausgebildete Handwerker suchen Arbeit in Europa und anderen Industrienationen',
@@ -89,7 +89,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'logistics_transport',
-    public_label:          'Logistik & Transport',
+    public_label:          'Logistics & Transport',
     emoji:                 '🚚',
     employer_description:  'LKW-Fahrer, Lagerlogistiker, Gabelstaplerfahrer, Supply-Chain-Experten',
     candidate_description: 'Logistikfachkräfte und Fahrer suchen Positionen in Europa und global',
@@ -115,7 +115,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'gastronomy',
-    public_label:          'Gastronomie',
+    public_label:          'Hospitality & Food Service',
     emoji:                 '🍽️',
     employer_description:  'Köche, Restaurantfachleute, Baristas, Servicepersonal',
     candidate_description: 'Gastronomie-Fachkräfte suchen internationale Einsätze in EU und weltweit',
@@ -128,7 +128,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'facility_cleaning',
-    public_label:          'Reinigung & Facility Management',
+    public_label:          'Cleaning & Facility Management',
     emoji:                 '🧹',
     employer_description:  'Reinigungskräfte, Facility Manager, Hausmeister, Gebäudetechnik',
     candidate_description: 'Fachkräfte in Gebäudedienstleistungen suchen Stellen in EU',
@@ -141,7 +141,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'security',
-    public_label:          'Sicherheit',
+    public_label:          'Security',
     emoji:                 '🔐',
     employer_description:  'Sicherheitspersonal, Werkschutz, Eventschutz, Portier',
     candidate_description: 'Ausgebildetes Sicherheitspersonal sucht Positionen in EU',
@@ -154,7 +154,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'manufacturing_production',
-    public_label:          'Produktion & Industrie',
+    public_label:          'Production & Manufacturing',
     emoji:                 '🏭',
     employer_description:  'Fließbandarbeiter, CNC-Bediener, Qualitätsprüfer, Produktionsmechaniker',
     candidate_description: 'Produktionsfachkräfte suchen Stellen in der europäischen Industrie',
@@ -167,7 +167,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'agriculture_food',
-    public_label:          'Landwirtschaft & Food Processing',
+    public_label:          'Agriculture & Food Processing',
     emoji:                 '🌾',
     employer_description:  'Landarbeiter, Erntehelfer, Food-Processing-Mitarbeiter',
     candidate_description: 'Saisonarbeiter und Landwirtschaftsfachkräfte suchen internationale Einsätze',
@@ -180,7 +180,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'education_training',
-    public_label:          'Bildung & Training',
+    public_label:          'Education & Training',
     emoji:                 '🎓',
     employer_description:  'Lehrkräfte, Ausbilder, Trainer, E-Learning-Spezialisten',
     candidate_description: 'Pädagogen und Trainer suchen internationale Positionen',
@@ -193,7 +193,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'language_services',
-    public_label:          'Sprachdienste / Dolmetschen / Übersetzen',
+    public_label:          'Language Services / Interpreting',
     emoji:                 '🌐',
     employer_description:  'Dolmetscher, Übersetzer, Sprachmittler, Lokalisierungsexperten',
     candidate_description: 'Mehrsprachige Fachkräfte bieten Sprach-/Übersetzungsdienstleistungen an',
@@ -206,7 +206,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'admin_backoffice',
-    public_label:          'Verwaltung / Backoffice',
+    public_label:          'Administration / Back Office',
     emoji:                 '📋',
     employer_description:  'Bürokaufleute, Sachbearbeiter, HR-Assistenten, Datenerfasser',
     candidate_description: 'Kaufmännische Fachkräfte suchen internationale Positionen',
@@ -232,7 +232,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'sales_vertrieb',
-    public_label:          'Vertrieb / Sales',
+    public_label:          'Sales',
     emoji:                 '📈',
     employer_description:  'Vertriebsmitarbeiter, Account Manager, Sales Representatives',
     candidate_description: 'Vertriebsfachkräfte suchen internationale Positionen mit Sprachkompetenz',
@@ -245,7 +245,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'technician_electro',
-    public_label:          'Techniker / Elektriker / Mechaniker',
+    public_label:          'Technicians / Electricians / Mechanics',
     emoji:                 '🔧',
     employer_description:  'Elektriker, KFZ-Mechaniker, Industriemechaniker, Wartungstechniker',
     candidate_description: 'Technische Fachkräfte suchen Positionen in Industrienationen',
@@ -258,7 +258,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'drivers_delivery',
-    public_label:          'Fahrer / Lieferdienste',
+    public_label:          'Drivers / Delivery Services',
     emoji:                 '🚗',
     employer_description:  'Berufskraftfahrer, Lieferfahrer, Kurier-Dienste, ÖPNV-Fahrer',
     candidate_description: 'Fahrer mit gültigen Führerscheinen suchen internationale Einsätze',
@@ -271,7 +271,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'skilled_worker_general',
-    public_label:          'Facharbeiter allgemein',
+    public_label:          'Skilled Workers (General)',
     emoji:                 '👷',
     employer_description:  'Qualifizierte Arbeitskräfte in vielen Branchen — flexible Kategorisierung',
     candidate_description: 'Facharbeiter mit Berufserfahrung, nicht eindeutig einer Branche zuzuordnen',
@@ -284,7 +284,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'apprenticeship_training',
-    public_label:          'Trainees / Apprenticeship / Ausbildungskorridore',
+    public_label:          'Trainees / Apprenticeships',
     emoji:                 '🎯',
     employer_description:  'Ausbildungsunternehmen suchen internationale Auszubildende und Trainees',
     candidate_description: 'Junge Fachkräfte suchen duale Ausbildung oder Trainee-Programme in DE/EU',
@@ -297,7 +297,7 @@ export const TALENT_CATEGORIES: TalentCategory[] = [
   },
   {
     sector_key:            'remote_qualified',
-    public_label:          'Remote-geeignete qualifizierte Tätigkeiten',
+    public_label:          'Remote-Eligible Qualified Roles',
     emoji:                 '🌍',
     employer_description:  'Digitale Nomaden-freundliche Unternehmen suchen Remote-Fachkräfte weltweit',
     candidate_description: 'Qualifizierte Fachkräfte bieten Remote-Dienstleistungen global an',

@@ -42,6 +42,44 @@ const PLAN_DISPLAY: Record<string, { name: string; description: string }> = {
   },
 }
 
+// English display overrides for plan feature bullets — DB values may be in German
+const FEATURE_TRANSLATIONS: Record<string, string> = {
+  // Job listings
+  '1 aktiver Job':                     '1 active job listing',
+  '3 aktive Jobs':                     '3 active job listings',
+  '5 aktive Jobs':                     '5 active job listings',
+  '10 aktive Jobs':                    '10 active job listings',
+  '20 aktive Jobs':                    '20 active job listings',
+  'aktiver Job':                       'Active job listing',
+  'aktive Jobs':                       'Active job listings',
+  'Unbegrenzte Jobs':                  'Unlimited job listings',
+  // Matching
+  'Basis-Matching':                    'Basic matching',
+  'Priorität im Matching':             'Matching priority',
+  'Höchste Priorität':                 'Highest priority',
+  // Candidate views
+  'Eingeschränkte Kandidatenansicht':  'Limited candidate view',
+  'Match-Liste einsehen':              'View match list',
+  'Kandidaten-Kurzprofil':             'Candidate short profile',
+  'Erweiterte Kandidatenansicht':      'Extended candidate view',
+  'Vollständige Kandidatenansicht':    'Full candidate view',
+  // Access & features
+  'Teamzugang':                        'Team access',
+  'Höchste Priorität im Matching':     'Highest matching priority',
+  'Zukünftige Agenten-Unterstützung':  'Future agent support',
+  'API-Zugang':                        'API access',
+  'CSV-Export':                        'CSV export',
+  'Dedizierter Support':               'Dedicated support',
+  'Individuelle Konditionen':          'Custom terms',
+  'Kein Abonnement erforderlich':      'No subscription required',
+  'Kostenlos':                         'Free',
+}
+
+/** Translate a DB feature string to English; pass through if already English. */
+function translateFeature(feature: string): string {
+  return FEATURE_TRANSLATIONS[feature.trim()] ?? feature
+}
+
 const PLAN_STYLE: Record<string, { border: string; badge: string; highlight: boolean }> = {
   free_employer: {
     border: 'border-slate-700',
@@ -169,12 +207,12 @@ export default async function PricingPage() {
                   )}
                 </div>
 
-                {/* Features */}
+                {/* Features — DB values translated to English via translateFeature() */}
                 <ul className="space-y-2 flex-1">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm text-slate-300">
                       <div className="w-1 h-4 bg-emerald-500/60 rounded-full shrink-0 mt-0.5" />
-                      {feature}
+                      {translateFeature(feature)}
                     </li>
                   ))}
                 </ul>
