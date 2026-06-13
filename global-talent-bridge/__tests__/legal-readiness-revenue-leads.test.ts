@@ -79,16 +79,16 @@ describe('Consent-Text', () => {
     expect(COMPLIANCE_DISCLAIMER.consentText).toMatch(/CorridorWork/i)
   })
 
-  it('consentText enthält Hinweis auf Datenschutzerklärung', () => {
-    expect(COMPLIANCE_DISCLAIMER.consentText).toMatch(/datenschutz/i)
+  it('consentText enthält Hinweis auf Privacy Policy', () => {
+    expect(COMPLIANCE_DISCLAIMER.consentText).toMatch(/privacy/i)
   })
 
-  it('consentText erwähnt Freiwilligkeit', () => {
-    expect(COMPLIANCE_DISCLAIMER.consentText).toMatch(/freiwillig/i)
+  it('consentText erwähnt Freiwilligkeit (voluntary)', () => {
+    expect(COMPLIANCE_DISCLAIMER.consentText).toMatch(/voluntary/i)
   })
 
-  it('consentText erwähnt Widerrufbarkeit', () => {
-    expect(COMPLIANCE_DISCLAIMER.consentText).toMatch(/widerruf/i)
+  it('consentText erwähnt Widerrufbarkeit (revocable)', () => {
+    expect(COMPLIANCE_DISCLAIMER.consentText).toMatch(/revoc/i)
   })
 })
 
@@ -125,7 +125,7 @@ describe('Consent ist Pflicht — Lead wird ohne Consent abgelehnt', () => {
 
   it('Fehlertext bei fehlendem Consent enthält "Zustimmung"', () => {
     const { errors } = validateLeadInput(validInput({ consent_to_contact: false }))
-    expect(errors.some(e => e.toLowerCase().includes('zustimmung'))).toBe(true)
+    expect(errors.some(e => e.toLowerCase().includes('consent'))).toBe(true)
   })
 
   it('Consent ist Pflicht für alle Lead-Typen', () => {
@@ -206,24 +206,24 @@ describe('Kein Stripe, kein automatischer Versand', () => {
 // ══════════════════════════════════════════════════════════════════════════════
 
 describe('COMPLIANCE_DISCLAIMER vollständig', () => {
-  it('noJobGuarantee enthält "kein" oder "keine"', () => {
-    expect(COMPLIANCE_DISCLAIMER.noJobGuarantee).toMatch(/kein/i)
+  it('noJobGuarantee contains "no"', () => {
+    expect(COMPLIANCE_DISCLAIMER.noJobGuarantee).toMatch(/^no /i)
   })
 
-  it('noVisaGuarantee enthält "kein" oder "keine"', () => {
-    expect(COMPLIANCE_DISCLAIMER.noVisaGuarantee).toMatch(/kein/i)
+  it('noVisaGuarantee contains "no"', () => {
+    expect(COMPLIANCE_DISCLAIMER.noVisaGuarantee).toMatch(/^no /i)
   })
 
-  it('noAutoPayment enthält "automatisch"', () => {
-    expect(COMPLIANCE_DISCLAIMER.noAutoPayment).toMatch(/automatisch/i)
+  it('noAutoPayment contains "automatic"', () => {
+    expect(COMPLIANCE_DISCLAIMER.noAutoPayment).toMatch(/automatic/i)
   })
 
-  it('noAutoContact enthält "automatisch"', () => {
-    expect(COMPLIANCE_DISCLAIMER.noAutoContact).toMatch(/automatisch/i)
+  it('noAutoContact contains "automatic"', () => {
+    expect(COMPLIANCE_DISCLAIMER.noAutoContact).toMatch(/automatic/i)
   })
 
-  it('gdprNote enthält DSGVO', () => {
-    expect(COMPLIANCE_DISCLAIMER.gdprNote).toMatch(/DSGVO/i)
+  it('gdprNote enthält GDPR', () => {
+    expect(COMPLIANCE_DISCLAIMER.gdprNote).toMatch(/GDPR/i)
   })
 
   it('phase1Note enthält Phase', () => {

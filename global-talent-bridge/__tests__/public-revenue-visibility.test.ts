@@ -330,16 +330,16 @@ describe('COMPLIANCE_DISCLAIMER — alle Felder gesetzt', () => {
     })
   })
 
-  it('noJobGuarantee enthält "kein" oder "keine"', () => {
-    expect(COMPLIANCE_DISCLAIMER.noJobGuarantee).toMatch(/kein/i)
+  it('noJobGuarantee enthält "no"', () => {
+    expect(COMPLIANCE_DISCLAIMER.noJobGuarantee).toMatch(/^no /i)
   })
 
-  it('noVisaGuarantee enthält "kein" oder "keine"', () => {
-    expect(COMPLIANCE_DISCLAIMER.noVisaGuarantee).toMatch(/kein/i)
+  it('noVisaGuarantee enthält "no"', () => {
+    expect(COMPLIANCE_DISCLAIMER.noVisaGuarantee).toMatch(/^no /i)
   })
 
-  it('gdprNote enthält DSGVO', () => {
-    expect(COMPLIANCE_DISCLAIMER.gdprNote).toMatch(/DSGVO/i)
+  it('gdprNote enthält GDPR', () => {
+    expect(COMPLIANCE_DISCLAIMER.gdprNote).toMatch(/GDPR/i)
   })
 
   it('phase1Note enthält Phase', () => {

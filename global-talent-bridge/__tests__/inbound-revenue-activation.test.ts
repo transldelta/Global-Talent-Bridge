@@ -69,7 +69,7 @@ describe('LeadInput Validierung', () => {
   it('lehnt leere E-Mail ab', () => {
     const { valid, errors } = validateLeadInput(validInput({ email: '' }))
     expect(valid).toBe(false)
-    expect(errors.some(e => e.toLowerCase().includes('e-mail'))).toBe(true)
+    expect(errors.some(e => e.toLowerCase().includes('email'))).toBe(true)
   })
 
   it('lehnt ungültige E-Mail ab', () => {
@@ -94,7 +94,7 @@ describe('LeadInput Validierung', () => {
   it('lehnt fehlendes Consent ab', () => {
     const { valid, errors } = validateLeadInput(validInput({ consent_to_contact: false }))
     expect(valid).toBe(false)
-    expect(errors.some(e => e.toLowerCase().includes('zustimmung'))).toBe(true)
+    expect(errors.some(e => e.toLowerCase().includes('consent'))).toBe(true)
   })
 
   it('lehnt zu kurzen Ansprechpartner ab', () => {
@@ -187,20 +187,20 @@ describe('Safety-Invarianten', () => {
 // ══════════════════════════════════════════════════════════════════════════════
 
 describe('Kein automatischer Versand', () => {
-  it('COMPLIANCE_DISCLAIMER.noAutoPayment enthält "automatische Zahlung"', () => {
-    expect(COMPLIANCE_DISCLAIMER.noAutoPayment).toMatch(/automatisch/i)
+  it('COMPLIANCE_DISCLAIMER.noAutoPayment enthält "automatic"', () => {
+    expect(COMPLIANCE_DISCLAIMER.noAutoPayment).toMatch(/automatic/i)
   })
 
-  it('COMPLIANCE_DISCLAIMER.noAutoContact enthält "automatische Kontaktaufnahme"', () => {
-    expect(COMPLIANCE_DISCLAIMER.noAutoContact).toMatch(/automatisch/i)
+  it('COMPLIANCE_DISCLAIMER.noAutoContact enthält "automatic"', () => {
+    expect(COMPLIANCE_DISCLAIMER.noAutoContact).toMatch(/automatic/i)
   })
 
-  it('COMPLIANCE_DISCLAIMER.noJobGuarantee enthält keine Versprechen', () => {
-    expect(COMPLIANCE_DISCLAIMER.noJobGuarantee).toMatch(/kein/i)
+  it('COMPLIANCE_DISCLAIMER.noJobGuarantee enthält "no"', () => {
+    expect(COMPLIANCE_DISCLAIMER.noJobGuarantee).toMatch(/^no /i)
   })
 
-  it('COMPLIANCE_DISCLAIMER.noVisaGuarantee enthält keine Versprechen', () => {
-    expect(COMPLIANCE_DISCLAIMER.noVisaGuarantee).toMatch(/kein/i)
+  it('COMPLIANCE_DISCLAIMER.noVisaGuarantee enthält "no"', () => {
+    expect(COMPLIANCE_DISCLAIMER.noVisaGuarantee).toMatch(/^no /i)
   })
 
   it('lib/revenue-leads.ts enthält keine sendEmail-Funktion', async () => {
@@ -276,8 +276,8 @@ describe('Branding — CorridorWork', () => {
 // ══════════════════════════════════════════════════════════════════════════════
 
 describe('Compliance Disclaimer', () => {
-  it('gdprNote enthält DSGVO-Referenz', () => {
-    expect(COMPLIANCE_DISCLAIMER.gdprNote).toMatch(/DSGVO/i)
+  it('gdprNote enthält GDPR-Referenz', () => {
+    expect(COMPLIANCE_DISCLAIMER.gdprNote).toMatch(/GDPR/i)
   })
 
   it('phase1Note enthält Phase-1-Hinweis', () => {

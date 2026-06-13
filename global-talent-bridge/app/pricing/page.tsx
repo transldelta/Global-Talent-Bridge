@@ -22,6 +22,26 @@ type PricingPlan = {
 
 const PLAN_ORDER = ['free_employer', 'starter_employer', 'growth_employer', 'enterprise_employer']
 
+// English display overrides — DB values may be in German; always show English on public site
+const PLAN_DISPLAY: Record<string, { name: string; description: string }> = {
+  free_employer: {
+    name:        'Free',
+    description: 'Discover international talent with no commitment. No subscription, no payment required.',
+  },
+  starter_employer: {
+    name:        'Starter',
+    description: 'For growing organisations building their international talent pipeline.',
+  },
+  growth_employer: {
+    name:        'Growth',
+    description: 'For organisations with regular international hiring needs.',
+  },
+  enterprise_employer: {
+    name:        'Enterprise',
+    description: 'Custom terms for large organisations. Commercial pricing available on request.',
+  },
+}
+
 const PLAN_STYLE: Record<string, { border: string; badge: string; highlight: boolean }> = {
   free_employer: {
     border: 'border-slate-700',
@@ -118,10 +138,12 @@ export default async function PricingPage() {
                       ? 'Growth'
                       : 'Enterprise'}
                   </span>
-                  <h2 className="text-lg font-bold text-white mt-2">{plan.name}</h2>
-                  {plan.description && (
+                  <h2 className="text-lg font-bold text-white mt-2">
+                    {PLAN_DISPLAY[plan.plan_key]?.name ?? plan.name}
+                  </h2>
+                  {(PLAN_DISPLAY[plan.plan_key]?.description ?? plan.description) && (
                     <p className="text-slate-400 text-xs mt-1 leading-relaxed">
-                      {plan.description}
+                      {PLAN_DISPLAY[plan.plan_key]?.description ?? plan.description}
                     </p>
                   )}
                 </div>

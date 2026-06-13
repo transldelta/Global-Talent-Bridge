@@ -68,26 +68,26 @@ export function validateLeadInput(input: LeadFormInput): { valid: boolean; error
   }
 
   if (!input.organization_name?.trim() || input.organization_name.trim().length < 2) {
-    errors.push('Organisationsname ist erforderlich (min. 2 Zeichen).')
+    errors.push('Organisation name is required (min. 2 characters).')
   }
   if (input.organization_name?.trim().length > 200) {
-    errors.push('Organisationsname zu lang (max. 200 Zeichen).')
+    errors.push('Organisation name too long (max. 200 characters).')
   }
 
   if (!input.contact_name?.trim() || input.contact_name.trim().length < 2) {
-    errors.push('Ansprechpartner ist erforderlich (min. 2 Zeichen).')
+    errors.push('Contact name is required (min. 2 characters).')
   }
 
   if (!input.email?.trim() || !EMAIL_REGEX.test(input.email.trim())) {
-    errors.push('Gültige E-Mail-Adresse ist erforderlich.')
+    errors.push('A valid email address is required.')
   }
 
   if (!['employer_pilot', 'agency_partner', 'market_intelligence', 'strategic_partner'].includes(input.lead_type)) {
-    errors.push('Ungültiger Lead-Typ.')
+    errors.push('Invalid lead type.')
   }
 
   if (!input.consent_to_contact) {
-    errors.push('Zustimmung zur Kontaktaufnahme ist erforderlich.')
+    errors.push('Consent to contact is required.')
   }
 
   return { valid: errors.length === 0, errors }
@@ -198,17 +198,17 @@ export const STATUS_COLORS: Record<LeadStatus, string> = {
 // ── Compliance Disclaimer (für Formulare) ────────────────────────────────────
 
 export const COMPLIANCE_DISCLAIMER = {
-  noJobGuarantee:      'Keine Jobgarantie. CorridorWork ist ein Matching-Dienst, kein Arbeitsvermittler.',
-  noVisaGuarantee:     'Keine Visa-Garantie. Visaprozesse liegen in der Zuständigkeit der Behörden.',
-  noAutoPayment:       'Keine automatische Zahlung. Pilot ist kostenlos und unverbindlich.',
-  noAutoContact:       'Keine automatische Kontaktaufnahme. Ihr Lead wird manuell geprüft.',
-  gdprNote:            'Ihre Daten werden nur zur Bearbeitung Ihrer Anfrage verwendet (DSGVO Art. 6 Abs. 1 lit. b).',
-  phase1Note:          'CorridorWork befindet sich in Phase 1 (Pilot). Keine laufenden Verträge ohne schriftliche Vereinbarung.',
-  // Legal-Readiness-Ergänzungen (Revenue Leads)
-  datenschutzUrl:      '/legal/datenschutz',
-  impressumUrl:        '/legal/impressum',
-  legalContact:        'transl.delta@gmail.com',
-  consentText:         'Ich möchte, dass CorridorWork mich zur Bearbeitung dieser Anfrage kontaktiert. Ich stimme der Speicherung meiner Angaben gemäß der Datenschutzerklärung zu (freiwillig, jederzeit widerrufbar).',
+  noJobGuarantee:  'No job guarantee. CorridorWork is a matching service, not an employment agency.',
+  noVisaGuarantee: 'No visa guarantee. Visa processes are the responsibility of the relevant authorities.',
+  noAutoPayment:   'No automatic payment. The pilot is free and non-binding.',
+  noAutoContact:   'No automatic contact. Your enquiry is reviewed manually.',
+  gdprNote:        'Your data is used solely to process your enquiry (GDPR Art. 6(1)(b)).',
+  phase1Note:      'CorridorWork is in Phase 1 (Pilot). No ongoing contracts without written agreement.',
+  // Legal-Readiness additions (Revenue Leads)
+  datenschutzUrl:  '/legal/datenschutz',
+  impressumUrl:    '/legal/impressum',
+  legalContact:    'transl.delta@gmail.com',
+  consentText:     'I agree that CorridorWork may contact me to process this enquiry. I consent to the storage of my details in accordance with the Privacy Policy (voluntary, revocable at any time).',
 } as const
 
 // ── Safety Export ─────────────────────────────────────────────────────────────

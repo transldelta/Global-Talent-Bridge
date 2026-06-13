@@ -89,7 +89,7 @@ describe('Strategic Partner Lead-Typ', () => {
       validStrategicInput({ lead_type: 'invalid_type' as LeadType })
     )
     expect(valid).toBe(false)
-    expect(errors.some(e => e.includes('Lead-Typ'))).toBe(true)
+    expect(errors.some(e => e.toLowerCase().includes('lead type'))).toBe(true)
   })
 
   it('strategic_partner Label ist definiert', () => {
@@ -344,7 +344,7 @@ describe('/partners Formular-Konfiguration', () => {
       validPartnerInput({ consent_to_contact: false })
     )
     expect(valid).toBe(false)
-    expect(errors.some(e => e.includes('Zustimmung'))).toBe(true)
+    expect(errors.some(e => e.includes('Consent to contact'))).toBe(true)
   })
 
   it('Honeypot verhindert Bots', () => {
@@ -385,7 +385,7 @@ describe('/strategic-partnership Formular-Konfiguration', () => {
       validStrategicInput({ consent_to_contact: false })
     )
     expect(valid).toBe(false)
-    expect(errors.some(e => e.includes('Zustimmung'))).toBe(true)
+    expect(errors.some(e => e.includes('Consent to contact'))).toBe(true)
   })
 
   it('strategic_partner ohne Organisation wird abgelehnt', () => {
@@ -401,7 +401,7 @@ describe('/strategic-partnership Formular-Konfiguration', () => {
       validStrategicInput({ email: 'invalid-email' })
     )
     expect(valid).toBe(false)
-    expect(errors.some(e => e.includes('E-Mail'))).toBe(true)
+    expect(errors.some(e => e.toLowerCase().includes('email'))).toBe(true)
   })
 
   it('Honeypot verhindert Bots', () => {
@@ -491,7 +491,7 @@ describe('Safety Invarianten — Revenue Accelerator', () => {
   })
 
   it('COMPLIANCE_DISCLAIMER.consentText enthält Datenschutz-Bezug', () => {
-    expect(COMPLIANCE_DISCLAIMER.consentText).toContain('Datenschutz')
+    expect(COMPLIANCE_DISCLAIMER.consentText).toContain('Privacy')
   })
 
   it('COMPLIANCE_DISCLAIMER.noAutoContact ist definiert', () => {

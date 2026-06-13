@@ -2,36 +2,36 @@
 /**
  * EmployerPilotForm.tsx
  *
- * Formular für kostenlose Employer-Pilot-Anfragen.
- * Kein Send-Button für E-Mails. Kein Stripe. Kein automatischer Versand.
- * Nur Speichern → manuell geprüft durch Admin.
+ * Form for free employer pilot enquiries.
+ * No email sending. No Stripe. No automatic outreach.
+ * Save only → manually reviewed by admin.
  */
 import { useState } from 'react'
 import { COMPLIANCE_DISCLAIMER } from '@/lib/revenue-leads'
 
 const SECTORS = [
-  'Pflege & Gesundheit',
-  'Bau & Handwerk',
-  'IT & Technologie',
-  'Gastronomie & Hotellerie',
-  'Logistik & Transport',
-  'Landwirtschaft',
-  'Produktion & Industrie',
-  'Bildung & Soziales',
-  'Sonstiges',
+  'Healthcare & Nursing',
+  'Construction & Trades',
+  'IT & Technology',
+  'Hospitality & Food Service',
+  'Logistics & Transport',
+  'Agriculture',
+  'Production & Manufacturing',
+  'Education & Social Services',
+  'Other',
 ]
 
 export function EmployerPilotForm() {
   const [form, setForm] = useState({
-    organization_name: '',
-    contact_name:      '',
-    email:             '',
-    sector:            '',
-    city:              '',
-    country:           '',
-    message:           '',
+    organization_name:  '',
+    contact_name:       '',
+    email:              '',
+    sector:             '',
+    city:               '',
+    country:            '',
+    message:            '',
     consent_to_contact: false,
-    website:           '', // Honeypot
+    website:            '', // Honeypot
   })
   const [loading,  setLoading]  = useState(false)
   const [success,  setSuccess]  = useState(false)
@@ -51,12 +51,12 @@ export function EmployerPilotForm() {
       const data = await res.json()
 
       if (!res.ok) {
-        setErrors(data.errors ?? [data.error ?? 'Fehler beim Einreichen.'])
+        setErrors(data.errors ?? [data.error ?? 'Submission error.'])
       } else {
         setSuccess(true)
       }
     } catch {
-      setErrors(['Netzwerkfehler. Bitte versuche es erneut.'])
+      setErrors(['Network error. Please try again.'])
     } finally {
       setLoading(false)
     }
@@ -64,15 +64,20 @@ export function EmployerPilotForm() {
 
   if (success) {
     return (
-      <div className="bg-green-50 border border-green-200 rounded-xl p-8 text-center">
-        <div className="text-4xl mb-3">✅</div>
-        <h3 className="text-xl font-bold text-green-900 mb-2">Pilot-Anfrage eingereicht!</h3>
-        <p className="text-green-800 text-sm">
-          Danke für Ihr Interesse. Wir prüfen Ihre Anfrage und melden uns <strong>manuell</strong> bei Ihnen.
-          Es erfolgt kein automatischer Versand, keine automatische Zahlung.
+      <div className="bg-slate-800 border border-emerald-700/50 rounded-xl p-8 text-center">
+        <div className="w-10 h-10 rounded-full bg-emerald-600/20 border border-emerald-500/40 flex items-center justify-center mx-auto mb-4">
+          <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h3 className="text-lg font-bold text-white mb-2">Pilot enquiry submitted</h3>
+        <p className="text-slate-400 text-sm">
+          Thank you for your interest. We will review your enquiry and follow up{' '}
+          <strong className="text-slate-300">manually</strong>.
+          No automatic sending, no automatic payment.
         </p>
-        <p className="text-green-700 text-xs mt-3">
-          ✓ Keine automatische Kontaktaufnahme &nbsp;·&nbsp; ✓ Kostenloser Pilot &nbsp;·&nbsp; ✓ Unverbindlich
+        <p className="text-slate-500 text-xs mt-3">
+          ✓ No automatic contact &nbsp;·&nbsp; ✓ Free pilot &nbsp;·&nbsp; ✓ No commitment
         </p>
       </div>
     )
@@ -80,7 +85,7 @@ export function EmployerPilotForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      {/* Honeypot — unsichtbar für Menschen */}
+      {/* Honeypot — invisible to humans */}
       <div style={{ display: 'none' }} aria-hidden="true">
         <input
           type="text"
@@ -93,35 +98,35 @@ export function EmployerPilotForm() {
       </div>
 
       {errors.length > 0 && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <div className="bg-red-950/40 border border-red-700/50 rounded-lg p-4">
           {errors.map((err, i) => (
-            <p key={i} className="text-sm text-red-700">⚠️ {err}</p>
+            <p key={i} className="text-sm text-red-400">⚠ {err}</p>
           ))}
         </div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Firmenname <span className="text-red-500">*</span>
+          <label className="block text-sm font-medium text-slate-300 mb-1.5">
+            Company name <span className="text-red-400">*</span>
           </label>
           <input
             type="text" required
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Mustermann GmbH"
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="Acme Ltd"
             value={form.organization_name}
             onChange={e => setForm(f => ({ ...f, organization_name: e.target.value }))}
             maxLength={200}
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Ansprechpartner <span className="text-red-500">*</span>
+          <label className="block text-sm font-medium text-slate-300 mb-1.5">
+            Contact name <span className="text-red-400">*</span>
           </label>
           <input
             type="text" required
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Max Mustermann"
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="Jane Smith"
             value={form.contact_name}
             onChange={e => setForm(f => ({ ...f, contact_name: e.target.value }))}
             maxLength={200}
@@ -130,47 +135,47 @@ export function EmployerPilotForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          E-Mail <span className="text-red-500">*</span>
+        <label className="block text-sm font-medium text-slate-300 mb-1.5">
+          Email <span className="text-red-400">*</span>
         </label>
         <input
           type="email" required
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="max@mustermann.de"
+          className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          placeholder="jane@company.com"
           value={form.email}
           onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
         />
-        <p className="text-xs text-gray-500 mt-1">Keine automatische E-Mail von uns. Manueller Kontakt nach Prüfung.</p>
+        <p className="text-xs text-slate-500 mt-1">No automatic email from us. Manual contact after review.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Branche</label>
+          <label className="block text-sm font-medium text-slate-300 mb-1.5">Sector</label>
           <select
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
             value={form.sector}
             onChange={e => setForm(f => ({ ...f, sector: e.target.value }))}
           >
-            <option value="">Bitte wählen</option>
+            <option value="">Select sector</option>
             {SECTORS.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Stadt</label>
+          <label className="block text-sm font-medium text-slate-300 mb-1.5">City</label>
           <input
             type="text"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             placeholder="Berlin"
             value={form.city}
             onChange={e => setForm(f => ({ ...f, city: e.target.value }))}
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Land</label>
+          <label className="block text-sm font-medium text-slate-300 mb-1.5">Country</label>
           <input
             type="text"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
-            placeholder="Deutschland"
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="Germany"
             value={form.country}
             onChange={e => setForm(f => ({ ...f, country: e.target.value }))}
           />
@@ -178,11 +183,13 @@ export function EmployerPilotForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Personalbedarf (kurz beschreiben)</label>
+        <label className="block text-sm font-medium text-slate-300 mb-1.5">
+          Staffing needs (brief description)
+        </label>
         <textarea
           rows={3}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
-          placeholder="Wir suchen 3 Pflegefachkräfte aus Südeuropa für unser Pflegeheim in Berlin..."
+          className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          placeholder="We are looking for 3 healthcare professionals from South-East Asia for our care home in Berlin..."
           value={form.message}
           onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
           maxLength={1000}
@@ -190,15 +197,20 @@ export function EmployerPilotForm() {
       </div>
 
       {/* Compliance Disclaimer */}
-      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 space-y-1">
-        <p className="text-xs text-gray-600 font-semibold uppercase">Wichtige Hinweise</p>
-        <p className="text-xs text-gray-500">✗ {COMPLIANCE_DISCLAIMER.noJobGuarantee}</p>
-        <p className="text-xs text-gray-500">✗ {COMPLIANCE_DISCLAIMER.noVisaGuarantee}</p>
-        <p className="text-xs text-gray-500">✗ {COMPLIANCE_DISCLAIMER.noAutoPayment}</p>
-        <p className="text-xs text-gray-500">
+      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 space-y-1.5">
+        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Important notes</p>
+        <p className="text-xs text-slate-500">✗ {COMPLIANCE_DISCLAIMER.noJobGuarantee}</p>
+        <p className="text-xs text-slate-500">✗ {COMPLIANCE_DISCLAIMER.noVisaGuarantee}</p>
+        <p className="text-xs text-slate-500">✗ {COMPLIANCE_DISCLAIMER.noAutoPayment}</p>
+        <p className="text-xs text-slate-500">
           ✓ {COMPLIANCE_DISCLAIMER.gdprNote}{' '}
-          <a href={COMPLIANCE_DISCLAIMER.datenschutzUrl} className="underline text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">
-            Datenschutzerklärung
+          <a
+            href={COMPLIANCE_DISCLAIMER.datenschutzUrl}
+            className="underline text-slate-400 hover:text-slate-300"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Privacy Policy
           </a>
         </p>
       </div>
@@ -206,29 +218,31 @@ export function EmployerPilotForm() {
       <div className="flex items-start gap-3">
         <input
           type="checkbox" required id="consent"
-          className="mt-1 rounded border-gray-300 text-blue-600"
+          className="mt-1 rounded border-slate-600 bg-slate-800 text-indigo-500"
           checked={form.consent_to_contact}
           onChange={e => setForm(f => ({ ...f, consent_to_contact: e.target.checked }))}
         />
-        <label htmlFor="consent" className="text-sm text-gray-700">
-          <span className="text-red-500">*</span>{' '}
-          Ich möchte, dass CorridorWork mich zur Bearbeitung dieser Anfrage kontaktiert.
-          Ich stimme der Speicherung meiner Angaben gemäß der{' '}
-          <a href={COMPLIANCE_DISCLAIMER.datenschutzUrl} className="underline text-blue-600 hover:text-blue-800">
-            Datenschutzerklärung
+        <label htmlFor="consent" className="text-sm text-slate-400">
+          <span className="text-red-400">*</span>{' '}
+          I agree that CorridorWork may contact me to process this enquiry. I consent to the
+          storage of my details in accordance with the{' '}
+          <a href={COMPLIANCE_DISCLAIMER.datenschutzUrl} className="underline text-slate-300 hover:text-white">
+            Privacy Policy
           </a>{' '}
-          zu (freiwillig, jederzeit widerrufbar).
+          (voluntary, revocable at any time).
         </label>
       </div>
 
       <button
         type="submit"
         disabled={loading || !form.consent_to_contact}
-        className="w-full bg-blue-600 text-white rounded-lg py-3 px-6 font-semibold text-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="w-full bg-indigo-600 text-white rounded-lg py-3 px-6 font-semibold text-sm hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
-        {loading ? 'Wird eingereicht...' : 'Pilot anfragen →'}
+        {loading ? 'Submitting…' : 'Request pilot access →'}
       </button>
-      <p className="text-xs text-center text-gray-400">Kein Abo · Keine Zahlung · Kostenlos · Unverbindlich</p>
+      <p className="text-xs text-center text-slate-500">
+        No subscription · No payment · Free · No commitment
+      </p>
     </form>
   )
 }
