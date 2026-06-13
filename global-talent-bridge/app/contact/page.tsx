@@ -5,20 +5,20 @@ import { PublicFooter } from '@/app/_components/PublicFooter'
 import { ContactForm } from './ContactForm'
 
 export const metadata: Metadata = {
-  title: 'Kontakt',
+  title: 'Contact CorridorWork',
   description:
-    'Kontaktformular für Fragen, Feedback und Partnerschaftsanfragen. Keine automatischen E-Mails — wir melden uns manuell.',
+    'Contact form for questions, feedback and partnership inquiries. No automatic emails — we respond manually.',
 }
 
 /**
- * Kontaktseite — Server Component.
- * Das Formular (ContactForm) ist eine Client Component und liest URL-Parameter
- * (role, interest) für Vorauswahl aus Pilot-CTAs.
- * Suspense-Boundary ist Pflicht für useSearchParams in Next.js 14.
+ * Contact page — Server Component.
+ * The form (ContactForm) is a Client Component and reads URL parameters
+ * (role, interest) for pre-selection from pilot CTAs.
+ * Suspense boundary required for useSearchParams in Next.js 14.
  */
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-gray-950 flex flex-col">
+    <div className="min-h-screen bg-slate-950 flex flex-col">
       <PublicNavBar />
 
       <div className="max-w-2xl mx-auto px-4 py-16 flex-1 w-full">

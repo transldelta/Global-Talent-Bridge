@@ -26,35 +26,40 @@ describe('Demo Sandbox — Honesty & Clarity', () => {
 
   it('existiert', () => { expect(existsSync(join(ROOT, file))).toBe(true) })
 
-  it('enthält Demo-Only Banner', () => {
+  it('enthält Demo-Only Banner (English after Phase 1 cleanup)', () => {
     const c = readFile(file)
-    expect(c).toContain('Demo-Modus')
+    // Phase 1: German "Demo-Modus" → English "Demo mode"
+    expect(c.toLowerCase()).toMatch(/demo mode|demo-modus/)
   })
 
   it('enthält klaren Disclaimer: keine echten Kunden', () => {
     const c = readFile(file)
-    expect(c.toLowerCase()).toContain('keine echten kunden')
+    // Phase 1: German → English. "keine echten kunden" → "no real customers"
+    expect(c.toLowerCase()).toMatch(/keine echten kunden|no real customers/)
   })
 
   it('enthält Disclaimer: keine echten Umsätze', () => {
     const c = readFile(file)
-    expect(c.toLowerCase()).toContain('keine echten umsätze')
+    // Phase 1: German → English. "keine echten umsätze" → "no real revenue"
+    expect(c.toLowerCase()).toMatch(/keine echten umsätze|no real revenue/)
   })
 
   it('enthält Demo Disclaimer Sektion', () => {
     const c = readFile(file)
-    expect(c).toContain('Demo Disclaimer')
+    // Phase 1: disclaimer is now an inline banner, not a separate "Demo Disclaimer" section
+    expect(c.toLowerCase()).toMatch(/demo disclaimer|demo mode|synthetic data/)
   })
 
   it('enthält "Synthetische Daten" Hinweis', () => {
     const c = readFile(file)
-    expect(c).toContain('synthetisch')
+    // Phase 1: "synthetisch" → "synthetic"
+    expect(c.toLowerCase()).toMatch(/synthetisch|synthetic/)
   })
 
-  it('enthält "Echter Käufer?" Link zu Strategic Partnership', () => {
+  it('enthält Link zu Strategic Partnership (Echter Käufer CTA entfernt)', () => {
     const c = readFile(file)
+    // Phase 1: "Echter Käufer?" button removed — but strategic-partnership link remains
     expect(c).toContain('strategic-partnership')
-    expect(c).toContain('Echter Käufer')
   })
 
   it('enthält Safety Section', () => {

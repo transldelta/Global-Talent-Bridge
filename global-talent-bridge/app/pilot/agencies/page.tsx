@@ -1,31 +1,33 @@
 /**
- * app/pilot/agencies/page.tsx
+ * app/pilot/agencies/page.tsx — /pilot/agencies
  *
- * Public Agency / White-Label Partner Landingpage — /pilot/agencies
+ * Public agency / white-label partner landing page. No auth required.
  */
 import type { Metadata } from 'next'
+import { PublicNavBar } from '@/app/_components/PublicNavBar'
+import { PublicFooter } from '@/app/_components/PublicFooter'
 import { AgencyPartnerForm } from './_components/AgencyPartnerForm'
 
 export const metadata: Metadata = {
-  title: 'Partner-Pilot für Agenturen',
+  title: 'Agency Partner Pilot — CorridorWork',
   description:
-    'White-Label Talent-Matching für Recruiting-Agenturen, Sprachschulen und Relocation-Dienstleister. Pilot kostenlos — keine automatische Zahlung, keine verbindlichen Verträge.',
+    'White-label talent matching for recruiting agencies, language schools and relocation providers. Pilot free — no automatic payment, no binding contracts.',
   keywords: [
     'White-Label Recruiting',
-    'Partner-Pilot Agentur',
-    'Talent-Matching Agentur',
-    'Recruiting-Agentur internationales Matching',
-    'Sprachschule Partner',
-    'Relocation Dienstleister',
-    'CorridorWork Partner',
+    'Agency partner pilot',
+    'Talent matching agency',
+    'Recruiting agency international matching',
+    'Language school partner',
+    'Relocation provider',
+    'CorridorWork partner',
   ],
   openGraph: {
-    title: 'Partner-Pilot für Agenturen — White-Label Talent-Matching | CorridorWork',
+    title: 'Agency Partner Pilot — White-Label Talent Matching | CorridorWork',
     description:
-      'Recruiting-Agenturen und Relocation-Dienstleister nutzen das CorridorWork-System als Partnerlösung. Pilot kostenlos, manuell gesteuert.',
+      'Recruiting agencies and relocation providers can use the CorridorWork system as a partner solution. Pilot free, manually controlled.',
     url: 'https://corridorwork.com/pilot/agencies',
     type: 'website',
-    locale: 'de_DE',
+    locale: 'en_US',
     siteName: 'CorridorWork',
   },
   alternates: {
@@ -35,66 +37,62 @@ export const metadata: Metadata = {
 
 export default function AgenciesPilotPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-950 to-slate-900">
-
-      {/* Header */}
-      <header className="border-b border-purple-900">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <a href="/" className="text-white font-bold text-lg">CorridorWork</a>
-          <a href="/pilot/employers" className="text-sm text-slate-400 hover:text-white transition-colors">
-            Arbeitgeber? →
-          </a>
-        </div>
-      </header>
+    <div className="min-h-screen bg-slate-950 flex flex-col">
+      <PublicNavBar />
 
       {/* Hero */}
-      <section className="max-w-4xl mx-auto px-4 py-16 text-center">
-        <div className="inline-block bg-purple-900 text-purple-300 text-xs font-semibold px-3 py-1 rounded-full mb-4">
-          🤝 Partner-Pilot — Phase 1
+      <section className="max-w-4xl mx-auto px-6 py-16 text-center w-full">
+        <div className="inline-block bg-amber-900/30 border border-amber-700/40 text-amber-300 text-xs font-semibold px-3 py-1.5 rounded-full mb-5">
+          Partner Pilot — Phase 1
         </div>
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-          Eigenes Talent-Matching.<br />
-          <span className="text-purple-400">Als Partnerlösung.</span>
+        <p className="text-amber-400 text-xs font-bold tracking-[0.18em] uppercase mb-4">
+          For Partners
+        </p>
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+          Your own talent matching.<br />
+          <span className="text-amber-400">As a partner solution.</span>
         </h1>
-        <p className="text-slate-300 text-lg mb-8 max-w-2xl mx-auto">
-          Recruiting-Agenturen, Sprachschulen und Relocation-Dienstleister können das CorridorWork-System
-          als White-Label Partnerlösung nutzen. Pilotphase kostenlos und unverbindlich.
+        <p className="text-slate-300 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
+          Recruiting agencies, language schools and relocation providers can use the
+          CorridorWork system as a white-label partner solution. Pilot phase free and without commitment.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12 text-left">
           {[
-            { icon: '🏷️', title: 'White-Label', text: 'Eigenes Branding auf dem Matching-System (Phase 2).' },
-            { icon: '🌍', title: 'Talent-Korridore', text: 'Zugang zu 10+ geprüften Migrations-Korridoren.' },
-            { icon: '📊', title: 'Market Intelligence', text: 'Aggregierte Nachfragedaten — keine personenbezogenen Daten.' },
-            { icon: '🔗', title: 'Employer Pipeline', text: 'Direktzugang zu vorqualifizierten Arbeitgebern (Pilot).' },
+            { title: 'White-label',        text: 'Your own branding on the matching system (Phase 2).' },
+            { title: 'Talent corridors',   text: 'Access to 10+ verified migration corridors.' },
+            { title: 'Market intelligence',text: 'Aggregated demand data — no personal data.' },
+            { title: 'Employer pipeline',  text: 'Direct access to pre-qualified employers (pilot).' },
           ].map(b => (
-            <div key={b.title} className="bg-slate-800 rounded-xl p-5 border border-purple-900">
-              <div className="text-2xl mb-2">{b.icon}</div>
-              <div className="font-semibold text-white text-sm mb-1">{b.title}</div>
-              <div className="text-slate-400 text-sm">{b.text}</div>
+            <div key={b.title} className="bg-slate-900 rounded-xl p-5 border border-slate-800">
+              <div className="w-1.5 h-6 bg-amber-500 rounded-full mb-3" />
+              <div className="font-semibold text-white text-sm mb-1.5">{b.title}</div>
+              <div className="text-slate-400 text-sm leading-relaxed">{b.text}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Form */}
-      <section className="max-w-2xl mx-auto px-4 pb-16">
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-1">Partner-Pilot anfragen</h2>
-          <p className="text-gray-500 text-sm mb-6">
-            Pilotphase · Kostenlos · Unverbindlich · Kein automatischer Versand
+      <section className="max-w-2xl mx-auto px-6 pb-16 w-full">
+        <div className="bg-slate-900 border border-slate-700 rounded-2xl p-8">
+          <h2 className="text-2xl font-bold text-white mb-1">Request partner pilot</h2>
+          <p className="text-slate-400 text-sm mb-6">
+            Pilot phase · Free · No commitment · No automatic sending
           </p>
           <AgencyPartnerForm />
         </div>
       </section>
 
-      {/* Hinweise */}
-      <section className="max-w-2xl mx-auto px-4 pb-16 text-center">
+      {/* Notes */}
+      <section className="max-w-2xl mx-auto px-6 pb-16 text-center w-full">
         <p className="text-xs text-slate-500">
-          CorridorWork befindet sich in Phase 1 (Pilot). White-Label ist für Phase 2 geplant.
-          Kein verbindlicher Vertrag. Kein automatischer Versand. Manuell gesteuerte Pilotphase.
+          CorridorWork is in Phase 1 (Pilot). White-label is planned for Phase 2.
+          No binding contract. No automatic sending. Manually controlled pilot phase.
         </p>
       </section>
+
+      <PublicFooter />
     </div>
   )
 }

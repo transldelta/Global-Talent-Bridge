@@ -59,14 +59,15 @@ describe('/promo-video page — metadata', () => {
 // ── 2. Visual preview warning banner ─────────────────────────────────────────
 
 describe('/promo-video page — visual preview banner', () => {
-  it('page source contains internal visual preview warning text', () => {
+  it.skip('page source contains internal visual preview warning text', () => {
+    // Phase 1: /promo-video replaced with notFound() — no preview banner shown
     const src = readPage()
     expect(src).toMatch(/Internal visual preview only|Do not use this page as a sales.*buyer.*or marketing asset/i)
   })
 
-  it('banner is conditionally shown based on FINAL_AUDIO_EXISTS', () => {
+  it.skip('banner is conditionally shown based on FINAL_AUDIO_EXISTS', () => {
+    // Phase 1: /promo-video replaced with notFound()
     const src = readPage()
-    // Banner must be inside the !FINAL_AUDIO_EXISTS conditional block
     expect(src).toMatch(/!FINAL_AUDIO_EXISTS[\s\S]{0,500}Internal visual preview only/i)
   })
 
@@ -76,12 +77,14 @@ describe('/promo-video page — visual preview banner', () => {
     expect(src).toMatch(/robots\s*:\s*['"]noindex/)
   })
 
-  it('banner references the voiceover required doc', () => {
+  it.skip('banner references the voiceover required doc', () => {
+    // Phase 1: /promo-video replaced with notFound()
     const src = readPage()
     expect(src).toContain('final-voiceover-required.md')
   })
 
-  it('banner explains video has no audio track', () => {
+  it.skip('banner explains video has no audio track', () => {
+    // Phase 1: /promo-video replaced with notFound()
     const src = readPage()
     expect(src).toMatch(/no audio track|no final audio|no.*voiceover.*included/i)
   })
@@ -90,9 +93,9 @@ describe('/promo-video page — visual preview banner', () => {
 // ── 3. Primary heading ────────────────────────────────────────────────────────
 
 describe('/promo-video page — primary heading', () => {
-  it('primary heading uses "Visual Preview" when no final audio', () => {
+  it.skip('primary heading uses "Visual Preview" when no final audio', () => {
+    // Phase 1: /promo-video replaced with notFound() — no heading rendered
     const src = readPage()
-    // The heading when FINAL_AUDIO_EXISTS is false
     expect(src).toMatch(/Human Footage — Visual Preview/)
   })
 
@@ -269,11 +272,10 @@ describe('Promo video preview — safety sweep', () => {
     expect(src).not.toMatch(/voiceover.*complete|audio.*ready.*for sale/i)
   })
 
-  it('page does not position robot voice as final/human voiceover', () => {
+  it.skip('page does not position robot voice as final/human voiceover', () => {
+    // Phase 1: /promo-video replaced with notFound() — no content to check
     const src = readPage().toLowerCase()
-    // Must not claim TTS IS the human voiceover — but "not a final version" is fine
     expect(src).not.toMatch(/tts.*is.*human voiceover|robot voice.*is.*final|robot.*audio.*is.*complete/i)
-    // Technical draft section must still label TTS as "not a final version"
     expect(src).toMatch(/not a final version|not.*final/i)
   })
 
@@ -284,14 +286,15 @@ describe('Promo video preview — safety sweep', () => {
     expect(src).not.toMatch(autoplayWithoutMuted)
   })
 
-  it('all three video sections have controls attribute', () => {
+  it.skip('all three video sections have controls attribute', () => {
+    // Phase 1: /promo-video replaced with notFound() — 0 video sections
     const src = readPage()
-    // Count <video ... controls occurrences
     const videoControlsCount = (src.match(/<video[\s\S]{0,200}controls/g) || []).length
     expect(videoControlsCount).toBeGreaterThanOrEqual(2)
   })
 
-  it('page does not claim audio is human when TTS draft is shown', () => {
+  it.skip('page does not claim audio is human when TTS draft is shown', () => {
+    // Phase 1: /promo-video replaced with notFound() — no TTS/audio content
     const src = readPage()
     expect(src).toMatch(/TTS|macOS Samantha|NOT FINAL|not.*final/i)
   })

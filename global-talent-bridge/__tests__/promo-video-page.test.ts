@@ -135,16 +135,19 @@ describe('/promo-video — Human Footage Final Video', () => {
     expect(size).toBeGreaterThan(5 * 1024 * 1024) // > 5MB
   })
 
-  it('Seite referenziert corridorwork-promo-human-en.mp4', () => {
+  it.skip('Seite referenziert corridorwork-promo-human-en.mp4', () => {
+    // Phase 1: /promo-video replaced with notFound()
     expect(readPage()).toContain('corridorwork-promo-human-en.mp4')
   })
 
-  it('Seite zeigt Human Footage als LIVE', () => {
+  it.skip('Seite zeigt Human Footage als LIVE', () => {
+    // Phase 1: /promo-video replaced with notFound()
     const c = readPage()
     expect(c).toMatch(/LIVE|✅.*LIVE|live.*human/i)
   })
 
-  it('Seite hat <video> für Human-Version mit source', () => {
+  it.skip('Seite hat <video> für Human-Version mit source', () => {
+    // Phase 1: /promo-video replaced with notFound()
     const c = readPage()
     expect(c).toContain('/promo-video/final/')
     expect(c).toContain('video/mp4')
@@ -311,8 +314,9 @@ describe('/promo-video — Human Version SRT Files', () => {
 })
 
 // ── 6. Video Eingebettet (Technical Draft) ────────────────────────────────────
+// Phase 1: /promo-video replaced with notFound() — all content checks skipped
 
-describe('/promo-video — Video Eingebettet', () => {
+describe.skip('/promo-video — Video Eingebettet (page is now notFound stub)', () => {
   it('Seite referenziert corridorwork-promo-en.mp4 (draft video)', () => {
     expect(readPage()).toContain('corridorwork-promo-en.mp4')
   })
@@ -339,8 +343,9 @@ describe('/promo-video — Video Eingebettet', () => {
 })
 
 // ── 7. Human Footage Pipeline Section ────────────────────────────────────────
+// Phase 1: /promo-video replaced with notFound() — all content checks skipped
 
-describe('/promo-video — Human Footage Pipeline', () => {
+describe.skip('/promo-video — Human Footage Pipeline (page is now notFound stub)', () => {
   it('Seite enthält "Human Footage" Abschnitt', () => {
     const c = readPage().toLowerCase()
     expect(c).toMatch(/human.?footage/)
@@ -390,8 +395,9 @@ describe('/promo-video — Human Footage Pipeline', () => {
 })
 
 // ── 8. Compliance Banner ──────────────────────────────────────────────────────
+// Phase 1: /promo-video replaced with notFound() — all content checks skipped
 
-describe('/promo-video — Compliance Banner', () => {
+describe.skip('/promo-video — Compliance Banner (page is now notFound stub)', () => {
   it('enthält "No job guarantee"', () => {
     const c = readPage().toLowerCase()
     expect(c).toMatch(/no job guarantee|zero.*employment|no.*employment guarantee/)
@@ -416,11 +422,13 @@ describe('/promo-video — Compliance Banner', () => {
 // ── 9. Brand & Domain ─────────────────────────────────────────────────────────
 
 describe('/promo-video — Brand & Domain', () => {
-  it('enthält "CorridorWork"', () => {
+  it.skip('enthält "CorridorWork"', () => {
+    // Phase 1: /promo-video replaced with notFound() — no brand text in page
     expect(readPage()).toContain('CorridorWork')
   })
 
-  it('enthält "corridorwork.com"', () => {
+  it.skip('enthält "corridorwork.com"', () => {
+    // Phase 1: /promo-video replaced with notFound()
     expect(readPage()).toContain('corridorwork.com')
   })
 
@@ -469,7 +477,8 @@ describe('/promo-video — Safety Invariants', () => {
     expect(readPage()).not.toMatch(/puppeteer|cheerio|playwright\.chromium/i)
   })
 
-  it('enthält Stripe/payments-Hinweis', () => {
+  it.skip('enthält Stripe/payments-Hinweis', () => {
+    // Phase 1: /promo-video replaced with notFound() — no content in page
     const c = readPage().toLowerCase()
     expect(c).toMatch(/no stripe|not activated|no payments/)
   })
@@ -481,8 +490,9 @@ describe('/promo-video — Safety Invariants', () => {
 })
 
 // ── 12. Human Storyboard Scenes ───────────────────────────────────────────────
+// Phase 1: /promo-video replaced with notFound() — all content checks skipped
 
-describe('/promo-video — Human Storyboard Szenen', () => {
+describe.skip('/promo-video — Human Storyboard Szenen (page is now notFound stub)', () => {
   it('enthält Scene "THE PROBLEM"', () => {
     expect(readPage()).toContain('THE PROBLEM')
   })
@@ -517,8 +527,9 @@ describe('/promo-video — Human Storyboard Szenen', () => {
 })
 
 // ── 13. Language Codes (Human Version) ────────────────────────────────────────
+// Phase 1: /promo-video replaced with notFound() — all content checks skipped
 
-describe('/promo-video — 10 Sprachcodes (Human Version)', () => {
+describe.skip('/promo-video — 10 Sprachcodes (Human Version) (page is now notFound stub)', () => {
   for (const lang of HUMAN_LANGS) {
     it(`enthält Sprachcode "${lang}" (human SRT)`, () => {
       expect(readPage()).toContain(`corridorwork-human-${lang}.srt`)
@@ -527,8 +538,9 @@ describe('/promo-video — 10 Sprachcodes (Human Version)', () => {
 })
 
 // ── 14. CTAs ──────────────────────────────────────────────────────────────────
+// Phase 1: /promo-video replaced with notFound() — all content checks skipped
 
-describe('/promo-video — CTAs', () => {
+describe.skip('/promo-video — CTAs (page is now notFound stub)', () => {
   it('enthält Link zu /demo/sandbox', () => {
     expect(readPage()).toContain('/demo/sandbox')
   })
@@ -545,7 +557,8 @@ describe('/promo-video — CTAs', () => {
 // ── 15. Component Structure ───────────────────────────────────────────────────
 
 describe('/promo-video — Komponenten-Struktur', () => {
-  it('importiert PublicFooter', () => {
+  it.skip('importiert PublicFooter', () => {
+    // Phase 1: /promo-video replaced with notFound() — no PublicFooter import needed
     expect(readPage()).toContain('PublicFooter')
   })
 
@@ -636,28 +649,29 @@ describe('/promo-video — Asset List Dokumentation', () => {
 
 // ── 18. Voiceover Recording Guide (Human Voiceover Integration Sprint) ─────────
 
+// Phase 1: /promo-video replaced with notFound() — page content tests skipped
 describe('/promo-video — Voiceover Recording Guide', () => {
-  it('zeigt "Visual preview with subtitles" (kein LIVE bei fehlendem Voiceover)', () => {
+  it.skip('zeigt "Visual preview with subtitles" (kein LIVE bei fehlendem Voiceover)', () => {
     expect(readPage()).toMatch(/Visual preview with subtitles/i)
   })
 
-  it('enthält "Record a natural voiceover using this script"', () => {
+  it.skip('enthält "Record a natural voiceover using this script"', () => {
     expect(readPage()).toMatch(/Record a natural voiceover using this script/i)
   })
 
-  it('enthält ersten Satz des finalen englischen Skripts', () => {
+  it.skip('enthält ersten Satz des finalen englischen Skripts', () => {
     expect(readPage()).toMatch(/Across the world, employers are searching for skilled people/i)
   })
 
-  it('enthält "CorridorWork helps structure that connection"', () => {
+  it.skip('enthält "CorridorWork helps structure that connection"', () => {
     expect(readPage()).toContain('CorridorWork helps structure that connection')
   })
 
-  it('enthält Dropzone-Pfad für Voiceover-Datei', () => {
+  it.skip('enthält Dropzone-Pfad für Voiceover-Datei', () => {
     expect(readPage()).toContain('corridorwork-vo-en-human.wav')
   })
 
-  it('enthält "No robot voice" Hinweis (Roboterstimme wird nicht als final dargestellt)', () => {
+  it.skip('enthält "No robot voice" Hinweis (Roboterstimme wird nicht als final dargestellt)', () => {
     const p = readPage().toLowerCase()
     expect(p).toMatch(/no robot voice/)
   })
@@ -668,15 +682,15 @@ describe('/promo-video — Voiceover Recording Guide', () => {
     expect(p).not.toMatch(/robot voice.*is.*final|robot.*audio.*final.*version.*complete/i)
   })
 
-  it('Script enthält "No job guarantee" (Compliance im Skript)', () => {
+  it.skip('Script enthält "No job guarantee" (Compliance im Skript)', () => {
     expect(readPage()).toMatch(/No job guarantee/i)
   })
 
-  it('Script enthält "No visa guarantee" (Compliance im Skript)', () => {
+  it.skip('Script enthält "No visa guarantee" (Compliance im Skript)', () => {
     expect(readPage()).toMatch(/No visa guarantee/i)
   })
 
-  it('Script enthält "No automatic outreach" (Compliance im Skript)', () => {
+  it.skip('Script enthält "No automatic outreach" (Compliance im Skript)', () => {
     expect(readPage()).toMatch(/No automatic outreach/i)
   })
 

@@ -1,6 +1,14 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { PublicNavBar } from '@/app/_components/PublicNavBar'
+import { PublicFooter } from '@/app/_components/PublicFooter'
+
+export const metadata: Metadata = {
+  title: 'Pricing — CorridorWork',
+  description:
+    'Transparent pricing for employers on CorridorWork. Start free and upgrade when ready. Payment not yet active in the current MVP phase.',
+}
 
 type PricingPlan = {
   plan_key: string
@@ -16,18 +24,18 @@ const PLAN_ORDER = ['free_employer', 'starter_employer', 'growth_employer', 'ent
 
 const PLAN_STYLE: Record<string, { border: string; badge: string; highlight: boolean }> = {
   free_employer: {
-    border: 'border-gray-700',
-    badge: 'bg-gray-800 text-gray-400',
+    border: 'border-slate-700',
+    badge: 'bg-slate-800 text-slate-400',
     highlight: false,
   },
   starter_employer: {
-    border: 'border-blue-700/50',
-    badge: 'bg-blue-900/40 text-blue-300',
+    border: 'border-indigo-700/50',
+    badge: 'bg-indigo-900/40 text-indigo-300',
     highlight: false,
   },
   growth_employer: {
-    border: 'border-purple-700/50',
-    badge: 'bg-purple-900/40 text-purple-300',
+    border: 'border-indigo-600/60',
+    badge: 'bg-indigo-900/50 text-indigo-200',
     highlight: true,
   },
   enterprise_employer: {
@@ -38,7 +46,6 @@ const PLAN_STYLE: Record<string, { border: string; badge: string; highlight: boo
 }
 
 export default async function PricingPage() {
-  // Pricing-Daten via Admin-Client (public Seite — kein User-Auth nötig)
   const adminSupabase = createAdminClient()
   const { data: plansRaw } = await adminSupabase
     .from('pricing_plans')
@@ -56,25 +63,27 @@ export default async function PricingPage() {
     )
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-slate-950 flex flex-col">
       <PublicNavBar />
 
-      <div className="max-w-5xl mx-auto px-4 py-12 space-y-10">
+      <div className="max-w-5xl mx-auto px-6 py-12 space-y-10 flex-1">
         {/* Header */}
         <div className="text-center space-y-4">
+          <p className="text-indigo-400 text-xs font-bold tracking-[0.18em] uppercase mb-3">
+            Pricing
+          </p>
           <h1 className="text-4xl font-bold text-white">
-            Transparente Preise für Arbeitgeber
+            Transparent pricing for employers
           </h1>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Finde das passende Paket für dein Unternehmen. Starte kostenlos und wechsle
-            jederzeit.
+          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+            Find the right plan for your organisation. Start free and upgrade when ready.
           </p>
 
-          {/* MVP-Hinweis */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-900/20 border border-yellow-700/50 rounded-full">
-            <span className="text-yellow-400 text-sm">⚠️</span>
-            <span className="text-yellow-300 text-sm font-medium">
-              Zahlungen sind in dieser MVP-Version noch nicht aktiviert.
+          {/* MVP notice */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl">
+            <div className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+            <span className="text-amber-300 text-sm font-medium">
+              Payment processing is not yet active in the current pilot phase.
             </span>
           </div>
         </div>
@@ -86,19 +95,19 @@ export default async function PricingPage() {
             return (
               <div
                 key={plan.plan_key}
-                className={`relative bg-gray-900 rounded-2xl border p-6 flex flex-col ${style.border} ${
-                  style.highlight ? 'ring-2 ring-purple-600/50' : ''
+                className={`relative bg-slate-900 rounded-2xl border p-6 flex flex-col ${style.border} ${
+                  style.highlight ? 'ring-2 ring-indigo-600/50' : ''
                 }`}
               >
                 {style.highlight && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="text-xs px-3 py-1 bg-purple-600 text-white rounded-full font-medium">
-                      Empfohlen
+                    <span className="text-xs px-3 py-1 bg-indigo-600 text-white rounded-full font-medium">
+                      Recommended
                     </span>
                   </div>
                 )}
 
-                {/* Plan-Name + Badge */}
+                {/* Plan name + badge */}
                 <div className="mb-4">
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${style.badge}`}>
                     {plan.plan_key.includes('free')
@@ -111,27 +120,27 @@ export default async function PricingPage() {
                   </span>
                   <h2 className="text-lg font-bold text-white mt-2">{plan.name}</h2>
                   {plan.description && (
-                    <p className="text-gray-400 text-xs mt-1 leading-relaxed">
+                    <p className="text-slate-400 text-xs mt-1 leading-relaxed">
                       {plan.description}
                     </p>
                   )}
                 </div>
 
-                {/* Preis */}
+                {/* Price */}
                 <div className="mb-5">
                   {plan.monthly_price_eur === 0 ? (
                     <div>
-                      <span className="text-3xl font-bold text-white">Kostenlos</span>
+                      <span className="text-3xl font-bold text-white">Free</span>
                     </div>
                   ) : (
                     <div>
                       <span className="text-3xl font-bold text-white">
-                        {plan.monthly_price_eur} €
+                        €{plan.monthly_price_eur}
                       </span>
-                      <span className="text-gray-400 text-sm"> / Monat</span>
+                      <span className="text-slate-400 text-sm"> / month</span>
                       {plan.yearly_price_eur > 0 && (
-                        <p className="text-gray-500 text-xs mt-0.5">
-                          {plan.yearly_price_eur} € / Jahr (2 Monate gratis)
+                        <p className="text-slate-500 text-xs mt-0.5">
+                          €{plan.yearly_price_eur} / year (2 months free)
                         </p>
                       )}
                     </div>
@@ -141,8 +150,8 @@ export default async function PricingPage() {
                 {/* Features */}
                 <ul className="space-y-2 flex-1">
                   {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
-                      <span className="text-green-400 mt-0.5 shrink-0">✓</span>
+                    <li key={i} className="flex items-start gap-2 text-sm text-slate-300">
+                      <div className="w-1 h-4 bg-emerald-500/60 rounded-full shrink-0 mt-0.5" />
                       {feature}
                     </li>
                   ))}
@@ -154,16 +163,16 @@ export default async function PricingPage() {
                     href="/auth/register?role=employer"
                     className={`block text-center py-2.5 rounded-lg text-sm font-medium transition-colors ${
                       style.highlight
-                        ? 'bg-purple-600 hover:bg-purple-500 text-white'
+                        ? 'bg-indigo-600 hover:bg-indigo-500 text-white'
                         : plan.monthly_price_eur === 0
-                        ? 'bg-gray-800 hover:bg-gray-700 text-white'
-                        : 'bg-blue-600 hover:bg-blue-500 text-white'
+                        ? 'bg-slate-800 hover:bg-slate-700 text-white'
+                        : 'bg-indigo-700 hover:bg-indigo-600 text-white'
                     }`}
                   >
-                    Als Arbeitgeber registrieren
+                    Register as employer
                   </Link>
-                  <p className="text-center text-xs text-gray-600 mt-2">
-                    Zahlung noch nicht aktiv
+                  <p className="text-center text-xs text-slate-600 mt-2">
+                    Payment not yet active
                   </p>
                 </div>
               </div>
@@ -171,44 +180,43 @@ export default async function PricingPage() {
           })}
         </div>
 
-        {/* FAQ / Hinweis */}
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 text-center">
-          <h3 className="text-white font-semibold mb-2">🚀 MVP-Phase</h3>
-          <p className="text-gray-400 text-sm max-w-xl mx-auto">
-            CorridorWork befindet sich in der MVP-Phase. Alle Funktionen sind bereits
-            nutzbar. Zahlungen und Premium-Pakete werden in einer späteren Phase aktiviert.
-            Jetzt kostenlos starten und erste Kandidaten finden.
+        {/* MVP note */}
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center">
+          <h3 className="text-white font-semibold mb-2">Pilot phase</h3>
+          <p className="text-slate-400 text-sm max-w-xl mx-auto">
+            CorridorWork is in the MVP pilot phase. All features are available to use now.
+            Payments and premium plans will be activated in a later phase. Start free today.
           </p>
         </div>
 
-        {/* Pilot-CTA */}
-        <div className="bg-gradient-to-r from-blue-900/20 to-green-900/20 border border-blue-800/40 rounded-2xl p-8 text-center">
-          <div className="text-3xl mb-3">🤝</div>
-          <h3 className="text-xl font-bold text-white mb-2">Pilot-Arbeitgeber gesucht</h3>
-          <p className="text-gray-400 text-sm max-w-xl mx-auto mb-6">
-            Du möchtest als einer der ersten Arbeitgeber die Plattform testen und Feedback
-            geben? Meld dich direkt — wir sprechen gerne mit dir. Kein Verkaufsdruck,
-            keine automatischen E-Mails.
+        {/* Pilot CTA */}
+        <div className="bg-slate-900 border border-indigo-800/40 rounded-2xl p-8 text-center">
+          <h3 className="text-xl font-bold text-white mb-2">Pilot employers wanted</h3>
+          <p className="text-slate-400 text-sm max-w-xl mx-auto mb-6">
+            Want to be one of the first employers to test the platform and provide feedback?
+            Get in touch directly — no sales pressure, no automated emails.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/contact?role=employer&interest=pilot_employer"
-              className="px-7 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors"
+              className="px-7 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl transition-colors"
             >
-              📋 Als Pilot-Arbeitgeber anfragen
+              Request pilot access
             </Link>
             <Link
               href="/auth/register?role=employer"
-              className="px-7 py-3.5 bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold rounded-xl border border-gray-700 transition-colors"
+              className="px-7 py-3.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl border border-slate-700 transition-colors"
             >
-              Direkt registrieren
+              Register directly
             </Link>
           </div>
-          <p className="mt-4 text-xs text-gray-600">
-            Keine Zahlung erforderlich · Kein automatischer E-Mail-Kontakt · MVP-Phase
+          <p className="mt-4 text-xs text-slate-600">
+            No payment required · No automated emails · Pilot phase
           </p>
         </div>
       </div>
+
+      <PublicFooter />
     </div>
   )
 }

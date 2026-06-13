@@ -65,6 +65,14 @@ export function PublicFooter() {
             <ul className="space-y-2.5">
               <li>
                 <Link
+                  href="/partners"
+                  className="text-slate-500 text-sm hover:text-slate-300 transition-colors"
+                >
+                  Partners
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/strategic-partnership"
                   className="text-slate-500 text-sm hover:text-slate-300 transition-colors"
                 >
@@ -73,26 +81,10 @@ export function PublicFooter() {
               </li>
               <li>
                 <Link
-                  href="/buyer-snapshot"
+                  href="/about"
                   className="text-slate-500 text-sm hover:text-slate-300 transition-colors"
                 >
-                  Buyer Snapshot
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/launch"
-                  className="text-slate-500 text-sm hover:text-slate-300 transition-colors"
-                >
-                  Launch Overview
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/partners"
-                  className="text-slate-500 text-sm hover:text-slate-300 transition-colors"
-                >
-                  Partners
+                  About
                 </Link>
               </li>
             </ul>
@@ -109,7 +101,7 @@ export function PublicFooter() {
                   href="/legal/datenschutz"
                   className="text-slate-500 text-sm hover:text-slate-300 transition-colors"
                 >
-                  Datenschutz
+                  Privacy Policy
                 </Link>
               </li>
               <li>
@@ -117,7 +109,7 @@ export function PublicFooter() {
                   href="/legal/impressum"
                   className="text-slate-500 text-sm hover:text-slate-300 transition-colors"
                 >
-                  Impressum
+                  Legal Notice
                 </Link>
               </li>
               <li>
@@ -125,7 +117,15 @@ export function PublicFooter() {
                   href="/legal/agb"
                   className="text-slate-500 text-sm hover:text-slate-300 transition-colors"
                 >
-                  AGB
+                  Terms
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contact"
+                  className="text-slate-500 text-sm hover:text-slate-300 transition-colors"
+                >
+                  Contact
                 </Link>
               </li>
             </ul>

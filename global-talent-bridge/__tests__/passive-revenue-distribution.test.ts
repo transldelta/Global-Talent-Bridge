@@ -78,7 +78,8 @@ describe('/launch Seite', () => {
   })
 
   it('enthält Sicherheitshinweis (kein Outreach)', () => {
-    expect(content.toLowerCase()).toMatch(/kein.*outreach|kein.*versand|kein.*cold/i)
+    // Phase 1: German → English. "Kein Cold-Outreach" → "No cold outreach" / "inbound-first"
+    expect(content.toLowerCase()).toMatch(/kein.*outreach|kein.*versand|kein.*cold|no cold outreach|inbound-first/i)
   })
 
   it('exportiert default function', () => {
@@ -106,16 +107,18 @@ describe('/buyer-snapshot Seite', () => {
   })
 
   it('enthält alle 4 Revenue-Pfade', () => {
-    expect(content).toContain('strategic_partner')
-    expect(content).toContain('agency_partner')
-    expect(content).toContain('employer_pilot')
-    expect(content).toContain('market_intelligence')
+    // Phase 1: Internal type codes removed — check for route URLs instead
+    expect(content).toContain('/strategic-partnership')
+    expect(content).toContain('/partners')
+    expect(content).toContain('/global/employers')
+    expect(content).toContain('/market-intelligence')
   })
 
   it('enthält Compliance/Safety-Sektion', () => {
+    // Phase 1: env-vars table removed. Compliance section still exists with readable items.
     expect(content.toLowerCase()).toMatch(/compliance|safety|sicherheit/i)
-    expect(content).toContain('EMAIL_PROVIDER')
-    expect(content).toContain('none')
+    // The page now shows readable compliance items (no env-var table)
+    expect(content.toLowerCase()).toMatch(/no automatic email|no cold outreach|no payment|gdpr/i)
   })
 
   it('enthält kein erfundenes Umsatzversprechen', () => {
@@ -244,14 +247,16 @@ describe('Sitemap — Distribution Pages', () => {
     expect(content).toContain('/buyer-snapshot')
   })
 
-  it('/launch hat priority >= 0.80', () => {
+  it('/launch hat priority >= 0.70', () => {
+    // Phase 1: /launch priority reduced from 0.85 to 0.75 (secondary page)
     const launchSection = content.slice(content.indexOf('/launch') - 50, content.indexOf('/launch') + 200)
-    expect(launchSection).toMatch(/priority:\s*0\.[89][05]/)
+    expect(launchSection).toMatch(/priority:\s*0\.[789]/)
   })
 
-  it('/buyer-snapshot hat priority >= 0.75', () => {
-    const snapshotSection = content.slice(content.indexOf('/buyer-snapshot') - 50, content.indexOf('/buyer-snapshot') + 200)
-    expect(snapshotSection).toMatch(/priority:\s*0\.[789]/)
+  it('/buyer-snapshot ist noindex — aus Sitemap ausgeschlossen', () => {
+    // Phase 1: /buyer-snapshot is noindex, intentionally excluded from sitemap
+    // The sitemap has a comment explaining this
+    expect(content).toMatch(/buyer-snapshot.*noindex|noindex.*buyer-snapshot/i)
   })
 })
 
@@ -261,11 +266,14 @@ describe('PublicFooter — Distribution Links', () => {
   let content: string
   beforeAll(() => { content = readFile('app/_components/PublicFooter.tsx') })
 
-  it('enthält /launch Link', () => {
+  it.skip('enthält /launch Link', () => {
+    // Phase 1: /launch removed from public footer (kept as secondary page, not promoted)
     expect(content).toContain('href="/launch"')
   })
 
-  it('enthält /buyer-snapshot Link', () => {
+  it.skip('enthält /buyer-snapshot Link', () => {
+    // Phase 1: /buyer-snapshot removed from public footer (noindex page, direct-link only)
+    // It is still accessible via direct URL; just not promoted in the public footer.
     expect(content).toContain('href="/buyer-snapshot"')
   })
 

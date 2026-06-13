@@ -130,20 +130,20 @@ describe('app/contact/ContactForm.tsx — client-side hardening', () => {
     expect(src).toMatch(/className="hidden"/)
   })
 
-  it('includes buyer_acquisition option in INTEREST_OPTIONS', () => {
+  it.skip('includes buyer_acquisition option in INTEREST_OPTIONS', () => {
+    // Phase 1 cleanup: buyer_acquisition removed from ContactForm dropdown (not a public inquiry type)
+    // The actions.ts server validation still accepts it; only the UI option was removed
     expect(src).toMatch(/buyer_acquisition/)
-    // Should be inside INTEREST_OPTIONS
-    const optionsBlock = src.match(/const INTEREST_OPTIONS\s*=\s*\[([\s\S]*?)\]/)
-    expect(optionsBlock).not.toBeNull()
-    expect(optionsBlock![1]).toMatch(/buyer_acquisition/)
   })
 
-  it('buyer_acquisition label mentions acquisition', () => {
+  it.skip('buyer_acquisition label mentions acquisition', () => {
+    // Phase 1 cleanup: acquisition dropdown option removed from ContactForm
     expect(src).toMatch(/Acquisition|acquisition|Erwerben|erwerben/)
   })
 
-  it('still includes all original interest options', () => {
+  it('includes core interest options (pilot_employer, candidate, partnership, feedback, other)', () => {
     const optionsBlock = src.match(/const INTEREST_OPTIONS\s*=\s*\[([\s\S]*?)\]/)
+    expect(optionsBlock).not.toBeNull()
     expect(optionsBlock![1]).toMatch(/pilot_employer/)
     expect(optionsBlock![1]).toMatch(/candidate/)
     expect(optionsBlock![1]).toMatch(/partnership/)

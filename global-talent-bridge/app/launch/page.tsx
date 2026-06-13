@@ -146,13 +146,9 @@ export default function LaunchPage() {
       <section className="max-w-4xl mx-auto px-4 pb-10">
         <div className="bg-slate-900 border border-slate-700 rounded-2xl p-5">
           <p className="text-slate-400 text-sm font-medium mb-3">Inbound-first approach</p>
-          <p className="text-slate-500 text-sm mb-2">
-            CorridorWork collects inbound interest via this website — automatically, without manual social media posting.
-            All requests go through structured intake forms and are reviewed by our team.
-          </p>
-          <p className="text-slate-600 text-xs">
-            Kein LinkedIn/WhatsApp nötig — no LinkedIn or WhatsApp required.
-            The platform operates independently of owner social media activity.
+          <p className="text-slate-500 text-sm">
+            CorridorWork collects inbound interest via this website — through structured intake forms
+            reviewed manually by our team. No cold outreach, no automated follow-up.
           </p>
         </div>
       </section>
@@ -161,7 +157,7 @@ export default function LaunchPage() {
       <section className="max-w-4xl mx-auto px-4 pb-16">
         <div className="bg-slate-900/60 border border-slate-700/50 rounded-xl p-4 text-center">
           <p className="text-slate-500 text-xs">
-            Kein Cold-Outreach &nbsp;·&nbsp; Kein automatischer Versand &nbsp;·&nbsp;
+            No cold outreach &nbsp;·&nbsp; No automatic emails &nbsp;·&nbsp;
             No Stripe active &nbsp;·&nbsp; No scraping &nbsp;·&nbsp; GDPR-compliant &nbsp;·&nbsp;
             No employment guarantee &nbsp;·&nbsp; No visa guarantee
           </p>

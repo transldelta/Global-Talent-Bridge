@@ -325,8 +325,9 @@ describe('app/for-buyers/page.tsx — structure and safety', () => {
   it('exists', () => {
     expect(existsSync(join(APP, 'for-buyers', 'page.tsx'))).toBe(true)
   })
-  it('is NOT noindex (public page)', () => {
-    expect(src).not.toMatch(/noindex.*nofollow/)
+  it('is noindex (restricted — direct-link only, not indexed)', () => {
+    // Phase 1 cleanup: /for-buyers is now noindex — not a primary public page
+    expect(src).toMatch(/noindex.*nofollow/)
   })
   it('does NOT link to /admin routes', () => {
     expect(src).not.toMatch(/href=["'`]\/admin/)

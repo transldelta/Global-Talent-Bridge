@@ -242,7 +242,8 @@ describe('Navigation — Simplified professional nav', () => {
   })
 
   test('nav contains Partners link', () => {
-    expect(nav).toContain('/strategic-partnership')
+    // Phase 1: Partners nav link now points to /partners (not /strategic-partnership)
+    expect(nav).toContain('/partners')
   })
 
   test('nav contains Demo link', () => {
@@ -285,8 +286,10 @@ describe('Footer — Clean 4-column structure', () => {
     expect(footer).toContain('/strategic-partnership')
   })
 
-  test('footer has Partners column with Buyer Snapshot', () => {
-    expect(footer).toContain('/buyer-snapshot')
+  test('footer has Partners column with About link', () => {
+    // Phase 1: Buyer Snapshot removed from public footer (noindex page, direct-link only)
+    // Replaced with /about link
+    expect(footer).toContain('/about')
   })
 
   test('footer has Legal column with Datenschutz', () => {

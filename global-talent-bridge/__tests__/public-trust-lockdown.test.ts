@@ -349,18 +349,19 @@ describe('/buyer-snapshot — Public Platform Snapshot', () => {
     expect(content).not.toContain('💰 Revenue-Pfade (4 aktiv)')
   })
 
-  test('keeps compliance configuration section with EMAIL_PROVIDER', () => {
-    // Required by passive-revenue-distribution.test.ts
-    expect(content).toContain('EMAIL_PROVIDER')
-    expect(content).toContain('none')
+  test('has compliance configuration section', () => {
+    // Phase 1: env-vars table removed. Section is now "Compliance configuration" with readable items.
+    expect(content.toLowerCase()).toContain('compliance configuration')
+    // Readable compliance items present (no email, no outreach, no payment)
+    expect(content.toLowerCase()).toMatch(/no automatic email|no cold outreach|no payment|gdpr/i)
   })
 
-  test('keeps inbound channel type identifiers', () => {
-    // Required by passive-revenue-distribution.test.ts
-    expect(content).toContain('strategic_partner')
-    expect(content).toContain('agency_partner')
-    expect(content).toContain('employer_pilot')
-    expect(content).toContain('market_intelligence')
+  test('keeps inbound channel identifiers (as route URLs)', () => {
+    // Phase 1: Internal type codes (strategic_partner, agency_partner…) replaced with route URLs
+    expect(content).toContain('/strategic-partnership')
+    expect(content).toContain('/partners')
+    expect(content).toContain('/global/employers')
+    expect(content).toContain('/market-intelligence')
   })
 
   test('has inbound-first statement', () => {
@@ -442,9 +443,9 @@ describe('/launch — Professional Overview Page', () => {
     expect(content.toLowerCase()).toMatch(/inbound-first|inbound first|inbound.*automatisch/i)
   })
 
-  test('contains "Kein LinkedIn/WhatsApp nötig" note', () => {
-    // Required by owner-offload-inbound-first.test.ts
-    expect(content.toLowerCase()).toMatch(/kein linkedin.*whatsapp nötig/i)
+  test('contains inbound-first / no social obligation note', () => {
+    // Phase 1: "Kein LinkedIn/WhatsApp nötig" → English "No cold outreach" / "Inbound-first"
+    expect(content.toLowerCase()).toMatch(/kein linkedin.*whatsapp nötig|no cold outreach|inbound-first/i)
   })
 
   test('does NOT have custom internal header (no emoji pill with "Phase 1 Pilot")', () => {

@@ -44,12 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'yearly',
       priority: 0.6,
     },
-    {
-      url: `${BASE_URL}/for-buyers`,
-      lastModified: now,
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
+    // NOTE: /for-buyers and /buyer-snapshot are noindex — intentionally excluded from sitemap
     {
       url: `${BASE_URL}/legal/impressum`,
       lastModified: now,
@@ -111,25 +106,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.75,
     },
-    // Passive Distribution Pages
+    // Engagement pages
     {
       url: `${BASE_URL}/launch`,
       lastModified: now,
       changeFrequency: 'monthly',
-      priority: 0.85,
+      priority: 0.75,
     },
-    {
-      url: `${BASE_URL}/buyer-snapshot`,
-      lastModified: now,
-      changeFrequency: 'monthly',
-      priority: 0.80,
-    },
+    // NOTE: /buyer-snapshot is noindex — excluded from sitemap
     // Demo page
     {
       url: `${BASE_URL}/demo`,
       lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.80,
+    },
+    // Corridor index
+    {
+      url: `${BASE_URL}/corridors`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.82,
     },
     // Solutions pages
     {

@@ -51,7 +51,7 @@ export async function PublicNavBar() {
             Candidates
           </Link>
           <Link
-            href="/strategic-partnership"
+            href="/partners"
             className="text-sm text-slate-400 hover:text-white transition-colors"
           >
             Partners

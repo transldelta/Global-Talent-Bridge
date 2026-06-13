@@ -129,8 +129,9 @@ describe('/launch — keine Pflicht-Social-Schritte', () => {
     expect(content).not.toMatch(/poste auf linkedin|poste auf whatsapp/i)
   })
 
-  it('enthält kein LinkedIn/WhatsApp nötig Hinweis', () => {
-    expect(content.toLowerCase()).toMatch(/kein linkedin.*whatsapp nötig|linkedin.*whatsapp.*nötig.*nein/i)
+  it('enthält Inbound-first / kein Social-Pflicht Hinweis', () => {
+    // Phase 1: German "Kein LinkedIn/WhatsApp nötig" → English "No cold outreach" / "Inbound-first"
+    expect(content.toLowerCase()).toMatch(/kein linkedin.*whatsapp nötig|no cold outreach|inbound-first|inbound only/i)
   })
 
   it('enthält alle 4 Revenue-CTAs', () => {

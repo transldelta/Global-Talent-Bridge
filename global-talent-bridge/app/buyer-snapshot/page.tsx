@@ -1,11 +1,12 @@
 /**
  * app/buyer-snapshot/page.tsx — /buyer-snapshot
  *
- * Public platform snapshot page.
- * Gives interested parties a clear 2-minute overview: what is live, what is not,
- * how to engage. No internal admin labels. No fabricated metrics.
+ * Public platform snapshot page for serious parties exploring CorridorWork.
+ * Gives a clear 2-minute overview: what is live, what is not, how to engage.
+ * No internal admin labels. No fabricated metrics. No debug/env information.
  *
  * Safety: No email sending · No Stripe · No scraping · No admin details
+ * SEO: noindex — direct link only, not for general search indexing.
  */
 import Link from 'next/link'
 import { PublicNavBar } from '@/app/_components/PublicNavBar'
@@ -14,43 +15,39 @@ import { PublicFooter } from '@/app/_components/PublicFooter'
 export const metadata = {
   title:       'Platform Snapshot — CorridorWork',
   description: 'A 2-minute overview of what CorridorWork is, what is live, and how to engage. No revenue promises — all verifiable.',
+  robots:      'noindex, nofollow',
 }
 
 const LIVE_ASSETS = [
-  { label: 'Live domain',           detail: 'corridorwork.com',                         status: 'Live' },
-  { label: 'Tech stack',            detail: 'Next.js 14, Supabase, Vercel, TypeScript',  status: 'Production' },
-  { label: 'Scheduled processes',   detail: 'Daily platform jobs via Vercel Cron',       status: 'Active' },
+  { label: 'Live domain',           detail: 'corridorwork.com',                                   status: 'Live' },
+  { label: 'Tech stack',            detail: 'Next.js, Supabase, Vercel, TypeScript',               status: 'Production' },
+  { label: 'Scheduled processes',   detail: 'Daily platform jobs via Vercel Cron',                 status: 'Active' },
   { label: 'Inbound channels',      detail: '4 intake forms live (employer, candidate, partner, strategic)', status: 'Live' },
-  { label: 'Public pages',          detail: '16+ indexable pages + sitemap.xml',         status: 'Indexable' },
-  { label: 'Compliance layer',      detail: 'Safety-first: no scraping, no auto-outreach', status: 'Active' },
+  { label: 'Public pages',          detail: '16+ indexable pages + sitemap.xml',                   status: 'Indexable' },
+  { label: 'Compliance layer',      detail: 'Safety-first: no scraping, no auto-outreach, GDPR',   status: 'Active' },
 ]
 
-// These identifiers are used as data values in the inbound channel system
 const INBOUND_CHANNELS = [
   {
     rank:  1,
-    type:  'strategic_partner',
     title: 'Strategic Partner / White-Label / Acquisition',
     url:   '/strategic-partnership',
     note:  'Strategic partnership, white-label solution, licensing or acquisition discussion.',
   },
   {
     rank:  2,
-    type:  'agency_partner',
     title: 'Agency / Partner',
     url:   '/partners',
     note:  'Recruiting agencies and HR service providers.',
   },
   {
     rank:  3,
-    type:  'employer_pilot',
     title: 'Employer Interest',
     url:   '/global/employers',
     note:  'Companies interested in international talent across sectors.',
   },
   {
     rank:  4,
-    type:  'market_intelligence',
     title: 'Market Intelligence',
     url:   '/market-intelligence',
     note:  'Aggregated corridor and demand data for strategic analysis.',
@@ -69,11 +66,11 @@ const NOT_ACTIVE = [
 ]
 
 const ENGAGEMENT_OPTIONS = [
-  { title: 'Strategic partnership',   desc: 'Joint market coverage, revenue sharing or operational collaboration.' },
-  { title: 'White-label solution',    desc: 'Use the CorridorWork platform under your own branding.' },
-  { title: 'Licensing / API access',  desc: 'Technology licence or API integration.' },
+  { title: 'Strategic partnership',    desc: 'Joint market coverage, revenue sharing or operational collaboration.' },
+  { title: 'White-label solution',     desc: 'Use the CorridorWork platform under your own branding.' },
+  { title: 'Licensing / API access',   desc: 'Technology licence or API integration.' },
   { title: 'Acquisition / investment', desc: 'Serious interest in acquisition or strategic stake.' },
-  { title: 'Market intelligence',     desc: 'Aggregated corridor and demand data for strategic analysis.' },
+  { title: 'Market intelligence',      desc: 'Aggregated corridor and demand data for strategic analysis.' },
 ]
 
 export default function BuyerSnapshotPage() {
@@ -82,14 +79,14 @@ export default function BuyerSnapshotPage() {
       <PublicNavBar />
 
       {/* Hero */}
-      <section className="max-w-3xl mx-auto px-4 pt-14 pb-8">
+      <section className="max-w-3xl mx-auto px-6 pt-14 pb-8">
         <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-5">
           Platform snapshot · 2 minutes
         </p>
         <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
           CorridorWork platform snapshot
         </h1>
-        <p className="text-gray-400 text-base mb-4">
+        <p className="text-slate-400 text-base mb-4 leading-relaxed">
           CorridorWork is a live platform for structured, compliance-first international
           talent matching. The platform collects inbound interest via four consent-based
           channels and processes it manually — no automatic outreach.
@@ -97,30 +94,30 @@ export default function BuyerSnapshotPage() {
         <div className="inline-flex items-center gap-2 px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-300 text-xs font-medium mb-3">
           Inbound-first — the platform collects interest automatically. No cold outreach. No spam.
         </div>
-        <p className="text-gray-500 text-sm">
+        <p className="text-slate-500 text-sm">
           Pilot stage — no active revenue contracts. All figures verifiable. No fabricated metrics.
         </p>
       </section>
 
       {/* Live Assets */}
-      <section className="max-w-3xl mx-auto px-4 pb-8">
+      <section className="max-w-3xl mx-auto px-6 pb-8">
         <h2 className="text-white font-bold text-lg mb-3">Platform assets</h2>
         <div className="bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden">
           {LIVE_ASSETS.map((asset, i) => (
             <div key={asset.label}
                  className={`flex items-center gap-3 px-4 py-3 ${i < LIVE_ASSETS.length - 1 ? 'border-b border-slate-800' : ''}`}>
               <div className="flex-1 min-w-0">
-                <div className="text-gray-400 text-xs">{asset.label}</div>
+                <div className="text-slate-400 text-xs">{asset.label}</div>
                 <div className="text-white text-sm">{asset.detail}</div>
               </div>
-              <span className="text-green-400 text-xs font-medium shrink-0">{asset.status}</span>
+              <span className="text-emerald-400 text-xs font-medium shrink-0">{asset.status}</span>
             </div>
           ))}
         </div>
       </section>
 
       {/* Inbound Channels */}
-      <section className="max-w-3xl mx-auto px-4 pb-8">
+      <section className="max-w-3xl mx-auto px-6 pb-8">
         <h2 className="text-white font-bold text-lg mb-3">Inbound channels</h2>
         <div className="space-y-2">
           {INBOUND_CHANNELS.map(channel => (
@@ -130,41 +127,42 @@ export default function BuyerSnapshotPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-white font-medium text-sm">{channel.title}</div>
-                <div className="text-gray-500 text-xs mt-0.5">{channel.note}</div>
-                <div className="text-gray-600 text-xs mt-0.5 font-mono">corridorwork.com{channel.url}</div>
+                <div className="text-slate-500 text-xs mt-0.5">{channel.note}</div>
+                <div className="text-slate-600 text-xs mt-0.5">corridorwork.com{channel.url}</div>
               </div>
-              <span className="text-green-400 text-xs font-medium shrink-0">Live</span>
+              <span className="text-emerald-400 text-xs font-medium shrink-0">Live</span>
             </div>
           ))}
         </div>
       </section>
 
       {/* Compliance */}
-      <section className="max-w-3xl mx-auto px-4 pb-8">
+      <section className="max-w-3xl mx-auto px-6 pb-8">
         <h2 className="text-white font-bold text-lg mb-3">Compliance configuration</h2>
-        <div className="bg-slate-900 border border-slate-700 rounded-2xl p-4 mb-4">
-          <p className="text-slate-400 text-xs mb-3">
-            Environment configuration — transparency for due diligence:
-          </p>
+        <div className="bg-slate-900 border border-slate-700 rounded-2xl p-5 mb-4">
+          <p className="text-slate-400 text-sm font-medium mb-3">Compliance posture — all verifiable:</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {[
-              { k: 'EMAIL_PROVIDER',          v: 'none' },
-              { k: 'OUTREACH_EMAIL_PROVIDER', v: 'none' },
-              { k: 'Stripe',                  v: 'inactive' },
-              { k: 'Scraping',                v: 'never' },
-              { k: 'Phase',                   v: 'Pilot' },
-            ].map(row => (
-              <div key={row.k} className="flex items-center justify-between px-3 py-1.5 bg-slate-800 rounded-lg">
-                <span className="text-gray-400 text-xs font-mono">{row.k}</span>
-                <span className="text-green-400 text-xs font-semibold">{row.v}</span>
+              'No automatic email sending',
+              'No cold outreach — inbound only',
+              'No payment processing active',
+              'No data scraping — all data manually curated',
+              'GDPR-compliant — EU Frankfurt region',
+              'RLS active on all database tables',
+              'No job guarantee in any copy',
+              'No visa guarantee in any copy',
+            ].map(item => (
+              <div key={item} className="flex items-center gap-2.5 text-slate-400 text-sm">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                {item}
               </div>
             ))}
           </div>
         </div>
-        <h3 className="text-gray-400 text-sm font-semibold mb-2">Not active:</h3>
+        <h3 className="text-slate-400 text-sm font-semibold mb-2">Not active:</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
           {NOT_ACTIVE.map(item => (
-            <div key={item} className="flex items-center gap-2 text-gray-400 text-sm">
+            <div key={item} className="flex items-center gap-2 text-slate-500 text-sm">
               <div className="w-1.5 h-1.5 rounded-full bg-slate-600 shrink-0" />
               <span>{item}</span>
             </div>
@@ -173,20 +171,20 @@ export default function BuyerSnapshotPage() {
       </section>
 
       {/* Engagement options */}
-      <section className="max-w-3xl mx-auto px-4 pb-8">
+      <section className="max-w-3xl mx-auto px-6 pb-8">
         <h2 className="text-white font-bold text-lg mb-3">Forms of engagement</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {ENGAGEMENT_OPTIONS.map(f => (
             <div key={f.title} className="bg-slate-900 border border-slate-700 rounded-xl p-4">
               <div className="text-white font-medium text-sm mb-1">{f.title}</div>
-              <p className="text-gray-500 text-xs">{f.desc}</p>
+              <p className="text-slate-500 text-xs">{f.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* CTA */}
-      <section className="max-w-3xl mx-auto px-4 pb-10">
+      <section className="max-w-3xl mx-auto px-6 pb-10">
         <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 text-center">
           <p className="text-slate-300 text-sm mb-4">
             Serious interest in a strategic partnership, white-label solution or acquisition?
@@ -203,9 +201,9 @@ export default function BuyerSnapshotPage() {
       </section>
 
       {/* Disclaimer */}
-      <section className="max-w-3xl mx-auto px-4 pb-16">
+      <section className="max-w-3xl mx-auto px-6 pb-16">
         <div className="bg-slate-900/40 border border-slate-800 rounded-xl p-4">
-          <p className="text-gray-600 text-xs text-center">
+          <p className="text-slate-600 text-xs text-center">
             CorridorWork is in pilot stage. No revenue guarantees.
             No guaranteed growth figures. No binding contracts without written agreement.
             All listed features are live and verifiable.

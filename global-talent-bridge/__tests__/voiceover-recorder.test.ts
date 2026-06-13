@@ -227,19 +227,23 @@ describe('scripts/mix-human-voiceover.sh', () => {
 // ── 7. /promo-video page — conditional final version ─────────────────────────
 
 describe('/promo-video — Conditional final version display', () => {
-  it('page imports existsSync for final video check', () => {
+  it.skip('page imports existsSync for final video check', () => {
+    // Phase 1: /promo-video replaced with notFound() — no video content served publicly
     expect(readFile(PROMO_PAGE)).toContain('existsSync')
   })
 
-  it('page has FINAL_AUDIO_EXISTS constant', () => {
+  it.skip('page has FINAL_AUDIO_EXISTS constant', () => {
+    // Phase 1: /promo-video replaced with notFound()
     expect(readFile(PROMO_PAGE)).toContain('FINAL_AUDIO_EXISTS')
   })
 
-  it('page references corridorwork-promo-human-en-final.mp4', () => {
+  it.skip('page references corridorwork-promo-human-en-final.mp4', () => {
+    // Phase 1: /promo-video replaced with notFound()
     expect(readFile(PROMO_PAGE)).toContain('corridorwork-promo-human-en-final.mp4')
   })
 
-  it('page has "Human voiceover version" label for final section', () => {
+  it.skip('page has "Human voiceover version" label for final section', () => {
+    // Phase 1: /promo-video replaced with notFound()
     expect(readFile(PROMO_PAGE)).toContain('Human voiceover version')
   })
 
@@ -250,7 +254,8 @@ describe('/promo-video — Conditional final version display', () => {
     expect(p).not.toContain('voiceover-recorder')
   })
 
-  it('page still shows visual preview section with honest label', () => {
+  it.skip('page still shows visual preview section with honest label', () => {
+    // Phase 1: /promo-video replaced with notFound()
     expect(readFile(PROMO_PAGE)).toContain('VISUAL PREVIEW')
   })
 })

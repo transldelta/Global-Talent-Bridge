@@ -1,32 +1,33 @@
 /**
- * app/pilot/employers/page.tsx
+ * app/pilot/employers/page.tsx — /pilot/employers
  *
- * Public Employer Pilot Landingpage — /pilot/employers
- * Kein Auth. Öffentlich zugänglich.
+ * Public employer pilot landing page. No auth required.
  */
 import type { Metadata } from 'next'
+import { PublicNavBar } from '@/app/_components/PublicNavBar'
+import { PublicFooter } from '@/app/_components/PublicFooter'
 import { EmployerPilotForm } from './_components/EmployerPilotForm'
 
 export const metadata: Metadata = {
-  title: 'Kostenloser Employer Pilot',
+  title: 'Free Employer Pilot — CorridorWork',
   description:
-    'Internationale Fachkräfte für Pflege, Bau, IT und Gastronomie. Kostenloser Pilot — kein Abo, keine automatische Zahlung, keine Jobgarantie. Unverbindlich anfragen.',
+    'International professionals for healthcare, construction, IT and hospitality. Free pilot — no subscription, no automatic payment, no job guarantee. No-commitment enquiry.',
   keywords: [
-    'internationales Recruiting',
-    'internationale Fachkräfte',
-    'Employer Pilot',
-    'Arbeitgeber internationales Talent',
-    'Pflege Fachkräfte international',
-    'Cross-border Hiring',
-    'CorridorWork Pilot',
+    'international recruiting',
+    'international talent',
+    'employer pilot',
+    'employer international talent',
+    'healthcare professionals international',
+    'cross-border hiring',
+    'CorridorWork pilot',
   ],
   openGraph: {
-    title: 'Kostenloser Employer Pilot — Internationales Talent-Matching | CorridorWork',
+    title: 'Free Employer Pilot — International Talent Matching | CorridorWork',
     description:
-      'Internationale Fachkräfte aus geprüften Talent-Korridoren. Pilot kostenlos starten — manuell geprüft, DSGVO-konform, kein Abo.',
+      'International professionals from verified talent corridors. Start the pilot free — manually reviewed, GDPR-compliant, no subscription.',
     url: 'https://corridorwork.com/pilot/employers',
     type: 'website',
-    locale: 'de_DE',
+    locale: 'en_US',
     siteName: 'CorridorWork',
   },
   alternates: {
@@ -36,72 +37,67 @@ export const metadata: Metadata = {
 
 export default function EmployerPilotPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
-
-      {/* Header */}
-      <header className="border-b border-slate-700">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <a href="/" className="text-white font-bold text-lg">CorridorWork</a>
-          <a href="/pilot/agencies" className="text-sm text-slate-400 hover:text-white transition-colors">
-            Recruiting-Agentur? →
-          </a>
-        </div>
-      </header>
+    <div className="min-h-screen bg-slate-950 flex flex-col">
+      <PublicNavBar />
 
       {/* Hero */}
-      <section className="max-w-4xl mx-auto px-4 py-16 text-center">
-        <div className="inline-block bg-blue-900 text-blue-300 text-xs font-semibold px-3 py-1 rounded-full mb-4">
-          🚀 Kostenloser Pilot — Phase 1
+      <section className="max-w-4xl mx-auto px-6 py-16 text-center w-full">
+        <div className="inline-block bg-indigo-900/40 border border-indigo-700/50 text-indigo-300 text-xs font-semibold px-3 py-1.5 rounded-full mb-5">
+          Free Pilot — Phase 1
         </div>
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-          Internationale Fachkräfte.<br />
-          <span className="text-blue-400">Direkt. Geprüft. Ohne Risiko.</span>
+        <p className="text-indigo-400 text-xs font-bold tracking-[0.18em] uppercase mb-4">
+          For Employers
+        </p>
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+          International talent.<br />
+          <span className="text-indigo-400">Direct. Reviewed. No-risk.</span>
         </h1>
-        <p className="text-slate-300 text-lg mb-8 max-w-2xl mx-auto">
-          CorridorWork verbindet Arbeitgeber mit qualifizierten internationalen Fachkräften aus geprüften Talent-Korridoren.
-          Testen Sie das Matching kostenlos und unverbindlich.
+        <p className="text-slate-300 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
+          CorridorWork connects employers with qualified international professionals from
+          verified talent corridors. Test the matching free and without commitment.
         </p>
 
         {/* Bullets */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 text-left">
           {[
-            { icon: '🆓', title: 'Kostenloser Pilot', text: 'Kein Abo, keine versteckten Kosten, keine automatische Zahlung.' },
-            { icon: '🎯', title: 'Internationales Matching', text: 'Zugang zu Talent-Korridoren: Pflege, Bau, IT, Gastronomie, Logistik.' },
-            { icon: '🛡️', title: 'Compliance First', text: 'Kein automatischer Kandidatenkontakt. Manuell kontrolliert. DSGVO-konform.' },
+            { title: 'Free pilot',             text: 'No subscription, no hidden costs, no automatic payment.' },
+            { title: 'International matching',  text: 'Access to talent corridors: healthcare, construction, IT, hospitality, logistics.' },
+            { title: 'Compliance first',        text: 'No automatic candidate contact. Manually controlled. GDPR-compliant.' },
           ].map(b => (
-            <div key={b.title} className="bg-slate-800 rounded-xl p-5 border border-slate-700">
-              <div className="text-2xl mb-2">{b.icon}</div>
-              <div className="font-semibold text-white text-sm mb-1">{b.title}</div>
-              <div className="text-slate-400 text-sm">{b.text}</div>
+            <div key={b.title} className="bg-slate-900 rounded-xl p-5 border border-slate-800">
+              <div className="w-1.5 h-6 bg-indigo-500 rounded-full mb-3" />
+              <div className="font-semibold text-white text-sm mb-1.5">{b.title}</div>
+              <div className="text-slate-400 text-sm leading-relaxed">{b.text}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Form */}
-      <section className="max-w-2xl mx-auto px-4 pb-16">
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-1">Pilot anfragen</h2>
-          <p className="text-gray-500 text-sm mb-6">
-            Kostenlos · Unverbindlich · Kein Abo · Keine automatische Zahlung
+      <section className="max-w-2xl mx-auto px-6 pb-16 w-full">
+        <div className="bg-slate-900 border border-slate-700 rounded-2xl p-8">
+          <h2 className="text-2xl font-bold text-white mb-1">Request pilot access</h2>
+          <p className="text-slate-400 text-sm mb-6">
+            Free · No commitment · No subscription · No automatic payment
           </p>
           <EmployerPilotForm />
         </div>
       </section>
 
       {/* How it works */}
-      <section className="max-w-4xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold text-white text-center mb-8">So funktioniert der Pilot</h2>
+      <section className="max-w-4xl mx-auto px-6 py-12 w-full">
+        <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-8 text-center">
+          How the pilot works
+        </p>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {[
-            { step: '1', icon: '📝', title: 'Anfrage einreichen', text: 'Dieses Formular ausfüllen. Kostenlos.' },
-            { step: '2', icon: '👁️', title: 'Manuelle Prüfung', text: 'CorridorWork prüft Ihre Anfrage. Kein Automat.' },
-            { step: '3', icon: '📞', title: 'Persönlicher Kontakt', text: 'Wir melden uns direkt bei Ihnen.' },
-            { step: '4', icon: '🤝', title: 'Pilot starten', text: 'Gemeinsam erste Kandidaten sichten.' },
+            { step: '1', title: 'Submit inquiry',      text: 'Fill in this form. Free, no commitment.' },
+            { step: '2', title: 'Manual review',        text: 'CorridorWork reviews your inquiry. No automation.' },
+            { step: '3', title: 'Personal contact',     text: 'We get in touch with you directly.' },
+            { step: '4', title: 'Start pilot',          text: 'Review first candidates together.' },
           ].map(s => (
             <div key={s.step} className="text-center">
-              <div className="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center mx-auto mb-3 text-sm">{s.step}</div>
-              <div className="text-2xl mb-2">{s.icon}</div>
+              <div className="w-10 h-10 rounded-full bg-indigo-600/20 border border-indigo-500/40 text-indigo-400 font-bold flex items-center justify-center mx-auto mb-3 text-sm">{s.step}</div>
               <div className="font-semibold text-white text-sm mb-1">{s.title}</div>
               <div className="text-slate-400 text-xs">{s.text}</div>
             </div>
@@ -110,12 +106,15 @@ export default function EmployerPilotPage() {
       </section>
 
       {/* Disclaimer */}
-      <section className="max-w-2xl mx-auto px-4 pb-16 text-center">
+      <section className="max-w-2xl mx-auto px-6 pb-16 text-center w-full">
         <p className="text-xs text-slate-500">
-          CorridorWork ist ein Pilot-Dienst (Phase 1). Kein Arbeitsvertrag. Keine Visa-Garantie. Keine automatische Zahlung.
-          Kandidatenkontakt nur nach expliziter Freigabe durch Arbeitgeber und Kandidat. DSGVO-konform.
+          CorridorWork is a pilot service (Phase 1). No employment contract. No visa guarantee.
+          No automatic payment. Candidate contact only after explicit consent from employer and candidate.
+          GDPR-compliant.
         </p>
       </section>
+
+      <PublicFooter />
     </div>
   )
 }

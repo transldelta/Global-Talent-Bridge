@@ -32,18 +32,12 @@ export default function DemoSandboxPage() {
 
       {/* Demo notice — subtle, dark, professional */}
       <div className="bg-slate-900 border-b border-slate-800 px-6 py-3">
-        <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
+        <div className="max-w-5xl mx-auto">
           <p className="text-slate-400 text-xs">
-            <span className="text-amber-400 font-semibold">Demo-Modus:</span>
+            <span className="text-amber-400 font-semibold">Demo mode:</span>
             {' '}
-            Ausschließlich synthetische Daten. Keine echten Kunden, keine echten Umsätze, keine echten Kandidaten- oder Arbeitgeberdaten.
+            Synthetic data only. No real customers, no real revenue, no real candidate or employer data.
           </p>
-          <Link
-            href="/strategic-partnership"
-            className="shrink-0 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-lg border border-slate-700 transition-colors"
-          >
-            Echter Käufer? →
-          </Link>
         </div>
       </div>
 
@@ -97,7 +91,7 @@ export default function DemoSandboxPage() {
           {[
             { value: `${TALENT_CATEGORIES.length}+`, label: 'Sectors covered',   accent: 'text-indigo-400' },
             { value: '15+',                           label: 'Global corridors',  accent: 'text-slate-300' },
-            { value: '4',                             label: 'Revenue pathways',  accent: 'text-slate-300' },
+            { value: '4',                             label: 'Operating pathways', accent: 'text-slate-300' },
           ].map(s => (
             <div key={s.label} className="bg-slate-900 border border-slate-800 rounded-xl p-5">
               <div className={`text-3xl font-bold mb-1 ${s.accent}`}>{s.value}</div>
@@ -152,7 +146,7 @@ export default function DemoSandboxPage() {
               </Link>
             ))}
             <Link href="/corridors" className="block text-center text-sm text-indigo-400 hover:text-indigo-300 transition-colors mt-3">
-              View all 15+ corridors →
+              View all corridors →
             </Link>
           </div>
         </div>
@@ -215,17 +209,17 @@ export default function DemoSandboxPage() {
           <p className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-2">
             Demo Disclaimer
           </p>
-          <p className="text-slate-500 text-sm mb-5">Was diese Seite zeigt und was nicht</p>
+          <p className="text-slate-500 text-sm mb-5">What this page shows — and what it does not</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
             <div>
-              <p className="text-slate-400 font-semibold mb-3">Was gezeigt wird</p>
+              <p className="text-slate-400 font-semibold mb-3">What is shown</p>
               <ul className="space-y-2">
                 {[
-                  'Plattformarchitektur (echt)',
-                  'Technische Fähigkeiten (echt)',
-                  `${TALENT_CATEGORIES.length} Sektoren-Taxonomie (echt)`,
-                  '15+ Korridor-Seiten (echt)',
-                  'Demo-Inhalte (zur Illustration)',
+                  'Platform architecture (real)',
+                  'Technical capabilities (real)',
+                  `${TALENT_CATEGORIES.length}-sector taxonomy (real)`,
+                  '15+ corridor pages (real)',
+                  'Demo content (for illustration)',
                 ].map(item => (
                   <li key={item} className="flex items-center gap-2.5 text-slate-400">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
@@ -235,14 +229,14 @@ export default function DemoSandboxPage() {
               </ul>
             </div>
             <div>
-              <p className="text-slate-400 font-semibold mb-3">Was nicht gezeigt wird</p>
+              <p className="text-slate-400 font-semibold mb-3">What is not shown</p>
               <ul className="space-y-2">
                 {[
-                  'Echte Kunden (0)',
-                  'Echter Umsatz (0 EUR)',
-                  'Echte Traction (keine)',
-                  'Echte Placements (keine)',
-                  'Fake-Erfolgszahlen (keine)',
+                  'Real customers (0)',
+                  'Real revenue (€0)',
+                  'Real traction (none)',
+                  'Real placements (none)',
+                  'Fabricated success numbers (none)',
                 ].map(item => (
                   <li key={item} className="flex items-center gap-2.5 text-slate-500">
                     <div className="w-1.5 h-1.5 rounded-full bg-slate-600 shrink-0" />

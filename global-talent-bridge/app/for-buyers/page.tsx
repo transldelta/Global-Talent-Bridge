@@ -18,25 +18,25 @@ export const metadata: Metadata = {
   title: 'For Buyers — CorridorWork',
   description:
     'CorridorWork is a transfer-ready SaaS asset for global talent corridor intelligence and approval-based candidate workflows. Enquire about acquisition.',
-  robots: 'index, follow',
+  robots: 'noindex, nofollow',
 }
 
 const ASSETS = [
   { label: 'Live domain',         detail: 'corridorwork.com — registered, HTTPS, indexed' },
-  { label: 'Full codebase',       detail: 'Next.js · TypeScript strict · 4 352 passing tests · 0 errors' },
-  { label: 'Database',            detail: 'Supabase PostgreSQL 17 · EU-Frankfurt · GDPR · RLS active' },
-  { label: 'Deployment',          detail: 'Vercel · serverless · auto-deploy · 163 pages' },
-  { label: 'Corridor engine',     detail: '8 scored global talent corridors · Buyer Opportunity Scores' },
-  { label: 'Admin toolset',       detail: '10+ tools: pipeline, intelligence, approval queue, buyer room' },
+  { label: 'Full codebase',       detail: 'Next.js · TypeScript strict · clean build · 0 errors' },
+  { label: 'Database',            detail: 'Supabase PostgreSQL · EU-Frankfurt · GDPR · RLS active' },
+  { label: 'Deployment',          detail: 'Vercel · serverless · auto-deploy from GitHub' },
+  { label: 'Corridor engine',     detail: '15+ scored global talent corridors · sector taxonomy' },
+  { label: 'Admin toolset',       detail: '10+ tools: pipeline, intelligence, approval queue, outreach' },
   { label: 'Documentation',       detail: '50+ files: architecture, security, transfer guide, buyer package' },
-  { label: 'Transfer-prepared',   detail: 'Documented handover steps for all 4 assets; timing depends on domain, GitHub, Vercel, Supabase, and buyer-side setup' },
+  { label: 'Transfer-prepared',   detail: 'Documented handover steps for all assets: domain, GitHub, Vercel, Supabase' },
 ]
 
 const FACTS = [
   { label: 'Revenue (MRR)',     value: '€0',          note: 'Pre-revenue asset stage' },
   { label: 'Paying customers',  value: '0',           note: 'No commercial transactions yet' },
-  { label: 'Test suite',        value: '4 352 ✓',     note: '0 failures' },
-  { label: 'TypeScript errors', value: '0',           note: 'tsc --noEmit clean' },
+  { label: 'Codebase quality',  value: 'Clean',       note: 'TypeScript strict · 0 build errors' },
+  { label: 'Test coverage',     value: 'Full suite',  note: 'Automated · 0 failures' },
   { label: 'Asking price',      value: 'Negotiable',  note: 'Asset-based · no MRR multiple' },
 ]
 
@@ -115,10 +115,10 @@ export default function ForBuyersPage() {
         <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
           {[
             ['Framework',    'Next.js App Router · TypeScript strict'],
-            ['Database',     'Supabase PostgreSQL 17 · EU-Frankfurt · GDPR'],
+            ['Database',     'Supabase PostgreSQL · EU-Frankfurt · GDPR'],
             ['Security',     'RLS on all tables · no_auto_send DB constraint'],
             ['Deployment',   'Vercel · serverless · auto-deploy from GitHub'],
-            ['Testing',      'Vitest · 4 352 tests · 48 files · 0 failures'],
+            ['Testing',      'Vitest · automated test suite · 0 failures'],
             ['Code quality', '0 TypeScript errors · ESLint clean'],
           ].map(([layer, tech], i, arr) => (
             <div

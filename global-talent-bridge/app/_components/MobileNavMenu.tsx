@@ -12,7 +12,7 @@ import Link from 'next/link'
 const NAV_LINKS = [
   { href: '/global/employers',       label: 'Employers' },
   { href: '/global/candidates',      label: 'Candidates' },
-  { href: '/strategic-partnership',  label: 'Partners' },
+  { href: '/partners',               label: 'Partners' },
   { href: '/demo/sandbox',           label: 'Demo' },
 ]
 
