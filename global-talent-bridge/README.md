@@ -85,7 +85,7 @@ npm test           # alle Tests
 npx vitest run     # CI-Modus
 ```
 
-Stand: **2061 Tests, alle grün.**
+Stand: **4596 Tests, alle grün.**
 
 ---
 
@@ -147,10 +147,32 @@ Oder GitHub-Integration: Push auf `main` → automatisches Deployment.
 - ✅ Technisch live und funktionsfähig
 - ✅ 4 Revenue-Pfade mit Lead-Erfassung
 - ✅ Admin-Tools, CWO Daily Runner, SEO Network
-- ✅ 2061 Tests bestanden
+- ✅ 4596 Tests bestanden
 - ❌ 0 zahlende Kunden
 - ❌ 0 EUR Umsatz (Phase 1 Pre-Revenue)
 - ❌ Stripe nicht konfiguriert
+
+---
+
+## For Buyers (English Summary)
+
+**CorridorWork** is a live, technically complete SaaS asset for structured cross-border hiring.
+
+| Item | Status |
+|---|---|
+| Live at | https://corridorwork.com |
+| Revenue | €0 — pre-revenue, Phase 1 |
+| Paying customers | 0 |
+| Tech stack | Next.js 14, TypeScript, Supabase (PostgreSQL), Vercel, Tailwind CSS |
+| Tests | 4596 passing, 0 failing |
+| Stripe / Payment | Not configured — ready to activate |
+| Email / Outreach | Not active — `EMAIL_PROVIDER=none` by default |
+| Transfer docs | `docs/` directory — full buyer package included |
+| Admin access | `/auth/login` — requires `ADMIN_EMAILS` env variable handover |
+
+**What you get:** Fully built platform, 167 pages, 15+ corridor SEO pages, 4 inbound revenue paths, complete admin dashboard, GDPR-compliant, EU-hosted, honest pre-revenue disclosure on all public pages.
+
+**What you do NOT get:** Active customers, revenue, or MRR. No job guarantee, no visa guarantee, no automated outreach. Buyer activates those layers post-transfer.
 
 ---
 

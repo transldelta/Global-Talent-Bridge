@@ -22,20 +22,21 @@ function readFile(rel: string) {
 
 // ── /demo ─────────────────────────────────────────────────────────────────────
 
-describe('/demo — How CorridorWork Works', () => {
+describe('/demo — Permanent Redirect to /demo/sandbox', () => {
+  // /demo now permanently redirects to /demo/sandbox (all content consolidated there)
   let content: string
   beforeAll(() => { content = readFile('app/demo/page.tsx') })
 
-  test('has professional English title', () => {
-    expect(content).toMatch(/how corridorwork works/i)
+  test('redirects to /demo/sandbox', () => {
+    expect(content).toContain('/demo/sandbox')
   })
 
-  test('uses PublicNavBar server component', () => {
-    expect(content).toContain('PublicNavBar')
+  test('uses permanentRedirect', () => {
+    expect(content).toMatch(/permanentRedirect/i)
   })
 
-  test('uses PublicFooter server component', () => {
-    expect(content).toContain('PublicFooter')
+  test('references CorridorWork brand', () => {
+    expect(content).toContain('CorridorWork')
   })
 
   test('does NOT have custom internal header nav', () => {
@@ -56,33 +57,7 @@ describe('/demo — How CorridorWork Works', () => {
   })
 
   test('does NOT use bg-white CTA box (contrast risk)', () => {
-    // The old page had a bg-white rounded-2xl shadow-2xl p-8 text-center CTA block
-    // which put dark text on white in a dark page — contrast issue
     expect(content).not.toContain('bg-white rounded-2xl shadow-2xl p-8 text-center')
-  })
-
-  test('CTA links to /global/employers', () => {
-    expect(content).toContain('/global/employers')
-  })
-
-  test('CTA links to /global/candidates', () => {
-    expect(content).toContain('/global/candidates')
-  })
-
-  test('CTA links to /strategic-partnership', () => {
-    expect(content).toContain('/strategic-partnership')
-  })
-
-  test('has disclaimer: no real personal data', () => {
-    expect(content).toMatch(/no real personal|no real.*data|fictional.*example/i)
-  })
-
-  test('has employment guarantee disclaimer', () => {
-    expect(content).toMatch(/no employment guarantee/i)
-  })
-
-  test('metadata locale is en_US', () => {
-    expect(content).toContain("en_US")
   })
 
   test('does NOT contain "Kostenlos testen"', () => {

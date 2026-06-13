@@ -195,8 +195,8 @@ describe('README.md — Buyer-Informationen', () => {
     expect(content).toContain('Vitest')
   })
 
-  it('enthält Test-Zahl (2061)', () => {
-    expect(content).toContain('2061')
+  it('enthält Test-Zahl (4596)', () => {
+    expect(content).toContain('4596')
   })
 
   it('enthält alle 4 Revenue-Pfade', () => {

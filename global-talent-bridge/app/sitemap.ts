@@ -63,18 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'yearly',
       priority: 0.3,
     },
-    {
-      url: `${BASE_URL}/auth/login`,
-      lastModified: now,
-      changeFrequency: 'yearly',
-      priority: 0.5,
-    },
-    {
-      url: `${BASE_URL}/auth/register`,
-      lastModified: now,
-      changeFrequency: 'yearly',
-      priority: 0.5,
-    },
+    // NOTE: /auth/login and /auth/register excluded — auth pages not indexed
     // Revenue Lead Pages — Inbound Pilot
     {
       url: `${BASE_URL}/strategic-partnership`,
@@ -114,13 +103,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.75,
     },
     // NOTE: /buyer-snapshot is noindex — excluded from sitemap
-    // Demo page
-    {
-      url: `${BASE_URL}/demo`,
-      lastModified: now,
-      changeFrequency: 'monthly',
-      priority: 0.80,
-    },
+    // NOTE: /demo excluded — permanently redirects to /demo/sandbox
     // Corridor index
     {
       url: `${BASE_URL}/corridors`,

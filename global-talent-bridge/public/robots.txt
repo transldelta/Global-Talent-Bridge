@@ -11,15 +11,15 @@ Allow: /pilot/
 Allow: /market-intelligence
 Allow: /industries/
 Allow: /solutions/
-Allow: /demo
 Allow: /global/
 Allow: /demo/sandbox
 
-# Kein Zugriff auf Admin- und Auth-Bereich
+# Kein Zugriff auf Admin-, Auth- und interne Bereiche
 Disallow: /admin/
 Disallow: /auth/
 Disallow: /candidate/
 Disallow: /employer/
 Disallow: /api/
+Disallow: /promo-video
 
 Sitemap: https://corridorwork.com/sitemap.xml

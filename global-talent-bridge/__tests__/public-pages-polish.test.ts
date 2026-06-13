@@ -293,73 +293,22 @@ describe('/partners — Premium Redesign', () => {
 })
 
 // ── 5. /demo ──────────────────────────────────────────────────────────────────
+// /demo permanently redirects to /demo/sandbox (consolidated demo page)
 
-describe('/demo — Structure & Trust', () => {
+describe('/demo — Permanent Redirect to /demo/sandbox', () => {
   let p: string
   beforeAll(() => { p = read('app/demo/page.tsx') })
 
-  it('has "How CorridorWork works" headline', () => {
-    expect(p).toMatch(/How CorridorWork works/i)
+  it('redirects to /demo/sandbox', () => {
+    expect(p).toContain('/demo/sandbox')
   })
 
-  it('has Employers section', () => {
-    expect(p).toMatch(/Employers/i)
+  it('uses permanentRedirect', () => {
+    expect(p).toMatch(/permanentRedirect/i)
   })
 
-  it('has Candidates section', () => {
-    expect(p).toMatch(/Candidates/i)
-  })
-
-  it('has Partners section', () => {
-    expect(p).toMatch(/Partners/i)
-  })
-
-  it('has Review process section', () => {
-    expect(p).toMatch(/Review process/i)
-  })
-
-  it('has Trust notes section', () => {
-    expect(p).toMatch(/Trust notes/i)
-  })
-
-  it('has "No employment guarantee" disclaimer', () => {
-    expect(p).toMatch(/No employment guarantee/i)
-  })
-
-  it('has "No visa guarantee" disclaimer', () => {
-    expect(p).toMatch(/No visa guarantee/i)
-  })
-
-  it('has "No automatic outreach" disclaimer', () => {
-    expect(p).toMatch(/No automatic outreach/i)
-  })
-
-  it('has "fictional example data" disclaimer', () => {
-    expect(p).toMatch(/fictional.*example|no real personal|sample data/i)
-  })
-
-  it('links to /global/employers', () => {
-    expect(p).toContain('/global/employers')
-  })
-
-  it('links to /global/candidates', () => {
-    expect(p).toContain('/global/candidates')
-  })
-
-  it('links to /strategic-partnership', () => {
-    expect(p).toContain('/strategic-partnership')
-  })
-
-  it('uses PublicNavBar', () => {
-    expect(p).toContain('PublicNavBar')
-  })
-
-  it('uses PublicFooter', () => {
-    expect(p).toContain('PublicFooter')
-  })
-
-  it('has og-image metadata', () => {
-    expect(p).toContain('/og-image.png')
+  it('references CorridorWork brand', () => {
+    expect(p).toContain('CorridorWork')
   })
 
   it('does NOT have admin links', () => {
