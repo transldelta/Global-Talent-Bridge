@@ -112,7 +112,7 @@ export default function DemoSandboxPage() {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
             {TALENT_CATEGORIES.map(cat => (
               <div key={cat.sector_key} className="flex items-center gap-2 p-2.5 bg-slate-800/60 border border-slate-700/60 rounded-lg">
-                <span className="text-base shrink-0">{cat.emoji}</span>
+                <div className="w-2 h-2 rounded-full bg-indigo-500/70 shrink-0" />
                 <div className="min-w-0">
                   <div className="text-xs font-medium text-slate-300 truncate">{cat.public_label}</div>
                   {cat.remote_eligible && (
@@ -161,7 +161,6 @@ export default function DemoSandboxPage() {
             {topRevCats.map((cat, i) => (
               <div key={cat.sector_key} className="flex items-center gap-3 p-3.5 bg-slate-800/60 border border-slate-700/60 rounded-lg">
                 <span className="text-slate-600 font-bold text-xs w-5 shrink-0">#{i + 1}</span>
-                <span className="text-base shrink-0">{cat.emoji}</span>
                 <div className="flex-1">
                   <div className="font-semibold text-slate-300 text-sm">{cat.public_label}</div>
                 </div>

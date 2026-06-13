@@ -69,7 +69,7 @@ export default function GlobalEmployersPage() {
             priority
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-slate-950/78" />
+          <div className="absolute inset-0 bg-slate-950/87" />
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-950 to-transparent" />
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-6 py-24 sm:py-32">
@@ -98,7 +98,7 @@ export default function GlobalEmployersPage() {
             </a>
             <Link
               href="/demo/sandbox"
-              className="px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg border border-white/25 transition-colors text-base backdrop-blur-sm"
+              className="px-8 py-3.5 bg-slate-800/90 hover:bg-slate-700 text-white font-semibold rounded-lg border border-slate-600 transition-colors text-base"
             >
               View demo
             </Link>

@@ -116,7 +116,7 @@ export default function PartnersPage() {
             </a>
             <Link
               href="/strategic-partnership"
-              className="px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg border border-white/25 transition-colors text-base backdrop-blur-sm"
+              className="px-8 py-3.5 bg-slate-800/90 hover:bg-slate-700 text-white font-semibold rounded-lg border border-slate-600 transition-colors text-base"
             >
               Explore strategic partnership
             </Link>
